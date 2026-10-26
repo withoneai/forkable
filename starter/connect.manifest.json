@@ -1,0 +1,20 @@
+{
+  "$schema": "https://forkable.dev/schema/connect.manifest.v1.json",
+  "app": "forkable-starter",
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "gmail-list-messages",
+      "access": "read",
+      "usedBy": "agents/hello.md",
+      "reason": "The hello agent reads your inbox once, to show the connection is real."
+    },
+    {
+      "platform": "gmail",
+      "actionId": "gmail-delete-message",
+      "access": "write",
+      "usedBy": "agents/hello.md",
+      "reason": "Shown declined on purpose: this starter never asks for delete access, so the demo can show a real 403 instead of a fake one."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "create-forkable",
+  "version": "0.1.0",
+  "description": "npm create forkable: fork a business. Copies the Forkable starter, fills in who it's for, installs, and runs the keyless demo.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-forkable": "./bin/create-forkable.mjs"
+  },
+  "files": [
+    "bin",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sync-template": "node scripts/sync-template.mjs",
+    "prepack": "node scripts/sync-template.mjs"
+  },
+  "homepage": "https://forkable.dev"
+}

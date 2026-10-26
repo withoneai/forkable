@@ -1,0 +1,27 @@
+{
+  "name": "forkable-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Acme Inc, a Forkable starter. One Connect prewired, a keyless demo, and a team of one agent to extend.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx src/demo.ts",
+    "dev": "tsx watch --clear-screen=false src/node.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@withone/connect": "^0.18.0",
+    "dotenv": "^16.5.0",
+    "hono": "^4.7.0",
+    "tsx": "^4.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.9.3"
+  }
+}
