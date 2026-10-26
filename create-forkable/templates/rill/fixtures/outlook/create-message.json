@@ -1,0 +1,18 @@
+{
+  "@odata.type": "#microsoft.graph.message",
+  "id": "AAMkADdraftNew=",
+  "conversationId": "AAQkADc7=",
+  "createdDateTime": "2026-10-23T08:01:00Z",
+  "lastModifiedDateTime": "2026-10-23T08:01:00Z",
+  "parentFolderId": "AQMkDrafts=",
+  "isDraft": true,
+  "subject": "Intro: Acme and Globex",
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "",
+        "address": "sam@globex.com"
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Ben Adler, Acme's CPA, says the Q3 payroll tax filing ($48,212) and Delaware franchise estimate ($4,000) are ready in your e-sign queue under Acme Inc Q3. Filing is due October 31, so he needs your signature by the 28th.",
+    "ask": "Sign the Q3 e-sign by October 28; tell him any out-of-state hire's state."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.18,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.81,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.14,
+          "g3": 0,
+          "none": 0.86
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.96,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.42,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.31,
+          "1": 0.42,
+          "2": 0.27,
+          "3": 0
+        },
+        "score": 0.97,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2307,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Thanks for getting this over to me, Ben. I'll sign it well ahead of the 28th.\n\nOn the new hires, I don't have the final details in front of me yet. I'll confirm where each of them will be working and get that to you before the first payroll so you have time to register for withholding if it's needed.\n\nBest,\nDana"
+}

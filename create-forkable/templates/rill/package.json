@@ -1,0 +1,36 @@
+{
+  "name": "rill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Rill, an AI email client on your own Gmail. Your goals and VIPs decide what you see first. Every user connects through One Connect.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n server,ui -c yellow,magenta --kill-others-on-fail 'pnpm --filter @rill/server dev' 'wait-on -t 60000 http-get://127.0.0.1:51789/api/health && pnpm --filter @rill/ui dev'",
+    "dev:server": "pnpm --filter @rill/server dev",
+    "dev:ui": "pnpm --filter @rill/ui dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "start": "pnpm --filter @withone/rill demo",
+    "record": "RECORD=1 pnpm --filter @withone/rill record",
+    "db:generate": "pnpm --filter @rill/core generate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.9.3",
+    "wait-on": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.4.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@embedded-postgres/darwin-arm64",
+      "@embedded-postgres/darwin-x64",
+      "@embedded-postgres/linux-x64",
+      "@embedded-postgres/linux-arm64",
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Elena Ruiz, Director of Operations at Globex, reports a four week pilot with strong results: weekly active users rose from 11 to 31 and ticket resolution time fell from 2.3 to 1.4 days. She plans to propose 40 seats to her VP of Ops next week.",
+    "ask": "Pricing proposal for 40 seats, annual discount, onboarding, and security summary by Friday."
+  },
+  "draft": "Hi Elena,\n\nGreat to hear from you, and I'm glad the pilot has gone this well. Taking it to your VP of Ops next week makes sense, and I'd like to help make that conversation easy.\n\nFriday works as a target for the pricing proposal. I'll make sure it covers per seat cost at 40, the effect of an annual commitment, and what onboarding includes. On the security summary, I'll check what we have in a shareable form so it's ready for your procurement team.\n\nIf anything about the two teams would change how you want this structured (rollout timing, for example), let me know and I'll fold it in.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0,
+          "them": 0.01,
+          "third_party": 0.01
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.14,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g3",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.99,
+          "none": 0.01
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.93,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.67,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.01,
+          "1": 0.67,
+          "2": 0.32,
+          "3": 0
+        },
+        "score": 1.31,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2349,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

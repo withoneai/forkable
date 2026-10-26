@@ -1,0 +1,27 @@
+import { cn } from "@/lib/utils";
+
+// The Rill mark: a solid bowl and capsule leg, a hairline halo at the bowl's
+// outer edge, one currentColor shape. No disc behind it.
+export function Logo({ className, size = 18 }: { className?: string; size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 512 512"
+      className={cn("shrink-0 text-foreground", className)}
+      aria-hidden
+    >
+      <g transform="translate(107.52,107.52) scale(2.9696)">
+        <path d="M8 10Q8 8 10 8L26 8Q28 8 28 10L28 90Q28 92 26 92L10 92Q8 92 8 90Z" fill="currentColor" />
+        <path d="M27.999999999999996 8A22 22 0 1 1 28 52L28 30Z" fill="currentColor" />
+        <path d="M28 6A24 24 0 0 1 28 54" fill="none" stroke="currentColor" strokeWidth="1.725" strokeLinecap="round" />
+        <path d="M28 1A29 29 0 0 1 28 59" fill="none" stroke="currentColor" strokeWidth="1.725" strokeLinecap="round" />
+        <path d="M28 -4A34 34 0 0 1 28 64" fill="none" stroke="currentColor" strokeWidth="1.725" strokeLinecap="round" />
+        <path
+          d="M28.21982659219661 64.16024481101655L76.21982659219661 98.16024481101655A10 10 0 0 0 87.78017340780339 81.83975518898345L39.78017340780339 47.839755188983446A10 10 0 0 0 28.21982659219661 64.16024481101655Z"
+          fill="currentColor"
+        />
+      </g>
+    </svg>
+  );
+}

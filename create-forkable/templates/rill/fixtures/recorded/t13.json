@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Maya Chen offers to introduce Dana to Tom Reyes at Stark Logistics' corporate venture arm, which writes $250k to $500k seed checks into B2B companies whose ops teams could be customers. She also suggests dinner soon.",
+    "ask": "Reply yes so Maya sends a double opt-in intro email"
+  },
+  "draft": "Maya, it's so good to hear from you, and yes, please make the intro. A corporate venture arm whose ops teams could be real customers is exactly the kind of fit we're hoping for, so I'm grateful you thought of us.\n\nThe round is moving well and we're talking with a handful of investors. Happy to share a short deck or a one-pager with you beforehand if that would help you frame things for Tom.\n\nAnd yes to dinner, it has been far too long. Let's find a evening once things calm down a bit, or sooner if you're free.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0,
+          "them": 0.02,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.15,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 0.97,
+        "probabilities": {
+          "g1": 0.98,
+          "g2": 0,
+          "g3": 0.01,
+          "none": 0.01
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.01,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.99,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.96,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.96,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.02,
+          "1": 0.96,
+          "2": 0.02,
+          "3": 0
+        },
+        "score": 1,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.08,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2274,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

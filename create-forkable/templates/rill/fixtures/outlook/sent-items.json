@@ -1,0 +1,93 @@
+{
+  "value": [
+    {
+      "id": "AAMkADs1=",
+      "conversationId": "AAQkADc1=",
+      "subject": "RE: Term sheet, option pool",
+      "from": {
+        "emailAddress": {
+          "name": "Dana Reyes",
+          "address": "dana@acme.com"
+        }
+      },
+      "toRecipients": [
+        {
+          "emailAddress": {
+            "name": "Priya Shah",
+            "address": "priya@northwind.vc"
+          }
+        }
+      ],
+      "ccRecipients": [
+        {
+          "emailAddress": {
+            "name": "Sam Ortiz",
+            "address": "sam@globex.com"
+          }
+        }
+      ],
+      "sentDateTime": "2026-10-22T16:04:58Z",
+      "createdDateTime": "2026-10-22T16:04:58Z",
+      "lastModifiedDateTime": "2026-10-22T16:04:58Z",
+      "parentFolderId": "AQMkSentItems=",
+      "body": {
+        "contentType": "text",
+        "content": "Thanks"
+      }
+    },
+    {
+      "id": "AAMkADs2=",
+      "conversationId": "AAQkADc9=",
+      "subject": "Hiring update",
+      "from": {
+        "emailAddress": {
+          "name": "Dana Reyes",
+          "address": "dana@acme.com"
+        }
+      },
+      "toRecipients": [
+        {
+          "emailAddress": {
+            "name": "Priya Shah",
+            "address": "priya@northwind.vc"
+          }
+        }
+      ],
+      "sentDateTime": "2026-10-20T10:00:00Z",
+      "createdDateTime": "2026-10-20T10:00:00Z",
+      "lastModifiedDateTime": "2026-10-20T10:00:00Z",
+      "parentFolderId": "AQMkSentItems=",
+      "body": {
+        "contentType": "text",
+        "content": "Two offers out."
+      }
+    },
+    {
+      "id": "AAMkADs3=",
+      "conversationId": "AAQkADc8=",
+      "subject": "Receipt",
+      "from": {
+        "emailAddress": {
+          "name": "Dana Reyes",
+          "address": "dana@acme.com"
+        }
+      },
+      "toRecipients": [
+        {
+          "emailAddress": {
+            "name": "",
+            "address": "no-reply@billing.example"
+          }
+        }
+      ],
+      "sentDateTime": "2026-10-19T10:00:00Z",
+      "createdDateTime": "2026-10-19T10:00:00Z",
+      "lastModifiedDateTime": "2026-10-19T10:00:00Z",
+      "parentFolderId": "AQMkSentItems=",
+      "body": {
+        "contentType": "text",
+        "content": "ok"
+      }
+    }
+  ]
+}

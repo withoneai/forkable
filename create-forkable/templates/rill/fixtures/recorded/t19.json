@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Tariq Rahman, now running internal tools at Stark Logistics, reconnects after about two years after seeing Acme's news on LinkedIn. He wants to catch up over coffee near your office in the next couple of weeks and compare notes on hiring.",
+    "ask": "Coffee in the next couple of weeks; you pick the day."
+  },
+  "draft": "So good to hear from you, Tariq.\n\nI'd love to grab coffee. Let me check my calendar and I'll come back to you shortly with a couple of mornings that work. I have plenty of hiring stories to trade, so come ready.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.95,
+        "probabilities": {
+          "me": 0.96,
+          "nobody": 0,
+          "them": 0.04,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.09,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.51,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.37,
+          "g3": 0,
+          "none": 0.63
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.01,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.99,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.89,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.71,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.71,
+          "1": 0.29,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.29,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2263,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

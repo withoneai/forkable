@@ -1,0 +1,25 @@
+{
+  "name": "@withone/rill",
+  "version": "0.1.0",
+  "description": "Rill, an AI email client on your own Gmail. Your goals and VIPs decide what you see first.",
+  "license": "MIT",
+  "author": "One Systems, Inc.",
+  "homepage": "https://rill.forkable.dev",
+  "type": "module",
+  "bin": { "rill": "./bin/rill.mjs" },
+  "scripts": {
+    "demo": "tsx src/index.ts demo",
+    "record": "tsx src/index.ts record",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rill/core": "workspace:*",
+    "@rill/server": "workspace:*",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}

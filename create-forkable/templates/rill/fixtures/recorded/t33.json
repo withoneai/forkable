@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Alex Kim from GrowthLoop, a lifecycle email agency, noticed Acme's onboarding emails stop after day 2 and offers three free ideas for the day 3 to 14 sequence. The pitch cites a 20 to 35% week two activation lift, which is unverified.",
+    "ask": "Reply if you want the three free onboarding ideas sent."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.83,
+        "probabilities": {
+          "me": 0.87,
+          "nobody": 0,
+          "them": 0.13,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.07,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.69,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.23,
+          "none": 0.77
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 0.98,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.98,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.02,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.79,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.64,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.64,
+          "1": 0.36,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.37,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2296,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Thanks for taking the time to try Acme out, I hope the first week was useful.\n\nI can't say yet whether the day 2 cutoff was deliberate, so I'll look into it on our side. We're a small team in the middle of a busy stretch, so I can't promise a quick turnaround on anything beyond that.\n\nFeel free to send the three ideas over. I'll read them when I can, though I can't commit to a call or a engagement at this point.\n\nBest,\nDana"
+}

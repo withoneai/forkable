@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Omar Farouk confirms his Thursday 10am onsite interview and expects a 30-minute closing conversation with you. He has a competing offer with a Friday deadline and wants you to know now.",
+    "ask": "Tell him if you want anything prepared for the closing conversation."
+  },
+  "draft": "Hi Omar,\n\nGlad Thursday works, and 9:45 at the office is perfect. Nothing to prepare for our 30 minutes. Those are exactly the questions I'd like to dig into, so come with as many as you have.\n\nI'm glad you flagged the Friday deadline. I can't promise anything on timing until I've talked with Marcus and the team, but we'll keep it in mind as we plan the day.\n\nLooking forward to meeting you.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.95,
+        "probabilities": {
+          "me": 0.96,
+          "nobody": 0,
+          "them": 0.04,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.14,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g2",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.99,
+          "g3": 0,
+          "none": 0.01
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0.01,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.99,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.87,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.61,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.39,
+          "2": 0.61,
+          "3": 0
+        },
+        "score": 1.6,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2290,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

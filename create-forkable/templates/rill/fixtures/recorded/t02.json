@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Marcus Lee, VP Engineering, reports both finalists cleared the final loop: Omar Farouk (staff backend) and Jess Tanaka (senior platform). Both are asking top of band, and Omar's competing offer expires Friday.",
+    "ask": "Approve top-of-band offers for both candidates today, or set a different number."
+  },
+  "draft": "Thanks for moving this along so quickly, I know the timing is tight.\n\nBefore I give you a yes on both, I want to look at how the two offers fit together against our hiring budget. Could you send me the total cost for both, including equity, and tell me whether you see any flexibility on Jess's number given the product gap? I'd like to settle this quickly so neither offer sits.\n\nPlease hold off on sending anything until you hear back from me.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.09,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g2",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 1,
+          "g3": 0,
+          "none": 0
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.97,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.96,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 0.96,
+          "3": 0.04
+        },
+        "score": 2.04,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.09,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2338,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

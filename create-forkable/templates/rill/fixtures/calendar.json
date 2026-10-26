@@ -1,0 +1,772 @@
+{
+  "calendars": [
+    {
+      "id": "cal1",
+      "name": "Dana Reyes",
+      "color": "#1a73e8",
+      "isDefault": true
+    }
+  ],
+  "events": [
+    {
+      "id": "e01",
+      "calendarId": "cal1",
+      "title": "Daily standup",
+      "durationMinutes": 15,
+      "timeZone": "America/Los_Angeles",
+      "recurringEventId": "rec-standup",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 0,
+        "at": "09:30"
+      }
+    },
+    {
+      "id": "e02",
+      "calendarId": "cal1",
+      "title": "Lunch",
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 0,
+        "at": "12:30"
+      }
+    },
+    {
+      "id": "e03",
+      "calendarId": "cal1",
+      "title": "Globex renewal call",
+      "durationMinutes": 45,
+      "timeZone": "America/Los_Angeles",
+      "location": "Zoom",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Marcus Hill",
+          "email": "marcus.hill@globex.com",
+          "response": "accepted"
+        }
+      ],
+      "joinUrl": "https://zoom.us/j/5551234567",
+      "when": {
+        "day": 0,
+        "at": "16:00"
+      }
+    },
+    {
+      "id": "e04",
+      "calendarId": "cal1",
+      "title": "Board sync",
+      "description": "Q3 review, seed round terms, hiring update.",
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Victor Langford",
+        "email": "victor@langpartners.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "response": "needsAction"
+        },
+        {
+          "name": "Victor Langford",
+          "email": "victor@langpartners.com",
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Priya Natarajan",
+          "email": "priya@northwind.vc",
+          "response": "accepted"
+        },
+        {
+          "name": "Marcus Hill",
+          "email": "marcus.hill@globex.com",
+          "response": "tentative"
+        }
+      ],
+      "joinUrl": "https://meet.google.com/kqp-wzrt-bnm",
+      "threadId": "t30",
+      "when": {
+        "weekday": 4,
+        "at": "10:00"
+      }
+    },
+    {
+      "id": "e05",
+      "calendarId": "cal1",
+      "title": "1:1 with Priya Natarajan",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Priya Natarajan",
+          "email": "priya@northwind.vc",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 1,
+        "at": "14:00"
+      }
+    },
+    {
+      "id": "e06",
+      "calendarId": "cal1",
+      "title": "Design partner call: Initech",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Priyanka Rao",
+          "email": "priyanka.rao@initech.example",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 1,
+        "at": "14:15"
+      }
+    },
+    {
+      "id": "e07",
+      "calendarId": "cal1",
+      "title": "Pricing review with Globex",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Marcus Hill",
+          "email": "marcus.hill@globex.com",
+          "response": "accepted"
+        }
+      ],
+      "movedFrom": {
+        "when": {
+          "day": 1,
+          "at": "11:00"
+        },
+        "durationMinutes": 30
+      },
+      "when": {
+        "day": 1,
+        "at": "15:00"
+      }
+    },
+    {
+      "id": "e08",
+      "calendarId": "cal1",
+      "title": "Customer QBR: Initech",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Priyanka Rao",
+          "email": "priyanka.rao@initech.example",
+          "response": "needsAction"
+        }
+      ],
+      "when": {
+        "day": 1,
+        "at": "16:30"
+      }
+    },
+    {
+      "id": "e09",
+      "calendarId": "cal1",
+      "title": "Omar Farouk onsite: close with Dana",
+      "description": "The interview loop runs from 10:00. Dana closes the day with 30 minutes.",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "location": "Acme HQ, 4th floor",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Omar Farouk",
+          "email": "omar@farouk.dev",
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "threadId": "t09",
+      "when": {
+        "weekday": 4,
+        "at": "16:00"
+      }
+    },
+    {
+      "id": "e10",
+      "calendarId": "cal1",
+      "title": "Vendor check-in: Umbrella Corp",
+      "status": "cancelled",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Wesker Han",
+          "email": "wesker.han@umbrella.example",
+          "response": "declined"
+        }
+      ],
+      "when": {
+        "day": 2,
+        "at": "13:00"
+      }
+    },
+    {
+      "id": "e11",
+      "calendarId": "cal1",
+      "title": "Product review",
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "recurringEventId": "rec-prodreview",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "tentative"
+        }
+      ],
+      "when": {
+        "day": 2,
+        "at": "15:00"
+      }
+    },
+    {
+      "id": "e12",
+      "calendarId": "cal1",
+      "title": "Design partner on-site: Hooli",
+      "allDay": true,
+      "durationMinutes": 1440,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Gavin Patel",
+          "email": "gavin.patel@hooli.example",
+          "response": "needsAction"
+        }
+      ],
+      "when": {
+        "day": 3,
+        "at": "00:00"
+      }
+    },
+    {
+      "id": "e13",
+      "calendarId": "cal1",
+      "title": "Coffee with a recruiter",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Riley Chen",
+          "email": "riley.chen@talentpartners.example",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 3,
+        "at": "08:30"
+      }
+    },
+    {
+      "id": "e14",
+      "calendarId": "cal1",
+      "title": "Investor update call",
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Priya Natarajan",
+          "email": "priya@northwind.vc",
+          "response": "accepted"
+        },
+        {
+          "name": "Victor Langford",
+          "email": "victor@langpartners.com",
+          "response": "needsAction"
+        }
+      ],
+      "when": {
+        "day": 4,
+        "at": "09:00"
+      }
+    },
+    {
+      "id": "e15",
+      "calendarId": "cal1",
+      "title": "Team happy hour",
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "location": "The Tipsy Fox",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": 4,
+        "at": "17:00"
+      }
+    },
+    {
+      "id": "e16",
+      "calendarId": "cal1",
+      "title": "Retro: Q3",
+      "durationMinutes": 45,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "when": {
+        "day": -1,
+        "at": "16:00"
+      }
+    },
+    {
+      "id": "e17",
+      "calendarId": "cal1",
+      "title": "Daily standup",
+      "when": {
+        "day": 1,
+        "at": "09:30"
+      },
+      "durationMinutes": 15,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "recurringEventId": "rec-standup"
+    },
+    {
+      "id": "e18",
+      "calendarId": "cal1",
+      "title": "Daily standup",
+      "when": {
+        "day": 2,
+        "at": "09:30"
+      },
+      "durationMinutes": 15,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "recurringEventId": "rec-standup"
+    },
+    {
+      "id": "e19",
+      "calendarId": "cal1",
+      "title": "Focus: board deck",
+      "when": {
+        "day": 1,
+        "at": "10:00"
+      },
+      "durationMinutes": 90,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        }
+      ]
+    },
+    {
+      "id": "e20",
+      "calendarId": "cal1",
+      "title": "Weekly team sync",
+      "when": {
+        "day": -2,
+        "at": "11:00"
+      },
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ]
+    },
+    {
+      "id": "e21",
+      "calendarId": "cal1",
+      "title": "Hiring sync",
+      "when": {
+        "day": 2,
+        "at": "11:00"
+      },
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Marcus Lee",
+          "email": "marcus@acme.com",
+          "response": "accepted"
+        }
+      ]
+    },
+    {
+      "id": "e22",
+      "calendarId": "cal1",
+      "title": "Dentist",
+      "when": {
+        "day": 3,
+        "at": "12:00"
+      },
+      "durationMinutes": 60,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        }
+      ]
+    },
+    {
+      "id": "e23",
+      "calendarId": "cal1",
+      "title": "Daily standup",
+      "when": {
+        "day": -1,
+        "at": "09:30"
+      },
+      "durationMinutes": 15,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Jordan Lee",
+          "email": "jordan@acme.com",
+          "response": "accepted"
+        },
+        {
+          "name": "Sam Patel",
+          "email": "sam@acme.com",
+          "response": "accepted"
+        }
+      ],
+      "recurringEventId": "rec-standup"
+    },
+    {
+      "id": "e24",
+      "calendarId": "cal1",
+      "title": "Board prep with Victor",
+      "when": {
+        "day": 2,
+        "at": "16:30"
+      },
+      "durationMinutes": 30,
+      "timeZone": "America/Los_Angeles",
+      "organizer": {
+        "name": "Dana Reyes",
+        "email": "dana@acme.com"
+      },
+      "attendees": [
+        {
+          "name": "Dana Reyes",
+          "email": "dana@acme.com",
+          "self": true,
+          "organizer": true,
+          "response": "accepted"
+        },
+        {
+          "name": "Victor Langford",
+          "email": "victor@langpartners.com",
+          "response": "needsAction"
+        }
+      ],
+      "joinUrl": "https://meet.google.com/abc-defg-hij"
+    }
+  ]
+}

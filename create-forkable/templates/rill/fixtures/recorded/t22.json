@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "A newsletter from The Product Weekly, issue 212, on how strong product teams run customer discovery. Key points: talk to customers on a fixed schedule, write the problem before the solution, and maintain a graveyard of killed ideas. It is a general 8-minute read, not a message to you personally.",
+    "ask": null
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "nobody",
+        "confidence": 0.8,
+        "probabilities": {
+          "me": 0.15,
+          "nobody": 0.85,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.95,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.04,
+          "none": 0.96
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "newsletter",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 1,
+          "notification": 0,
+          "person": 0,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.87,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.87,
+          "1": 0.13,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.13,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2344,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

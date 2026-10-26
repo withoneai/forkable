@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Rosa Delgado, outside counsel for the Northwind seed round, needs you to choose an option pool structure before she finalizes signature documents. Option 1 is a 10% pre-money pool costing about 1.1 more points of dilution; Option 2 is 8% with a top-up to 10% after the engineering hires, which Northwind may resist.",
+    "ask": "Reply 1 or 2 by noon tomorrow."
+  },
+  "draft": "Rosa,\n\nHope the rest of your day is going smoothly after this morning's call. I'm weighing the dilution tradeoff against how Northwind is likely to react, and I want to give you a definite answer rather than a rushed one.\n\nYou'll have my pick in writing before your noon deadline tomorrow. If there's anything on Northwind's side that would make Option 2 a harder sell than it looks, I'd welcome your read on that in the meantime.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.22,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0.99,
+          "g2": 0,
+          "g3": 0,
+          "none": 0.01
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.05,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.98,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.76,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.24,
+          "2": 0.76,
+          "3": 0
+        },
+        "score": 1.76,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.06,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2365,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

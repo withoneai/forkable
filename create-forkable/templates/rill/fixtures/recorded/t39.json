@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Richard Hale, Director of Platform Operations at Hooli, follows up after Tuesday's demo. Hooli's platform team wants a pilot and he needs seats, duration, cost, and what Acme needs from Hooli before taking it to his VP.",
+    "ask": "Send your standard pilot proposal covering seats, duration, cost, and requirements."
+  },
+  "draft": "Richard,\n\nGlad the demo was useful, and happy to help you make the case upstairs.\n\nI'll put together a pilot overview covering scope, duration, pricing, and what we'd need from your team, so your VP has something concrete to review. To size it properly, it would help to know roughly how many people on the platform team would use it, and whether there is a timeline your VP is working against (a quarter-end or budget cycle, for example).\n\nIf it's easier, we can also do a quick 20-minute call this week to walk through the details, and I can shape the overview around what comes out of it.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0,
+          "them": 0.02,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.26,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g3",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 1,
+          "none": 0
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.01,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.99,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.93,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.77,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.77,
+          "2": 0.23,
+          "3": 0
+        },
+        "score": 1.22,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2241,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

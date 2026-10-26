@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Victor Lang, a board member, wants the board deck by Tuesday evening before Thursday's sync. He asks for burn against the July plan, the Northwind seed status, and a slide on the two engineering hires. If Northwind terms land, he wants them added for approval.",
+    "ask": "Send board deck by Tuesday evening, with burn, Northwind status, hires."
+  },
+  "draft": "Victor,\n\nHappy to get you the deck with a full day to digest it, so I'll plan around Tuesday evening. I'll aim to cover the burn against the July plan, the Northwind status, and a slide on the engineering hires.\n\nIf the Northwind terms are in hand before Thursday, I'll make sure the deck reflects them so the meeting can focus on a decision.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.99,
+        "probabilities": {
+          "me": 0.99,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0.01
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.21,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 0.73,
+        "probabilities": {
+          "g1": 0.8,
+          "g2": 0.05,
+          "g3": 0,
+          "none": 0.15
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.91,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.63,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.63,
+          "2": 0.37,
+          "3": 0
+        },
+        "score": 1.37,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.98,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2299,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

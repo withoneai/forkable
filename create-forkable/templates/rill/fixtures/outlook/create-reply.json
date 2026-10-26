@@ -1,0 +1,18 @@
+{
+  "@odata.type": "#microsoft.graph.message",
+  "id": "AAMkADdraftReply=",
+  "conversationId": "AAQkADc1=",
+  "createdDateTime": "2026-10-23T08:00:00Z",
+  "lastModifiedDateTime": "2026-10-23T08:00:00Z",
+  "parentFolderId": "AQMkDrafts=",
+  "isDraft": true,
+  "subject": "RE: Term sheet, option pool",
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "Priya Shah",
+        "address": "priya@northwind.vc"
+      }
+    }
+  ]
+}

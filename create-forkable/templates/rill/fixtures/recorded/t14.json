@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "Ingrid Solberg is withdrawing from the senior platform hiring process because she accepted another offer, where a close friend is CTO. She calls Acme her second choice out of six and offers to refer engineers to Dana.",
+    "ask": null
+  },
+  "judgedModel": "jev-latest",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.41,
+        "probabilities": {
+          "me": 0.5599999999999999,
+          "nobody": 0.42,
+          "them": 0.01,
+          "third_party": 0.01
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.09,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g2",
+        "confidence": 0.93,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.95,
+          "g3": 0,
+          "none": 0.05
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.11,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.54,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.14,
+          "1": 0.54,
+          "2": 0.32,
+          "3": 0
+        },
+        "score": 1.19,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2283,
+      "output_tokens": 272
+    }
+  }
+}

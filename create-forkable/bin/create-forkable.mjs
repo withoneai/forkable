@@ -4,7 +4,7 @@
 // Copies a template (the forkable-starter by default), fills in
 // local/profile.md, makes a fresh git history, installs, and runs the
 // keyless demo. No account and no keys needed for any of that.
-import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -12,6 +12,18 @@ import { spawnSync } from "node:child_process";
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, "..");
 const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+const pnpmCmd = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+
+function availableTemplates() {
+  try {
+    return readdirSync(join(packageRoot, "templates"), { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+      .sort();
+  } catch {
+    return [];
+  }
+}
 
 function printHelp() {
   console.log(`Usage: npm create forkable@latest <name> [options]
@@ -23,6 +35,8 @@ Options:
   --in <where>        Where, e.g. "Los Angeles". Written into local/profile.md.
   --template <id>     Template to copy. Default: forkable-starter.
   -h, --help          Show this help.
+
+Templates available: ${availableTemplates().join(", ")}
 
 Example:
   npm create forkable@latest rill --for "real estate agents" --in "Los Angeles"`);
@@ -38,7 +52,7 @@ function slugify(input) {
 }
 
 function parseArgs(argv) {
-  const out = { name: null, for: null, in: null, template: "forkable-starter" };
+  const out = { name: null, for: null, in: null, template: "forkable-starter", templateExplicit: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "-h" || a === "--help") {
@@ -50,6 +64,7 @@ function parseArgs(argv) {
       out.in = argv[++i] ?? null;
     } else if (a === "--template") {
       out.template = argv[++i] ?? out.template;
+      out.templateExplicit = true;
     } else if (!a.startsWith("-") && !out.name) {
       out.name = a;
     } else {
@@ -89,9 +104,16 @@ function main() {
     process.exit(1);
   }
 
+  // No --template given, but the name matches a real template id (e.g.
+  // `npm create forkable rill`): fork that business instead of the base
+  // starter. An explicit --template always wins.
+  if (!args.templateExplicit && availableTemplates().includes(slug)) {
+    args.template = slug;
+  }
+
   const templateDir = join(packageRoot, "templates", args.template);
   if (!existsSync(templateDir)) {
-    console.error(`create-forkable: no template named "${args.template}". Available: forkable-starter.`);
+    console.error(`create-forkable: no template named "${args.template}". Available: ${availableTemplates().join(", ")}.`);
     process.exit(1);
   }
 
@@ -137,15 +159,32 @@ function main() {
   run("git", ["add", "-A"], { cwd: targetDir });
   run("git", ["commit", "-q", "-m", `Forked from ${args.template}@${starterVersion}`], { cwd: targetDir, env: gitEnv });
 
-  console.log("\nInstalling dependencies...\n");
-  const installStatus = run(npmCmd, ["install"], { cwd: targetDir });
+  // A template that ships its own pnpm workspace (several packages, a
+  // workspace:* protocol) cannot be installed with npm: npm has no concept
+  // of pnpm-workspace.yaml and chokes on the workspace:* specifier. Use
+  // pnpm for those, npm (the default, zero-extra-tools path) for everything
+  // else.
+  const usesPnpmWorkspace = existsSync(join(targetDir, "pnpm-workspace.yaml"));
+  const pkgManagerCmd = usesPnpmWorkspace ? pnpmCmd : npmCmd;
+
+  console.log(`\nInstalling dependencies with ${pkgManagerCmd}...\n`);
+  let installStatus;
+  try {
+    installStatus = run(pkgManagerCmd, ["install"], { cwd: targetDir });
+  } catch (e) {
+    if (usesPnpmWorkspace && e && e.code === "ENOENT") {
+      console.error(`\ncreate-forkable: this template needs pnpm, which was not found. Install it (https://pnpm.io/installation), then run \`pnpm install && pnpm start\` in ./${slug}.`);
+      process.exit(1);
+    }
+    throw e;
+  }
   if (installStatus !== 0) {
-    console.error("\ncreate-forkable: npm install failed. Fix that, then run `npm start` in the new directory.");
+    console.error(`\ncreate-forkable: ${pkgManagerCmd} install failed. Fix that, then run \`${pkgManagerCmd} start\` in the new directory.`);
     process.exit(installStatus);
   }
 
   console.log("\nRunning the keyless demo...\n");
-  const demoStatus = run(npmCmd, ["start"], { cwd: targetDir });
+  const demoStatus = run(pkgManagerCmd, ["start"], { cwd: targetDir });
   if (demoStatus !== 0) {
     console.error(`\ncreate-forkable: the demo exited ${demoStatus}. The fork is still at ./${slug}; see its README.`);
     process.exit(demoStatus);

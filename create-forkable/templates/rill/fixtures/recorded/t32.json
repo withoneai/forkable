@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Tyler Brooks of PipelinePros, an outsourced SDR firm, is pitching a $6,500 monthly retainer to book qualified meetings for Acme. He cites Acme's hiring as a sign of a recent or upcoming funding round.",
+    "ask": "A 15-minute call this week or next."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.96,
+        "probabilities": {
+          "me": 0.97,
+          "nobody": 0,
+          "them": 0.03,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.1,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.89,
+        "probabilities": {
+          "g1": 0.03,
+          "g2": 0.01,
+          "g3": 0.04,
+          "none": 0.92
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 1,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.73,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.5,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.5,
+          "1": 0.5,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.5,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2322,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Thanks for reaching out, Tyler. We're not looking at outsourced SDR support right now, so I'll pass on a call this round. Our focus for the next few months is closing design partners directly, and we're keeping that in-house for now.\n\nI appreciate you being upfront on pricing and terms, and I wish you a strong Q4.\n\nBest,\nDana"
+}

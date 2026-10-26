@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Dmitri Volkov of Cyberdyne Office says invoice 10482 for 12 standing desks and monitor arms ($7,140) was approved by Riley on October 9 but rejected by your accounts payable system for a missing PO number. Riley is out, and net 30 terms are at day 12.",
+    "ask": "Send the PO number, or confirm he can submit without one."
+  },
+  "draft": "Hi Dmitri,\n\nThanks for flagging this, and sorry for the hassle while Riley is out. I don't have the PO number on hand, and I don't want to guess and have it bounce again. I'm going to check with our team on whether one was issued for this purchase, and whether it's fine to process without one.\n\nCould you tell me whether your invoice has a field where the PO would normally go, and whether you've seen this kind of rejection from us before? That will help me get it sorted quickly. Since you're at day 12 of net 30, there's plenty of runway, and I'll aim to get you an answer soon.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.91,
+        "probabilities": {
+          "me": 0.93,
+          "nobody": 0,
+          "them": 0.01,
+          "third_party": 0.06
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.06,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.07,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.99,
+          "receipt": 0.01
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.89,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.55,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.1,
+          "1": 0.55,
+          "2": 0.35,
+          "3": 0
+        },
+        "score": 1.26,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2282,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

@@ -21,9 +21,11 @@ Options:
   -h, --help          Show this help.
 ```
 
-Today the only template is `forkable-starter` itself, bundled in this
-package. More official and community templates (a full business like
-Rill or Brief, not just the base) are coming; see
-[forkable.dev](https://forkable.dev).
+Two templates ship in this package: `forkable-starter` (the default, a
+small single-package app), and `rill` (`--template rill`), a full AI
+email client with its own pnpm workspace, database and UI. A template
+that ships a `pnpm-workspace.yaml` installs and runs with pnpm instead of
+npm; everything else needs nothing beyond Node. More official and
+community templates are coming; see [forkable.dev](https://forkable.dev).
 
 MIT licensed.

@@ -1,0 +1,55 @@
+{
+  "id": "AAMkEvNew=",
+  "iCalUId": "040000008200E00074C5B7101A82E0080000000005",
+  "type": "singleInstance",
+  "subject": "Pilot kickoff",
+  "body": {
+    "contentType": "text",
+    "content": "Kickoff for the Globex pilot."
+  },
+  "start": {
+    "dateTime": "2026-11-05T17:00:00.0000000",
+    "timeZone": "UTC"
+  },
+  "end": {
+    "dateTime": "2026-11-05T17:45:00.0000000",
+    "timeZone": "UTC"
+  },
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": true,
+  "isDraft": false,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_pilot-kickoff",
+    "conferenceId": "123456789"
+  },
+  "location": {
+    "displayName": "Microsoft Teams Meeting"
+  },
+  "organizer": {
+    "emailAddress": {
+      "name": "Dana Reyes",
+      "address": "dana@acme.com"
+    }
+  },
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Sam Ortiz",
+        "address": "sam@globex.com"
+      }
+    }
+  ],
+  "responseStatus": {
+    "response": "organizer",
+    "time": "0001-01-01T00:00:00Z"
+  },
+  "lastModifiedDateTime": "2026-10-23T08:10:00Z"
+}

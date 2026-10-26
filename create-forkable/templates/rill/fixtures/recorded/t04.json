@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Jordan Park, Head of Marketing, sends the draft launch post (v3, about 900 words) for review. He wants feedback by tomorrow midday, mainly on whether the vague pricing paragraph is too vague. The Vandelay customer quote is still pending approval from Leo.",
+    "ask": "Review launch post draft; advise if pricing paragraph is too vague, by tomorrow midday."
+  },
+  "draft": "Thanks, Jordan, and good timing on getting this ready ahead of the designer.\n\nI'll take a look today and get my comments back to you before midday tomorrow, with a close read on the pricing paragraph. Since the Vandelay quote is still waiting on Leo, I'd hold off on locking that section until it clears.\n\nIf anything is time-sensitive on your end before then, just ping me.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0,
+          "them": 0.01,
+          "third_party": 0.01
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.17,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.51,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.04,
+          "g3": 0.33,
+          "none": 0.63
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.96,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.68,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.32,
+          "2": 0.68,
+          "3": 0
+        },
+        "score": 1.68,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.07,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2309,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

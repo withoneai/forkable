@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "Victor from LangPartners invites Dana to a Board sync on Thursday October 29, 2026, 10:00 to 11:00am Pacific, covering Q3 review, seed round terms, and a hiring update. Priya from Northwind VC is also a guest.",
+    "ask": "Confirm attendance: Yes, No, or Maybe"
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0.01,
+          "them": 0.01,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.07,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 0.63,
+        "probabilities": {
+          "g1": 0.72,
+          "g2": 0,
+          "g3": 0,
+          "none": 0.28
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.06,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "calendar",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 1,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.53,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.67,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.1,
+          "1": 0.67,
+          "2": 0.23,
+          "3": 0
+        },
+        "score": 1.13,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.44,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2304,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@rill/server",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./*": "./src/*.ts" },
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/node.ts",
+    "start": "tsx src/node.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@rill/core": "workspace:*",
+    "@withone/connect": "^0.17.2",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.0",
+    "embedded-postgres": "^18.4.0-beta.17",
+    "hono": "^4.7.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}

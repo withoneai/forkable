@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "Priya Nair of Northwind VC needs Dana's position on two term sheet points before Thursday's 5pm IC: board seat timing and pro rata. She says the rest of the document is clean and counsel can sign once agreed.",
+    "ask": "Decide whether to push on pro rata; send position by tomorrow morning."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.99,
+        "probabilities": {
+          "me": 0.99,
+          "nobody": 0,
+          "them": 0.01,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.93,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 1,
+          "g2": 0,
+          "g3": 0,
+          "none": 0
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.98,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.97,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.01,
+          "2": 0.97,
+          "3": 0.02
+        },
+        "score": 2.01,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.14,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2425,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

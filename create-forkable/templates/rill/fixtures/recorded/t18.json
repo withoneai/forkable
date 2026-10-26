@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Frank Molinari, your landlord, offers to renew Suite 410, which expires January 31. Options are 24 months at $9,400 or 12 months at $9,900 monthly, and he suggests combining with Suite 420 if you need more space.",
+    "ask": "Pick 24-month or 12-month renewal by mid November."
+  },
+  "draft": "Hi Frank,\n\nThanks for getting in touch early, it gives us room to plan properly. We're growing the team this fall and into the new year, so space is a real consideration for us, and the Suite 420 option is interesting.\n\nI can't commit to a term yet, as we're still working through our headcount plans. I'll aim to give you a clear answer before mid November. In the meantime, could you tell me roughly what the rent for Suite 420 would look like, and whether combining it with 410 would change the terms on either renewal option?\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.08,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.96,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.03,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.97,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.94,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.72,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.73,
+          "1": 0.26,
+          "2": 0.01,
+          "3": 0
+        },
+        "score": 0.28,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2347,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

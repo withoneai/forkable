@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ADD COLUMN "show_images" boolean DEFAULT true NOT NULL;

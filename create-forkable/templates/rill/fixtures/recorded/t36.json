@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Aisha Bello, a third-year computer science student at Northfield University, is weighing a big company summer internship against joining a five-person startup. She read your post about leaving a large company and asks for 15 minutes to hear how you would think about it, by email or call, and says a no is fine.",
+    "ask": "15 minutes by email or call to discuss her internship choice"
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.96,
+        "probabilities": {
+          "me": 0.97,
+          "nobody": 0.01,
+          "them": 0.02,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.01,
+          "g3": 0,
+          "none": 0.99
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 0.51,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.59,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.41,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.82,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.78,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.78,
+          "1": 0.22,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.22,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.02,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2291,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Hi Aisha,\n\nThanks for reaching out, and it's great to hear the post resonated. I'm happy to help where I can, though with our seed raise and hiring right now a call is hard to fit in. Email works much better for me.\n\nIf you send me the two or three things you're weighing most (what you want to learn, how much risk you can take on, what kind of mentorship each place offers), I'll reply with how I'd think it through. A few specifics about the startup, like what they're building and whether they've raised money, would help me give you something useful rather than generic.\n\nTalk soon,\nDana"
+}

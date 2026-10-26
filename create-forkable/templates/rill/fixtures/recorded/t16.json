@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Dev Horizons organizers are finalizing your November 7 main stage slot at 2:15pm (25 minutes plus 5 for questions). They need AV choices, a mic preference, whether you need a live internet demo, and bio/headshot reuse, plus a yes or no on the November 6 speaker dinner.",
+    "ask": "Confirm AV, mic, demo, bio, and dinner attendance by Friday."
+  },
+  "draft": "Thanks for the details, Chloe. I'm looking forward to being on the main stage at Dev Horizons.\n\nI'm still pinning down a few things on my side, including the setup, the demo plans, and the dinner, so I'd rather give you firm answers than guesses. You'll have all of it from me by Friday, and I'll let you know sooner if anything is time sensitive for the restaurant count.\n\nIf there's a hard deadline on any one item before Friday, just say so and I'll prioritize it.\n\nThanks for all the work pulling this together.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.11,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.98,
+        "probabilities": {
+          "calendar": 0.02,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.98,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.97,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.8,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.01,
+          "1": 0.8,
+          "2": 0.19,
+          "3": 0
+        },
+        "score": 1.18,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2339,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

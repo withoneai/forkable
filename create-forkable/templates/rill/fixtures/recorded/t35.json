@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Casey Monroe, a B2B software writer for The Signal Report, is working on a piece about small operations teams leaving spreadsheets. Acme came up in two customer interviews. She requests three emailed questions or a 20-minute call on buying trends, with a deadline next Wednesday.",
+    "ask": "Answer three emailed questions or join a 20-minute call by next Wednesday."
+  },
+  "draft": "Happy to help with this. Email works best for me, so please send the three questions over and I'll get back to you well before your Wednesday deadline.\n\nSince the piece is about how teams buy, I'll stick to what I'm seeing from customers and leave fundraising out of it. I'd appreciate the chance to see the quotes before publication, as you offered.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.97,
+        "probabilities": {
+          "me": 0.98,
+          "nobody": 0,
+          "them": 0.02,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.08,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.83,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.13,
+          "none": 0.87
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 0.51,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.59,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.41,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.85,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.61,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.33,
+          "1": 0.61,
+          "2": 0.06,
+          "3": 0
+        },
+        "score": 0.73,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2280,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

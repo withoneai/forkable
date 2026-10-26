@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "Amazon Web Services says the September 2026 invoice for Acme Inc is ready, totaling $2,318.46, charged to the card on file. RDS was the largest cost at $912.10, followed by EC2 at $704.55.",
+    "ask": null
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "nobody",
+        "confidence": 0.95,
+        "probabilities": {
+          "me": 0.04,
+          "nobody": 0.96,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "receipt",
+        "confidence": 0.99,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0.01,
+          "person": 0,
+          "receipt": 0.99
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.76,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.77,
+          "1": 0.22,
+          "2": 0.01,
+          "3": 0
+        },
+        "score": 0.25,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2295,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

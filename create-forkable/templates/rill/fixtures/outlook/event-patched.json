@@ -1,0 +1,77 @@
+{
+  "id": "AAMkEvDesign=",
+  "iCalUId": "040000008200E00074C5B7101A82E0080000000002",
+  "type": "singleInstance",
+  "subject": "Design partner call (moved)",
+  "bodyPreview": "Walk through the pilot.",
+  "body": {
+    "contentType": "text",
+    "content": "Walk through the pilot."
+  },
+  "start": {
+    "dateTime": "2026-10-30T22:00:00.0000000",
+    "timeZone": "UTC"
+  },
+  "end": {
+    "dateTime": "2026-10-30T22:45:00.0000000",
+    "timeZone": "UTC"
+  },
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": true,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_acme-design"
+  },
+  "location": {
+    "displayName": "Microsoft Teams Meeting"
+  },
+  "organizer": {
+    "emailAddress": {
+      "name": "Dana Reyes",
+      "address": "dana@acme.com"
+    }
+  },
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "2026-10-22T10:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Sam Ortiz",
+        "address": "sam@globex.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "tentativelyAccepted",
+        "time": "2026-10-22T11:00:00Z"
+      },
+      "emailAddress": {
+        "name": "Priya Shah",
+        "address": "priya@northwind.vc"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "",
+        "address": "lee@initech.example"
+      }
+    }
+  ],
+  "responseStatus": {
+    "response": "organizer",
+    "time": "0001-01-01T00:00:00Z"
+  },
+  "showAs": "busy",
+  "lastModifiedDateTime": "2026-10-23T08:20:00Z"
+}

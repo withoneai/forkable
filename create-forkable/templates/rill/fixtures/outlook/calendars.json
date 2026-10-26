@@ -1,0 +1,30 @@
+{
+  "value": [
+    {
+      "id": "AAMkCal1=",
+      "name": "Calendar",
+      "color": "auto",
+      "hexColor": "",
+      "isDefaultCalendar": true,
+      "canEdit": true,
+      "canShare": true,
+      "owner": {
+        "name": "Dana Reyes",
+        "address": "dana@acme.com"
+      }
+    },
+    {
+      "id": "AAMkCal2=",
+      "name": "Acme holidays",
+      "color": "lightGreen",
+      "hexColor": "#8fd18f",
+      "isDefaultCalendar": false,
+      "canEdit": false,
+      "canShare": false,
+      "owner": {
+        "name": "Acme team",
+        "address": "team@acme.com"
+      }
+    }
+  ]
+}

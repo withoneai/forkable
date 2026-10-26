@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Wes Carter, Head of Operations at customer Oceanic Supply Co, escalates that CSV exports over about 2,000 rows have timed out since Monday on ticket 2291, with no reply since Tuesday. Friday payroll depends on it.",
+    "ask": "Confirm whether the export will work by Friday, or run it for them."
+  },
+  "draft": "Thanks for writing to me directly, and I'm sorry you've had to chase this.\n\nI don't want to promise tomorrow before I've confirmed it with our engineers, so I'm getting a straight answer from them today. Having someone on our side run the Friday export is a reasonable fallback, and I'll push for it if the fix isn't certain.\n\nTo make that quick, could you reply with the name of the report and the date range or filters you use for payroll? Then nobody has to guess when they run it. You'll hear from me again today with a clear yes or no.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.8,
+        "probabilities": {
+          "me": 0.85,
+          "nobody": 0,
+          "them": 0.01,
+          "third_party": 0.14
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.05,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.01,
+          "none": 0.99
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.89,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.9,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.03,
+          "1": 0.01,
+          "2": 0.93,
+          "3": 0.03
+        },
+        "score": 1.96,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2308,
+      "output_tokens": 271
+    }
+  },
+  "judgedModel": "jev-latest"
+}

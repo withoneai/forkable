@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Sam Okafor introduces you to Lena Fischer, a partner at Initech Ventures on their platform team, who saw the Acme demo at a founder dinner. Sam thinks there's a fit, either for your seed round or for getting Acme in front of Initech's portfolio ops teams.",
+    "ask": "Reply to Lena and set up a conversation about Acme."
+  },
+  "draft": "Sam, thank you for the warm intro, I really appreciate it.\n\nLena, great to meet you. I'm glad the demo caught your eye at the dinner, and I'd love to talk about both sides of this: the round we're in the middle of, and how Acme might be useful to the ops teams across your portfolio. Could you share a bit about what the platform team is focused on right now, and what a good first conversation would look like from your end? If you have a calendar link or a few times that suit you, I'm happy to work around your schedule.\n\nTalk soon,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.88,
+        "probabilities": {
+          "me": 0.91,
+          "nobody": 0,
+          "them": 0.06,
+          "third_party": 0.03
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.06,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g1",
+        "confidence": 0.95,
+        "probabilities": {
+          "g1": 0.96,
+          "g2": 0,
+          "g3": 0.02,
+          "none": 0.02
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 0.98,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.02,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.98,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.68,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.95,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.03,
+          "1": 0.95,
+          "2": 0.02,
+          "3": 0
+        },
+        "score": 1,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.08,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2306,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

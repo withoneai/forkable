@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "Stack Notes issue 148, a newsletter about the cost of flaky test suites. It reports that flaky tests cost about 4.2 engineer hours per team weekly, and fixing the top 5% removed 80% of retries. Other items cover a queue migration, serverless Postgres pooling, and senior engineer interviews.",
+    "ask": "Reply with topics you want covered, or read online."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "nobody",
+        "confidence": 0.84,
+        "probabilities": {
+          "me": 0.12,
+          "nobody": 0.88,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.04,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.99,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0.01,
+          "g3": 0,
+          "none": 0.99
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "newsletter",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 1,
+          "notification": 0,
+          "person": 0,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.97,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.97,
+          "1": 0.03,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.03,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2334,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

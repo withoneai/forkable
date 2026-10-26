@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Nadia Hassan, program chair of Umbrella Summit in Austin on March 12 to 13, invites Dana to give a 30 minute talk on how Acme hires and runs engineering. Travel and two hotel nights are covered, with no speaker fee. The program locks November 15.",
+    "ask": "Send a one paragraph talk abstract by November 15."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 1,
+        "probabilities": {
+          "me": 1,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.06,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 0.5,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.58,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.42,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.83,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.91,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.91,
+          "1": 0.09,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.1,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2328,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Hi Nadia,\n\nThank you for thinking of me, this sounds like a great event, and the topic is close to what we spend our days on at Acme. I'm interested in principle, but I need to check my calendar for those March dates and see what the next few months look like for us before I commit.\n\nI'll aim to get back to you well ahead of the November 15 deadline. In the meantime, is there a particular angle you'd like the talk to take, say hiring, how the team runs day to day, or both? That would help me shape a useful abstract if it works out.\n\nTalk soon,\nDana"
+}

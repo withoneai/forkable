@@ -1,7 +1,7 @@
 {
   "name": "create-forkable",
-  "version": "0.1.1",
-  "description": "npm create forkable: fork a business. Copies the Forkable starter, fills in who it's for, installs, and runs the keyless demo.",
+  "version": "0.2.0",
+  "description": "npm create forkable: fork a business. Copies a Forkable template (the starter, or a real business like Rill), fills in who it's for, installs, and runs the keyless demo.",
   "license": "MIT",
   "type": "module",
   "bin": {

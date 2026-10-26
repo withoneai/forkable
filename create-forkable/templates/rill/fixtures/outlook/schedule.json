@@ -1,0 +1,63 @@
+{
+  "value": [
+    {
+      "scheduleId": "dana@acme.com",
+      "availabilityView": "0220",
+      "scheduleItems": [
+        {
+          "isPrivate": false,
+          "status": "busy",
+          "subject": "Design partner call",
+          "location": "Microsoft Teams Meeting",
+          "start": {
+            "dateTime": "2026-10-30T21:00:00.0000000",
+            "timeZone": "UTC"
+          },
+          "end": {
+            "dateTime": "2026-10-30T21:30:00.0000000",
+            "timeZone": "UTC"
+          }
+        },
+        {
+          "isPrivate": false,
+          "status": "free",
+          "subject": "Focus block",
+          "start": {
+            "dateTime": "2026-10-30T18:00:00.0000000",
+            "timeZone": "UTC"
+          },
+          "end": {
+            "dateTime": "2026-10-30T19:00:00.0000000",
+            "timeZone": "UTC"
+          }
+        },
+        {
+          "isPrivate": true,
+          "status": "tentative",
+          "start": {
+            "dateTime": "2026-10-30T23:00:00.0000000",
+            "timeZone": "UTC"
+          },
+          "end": {
+            "dateTime": "2026-10-30T23:30:00.0000000",
+            "timeZone": "UTC"
+          }
+        }
+      ],
+      "workingHours": {
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "startTime": "09:00:00.0000000",
+        "endTime": "18:00:00.0000000",
+        "timeZone": {
+          "name": "Pacific Standard Time"
+        }
+      }
+    }
+  ]
+}

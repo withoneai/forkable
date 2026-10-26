@@ -1,0 +1,204 @@
+{
+  "value": [
+    {
+      "id": "AAMkEvBoard=",
+      "iCalUId": "040000008200E00074C5B7101A82E0080000000001",
+      "type": "singleInstance",
+      "subject": "Board sync",
+      "bodyPreview": "Quarterly board sync. Agenda to follow.",
+      "body": {
+        "contentType": "html",
+        "content": "<html><body><p>Quarterly board sync. Agenda to follow.</p></body></html>"
+      },
+      "start": {
+        "dateTime": "2026-10-29T10:00:00.0000000",
+        "timeZone": "Pacific Standard Time"
+      },
+      "end": {
+        "dateTime": "2026-10-29T11:00:00.0000000",
+        "timeZone": "Pacific Standard Time"
+      },
+      "isAllDay": false,
+      "isCancelled": false,
+      "isOrganizer": false,
+      "isOnlineMeeting": false,
+      "location": {
+        "displayName": "Lang Partners, 4th floor"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "Victor Langford",
+          "address": "victor@langpartners.example"
+        }
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "none",
+            "time": "0001-01-01T00:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Dana Reyes",
+            "address": "dana@acme.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "accepted",
+            "time": "2026-10-21T18:30:00Z"
+          },
+          "emailAddress": {
+            "name": "Priya Shah",
+            "address": "priya@northwind.vc"
+          }
+        }
+      ],
+      "responseStatus": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "showAs": "tentative",
+      "lastModifiedDateTime": "2026-10-21T18:00:00Z"
+    },
+    {
+      "id": "AAMkEvDesign=",
+      "iCalUId": "040000008200E00074C5B7101A82E0080000000002",
+      "type": "singleInstance",
+      "subject": "Design partner call",
+      "bodyPreview": "Walk through the pilot.",
+      "body": {
+        "contentType": "text",
+        "content": "Walk through the pilot."
+      },
+      "start": {
+        "dateTime": "2026-10-30T21:00:00.0000000",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2026-10-30T21:30:00.0000000",
+        "timeZone": "UTC"
+      },
+      "isAllDay": false,
+      "isCancelled": false,
+      "isOrganizer": true,
+      "isOnlineMeeting": true,
+      "onlineMeetingProvider": "teamsForBusiness",
+      "onlineMeeting": {
+        "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_acme-design"
+      },
+      "location": {
+        "displayName": "Microsoft Teams Meeting"
+      },
+      "organizer": {
+        "emailAddress": {
+          "name": "Dana Reyes",
+          "address": "dana@acme.com"
+        }
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "accepted",
+            "time": "2026-10-22T10:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Sam Ortiz",
+            "address": "sam@globex.com"
+          }
+        },
+        {
+          "type": "required",
+          "status": {
+            "response": "tentativelyAccepted",
+            "time": "2026-10-22T11:00:00Z"
+          },
+          "emailAddress": {
+            "name": "Priya Shah",
+            "address": "priya@northwind.vc"
+          }
+        }
+      ],
+      "responseStatus": {
+        "response": "organizer",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "showAs": "busy",
+      "lastModifiedDateTime": "2026-10-22T11:00:00Z"
+    },
+    {
+      "id": "AAMkEvOffsite=",
+      "iCalUId": "040000008200E00074C5B7101A82E0080000000003",
+      "type": "singleInstance",
+      "subject": "Team offsite",
+      "bodyPreview": "",
+      "start": {
+        "dateTime": "2026-11-03T00:00:00.0000000",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2026-11-04T00:00:00.0000000",
+        "timeZone": "UTC"
+      },
+      "isAllDay": true,
+      "isCancelled": false,
+      "isOrganizer": true,
+      "isOnlineMeeting": false,
+      "organizer": {
+        "emailAddress": {
+          "name": "Dana Reyes",
+          "address": "dana@acme.com"
+        }
+      },
+      "attendees": [],
+      "responseStatus": {
+        "response": "organizer"
+      },
+      "showAs": "free",
+      "lastModifiedDateTime": "2026-10-20T09:00:00Z"
+    },
+    {
+      "id": "AAMkEvDropped=",
+      "iCalUId": "040000008200E00074C5B7101A82E0080000000004",
+      "type": "occurrence",
+      "seriesMasterId": "AAMkEvSeries=",
+      "subject": "Canceled: Weekly 1:1",
+      "bodyPreview": "",
+      "start": {
+        "dateTime": "2026-10-28T09:00:00.0000000",
+        "timeZone": "Eastern Standard Time"
+      },
+      "end": {
+        "dateTime": "2026-10-28T09:30:00.0000000",
+        "timeZone": "Eastern Standard Time"
+      },
+      "isAllDay": false,
+      "isCancelled": true,
+      "isOrganizer": false,
+      "organizer": {
+        "emailAddress": {
+          "name": "Sam Ortiz",
+          "address": "sam@globex.com"
+        }
+      },
+      "attendees": [
+        {
+          "type": "required",
+          "status": {
+            "response": "accepted"
+          },
+          "emailAddress": {
+            "name": "Dana Reyes",
+            "address": "dana@acme.com"
+          }
+        }
+      ],
+      "responseStatus": {
+        "response": "accepted"
+      },
+      "lastModifiedDateTime": "2026-10-22T08:00:00Z"
+    }
+  ]
+}

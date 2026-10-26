@@ -1,0 +1,93 @@
+{
+  "writerModel": "claude-haiku-5-5",
+  "summary": {
+    "summary": "GitHub notice that Marcus merged PR #412 into main, which rate limits the export endpoint and streams CSV rows to fix timeouts on exports over 2,000 rows (ticket 2291). All 14 checks passed.",
+    "ask": null
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "nobody",
+        "confidence": 0.99,
+        "probabilities": {
+          "me": 0.01,
+          "nobody": 0.99,
+          "them": 0,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 1,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0,
+          "none": 1
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "notification",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 1,
+          "person": 0,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.03,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.95,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.96,
+          "1": 0.03,
+          "2": 0.01,
+          "3": 0
+        },
+        "score": 0.05,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2287,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

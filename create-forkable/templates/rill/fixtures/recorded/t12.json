@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Patricia Gomez from Globex procurement says a completed 84-question security questionnaire is required before moving from pilot to a paid contract for the 40-seat rollout. A SOC 2 report or security overview can replace covered questions. Due November 3.",
+    "ask": "Return the completed security questionnaire by November 3."
+  },
+  "draft": "Hi Patricia,\n\nGood to connect, and glad to be working with you and Elena on this. We'll get the questionnaire completed and back to you ahead of the November 3 deadline.\n\nOne quick question so we point you to the right material: do you have a preference between a completed questionnaire alone, or a security overview alongside it? If there are specific sections your team weighs most heavily, let me know and we'll prioritize those.\n\nBest,\nDana",
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.87,
+        "probabilities": {
+          "me": 0.9,
+          "nobody": 0,
+          "them": 0,
+          "third_party": 0.1
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.08,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "g3",
+        "confidence": 0.83,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.87,
+          "none": 0.13
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.06,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "person",
+        "confidence": 1,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 1,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.86,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.17,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.41,
+          "1": 0.35,
+          "2": 0.24,
+          "3": 0
+        },
+        "score": 0.85,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.03,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2306,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest"
+}

@@ -1,0 +1,94 @@
+{
+  "writerModel": "claude-sonnet-5-5",
+  "summary": {
+    "summary": "Yusuf Demir, Head of Partnerships at Wonka Labs, proposes a partnership where Acme serves as the front end and Wonka's workflow engine runs the automations. He cites about 300 mid-market customers asking for an integration and two past partner integrations that drove signups.",
+    "ask": "A 30-minute call to explore the integration partnership."
+  },
+  "jev": {
+    "answers": {
+      "ball": {
+        "choice": "me",
+        "confidence": 0.96,
+        "probabilities": {
+          "me": 0.97,
+          "nobody": 0,
+          "them": 0.03,
+          "third_party": 0
+        },
+        "type": "choice"
+      },
+      "commitment": {
+        "noul": 0.08,
+        "type": "noul"
+      },
+      "goal": {
+        "choice": "none",
+        "confidence": 0.61,
+        "probabilities": {
+          "g1": 0,
+          "g2": 0,
+          "g3": 0.29,
+          "none": 0.71
+        },
+        "type": "choice"
+      },
+      "inj_action_request": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_agent_addressed": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "inj_override": {
+        "noul": 0.02,
+        "type": "noul"
+      },
+      "kind": {
+        "choice": "cold_pitch",
+        "confidence": 0.96,
+        "probabilities": {
+          "calendar": 0,
+          "cold_pitch": 0.97,
+          "newsletter": 0,
+          "notification": 0,
+          "person": 0.03,
+          "receipt": 0
+        },
+        "type": "choice"
+      },
+      "needs_reply": {
+        "noul": 0.77,
+        "type": "noul"
+      },
+      "urgency": {
+        "confidence": 0.52,
+        "legend": {
+          "0": "It can wait a week or more, or never needs acting on.",
+          "1": "It should be handled this week.",
+          "2": "It should be handled today: someone is blocked or a deadline is days away.",
+          "3": "It needs attention within the hour: something is broken, money is at risk, or a deadline is today."
+        },
+        "probabilities": {
+          "0": 0.48,
+          "1": 0.52,
+          "2": 0,
+          "3": 0
+        },
+        "score": 0.52,
+        "type": "score"
+      },
+      "vip_v3": {
+        "noul": 0.04,
+        "type": "noul"
+      }
+    },
+    "model": "jev-1.13.0",
+    "usage": {
+      "input_tokens": 2302,
+      "output_tokens": 272
+    }
+  },
+  "judgedModel": "jev-latest",
+  "draft": "Thanks for reaching out, Yusuf. A workflow engine with that kind of reach among operations teams sounds like it could be a good fit for what we are building.\n\nWe are heads down on a few priorities right now, so I want to be thoughtful about where I spend time. Before we set up a call, could you share a bit more on what the integration would involve on our side, such as the engineering effort and what the two earlier partners saw in practice? That will help me decide who from our team should join.\n\nTalk soon,\nDana"
+}
