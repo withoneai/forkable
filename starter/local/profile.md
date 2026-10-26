@@ -11,10 +11,11 @@ This fork is for **{{FOR}}**, in **{{IN}}**.
 Nothing else here is filled in yet. A local GTM pass (positioning, pricing,
 channels) should set:
 
-- **Language and locale.** Does {{IN}} read right-to-left? What currency,
-  date format and holidays apply there?
+- **Language and locale.** What language and script do {{FOR}} in {{IN}}
+  use day to day? Is it written right-to-left? What currency, date format
+  and holidays apply there?
 - **Local channels.** Which of WhatsApp Business, Square, Calendly or a
-  phone number does a {{FOR}} business in {{IN}} actually use?
+  phone number do {{FOR}} in {{IN}} actually rely on?
 - **Who this is for, specifically.** Not "{{FOR}}" in general: the one
   owner-operator persona this fork should feel like it was built for.
 
