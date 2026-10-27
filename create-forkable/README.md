@@ -1,7 +1,7 @@
 # create-forkable
 
 ```
-npm create forkable@latest my-business --for "real estate agents" --in "Los Angeles"
+npm create forkable@latest my-business -- --for "real estate agents" --in "Los Angeles"
 ```
 
 Copies the [Forkable](https://forkable.dev) starter into `./my-business`,

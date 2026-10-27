@@ -174,7 +174,7 @@ overwritten.
 Templates in this package: ${bundledTemplateIds().join(", ")}
 
 Examples:
-  npm create forkable@latest rill --for "real estate agents" --in "Los Angeles"
+  npm create forkable@latest rill -- --for "real estate agents" --in "Los Angeles"
   npm create forkable@latest my-inbox -- --template rill --json --yes`);
 }
 

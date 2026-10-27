@@ -7,7 +7,7 @@ from: [One Connect](https://withone.ai) wired up, a keyless Acme Inc demo
 that exits 0, one runtime agent to build on, and a go-to-market kit.
 
 ```
-npm create forkable@latest my-business --for "real estate agents" --in "Los Angeles"
+npm create forkable@latest my-business -- --for "real estate agents" --in "Los Angeles"
 cd my-business
 npm install
 npm start
