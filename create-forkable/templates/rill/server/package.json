@@ -6,7 +6,7 @@
   "type": "module",
   "exports": { ".": "./src/index.ts", "./*": "./src/*.ts" },
   "scripts": {
-    "dev": "tsx watch --clear-screen=false src/node.ts",
+    "dev": "RILL_UI_URL=${RILL_UI_URL:-http://localhost:5180} tsx watch --clear-screen=false src/node.ts",
     "start": "tsx src/node.ts",
     "typecheck": "tsc --noEmit"
   },

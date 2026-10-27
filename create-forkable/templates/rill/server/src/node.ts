@@ -79,10 +79,23 @@ export async function startServer(options: { env?: Partial<ServerEnv>; log?: (li
 
   const app = createApp(deps);
 
-  // ui/dist when built, with the SPA fallback; a plain page otherwise.
+  // In `pnpm dev` the UI is Vite on its own port (RILL_UI_URL), so anything
+  // that lands here outside /api, such as the One Connect callback's return to
+  // "/", goes on to it with its path and query. Otherwise: ui/dist when built,
+  // with the SPA fallback, and a plain page when it isn't.
+  const devUi = process.env.RILL_UI_URL?.replace(/\/$/, "");
+  if (devUi) {
+    app.get("*", (c) => {
+      if (c.req.path.startsWith("/api/")) return c.notFound();
+      const u = new URL(c.req.url);
+      return c.redirect(`${devUi}${u.pathname}${u.search}`);
+    });
+  }
   const uiDist = resolve(ROOT, "ui", "dist");
   const indexHtml = resolve(uiDist, "index.html");
-  if (existsSync(indexHtml)) {
+  if (devUi) {
+    // handled above
+  } else if (existsSync(indexHtml)) {
     const root = relative(process.cwd(), uiDist) || ".";
     app.use("/*", serveStatic({ root }));
     app.get("*", (c) => {
