@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "site": "https://forkable.dev",
+  "command": "npm create forkable@latest <dir> -- --template <id>",
+  "agentCommand": "npm create forkable@latest <dir> -- --template <id> --json --yes",
+  "templates": [
+    {
+      "id": "forkable-starter",
+      "name": "Forkable starter",
+      "status": "available",
+      "kind": "Starter",
+      "tagline": "Fork a business. The team comes with it.",
+      "description": "The base every Forkable business starts from: One Connect and Sign in with One prewired, a keyless Acme Inc demo, agents/, AGENTS.md, build skills and a gtm/ kit.",
+      "platforms": ["gmail"],
+      "packageManager": "npm",
+      "create": "npm create forkable@latest my-business",
+      "demo": "npm start",
+      "site": "https://forkable.dev",
+      "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/forkable-starter",
+      "repo": null,
+      "envToGoLive": ["ONE_CLIENT_ID", "ONE_CLIENT_SECRET", "ONE_CONNECT_KEY", "ONE_REDIRECT_URI"]
+    },
+    {
+      "id": "rill",
+      "name": "Rill",
+      "status": "available",
+      "kind": "Email",
+      "tagline": "Your goals and your VIPs decide what you see first.",
+      "description": "An email client on your Gmail. It sorts mail by your VIPs and goals and drafts the reply.",
+      "platforms": ["gmail", "google-calendar", "outlook-mail", "outlook-calendar", "zoom", "anthropic", "typesafe"],
+      "packageManager": "pnpm",
+      "create": "npm create forkable@latest my-inbox -- --template rill",
+      "demo": "pnpm start",
+      "site": "https://rill.forkable.dev",
+      "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/rill",
+      "repo": null,
+      "envToGoLive": ["ONE_CLIENT_ID", "ONE_CLIENT_SECRET", "ONE_CONNECT_KEY", "ONE_PERMISSION_SET"]
+    },
+    {
+      "id": "brief",
+      "name": "Brief",
+      "status": "coming-soon",
+      "kind": "AI visibility",
+      "tagline": "See how AI answers the questions your buyers ask.",
+      "description": "See how AI answers the questions your buyers ask, who gets named and cited, and what to write next.",
+      "platforms": ["openai", "anthropic", "gemini", "perplexity", "webflow"],
+      "packageManager": "pnpm",
+      "create": null,
+      "demo": null,
+      "site": "https://brief.forkable.dev",
+      "code": null,
+      "repo": null,
+      "envToGoLive": []
+    }
+  ]
+}
