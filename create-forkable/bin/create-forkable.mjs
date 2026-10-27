@@ -469,6 +469,10 @@ async function fork(args, state) {
   else if (!args.install) say(`  Skipped by --no-install. Run \`cd ${slug} && ${pm.label} install\` first.\n`);
 
   state.nextSteps = nextSteps(targetDir, pm.label, args, state);
+  if (state.agentsMd) {
+    state.next = `Read ${state.agentsMd} now, before you change, run or answer anything else. It holds this fork's rules: where secrets go, what needs the human's OK, how going live works.`;
+    say(`Coding agent? Read ./${slug}/AGENTS.md before anything else.\n`);
+  }
   state.ok = true;
 }
 
@@ -505,6 +509,7 @@ async function main() {
 
   const state = {
     ok: false,
+    next: null,
     dir: null,
     template: null,
     version: null,
