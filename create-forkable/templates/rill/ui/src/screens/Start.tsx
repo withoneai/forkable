@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useOneConnect } from "@withone/connect/react";
-import { ArrowRight, Check, ListChecks, Mail, PenLine, Plus, ShieldCheck } from "lucide-react";
-import type { ApiMailbox, MailboxEvent, VipSuggestion } from "@rill/core/api-types";
+import { ArrowRight, Check, Plus } from "lucide-react";
+import type { MailboxEvent, VipSuggestion } from "@rill/core/api-types";
 import { LANES, type Lane } from "@rill/core/types";
 import { api } from "@/lib/api";
 import { useMailbox } from "@/lib/mailbox";
@@ -12,6 +11,8 @@ import { useMailboxEvents } from "@/lib/sse";
 import { toast } from "@/lib/toast";
 import { cn, LANE_LABEL } from "@/lib/utils";
 import { Logo } from "@/components/Logo";
+import { Splash } from "@/components/Splash";
+import { SignIn } from "./SignIn";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -28,21 +29,23 @@ const STEPS: { n: Step; label: string }[] = [
 ];
 
 export function Start() {
-  const { me, loading, mailbox, select } = useMailbox();
+  const { loading, mailbox } = useMailbox();
   const [params] = useSearchParams();
   const [step, setStep] = useState<Step>(() => {
     // Dev convenience: /start?step=3 opens a later step when a mailbox exists.
     const n = Number(params.get("step"));
     return n >= 1 && n <= 4 ? (n as Step) : 1;
   });
-  const [created, setCreated] = useState<ApiMailbox | null>(null);
-  const nav = useNavigate();
-  const mb = created ?? mailbox;
+  const mb = mailbox;
 
   useEffect(() => {
     // A mailbox exists but onboarding was not finished: pick up at goals.
-    if (!loading && mailbox && !mailbox.onboarded && step === 1 && !created) setStep(2);
-  }, [loading, mailbox, step, created]);
+    if (!loading && mailbox && !mailbox.onboarded && step === 1) setStep(2);
+  }, [loading, mailbox, step]);
+
+  // Step 1 is the sign-in screen: full screen, no wizard header.
+  if (loading) return <Splash />;
+  if (step === 1 && !(mailbox && !mailbox.onboarded)) return <SignIn />;
 
   return (
     <div className="flex h-full flex-col bg-background">
@@ -62,78 +65,10 @@ export function Start() {
         <span />
       </header>
       <main className="flex min-h-0 flex-1 items-start justify-center overflow-y-auto px-5 py-8">
-        {step === 1 && <Welcome me={me} onMailbox={(m) => {
-          setCreated(m); select(m.id);
-          // The sample ships with goals and VIPs already set, so it opens straight onto the inbox.
-          if (m.onboarded) nav("/inbox/vip"); else setStep(2);
-        }} />}
         {step === 2 && mb && <Goals mailboxId={mb.id} onNext={() => setStep(3)} onSkip={() => setStep(4)} />}
         {step === 3 && mb && <Vips mailboxId={mb.id} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
         {step === 4 && mb && <LiveSort mailboxId={mb.id} />}
       </main>
-    </div>
-  );
-}
-
-function Welcome({ me, onMailbox }: { me: ReturnType<typeof useMailbox>["me"]; onMailbox: (m: ApiMailbox) => void }) {
-  const qc = useQueryClient();
-  const [busy, setBusy] = useState<"sample" | null>(null);
-  const connect = useOneConnect({
-    authorizeUrl: "/api/one/authorize",
-    connector: "gmail",
-    onSuccess: () => { qc.invalidateQueries({ queryKey: keys.me }); },
-    onError: (message) => toast({ title: "Sign in did not finish", detail: message, tone: "destructive" }),
-  });
-  const configured = me?.connect.configured ?? false;
-
-  const createSample = async () => {
-    setBusy("sample");
-    try {
-      const m = await api.createSampleMailbox();
-      await qc.invalidateQueries({ queryKey: keys.me });
-      onMailbox(m);
-    } catch (e) {
-      toast({ title: "Could not open that mailbox", detail: (e as Error).message, tone: "destructive" });
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  return (
-    <div className="slide-up flex w-full max-w-[460px] flex-col gap-8 pt-[7vh]">
-      <div className="flex flex-col gap-4">
-        <Logo size={36} />
-        <h1 className="text-28 font-semibold tracking-tight">Your goals and your VIPs decide what you see first.</h1>
-        <p className="text-13 text-muted-foreground">
-          Rill is an AI email client on your own Gmail or Outlook. It sorts every email into five lanes, writes the reply, and never sends without your keypress.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <Button variant="primary" icon={<Mail />} className="h-10 justify-start px-3.5 text-13" disabled={!configured || connect.status === "connecting"} loading={connect.status === "connecting"} onClick={connect.open}>
-          Sign in with One
-          <span className="ml-auto text-11 font-normal opacity-80">Gmail or Outlook, custom access</span>
-        </Button>
-        {!configured && (
-          <p className="px-1 text-11 text-muted-foreground">
-            Sign in is not set up on this {me?.local ? "computer" : "server"} yet. The sample inbox works without it.
-            {me?.local && <> <Link to="/setup/connect" className="font-medium text-foreground underline underline-offset-2">Set up Sign in with One</Link></>}
-          </p>
-        )}
-        <Button icon={<ArrowRight />} className="h-10 justify-start px-3.5 text-13" loading={busy === "sample"} onClick={() => void createSample()}>
-          Try the Acme sample inbox
-          <span className="ml-auto text-11 font-normal text-muted-foreground">No keys, recorded judgments</span>
-        </Button>
-      </div>
-      <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground">
-        <li className="flex items-start gap-2.5"><ListChecks className="mt-0.5 size-3.5 shrink-0 stroke-[1.75]" /><span><span className="text-foreground">Reads and sorts</span> with exactly the mail actions you grant, in your One account.</span></li>
-        <li className="flex items-start gap-2.5"><PenLine className="mt-0.5 size-3.5 shrink-0 stroke-[1.75]" /><span><span className="text-foreground">Writes drafts.</span> Only your keypress sends. The writer has no tools.</span></li>
-        <li className="flex items-start gap-2.5"><ShieldCheck className="mt-0.5 size-3.5 shrink-0 stroke-[1.75]" /><span><span className="text-foreground">Lists every call</span> under Access, including the ones One refused.</span></li>
-      </ul>
-      <div className="flex items-center gap-3 rounded-md border border-border bg-faint px-3 py-2 font-mono text-11 text-muted-foreground" aria-label="Example receipt">
-        <span className="text-foreground">Gmail · delete</span>
-        <span className="flex-1 border-b border-dotted border-border-strong" aria-hidden />
-        <span className="text-destructive-text">declined, 403</span>
-      </div>
     </div>
   );
 }
