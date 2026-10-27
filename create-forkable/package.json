@@ -19,7 +19,9 @@
   },
   "scripts": {
     "sync-template": "node scripts/sync-template.mjs",
-    "prepack": "node scripts/sync-template.mjs"
+    "prepack": "node scripts/sync-template.mjs",
+    "mirror-templates": "node scripts/mirror-templates.mjs",
+    "mirror-templates:check": "node scripts/mirror-templates.mjs --check"
   },
   "homepage": "https://forkable.dev"
 }

@@ -103,3 +103,14 @@ for, copy or write a secret, and read the fork's `AGENTS.md` before
 changing code.
 
 MIT licensed.
+
+## Template mirrors
+
+Replit and Bolt import whole repos, and `gh repo create --template` needs a
+repo marked as a template, so each template here also has a standalone
+mirror (`withoneai/forkable-rill`, `withoneai/forkable-starter`).
+`npm run mirror-templates` writes them to `~/projects/forkable-mirrors/<repo>`
+(`--out` to change it), one commit per sync that names the source commit,
+and only when the content changed. `npm run mirror-templates:check` fails
+when a mirror is stale. `scripts/mirror-templates.workflow.yml` is the CI
+job that would push them; it is not enabled.

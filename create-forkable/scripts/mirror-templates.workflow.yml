@@ -1,0 +1,100 @@
+# Template mirrors: keeps withoneai/forkable-<id> in sync with
+# create-forkable/templates/<id>.
+#
+# NOT ENABLED. GitHub only runs workflows under .github/workflows/, and this
+# file sits in create-forkable/scripts/ on purpose. To turn it on, once Moe
+# has approved publishing the mirror repos:
+#
+#   1. Create each mirror repo, public, and mark it as a GitHub template:
+#        gh repo create withoneai/forkable-rill --public --description "Rill, a Forkable template (mirror of withoneai/forkable)"
+#        gh repo edit withoneai/forkable-rill --template
+#      (same for forkable-starter). `--template` is what makes
+#      "Use this template" and `gh repo create <new> --template withoneai/forkable-rill` work.
+#   2. One deploy key per mirror (GitHub deploy keys are per repo):
+#        ssh-keygen -t ed25519 -N "" -C "forkable-mirror-rill" -f mirror-rill
+#        gh repo deploy-key add mirror-rill.pub --repo withoneai/forkable-rill --allow-write --title "forkable mirror sync"
+#        gh secret set MIRROR_DEPLOY_KEY_RILL --repo withoneai/forkable < mirror-rill
+#      Then delete the local key files. Starter: MIRROR_DEPLOY_KEY_STARTER.
+#   3. git mv create-forkable/scripts/mirror-templates.workflow.yml .github/workflows/mirror-templates.yml
+#
+# On every push to main that touches a template, each mirror is cloned,
+# rewritten by scripts/mirror-templates.mjs (one commit, only when content
+# changed, message naming the source commit) and pushed. Pull requests get
+# the read-only --check, which fails when a mirror would change; that is a
+# heads-up for the reviewer, not a blocker, since the push on merge syncs it.
+
+name: Template mirrors
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "create-forkable/templates/**"
+      - "create-forkable/scripts/mirror-templates.mjs"
+  pull_request:
+    paths:
+      - "create-forkable/templates/**"
+      - "create-forkable/scripts/mirror-templates.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: template-mirrors
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: rill
+            repo: forkable-rill
+            key: MIRROR_DEPLOY_KEY_RILL
+          - id: forkable-starter
+            repo: forkable-starter
+            key: MIRROR_DEPLOY_KEY_STARTER
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Clone the mirror
+        env:
+          DEPLOY_KEY: ${{ secrets[matrix.key] }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/mirrors"
+          if [ -n "$DEPLOY_KEY" ]; then
+            install -m 700 -d ~/.ssh
+            printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/mirror_key
+            chmod 600 ~/.ssh/mirror_key
+            ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/mirror_key -o IdentitiesOnly=yes"
+            git clone "git@github.com:withoneai/${{ matrix.repo }}.git" "$RUNNER_TEMP/mirrors/${{ matrix.repo }}"
+          else
+            # Pull requests from forks get no secrets: read the public mirror over https.
+            git clone "https://github.com/withoneai/${{ matrix.repo }}.git" "$RUNNER_TEMP/mirrors/${{ matrix.repo }}"
+          fi
+
+      - name: Check (pull requests)
+        if: github.event_name == 'pull_request'
+        working-directory: create-forkable
+        run: node scripts/mirror-templates.mjs --check --only "${{ matrix.id }}" --out "$RUNNER_TEMP/mirrors"
+
+      - name: Sync and push (main)
+        if: github.event_name != 'pull_request'
+        working-directory: create-forkable
+        env:
+          GIT_AUTHOR_NAME: forkable-mirror[bot]
+          GIT_AUTHOR_EMAIL: noreply@forkable.dev
+          GIT_COMMITTER_NAME: forkable-mirror[bot]
+          GIT_COMMITTER_EMAIL: noreply@forkable.dev
+        run: |
+          node scripts/mirror-templates.mjs --only "${{ matrix.id }}" --out "$RUNNER_TEMP/mirrors" --source "${GITHUB_SHA::7}"
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/mirror_key -o IdentitiesOnly=yes"
+          git -C "$RUNNER_TEMP/mirrors/${{ matrix.repo }}" push origin main
