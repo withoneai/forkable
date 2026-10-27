@@ -24,7 +24,8 @@ function main(): void {
   console.log("Receipt");
   console.log(`  ${receiptLine(receipt)}`);
   console.log(`  ${receipt.note}`);
-  console.log("\nRun `npm run dev` to sign in with One and connect your own tools.");
+  // create-forkable prints its own next steps right after this.
+  if (!process.env.FORKABLE_CREATE) console.log("\nRun `npm run dev` to sign in with One and connect your own tools.");
 }
 
 main();

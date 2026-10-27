@@ -141,9 +141,12 @@ function main() {
   // local/profile.md: fill in who this fork is for, and where.
   const profilePath = join(targetDir, "local", "profile.md");
   if (existsSync(profilePath)) {
-    const forValue = args.for ?? '(not set - rerun with --for "<who this is for>")';
-    const inValue = args.in ?? '(not set - rerun with --in "<where>")';
-    const filled = fillPlaceholders(readFileSync(profilePath, "utf8"), { FOR: forValue, IN: inValue });
+    // Fill only what was given. An unset field keeps its {{FOR}} / {{IN}}
+    // placeholder for the owner, a coding agent or a GTM skill to fill later.
+    const values = {};
+    if (args.for) values.FOR = args.for;
+    if (args.in) values.IN = args.in;
+    const filled = fillPlaceholders(readFileSync(profilePath, "utf8"), values);
     writeFileSync(profilePath, filled);
   }
 
@@ -184,13 +187,44 @@ function main() {
   }
 
   console.log("\nRunning the keyless demo...\n");
-  const demoStatus = run(pkgManagerCmd, ["start"], { cwd: targetDir });
+  const demoStatus = run(pkgManagerCmd, ["start"], { cwd: targetDir, env: { ...process.env, FORKABLE_CREATE: "1" } });
   if (demoStatus !== 0) {
     console.error(`\ncreate-forkable: the demo exited ${demoStatus}. The fork is still at ./${slug}; see its README.`);
     process.exit(demoStatus);
   }
 
-  console.log(`\n./${slug} is ready. cd ${slug}, then see its AGENTS.md and README.md for next steps.`);
+  // Each template prints its own next steps (forkable.json "welcome": a
+  // dependency-free Node script). Templates without one get the generic list.
+  const welcome = readWelcome(targetDir);
+  if (welcome) {
+    const status = run(process.execPath, [welcome, "--dir", slug, "--pm", pkgManagerCmd.replace(/\.cmd$/, "")], { cwd: targetDir });
+    if (status === 0) return;
+  }
+  printNextSteps(slug, pkgManagerCmd.replace(/\.cmd$/, ""));
+}
+
+function readWelcome(targetDir) {
+  try {
+    const { welcome } = JSON.parse(readFileSync(join(targetDir, "forkable.json"), "utf8"));
+    if (typeof welcome !== "string") return null;
+    const file = resolve(targetDir, welcome);
+    return file.startsWith(targetDir) && existsSync(file) ? file : null;
+  } catch {
+    return null;
+  }
+}
+
+function printNextSteps(slug, pm) {
+  const rows = [
+    [`cd ${slug} && ${pm} start`, "run the keyless demo again"],
+    ["local/profile.md", "who this fork is for, and where"],
+    ["AGENTS.md", "point your coding agent here before changing code"],
+    ["README.md", "make a Connect app, then turn on Sign in with One"],
+  ];
+  const width = Math.max(...rows.map(([a]) => a.length)) + 2;
+  console.log(`\n./${slug} is ready.\n`);
+  rows.forEach(([a, b], i) => console.log(`  ${i + 1}  ${a.padEnd(width)}${b}`));
+  console.log("");
 }
 
 main();

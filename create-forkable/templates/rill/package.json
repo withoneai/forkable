@@ -12,6 +12,7 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "start": "pnpm --filter @withone/rill demo",
+    "welcome": "node forkable/welcome.mjs",
     "record": "RECORD=1 pnpm --filter @withone/rill record",
     "db:generate": "pnpm --filter @rill/core generate"
   },

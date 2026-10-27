@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // `rill`         start the server and open the browser
-// `rill demo`    the keyless demo: sample inbox, lanes, brief, receipt, exit 0
+// `rill demo`    the keyless demo: sample inbox, lanes, brief, calendar, grant check, exit 0
 // `rill record`  re-judge the sample inbox with a live Jev and write fixtures/recorded
 import { spawn } from "node:child_process";
 import { actionLabel, calendar, calendarReceiptDemo, fixtures, getMailProvider, ledger, platformLabel, sync, writer, one, type Lane, type LedgerRow } from "@rill/core";
@@ -79,7 +79,7 @@ async function demo(): Promise<void> {
     }
     console.log("");
 
-    console.log("Receipts");
+    console.log("Grant check (delete is never granted)");
     const hidden = await findInjectionMessage(deps.db, mailbox.id);
     if (hidden) {
       const row = await getMailProvider(ctx.mailbox.mailProvider).attemptDelete(ctx, hidden.gmailId, "Hidden text in an email asked the assistant to delete the inbox");
@@ -95,7 +95,8 @@ async function demo(): Promise<void> {
     } else {
       console.log("  Google Calendar: no synced event to demo against.");
     }
-    console.log("\nRun `rill` to open the inbox in your browser.");
+    // A fresh fork gets the full welcome right after this, so skip the hint there.
+    if (!process.env.FORKABLE_CREATE) console.log("\nNext: `pnpm dev`, then open http://localhost:5180. `pnpm welcome` shows every step.");
   } finally {
     await stop();
   }
