@@ -16,8 +16,14 @@ This repo has two things:
   CLI. Copies the starter, fills in who a fork is for and where, installs,
   and runs the keyless demo.
 
-See each folder's own README for details. More official and community
-templates (a full business, not just the base) are coming; see
-[forkable.dev](https://forkable.dev).
+See each folder's own README for details.
+
+## Contributing
+
+Build a business on the starter and publish it as a template, or help
+with the starter and the CLI. [CONTRIBUTING.md](./CONTRIBUTING.md) covers
+giving your coding agent One's integrations (CLI or MCP), what the starter
+already handles, the template checklist and how to send a pull request.
+The short version is at [forkable.dev/contribute](https://forkable.dev/contribute).
 
 MIT licensed.
