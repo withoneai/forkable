@@ -21,14 +21,17 @@ The short version of this guide also lives at
 ## 1. Give your coding agent the integrations
 
 Templates call third-party tools (Gmail, Slack, Stripe, HubSpot and the
-rest of One's catalog) through One. Your coding agent needs One too, so
-it can look up the exact action, its parameters and its docs while it
-writes the code. Pick one of these.
+rest of One's catalog) through One. Your coding agent needs One too: the
+CLI or the MCP server connects it to One's knowledge base of thousands of
+integrations, so it can look up the exact action, its parameters and its
+docs while it writes the code. Pick one of these.
 
-**The One CLI** (works with any agent that can run a shell):
+**The One CLI**, installed globally (works with any agent that can run a
+shell):
 
 ```bash
-npx @withone/cli@latest init
+npm install -g @withone/cli
+one init
 ```
 
 `one init` signs you in in the browser and installs the One skill into
@@ -40,7 +43,8 @@ tell your agent:
 Please run "one onboard"
 ```
 
-**The remote MCP server** at `https://mcp.withone.ai/mcp`, no install:
+**Or the remote MCP server** at `https://mcp.withone.ai/mcp`, if you would
+rather not install anything:
 
 ```bash
 # Claude Code
