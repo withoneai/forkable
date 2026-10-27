@@ -20,7 +20,7 @@ const npmCmd = isWin ? "npm.cmd" : "npm";
 const pnpmCmd = isWin ? "pnpm.cmd" : "pnpm";
 const corepackCmd = isWin ? "corepack.cmd" : "corepack";
 const CATALOG_URL = "https://forkable.dev/templates.json";
-const CATALOG_TIMEOUT_MS = 2500;
+const CATALOG_TIMEOUT_MS = 6000;
 const DEFAULT_TEMPLATE = "forkable-starter";
 
 const cliVersion = (() => {
@@ -209,6 +209,8 @@ function parseArgs(argv) {
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
+    // npx and pnpm create pass a bare "--" through; npm create strips it.
+    if (a === "--") continue;
     if (a === "-h" || a === "--help") out.help = true;
     else if (a === "-v" || a === "--version") out.version = true;
     else if (a === "--for") out.for = value(++i, a);

@@ -52,7 +52,7 @@ npm create forkable@latest my-inbox -- --template rill --json --yes
 ```
 
 `--list` reads the live catalog at https://forkable.dev/templates.json
-(2.5 second timeout) and falls back to the `catalog.json` bundled in this
+(6 second timeout) and falls back to the `catalog.json` bundled in this
 package (`FORKABLE_OFFLINE=1` skips the fetch, `FORKABLE_CATALOG_URL`
 overrides it). Only templates with `"status": "available"` can be forked; a
 coming-soon id stops with `TEMPLATE_COMING_SOON`.
