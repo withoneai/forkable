@@ -100,8 +100,8 @@ function ShellInner() {
           <div className={cn("my-2 h-px bg-border", rail ? "w-6" : "mx-2")} />
           <RailLink rail={rail} to="/brief" label="Brief" icon={<Sun />} keyHint="G B" />
           <RailLink rail={rail} to="/calendar" label="Calendar" icon={<Calendar />} keyHint="G C" />
-          <RailLink rail={rail} to="/access" label="Access" icon={<ShieldCheck />} keyHint="G A" />
           <RailLink rail={rail} to="/settings" label="Settings" icon={<Settings />} keyHint="G ," />
+          <RailLink rail={rail} to="/access" label="Access" icon={<ShieldCheck />} keyHint="G A" />
         </nav>
         <div className={cn("flex flex-col gap-2 p-2", rail && "items-center px-1.5")}>
           {!rail && <StatusChip />}

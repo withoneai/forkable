@@ -13,7 +13,7 @@
     { "platform": "gmail", "actionId": "conn_mod_def::GJ3olIfJ9E0::xBAV1bF_RXG94_j4bmye2A", "access": "write", "usedBy": "packages/core/src/providers/gmail/mail.ts", "reason": "Applies a lane label to a thread after Jev judges it." },
     { "platform": "gmail", "actionId": "conn_mod_def::GGZUe0SIuk8::nhwEKp2cQ6uARsH3513VeQ", "access": "write", "usedBy": "packages/core/src/providers/gmail/mail.ts", "reason": "Saves a reply draft. The AI never sends; only your keypress sends." },
     { "platform": "gmail", "actionId": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ", "access": "write", "usedBy": "packages/core/src/providers/gmail/mail.ts", "reason": "Sends a reply, only on your keypress." },
-    { "platform": "gmail", "actionId": "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA", "access": "write", "usedBy": "packages/core/src/providers/gmail/mail.ts", "reason": "Shown declined on purpose: Rill never asks for delete access, so the Access screen can show a real 403 instead of a fake one." },
+    { "platform": "gmail", "actionId": "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA", "access": "write", "usedBy": "packages/core/src/providers/gmail/mail.ts", "reason": "Never granted: Rill does not delete mail. Listed so a call to it can be checked as declined." },
 
     { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ", "access": "read", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Lists your calendars." },
     { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA", "access": "read", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Syncs events for Day/Week/Month/Agenda and the Today rail." },
@@ -24,7 +24,7 @@
     { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6Rlvk1bgM::h5exn4dzTkyhjoA89wddmQ", "access": "read", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Offer times reads everyone's free/busy before suggesting slots." },
     { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6Rlzrfb_k::Oi-ZtyZ3See3CXbl6lQ6Ww", "access": "write", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Watches for calendar changes (not yet wired into the hosted Worker)." },
     { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlNlVxE8::8J4tSlqIS4Sa3zgS9gLU8w", "access": "write", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Stops a watch channel (pairs with eventsWatch)." },
-    { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlN24ctU::0y6GOBuWT4ShfvJCjD3vRw", "access": "write", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Shown declined on purpose: the Access screen's Google Calendar 403 receipt." },
+    { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlN24ctU::0y6GOBuWT4ShfvJCjD3vRw", "access": "write", "usedBy": "packages/core/src/providers/gmail/calendar.ts", "reason": "Never granted: Rill does not delete events. Listed so a call to it can be checked as declined." },
 
     { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYxNZ51eU::xY4rcCXiTTyrarjC9ac97w", "access": "read", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Reads your mailbox address." },
     { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYwcOQ0W0::zXQUrHvhTy-rXQG3h50Paw", "access": "read", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Syncs your messages so Jev can triage them into lanes." },
@@ -34,7 +34,7 @@
     { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYxdg2AH8::ZxbBRaXcQsGVvtiWQl5pFg", "access": "write", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Saves a reply draft. The AI never sends; only your keypress sends." },
     { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYyGDPmeM::46r7Kmr7RnuPgS8FJJjqpA", "access": "write", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Sends a reply in one step, only on your keypress." },
     { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYyRYRR_M::DICn4DLuT_OjefG-EBoBZQ", "access": "write", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Sends a Compose draft, only on your keypress." },
-    { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYvl8Sywk::YzE-MOO4TeeYwXkMGPVuKQ", "access": "write", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Shown declined on purpose: the Access screen's Outlook 403 receipt." },
+    { "platform": "outlook-mail", "actionId": "conn_mod_def::GMIYvl8Sywk::YzE-MOO4TeeYwXkMGPVuKQ", "access": "write", "usedBy": "packages/core/src/providers/outlook/mail.ts", "reason": "Never granted: Rill does not delete mail. Listed so a call to it can be checked as declined." },
 
     { "platform": "outlook-calendar", "actionId": "conn_mod_def::GMIY1FxtnJw::naghBU_mSTKsg0Lv46gF1w", "access": "read", "usedBy": "packages/core/src/providers/outlook/calendar.ts", "reason": "Lists your calendars." },
     { "platform": "outlook-calendar", "actionId": "conn_mod_def::GJ58LPpX-M4::e4__fu-6SUK_WBT15hJPoQ", "access": "read", "usedBy": "packages/core/src/providers/outlook/calendar.ts", "reason": "Syncs events for Day/Week/Month/Agenda and the Today rail." },

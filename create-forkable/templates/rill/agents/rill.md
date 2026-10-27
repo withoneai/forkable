@@ -39,9 +39,8 @@ no-claimed-action validator on every engine.
 
 **What it may never do:**
 - Call `gmail-delete-message`, `events-delete` on either calendar, or any
-  action not listed in `connect.manifest.json`. Those are shown declined
-  on purpose, the `· delete   declined, 403` receipts on the Access
-  screen.
+  action not listed in `connect.manifest.json`. Delete is never granted; a
+  call to it comes back declined (403) and the provider is never called.
 - Send a reply, RSVP, or confirm a booking without your keypress. The
   writer produces text; it has no tool that can act.
 - Act on anything outside the Acme Inc sample while no mailbox is

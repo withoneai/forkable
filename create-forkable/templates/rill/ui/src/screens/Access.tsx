@@ -93,7 +93,7 @@ export function Access() {
         <div className="mx-auto flex w-full max-w-[880px] flex-col gap-5 px-6 pb-12 pt-7">
           <header>
             <h1 className="text-xl font-semibold tracking-tight">Access</h1>
-            <p className="mt-0.5 text-13 text-muted-foreground">What you granted, and every call Rill made with it.</p>
+            <p className="mt-0.5 text-13 text-muted-foreground">The accounts you connected and what Rill can do with them. Secured by One.</p>
           </header>
 
           {q.isError && !a ? (
@@ -194,7 +194,7 @@ export function Access() {
                   );
                 })}
               </div>
-              <p className="mt-1.5 text-11 text-muted-foreground">Access is set on the One consent screen. You can narrow it there any time; Rill cannot widen it.</p>
+              <p className="mt-1.5 text-11 text-muted-foreground">Access is set when you sign in with One. Change or revoke it in your One account any time.</p>
             </div>
           </div>
 
@@ -206,8 +206,8 @@ export function Access() {
                   {a.today.calls} calls today · <span className={cn(a.today.declined > 0 && "font-medium text-destructive-text")}>{a.today.declined} declined</span>
                 </span>
               )}
-              <Button size="sm" onClick={showReceipt} loading={demo.isPending}>Show the receipt</Button>
-              {mailbox?.calendarProvider && <Button size="sm" variant="ghost" onClick={showCalendarReceipt} loading={calDemo.isPending}>Show the calendar receipt</Button>}
+              <Button size="sm" onClick={showReceipt} loading={demo.isPending}>Test a declined call</Button>
+              {mailbox?.calendarProvider && <Button size="sm" variant="ghost" onClick={showCalendarReceipt} loading={calDemo.isPending}>Test on calendar</Button>}
             </div>
           </div>
 

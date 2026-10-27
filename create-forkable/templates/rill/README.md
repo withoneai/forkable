@@ -1,6 +1,6 @@
 # Rill
 
-An AI email client on your own Gmail. Your goals and your VIP list decide what you see first. Jev judges every email, an LLM writes, and you connect your inbox through One Connect, so the app holds a grant, never your password.
+An AI email client on your own Gmail. Your goals and your VIP list decide what you see first. Jev judges every email and an LLM writes. Sign in with One and Gmail or Outlook integrations come built in.
 
 Free and open source. Runs on your machine with one command, or hosted at rill.forkable.dev.
 
@@ -15,7 +15,9 @@ npx @withone/rill
 - VIPs match by address, domain or a plain description ("anyone on our board"). Per-VIP rules: always top, never auto-draft, reply-within reminders, follow-ups.
 - Drafts ready before you open the thread, in your voice. The AI never sends. Only your keypress sends.
 - A morning brief, follow-up nudges, snooze, reply later, Ask your inbox with cited emails, Cmd+K for everything.
-- An Access screen that shows exactly what you granted, every call the app made today, and the ones One refused. A call outside the grant reads `Gmail · delete   declined, 403`.
+- Calendar built in: Day, Week, Month and Agenda, invites, Offer times and meeting links.
+
+Secured by One. Each user connects their own accounts, and they can revoke them any time.
 
 ## Three ways to run the writer
 
@@ -31,7 +33,7 @@ Same prompts, same validator, on every engine. The writer has no tools and canno
 
 ```
 pnpm install
-pnpm start          # triages the Acme sample inbox, prints lanes, brief and the receipt, exits 0
+pnpm start          # triages the Acme sample inbox, prints lanes and the brief, exits 0
 pnpm dev            # the full UI on the sample inbox at http://127.0.0.1:5180
 ```
 
@@ -40,6 +42,24 @@ pnpm dev            # the full UI on the sample inbox at http://127.0.0.1:5180
 Create a Connect app in the One dashboard (Developers, Connect, New app) and register `http://localhost:51789/api/one/callback`. Then open http://localhost:5180/setup/connect (or Settings, General, Sign in with One) and paste the client ID, client secret, Connect key and permission set. They go to your macOS Keychain (elsewhere, `~/.rill/connect.env`, mode 0600) and sign-in turns on without a restart. Setting them in `.env` still works as a fallback. Signing in with One is the only login.
 
 Jev runs on your grant too: connect TypeSafe in One and grant it to Rill. Without it, the writer answers Jev's questions and rows get a Check badge. The app never holds a platform key or an API secret, only the grant.
+
+## Database
+
+Rill keeps everything in Postgres through Drizzle: mailboxes, threads, judgments, drafts, goals, VIPs, calendar events and the ledger. Nothing to install.
+
+- **Local (default).** Rill starts its own embedded Postgres on first run, with its data in `~/.rill/db` on port 55439. `pnpm start`, `pnpm dev` and `npx @withone/rill` all use it. If one from an earlier run is still up, Rill reuses it. Settings, Database shows which one is in use and where it lives.
+- **Your own Postgres.** Set `DATABASE_URL` in `.env` and Rill uses that instead of the embedded one.
+- **Hosted.** The Cloudflare Worker reaches Neon Postgres through Hyperdrive, same schema as local.
+
+Migrations run on every start, so a fresh database comes up with the full schema. After a schema change in `packages/core/src/db/schema.ts`, run `pnpm db:generate` and commit the new file in `packages/core/src/db/migrations/`.
+
+| Variable | Default | What it does |
+| --- | --- | --- |
+| `DATABASE_URL` | unset | use this Postgres, skip the embedded one |
+| `RILL_HOME` | `~/.rill` | data directory, the database lives in `<RILL_HOME>/db` |
+| `RILL_PG_PORT` | `55439` | port for the embedded Postgres |
+
+To start over, stop Rill, check nothing still holds `~/.rill/db` (`head -1 ~/.rill/db/postmaster.pid` names the process), then delete the folder. The next start makes a new, empty database.
 
 ## Layout
 

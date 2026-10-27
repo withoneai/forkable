@@ -31,11 +31,12 @@ tracked as follow-up work, not guessed at here.
 - **Acme Inc only.** `fixtures/` and the keyless demo use the Acme Inc
   sample. Never swap in a real company, a prospect, or a recognizable
   person, even as a placeholder.
-- **The receipts stay.** The keyless demo always ends on two declined
-  actions, `Gmail · delete   declined, 403` and
-  `Google Calendar · delete   declined, 403`. That is the proof Connect
-  enforces the grant; do not remove it or make every action in the
-  manifest succeed.
+- **Delete stays outside the grant.** Rill never asks for delete on mail
+  or calendar. The keyless demo also prints the declined lines
+  (`Gmail · delete   declined, 403`, `Google Calendar · delete   declined,
+  403`) as an optional check that a call outside the grant is refused.
+  They are a developer detail, not the point of the demo; the demo should
+  show the inbox working.
 - **The manifest is the source of truth for what this fork asks for.**
   `connect.manifest.json` must list every `one.call`/`one.attempt` call in
   `packages/core/src`, with the access level and the one-line reason shown
