@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx && node scripts/prerender.mjs && node scripts/agent-files.mjs",
+    "build": "node scripts/platform-count.mjs && tsc -b && vite build && vite build --ssr src/entry-server.tsx && node scripts/prerender.mjs && node scripts/agent-files.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b"
   },

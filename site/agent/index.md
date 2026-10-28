@@ -53,7 +53,7 @@ Add https://blocks.forkable.dev/mcp as a connector in Claude or ChatGPT and sign
 - **Writes wait for you.** Nothing sends or changes until you press Confirm.
 - **Saved for next time.** Open it again in the other chat app, or at https://blocks.forkable.dev.
 
-Build your own MCP from the same open source code (https://github.com/withoneai/forkable/tree/main/mcp). Sign in with One is its login, so every tool call runs on the person's own accounts.
+**Run your own MCP.** The code behind blocks.forkable.dev is open source (MIT, https://github.com/withoneai/forkable/tree/main/mcp). Fork it to put an MCP on your own domain and brand, with Sign in with One as its login, so every tool call runs on that person's own accounts, not a shared key. Steps: https://forkable.dev/mcp#run-your-own (markdown: https://forkable.dev/mcp.md)
 
 ## One command, a full business
 

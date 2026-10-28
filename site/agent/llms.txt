@@ -29,6 +29,7 @@ The full walkthrough, with what each command prints: https://forkable.dev/start.
 
 - [Home](https://forkable.dev/index.md): what a fork comes with, integrations, templates, blocks, the MCP in chat, publishing
 - [Agent quickstart](https://forkable.dev/start.md): the exact commands in order, what each prints, where to stop and ask
+- [Apps inside your chat](https://forkable.dev/mcp.md): the blocks MCP for Claude and ChatGPT (https://blocks.forkable.dev/mcp), how to add it, six example prompts and the UIs they build, and how to run your own MCP from the open source code (your domain and brand, Sign in with One as its login, every call on each user's own accounts)
 - [Contribute](https://forkable.dev/contribute.md): build a business on the starter and publish it as a template
 - [Templates JSON](https://forkable.dev/templates.json): every template with its id, platforms, package manager and commands
 

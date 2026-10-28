@@ -1,0 +1,640 @@
+{
+ "address": "dana@acme.com",
+ "threads": [
+  {
+   "id": "t01",
+   "subject": "Term sheet redlines, need you by Thursday",
+   "labelIds": [
+    "SENT",
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t01m1",
+     "from": {
+      "name": "Dana Reyes",
+      "email": "dana@acme.com"
+     },
+     "to": [
+      "priya@northwind.vc"
+     ],
+     "minutesAgo": 1510,
+     "body": "Hi Priya,\n\nThanks for turning the redlines around so fast. I have read through them twice with Rosa.\n\nMost of it is fine as drafted. Two points I want to think about overnight: the board seat timing (we had talked about it kicking in at close, the redline moves it to signing) and the pro rata clause, which now covers every future round rather than the next one.\n\nI will come back to you with a position on both by Wednesday so we stay on track for Thursday.\n\nDana",
+     "labelIds": [
+      "SENT"
+     ]
+    },
+    {
+     "id": "t01m2",
+     "from": {
+      "name": "Priya Nair",
+      "email": "priya@northwind.vc"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 18,
+     "body": "Dana,\n\nQuick one before our IC meets Thursday at 5pm. I need your answer on the two open points, board seat timing and pro rata.\n\nOn the board seat, we can live with it kicking in at close if that matters to you. On pro rata, my partners want it to survive past the next round. I can probably get them to a cap at the Series B if you push, but I need to know today whether you are pushing.\n\nThe rest of the document is clean. Our counsel is standing by to turn a signature version the moment we agree, so Thursday is still real if I hear from you by tomorrow morning.\n\nCall me any time this afternoon if a conversation is faster.\n\nPriya\n\nPriya Nair\nPartner, Northwind VC",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t02",
+   "subject": "Re: Q4 hiring plan",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t02m1",
+     "from": {
+      "name": "Marcus Lee",
+      "email": "marcus@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 95,
+     "body": "Dana,\n\nBoth finalists cleared the last loop yesterday. Summary:\n\nOmar Farouk, staff backend at his current place, 9 years. Panel was unanimous. Wants $215k base, which is top of our band, plus the standard 0.25% grant.\n\nJess Tanaka, senior platform, 7 years. Strong on infra, a bit lighter on product sense, but the team loved working with her in the pairing session. Asking $205k, also top of band.\n\nI want to send both offers today. Omar has a competing offer that expires Friday and Jess has a second onsite elsewhere next week. If we wait we lose at least one of them.\n\nCan you approve top of band for both, or tell me where you want to land? I have the offer letters drafted and Rosa has reviewed the template.\n\nMarcus\n\nMarcus Lee\nVP Engineering, Acme Inc",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t03",
+   "subject": "Board deck for next week",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t03m1",
+     "from": {
+      "name": "Victor Lang",
+      "email": "victor@langpartners.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 150,
+     "body": "Dana,\n\nLooking ahead to Thursday's board sync. Can you send the deck by Tuesday evening so the three of us have a day with it before the call? Last quarter it arrived two hours ahead and we spent most of the meeting reading instead of talking.\n\nThings I would like to see this time: the burn number against the plan we approved in July, where the seed conversation with Northwind stands, and a slide on the two engineering hires, even if it is just names and start dates.\n\nIf the Northwind terms land before Thursday, add them to the deck and we can use the meeting to approve.\n\nThanks,\nVictor\n\nVictor Lang\nBoard member, Acme Inc\nGeneral Partner, Lang Partners",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t04",
+   "subject": "Can you review the launch post?",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t04m1",
+     "from": {
+      "name": "Jordan Park",
+      "email": "jordan@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 310,
+     "body": "Hey Dana,\n\nThe launch post draft is ready for your eyes. Link is in the shared Launch folder, file is \"Acme launch post v3\".\n\nIt is about 900 words. The structure is: the problem we kept hearing from design partners, what we built, two short customer quotes (Globex approved theirs, the Vandelay one is still pending Leo), and a quiet mention that we are hiring.\n\nI would like your comments by tomorrow midday so I can get a final to the designer for the hero image on Friday. Mostly I want you to check the second paragraph, where I describe the pricing. I kept it vague on purpose but tell me if it is too vague.\n\nJordan\n\nJordan Park\nHead of Marketing, Acme Inc",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t05",
+   "subject": "Pilot results and next steps",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t05m1",
+     "from": {
+      "name": "Elena Ruiz",
+      "email": "elena@globex.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 240,
+     "body": "Hi Dana,\n\nThe four week pilot wrapped on Friday and I pulled the numbers this morning.\n\nWeekly active users on the Acme workspace went 11, 17, 24, 31. Average time to resolve a ticket in the pilot team dropped from 2.3 days to 1.4. The team lead said she would be upset if we took it away, which is the best signal I have.\n\nI want to take this to our VP of Ops next week and ask for 40 seats across two teams. For that I need a pricing proposal from you: per seat cost at 40, what an annual commitment does to it, and whether onboarding is included. If you have a one page summary of the security posture, add that too, it will save me a round with procurement.\n\nCan you get me something by Friday?\n\nElena\n\nElena Ruiz\nDirector of Operations, Globex",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t06",
+   "subject": "Offsite date: need a decision today",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t06m1",
+     "from": {
+      "name": "Riley Chen",
+      "email": "riley@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 6,
+     "body": "Dana,\n\nThe venue in Half Moon Bay will only hold both dates until 5pm today. Options:\n\nA) Nov 13 to 14 (Thu to Fri). Everyone can make it except Jordan, who is at a conference on the 13th and would join Friday morning.\n\nB) Nov 20 to 21. Everyone can make it, but it is the week before Thanksgiving and the rate is 18% higher.\n\nMy vote is A. Jordan is fine missing the first morning. Just reply A or B and I will book.\n\nRiley",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t07",
+   "subject": "Intro: you and Lena from Initech",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t07m1",
+     "from": {
+      "name": "Sam Okafor",
+      "email": "sam@initech.io"
+     },
+     "to": [
+      "dana@acme.com",
+      "lena@initech.vc"
+     ],
+     "minutesAgo": 380,
+     "body": "Dana, meet Lena. Lena, meet Dana.\n\nLena Fischer is a partner at Initech Ventures and sits on their platform team, which works with the operations groups at Initech's portfolio companies. She saw the Acme demo at the founder dinner last month and asked me to connect you two.\n\nLena, Dana is the CEO of Acme. They are twelve people, have three design partners in pilot, and from what I hear are in the middle of a round. I think there is something here either way, whether that is the round or getting Acme in front of your portfolio ops teams.\n\nI will leave you both to it.\n\nSam\n\nSam Okafor\nInitech",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t08",
+   "subject": "Data room access",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t08m1",
+     "from": {
+      "name": "Grace Lindqvist",
+      "email": "grace@lindqvist.me"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 700,
+     "body": "Hi Dana,\n\nGood to talk on Friday. As promised I am interested in coming into the seed for $150k alongside Northwind, assuming the terms are what you described.\n\nBefore I commit I would like access to the data room. Specifically the last 12 months of financials, the cap table, the design partner agreements, and the Northwind term sheet once it is signed. My email for the data room is this one.\n\nI can move quickly. If I have the documents by Friday I can give you a yes or no early next week.\n\nBest,\nGrace",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t09",
+   "subject": "Re: Onsite interview, Thursday",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t09m1",
+     "from": {
+      "name": "Omar Farouk",
+      "email": "omar@farouk.dev"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 420,
+     "body": "Hi Dana,\n\nThank you for the invitation. Thursday at 10am works for me and I will plan to be at the office by 9:45.\n\nMarcus mentioned the day would end with 30 minutes with you. If there is anything you would like me to prepare for that conversation, let me know. Otherwise I will come with questions about how you think about the first ten engineers and what you want the team to look like a year from now.\n\nOne practical thing: I have a competing offer with a Friday deadline. I am not trying to rush you, I would just rather you know now than on Thursday afternoon.\n\nSee you then,\nOmar",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t10",
+   "subject": "Two senior profiles for the backend role",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t10m1",
+     "from": {
+      "name": "Hannah Brooks",
+      "email": "hannah@brookstalent.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1100,
+     "body": "Hi Dana,\n\nTwo profiles for the senior backend role, both pre-screened against the brief Marcus sent over.\n\n1. Devi Raman. 8 years, most recently tech lead on a payments team at a fintech. Strong on reliability and on-call culture. Based in Oakland, wants hybrid. Comp expectation $200k to $220k.\n\n2. Paul Nkemelu. 10 years, has been the first senior hire at two startups and stayed through Series B at both. Based in Denver, open to relocating. Comp expectation $210k.\n\nBoth are available for a first call this week. Tell me which you want to see and I will set up 30 minutes with Marcus. If neither fits, tell me what is off and I will adjust the search.\n\nHannah\n\nHannah Brooks\nBrooks Talent Partners",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t11",
+   "subject": "SSO timeline before we roll out wider",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t11m1",
+     "from": {
+      "name": "Leo Martins",
+      "email": "leo@vandelay.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 520,
+     "body": "Dana,\n\nThe pilot team here is happy and I am ready to ask for budget to roll Acme out to the whole operations group, about 60 people, in Q1.\n\nThe blocker is SSO. Our IT policy requires SAML for anything that touches more than 25 users, and the pilot is currently on email and password. I know it is on your roadmap. What I need is a date I can put in the budget request, even a rough one like \"end of January\".\n\nSeparately, Jordan asked me for a quote for your launch post. I am fine with it in principle, I just need to clear it with our comms team, so give me a few days on that.\n\nThanks,\nLeo\n\nLeo Martins\nOperations Lead, Vandelay Industries",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t12",
+   "subject": "Security questionnaire for the Acme engagement",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t12m1",
+     "from": {
+      "name": "Patricia Gomez",
+      "email": "patricia.gomez@globex.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1700,
+     "body": "Hello Dana,\n\nI am in procurement at Globex and I am working with Elena Ruiz on the Acme engagement. Before we can move from pilot to a paid contract, our vendor process requires a completed security questionnaire.\n\nThe questionnaire is 84 questions and is attached. Most vendors complete it in about a week. The sections that typically take the longest are data retention, subprocessors, and incident response. If you already have a SOC 2 report or a security overview, you can attach it and skip the questions it covers.\n\nPlease return it by November 3 so we can keep to Elena's timeline for the 40 seat rollout.\n\nRegards,\nPatricia Gomez\nProcurement, Globex",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t13",
+   "subject": "Someone you should meet",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t13m1",
+     "from": {
+      "name": "Maya Chen",
+      "email": "maya@piedpiper.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2300,
+     "body": "Dana,\n\nHow is the round going? I had coffee yesterday with Tom Reyes at Stark Logistics' corporate venture arm (no relation, I asked). They are writing $250k to $500k checks into B2B seed rounds where their ops teams could be customers, and he specifically asked whether I knew anyone in the operations tooling space.\n\nI told him about Acme without naming you. He wants an intro. Want me to make it? Say yes and I will send a double opt-in email this week.\n\nAlso, dinner soon. It has been too long.\n\nMaya",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t14",
+   "subject": "Withdrawing from the process",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t14m1",
+     "from": {
+      "name": "Ingrid Solberg",
+      "email": "ingrid@solberg.io"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2800,
+     "body": "Hi Dana,\n\nI wanted to tell you directly rather than through Marcus. I am withdrawing from the senior platform process at Acme.\n\nIt is not about the team or the work. I accepted an offer on Friday from a company where a close friend is the CTO, and it was a decision about people more than anything else. Acme was my second choice out of six, which I hope reads as the compliment it is meant to be.\n\nI enjoyed every conversation, especially the one with you about how you decide what not to build. If I can ever be useful, including pointing engineers your way, please ask.\n\nIngrid",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t15",
+   "subject": "Q3 filing ready for your signature",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t15m1",
+     "from": {
+      "name": "Ben Adler",
+      "email": "ben@adlerandco.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 900,
+     "body": "Dana,\n\nThe Q3 payroll tax filing and the Delaware franchise estimate are ready. Both are in your e-sign queue under \"Acme Inc Q3\".\n\nPayroll tax: $48,212, which matches the register Riley sent. Franchise estimate: $4,000, same as last quarter.\n\nThe filing deadline is October 31, but the e-sign has to be back to me by the 28th so I can submit with a buffer. Should take you five minutes.\n\nOne question: Riley mentioned two new hires starting in November. If either is out of state, tell me which state so I can register for withholding before the first payroll.\n\nBen\n\nBen Adler, CPA\nAdler and Co",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t16",
+   "subject": "Dev Horizons: AV and stage setup for your talk",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t16m1",
+     "from": {
+      "name": "Chloe Dubois",
+      "email": "chloe@devhorizons.events"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1400,
+     "body": "Hi Dana,\n\nWe are finalizing the stage setups for Dev Horizons on November 7. You are on the main stage at 2:15pm for 25 minutes plus 5 for questions.\n\nPlease confirm the following by Friday:\n\n1. Will you present from your own laptop (we have HDMI and USB-C) or send slides ahead?\n2. Lapel mic or handheld?\n3. Do you need a live demo with internet? If yes, we will put you on the wired line.\n4. Your headshot and bio are still the ones from last year. Fine to reuse?\n\nAlso, there is a speaker dinner on the 6th at 7pm. Let me know if you can make it so I can give the restaurant a count.\n\nChloe\n\nChloe Dubois\nProgram Director, Dev Horizons",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t17",
+   "subject": "Option pool: need your pick before we send to Northwind",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t17m1",
+     "from": {
+      "name": "Rosa Delgado",
+      "email": "rosa@delgadopearson.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 70,
+     "body": "Dana,\n\nNorthwind's counsel has asked us to confirm the option pool size in the signature version. We discussed two options on the call this morning and I need you to pick one in writing before I send anything.\n\nOption 1: 10% post-money pool, all of it created pre-money. Cleanest for the investors, costs you and the founders about 1.1 points of dilution more than Option 2.\n\nOption 2: 8% pool pre-money, with a board commitment to top up to 10% after the two engineering hires. Better for you now, but Northwind may push back since it was 10% in the term sheet.\n\nGiven the Thursday IC, I recommend Option 1 unless the extra dilution is a real problem. Reply with \"1\" or \"2\" and I will finalize. I need it by noon tomorrow at the latest.\n\nRosa\n\nRosa Delgado\nPartner, Delgado Pearson",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t18",
+   "subject": "Lease renewal for Suite 410",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t18m1",
+     "from": {
+      "name": "Frank Molinari",
+      "email": "frank@molinariproperties.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 3100,
+     "body": "Dana,\n\nYour lease on Suite 410 expires January 31. I am reaching out now because I have had two inquiries about the floor and I would rather keep you than show it.\n\nRenewal terms: 24 months at $9,400 per month, up from $8,800, which is below the 9% the rest of the building took this year. Or 12 months at $9,900 if you want to stay flexible. Both include the two parking spots you have now.\n\nIf you are going to need more space in the new year, Suite 420 next door (about 1,800 square feet) comes free in March and we could talk about combining.\n\nLet me know which way you are leaning by mid November so I can get paperwork started.\n\nFrank\n\nFrank Molinari\nMolinari Properties",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t19",
+   "subject": "Coffee?",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t19m1",
+     "from": {
+      "name": "Tariq Rahman",
+      "email": "tariq@stark-logistics.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 3600,
+     "body": "Dana,\n\nIt has been almost two years. I saw the Acme news on LinkedIn and realized I have been meaning to write for about six months of that.\n\nI moved to Stark Logistics in the spring, running their internal tools group, which is more fun than it sounds. Would love to hear how the CEO thing is treating you and swap notes on hiring, which is eating my life right now.\n\nCoffee near your office some morning in the next couple of weeks? I am flexible, you pick the day.\n\nTariq",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t20",
+   "subject": "Escalation: exports failing since Monday",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t20m1",
+     "from": {
+      "name": "Wes Carter",
+      "email": "wes@oceanicsupply.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 200,
+     "body": "Dana,\n\nI am writing to you directly because the support thread (ticket 2291) has been open since Monday and I have not had a reply since Tuesday morning.\n\nOur CSV exports have been failing with a timeout for every report over about 2,000 rows. We are a small customer, six seats, but we use the Friday export for payroll and Friday is two days away. If this is not fixed by then I have to rebuild the report by hand, which is most of a day.\n\nI do not need a long explanation. I need to know whether it will work on Friday, and if not, whether someone can run the export for us on your side.\n\nWes Carter\nHead of Operations, Oceanic Supply Co",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t21",
+   "subject": "PO number for invoice 10482",
+   "labelIds": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "messages": [
+    {
+     "id": "t21m1",
+     "from": {
+      "name": "Dmitri Volkov",
+      "email": "dmitri@cyberdyne-office.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2000,
+     "body": "Hello Dana,\n\nInvoice 10482 for the standing desks and monitor arms (12 units, $7,140) was approved by Riley on October 9, but your accounts payable system rejected it for a missing PO number.\n\nRiley is out this week and suggested I ask you. Could you send me the PO number, or confirm that I can submit without one? Our terms are net 30 from the original invoice date, so we are at day 12.\n\nThank you,\nDmitri Volkov\nAccount Manager, Cyberdyne Office",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t22",
+   "subject": "How the best PMs run discovery",
+   "labelIds": [
+    "INBOX"
+   ],
+   "messages": [
+    {
+     "id": "t22m1",
+     "from": {
+      "name": "The Product Weekly",
+      "email": "hello@productweekly.news"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 950,
+     "body": "The Product Weekly, issue 212\n\nThis week: how the best PMs run discovery.\n\nWe interviewed product leads at eight companies between 20 and 200 people about how they decide what to build next. Three patterns showed up everywhere.\n\n1. They talk to customers on a schedule, not when they have a question. Five conversations a week was the median.\n2. They write the problem down before the solution, and share the problem write-up with engineering before any mockup exists.\n3. They kill more than they ship. The best teams had a graveyard doc and were proud of it.\n\nFull piece on the site, about an 8 minute read.\n\nAlso this week: a template for a one page problem brief, and a reader question about pricing experiments.\n\nYou are receiving this because you subscribed at productweekly.news. Unsubscribe any time from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t23",
+   "subject": "Seed Signals: October round-up",
+   "labelIds": [
+    "INBOX"
+   ],
+   "messages": [
+    {
+     "id": "t23m1",
+     "from": {
+      "name": "Seed Signals",
+      "email": "digest@seedsignals.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2400,
+     "body": "Seed Signals, October round-up\n\nRound sizes are up and round counts are down. Median seed in our tracked set was $3.4M this month, against $2.9M in October last year, with about 15% fewer deals closed.\n\nWhat founders are telling us:\n\nTerm sheets are taking longer. The median from first meeting to signed term sheet was 41 days, up from 33.\n\nPro rata is back on the table. Two thirds of the term sheets we saw this month included some form of pro rata rights, and about a quarter extended them past the next round. Push back on that one if you can.\n\nOption pools are being negotiated harder, with 10% post-money still the most common ask.\n\nOn the site this week: a founder's annotated term sheet, and a comparison of three data room tools.\n\nSeed Signals is free. Forward it to a founder who needs it!\n\nUnsubscribe from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t24",
+   "subject": "Stack Notes #148: the cost of a flaky test suite",
+   "labelIds": [
+    "INBOX"
+   ],
+   "messages": [
+    {
+     "id": "t24m1",
+     "from": {
+      "name": "Stack Notes",
+      "email": "newsletter@stacknotes.dev"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 4200,
+     "body": "Stack Notes, issue 148\n\nThe cost of a flaky test suite\n\nWe instrumented CI at six companies for a month. Average time lost to re-running flaky tests was 4.2 engineer hours per week per team, or about one engineer in ten doing nothing. Fixing the top 5% of flaky tests eliminated 80% of the retries.\n\nAlso in this issue:\n\nA short write-up on moving a 40-service deployment from cron-based jobs to a queue, including what broke.\n\nPostgres connection pooling for serverless, with the numbers on what a 6 connection cap actually means at load.\n\nA reader's checklist for interviewing senior engineers that does not involve a whiteboard.\n\nRead online or reply with topics you want covered.\n\nUnsubscribe from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ]
+  }
+ ]
+}

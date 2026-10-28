@@ -8,14 +8,14 @@ export function Footer() {
           <Logo size={28} />
           Forkable
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <a href="https://github.com/withoneai/forkable" className="transition-colors hover:text-foreground">
             GitHub
           </a>
           <a href="/blocks/" className="transition-colors hover:text-foreground">
             Blocks
           </a>
-          <a href="https://blocks.forkable.dev" className="transition-colors hover:text-foreground">
+          <a href="/mcp" className="transition-colors hover:text-foreground">
             MCP
           </a>
           <a href="/contribute" className="transition-colors hover:text-foreground">

@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { LearnMore } from "./LearnMore";
 import { Horizon } from "./art/Horizon";
 import { Terminal } from "./Terminal";
@@ -58,13 +58,12 @@ export function Hero({ template }: { template: Template }) {
       >
         <div className="t-stagger-line t-stagger-line--1 flex justify-center">
           <a
-            href="#open-source"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 py-1 pl-2 pr-3 text-11 text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
+            href="/mcp"
+            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/60 py-1 pl-1 pr-3 text-13 text-muted-foreground backdrop-blur transition-colors hover:border-foreground/25 hover:text-foreground"
           >
-            <span className="live-dot size-1.5 rounded-full bg-accent-fill" aria-hidden />
-            <span className="font-medium text-foreground">Free and open source</span>
-            <span className="h-3 w-px bg-border" aria-hidden />
-            MIT licensed
+            <span className="rounded-full bg-accent-fill px-2 py-0.5 text-11 font-medium text-accent-ink">New</span>
+            <span className="font-medium text-foreground">Apps inside Claude and ChatGPT</span>
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
           </a>
         </div>
         <h1 className="t-stagger-line t-stagger-line--2 text-gradient-headline mt-6 pb-2 font-serif text-56 tracking-tight sm:text-80">

@@ -1,0 +1,95 @@
+{
+  "_note": "The flows on forkable.dev/mcp. Each one is a prompt, the tools the agent calls, and the UI it writes: src/flows/<id>.tsx, a render_ui module against the blocks MCP kit (@forkable/ui). actions are the ids the UI declares to render_ui, checked in One's catalog with the One CLI on 2026-10-28. On the page they run on the Acme Inc sample (src/flows/sample/), not a real account.",
+  "flows": [
+    {
+      "id": "morning-brief",
+      "name": "Morning command center",
+      "description": "Your next meetings, the unread mail from real people and what Stripe took since yesterday, on one screen.",
+      "prompt": "Give me one screen for this morning: my next meetings, the unread emails that need me, and what came in on Stripe since yesterday.",
+      "platforms": ["gmail", "google-calendar", "stripe"],
+      "actions": ["calendarEvents", "gmailThreads", "stripeCharges"],
+      "trail": [
+        { "tool": "list_connections", "detail": "gmail, google-calendar, stripe" },
+        { "tool": "find_actions", "platform": "google-calendar", "detail": "today's events", "result": "List a Calendar's Events" },
+        { "tool": "find_actions", "platform": "gmail", "detail": "unread threads", "result": "List and View Email Threads" },
+        { "tool": "find_actions", "platform": "stripe", "detail": "recent payments", "result": "List Charges" },
+        { "tool": "render_ui", "detail": "This morning", "result": "3 reads" }
+      ],
+      "reply": "Here is your morning on one screen. It reads your calendar, Gmail and Stripe, and changes nothing."
+    },
+    {
+      "id": "meeting-prep",
+      "name": "Meeting prep",
+      "description": "The next meeting with guests, the last month of mail with each of them, and an agenda built from what is still open.",
+      "prompt": "Prep me for my next meeting: who is in it, my last emails with each of them, and draft an agenda from anything I still owe them.",
+      "platforms": ["google-calendar", "gmail"],
+      "actions": ["calendarEvents", "gmailThreads", "gmailDraft"],
+      "trail": [
+        { "tool": "find_actions", "platform": "google-calendar", "detail": "next event and its guests", "result": "List a Calendar's Events" },
+        { "tool": "find_actions", "platform": "gmail", "detail": "threads with a person", "result": "List and View Email Threads" },
+        { "tool": "action_docs", "platform": "gmail", "detail": "drafts", "result": "Create Draft" },
+        { "tool": "render_ui", "detail": "Northwind terms prep", "result": "2 reads, 1 write" }
+      ],
+      "reply": "Your next meeting is Northwind terms, with Priya, Rosa and Victor. I pulled the last month of mail with each of them and started an agenda. Saving the draft waits for your Confirm."
+    },
+    {
+      "id": "follow-up-radar",
+      "name": "Follow-up radar",
+      "description": "Every email you sent that never got an answer, oldest first, with a nudge you can edit and send in one click.",
+      "prompt": "Which emails did I send in the last month that never got a reply? Oldest first, with a one-click nudge.",
+      "platforms": ["gmail"],
+      "actions": ["gmailThreads", "gmailSend"],
+      "trail": [
+        { "tool": "find_actions", "platform": "gmail", "detail": "sent threads", "result": "List and View Email Threads" },
+        { "tool": "action_docs", "platform": "gmail", "detail": "reply in a thread", "result": "Send Email" },
+        { "tool": "render_ui", "detail": "Follow-up radar", "result": "1 read, 1 write" }
+      ],
+      "reply": "These are still waiting on a reply. Pick one to write a nudge. It goes out only after you confirm."
+    },
+    {
+      "id": "revenue-pulse",
+      "name": "Revenue pulse",
+      "description": "MRR, collected, failed payments and overdue invoices from Stripe, with a payment reminder drafted in Gmail.",
+      "prompt": "How is revenue this month? MRR, new and failed payments, who is overdue, and a button to draft a payment reminder.",
+      "platforms": ["stripe", "gmail"],
+      "actions": ["stripeSubscriptions", "stripeCharges", "stripeInvoices", "gmailDraft"],
+      "trail": [
+        { "tool": "find_actions", "platform": "stripe", "detail": "subscriptions for MRR", "result": "List Subscriptions" },
+        { "tool": "find_actions", "platform": "stripe", "detail": "payments and failures", "result": "List Charges" },
+        { "tool": "find_actions", "platform": "stripe", "detail": "open invoices", "result": "Get Invoices" },
+        { "tool": "action_docs", "platform": "gmail", "detail": "drafts", "result": "Create Draft" },
+        { "tool": "render_ui", "detail": "Revenue pulse", "result": "3 reads, 1 write" }
+      ],
+      "reply": "Here is the last 30 days on Stripe. Reminders are saved as Gmail drafts, and each one asks you first."
+    },
+    {
+      "id": "investor-update",
+      "name": "Investor update",
+      "description": "MRR and growth from Stripe, what shipped on GitHub, written up as a draft you edit and save to Gmail.",
+      "prompt": "Write my monthly investor update from Stripe revenue and what we merged on GitHub in acme/acme-app. Let me edit it, then save it as a Gmail draft.",
+      "platforms": ["stripe", "github", "gmail"],
+      "actions": ["stripeSubscriptions", "stripeCharges", "githubPulls", "gmailDraft"],
+      "trail": [
+        { "tool": "find_actions", "platform": "stripe", "detail": "MRR and payments", "result": "List Subscriptions" },
+        { "tool": "find_actions", "platform": "github", "detail": "merged pull requests", "result": "List Pull Requests" },
+        { "tool": "action_docs", "platform": "gmail", "detail": "drafts", "result": "Create Draft" },
+        { "tool": "render_ui", "detail": "Investor update", "result": "3 reads, 1 write" }
+      ],
+      "reply": "I wrote the update from your numbers and what shipped. Pick what goes in, edit freely, and save it when it reads right."
+    },
+    {
+      "id": "inbox-cleanup",
+      "name": "Inbox by sender",
+      "description": "Your inbox grouped by who sent it, newsletters split from people, and everything from a sender archived at once.",
+      "prompt": "Group my inbox by sender, show me which ones are just newsletters, and let me archive everything from a sender at once.",
+      "platforms": ["gmail"],
+      "actions": ["gmailThreads", "gmailBatchModify"],
+      "trail": [
+        { "tool": "find_actions", "platform": "gmail", "detail": "inbox threads", "result": "List and View Email Threads" },
+        { "tool": "find_actions", "platform": "gmail", "detail": "archive many at once", "result": "Batch Modify a User’s Gmail Messages (Labels)" },
+        { "tool": "render_ui", "detail": "Inbox by sender", "result": "1 read, 1 write" }
+      ],
+      "reply": "Here is your inbox by sender. Pick the ones you never read and archive them together. You confirm before anything moves."
+    }
+  ]
+}

@@ -12,6 +12,7 @@ const { render } = await import(pathToFileURL(`${site}dist-ssr/entry-server.js`)
 const pages = [
   { file: "dist/index.html", page: "home" },
   { file: "dist/contribute/index.html", page: "contribute" },
+  { file: "dist/mcp/index.html", page: "mcp" },
 ];
 
 for (const { file, page } of pages) {

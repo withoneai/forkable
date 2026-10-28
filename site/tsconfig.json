@@ -11,7 +11,7 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
+    "paths": { "@/*": ["./src/*"], "@forkable/ui": ["./src/flows/kit.tsx"] }
   },
   "include": ["src"]
 }

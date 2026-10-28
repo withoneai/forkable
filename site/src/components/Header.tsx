@@ -1,20 +1,36 @@
-import { Github, Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import clsx from "clsx";
+import { Github, Menu, Moon, Sun, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { useTheme } from "../lib/hooks";
 
-const LINKS = [
+type NavLink = { href: string; label: string; isNew?: boolean };
+
+const LINKS: NavLink[] = [
   { href: "#integrations", label: "Integrations" },
   { href: "#templates", label: "Templates" },
   { href: "#blocks", label: "Blocks" },
-  { href: "#chat", label: "In chat" },
+  { href: "/mcp", label: "MCP", isNew: true },
   { href: "#fork", label: "How it works" },
   { href: "#publish", label: "Publish" },
   { href: "/contribute", label: "Contribute" },
 ];
 
 // A floating pill, centred, glass over whatever scrolls under it.
-export function Header({ home = true }: { home?: boolean }) {
+// The lime "New" chip beside the MCP link, so the page is easy to find.
+function NewChip() {
+  return <span className="rounded-full bg-accent-fill px-1.5 py-px text-10 font-medium leading-4 text-accent-ink">New</span>;
+}
+
+export function Header({ home = true, current }: { home?: boolean; current?: string }) {
   const [theme, toggle] = useTheme();
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
   // Off the home page, the section anchors point back at it.
   const to = (href: string) => (home || !href.startsWith("#") ? href : `/${href}`);
   return (
@@ -29,9 +45,14 @@ export function Header({ home = true }: { home?: boolean }) {
             <a
               key={l.href}
               href={to(l.href)}
-              className="whitespace-nowrap rounded-full px-3 py-1.5 text-13 text-muted-foreground transition-colors hover:text-foreground"
+              aria-current={current === l.href ? "page" : undefined}
+              className={clsx(
+                "flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-13 transition-colors hover:text-foreground",
+                current === l.href ? "text-foreground" : "text-muted-foreground",
+              )}
             >
               {l.label}
+              {l.isNew && <NewChip />}
             </a>
           ))}
         </div>
@@ -65,8 +86,52 @@ export function Header({ home = true }: { home?: boolean }) {
           >
             Browse templates
           </a>
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? "Close the menu" : "Open the menu"}
+            className="grid size-8 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+          >
+            {open ? <X className="size-4" strokeWidth={1.75} /> : <Menu className="size-4" strokeWidth={1.75} />}
+          </button>
         </div>
       </nav>
+      {open && (
+        <div
+          id="mobile-nav"
+          className="motion-in mx-auto mt-2 max-w-5xl rounded-2xl border border-border bg-background/90 p-2 backdrop-blur-xl lg:hidden"
+        >
+          <ul className="flex flex-col">
+            {LINKS.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={to(l.href)}
+                  onClick={() => setOpen(false)}
+                  aria-current={current === l.href ? "page" : undefined}
+                  className={clsx(
+                    "flex items-center gap-2 rounded-xl px-3 py-2.5 text-15 transition-colors hover:bg-foreground/[0.04] hover:text-foreground",
+                    current === l.href ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {l.label}
+                  {l.isNew && <NewChip />}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href="https://github.com/withoneai/forkable"
+                className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-15 text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+              >
+                <Github className="size-4" strokeWidth={1.75} />
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 }

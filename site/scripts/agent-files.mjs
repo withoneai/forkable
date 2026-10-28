@@ -76,6 +76,47 @@ out("start.md", fill(source("start.md"), { ...values, TEMPLATE_LINES: values.AVA
 out("index.md", fill(source("index.md"), values));
 out("contribute.md", fill(source("contribute.md"), values));
 
+// /mcp.md, the markdown twin of /mcp, with the flows from the same
+// flows.json the page reads.
+const flows = JSON.parse(readFileSync(`${site}src/flows/flows.json`, "utf8")).flows;
+const actionTitles = {
+  gmailThreads: "Gmail, List and View Email Threads",
+  gmailSend: "Gmail, Send Email",
+  gmailDraft: "Gmail, Create Draft",
+  gmailBatchModify: "Gmail, Batch Modify a User’s Gmail Messages (Labels)",
+  calendarEvents: "Google Calendar, List a Calendar's Events",
+  stripeCharges: "Stripe, List Charges",
+  stripeSubscriptions: "Stripe, List Subscriptions",
+  stripeInvoices: "Stripe, Get Invoices",
+  githubPulls: "GitHub, List Pull Requests",
+};
+const MCP_TOOLS = ["list_connections", "find_actions", "action_docs", "ui_guide", "render_ui", "update_ui", "list_my_uis", "show_ui", "rename_ui", "delete_ui", "run_action"];
+const platformCount = JSON.parse(readFileSync(`${site}src/generated/platform-count.json`, "utf8")).platforms;
+out(
+  "mcp.md",
+  fill(source("mcp.md"), {
+    FLOW_SECTIONS: flows
+      .map((f) =>
+        [
+          `### ${f.name}`,
+          "",
+          f.description,
+          "",
+          "```",
+          f.prompt,
+          "```",
+          "",
+          `- Actions: ${f.actions.map((a) => actionTitles[a] ?? a).join("; ")}`,
+          `- UI source: https://github.com/withoneai/forkable/blob/main/site/src/flows/${f.id}.tsx`,
+        ].join("\n"),
+      )
+      .join("\n\n"),
+    TOOL_COUNT: String(MCP_TOOLS.length),
+    TOOL_LIST: MCP_TOOLS.map((t) => `\`${t}\``).join(", "),
+    PLATFORM_COUNT: platformCount,
+  }),
+);
+
 // Agent Skills Discovery index (RFC v0.2.0), as withone.ai serves it: the
 // digest is the sha256 of exactly the bytes served at the skill's URL.
 const skill = source("SKILL.md");
@@ -130,6 +171,7 @@ out(
           { name: "Home", url: `${SITE_URL}/`, markdown: `${SITE_URL}/index.md` },
           { name: "Agent quickstart", url: `${SITE_URL}/start.md`, markdown: `${SITE_URL}/start.md` },
           { name: "Contribute", url: `${SITE_URL}/contribute`, markdown: `${SITE_URL}/contribute.md` },
+          { name: "Apps inside your chat (the blocks MCP)", url: `${SITE_URL}/mcp`, markdown: `${SITE_URL}/mcp.md` },
         ],
       },
       rules: [

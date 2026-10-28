@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ArrowUp, BookmarkCheck, Check, Copy, MousePointerClick, Search, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUp, BookmarkCheck, Check, Copy, MousePointerClick, Search, ShieldCheck } from "lucide-react";
 import { SectionHead } from "./SectionHead";
 import { LearnMore } from "./LearnMore";
 import { AppWindow } from "./AppWindow";
 import { Glyph } from "./Glyph";
-import { connectorLogo } from "./icons";
+import { ConfirmLayer } from "./mcp/ConfirmSheet";
+import { PlatformLogo } from "./mcp/logos";
 import { useReveal } from "../lib/hooks";
 
 const MCP_URL = "https://blocks.forkable.dev/mcp";
@@ -12,15 +13,16 @@ const MCP_URL = "https://blocks.forkable.dev/mcp";
 const CELLS = [
   { icon: Search, title: "It finds the actions", body: "The agent looks up what it needs on your accounts and nothing else." },
   { icon: MousePointerClick, title: "A screen you can click", body: "Real buttons, tables and forms on Forkable's kit. Reads run at once." },
-  { icon: ShieldCheck, title: "Writes wait for you", body: "Nothing sends or changes until you press Confirm." },
+  { icon: ShieldCheck, title: "Writes wait for you", body: "Nothing sends or changes until you press Confirm, in the connector's own dialog." },
   { icon: BookmarkCheck, title: "Saved for next time", body: "Open it again in the other chat app, or at blocks.forkable.dev." },
 ];
 
-// Acme Inc sample threads, the same ones Rill and the blocks gallery show.
+// Acme Inc sample threads, the same inbox the flows on /mcp read (see
+// src/flows/sample/WORLD.md): three people waiting on a plain yes.
 const ROWS = [
-  { from: "Riley Chen", subject: "Offsite date, need a decision today", due: "Today" },
-  { from: "Priya Nair", subject: "Term sheet redlines, need you by Thursday", due: "Thu" },
-  { from: "Rosa Delgado", subject: "Option pool, need your pick", due: "Fri" },
+  { from: "Marcus Lee", email: "marcus@acme.com", subject: "Re: Q4 hiring plan", due: "Today", yes: "Yes, approved. Top of band for both, send the offers today.\n\nDana" },
+  { from: "Grace Lindqvist", email: "grace@lindqvist.me", subject: "Data room access", due: "Fri", yes: "Yes. You will have data room access by end of day.\n\nDana" },
+  { from: "Maya Chen", email: "maya@piedpiper.com", subject: "Someone you should meet", due: "This week", yes: "Yes please, make the intro.\n\nDana" },
 ];
 
 function CopyUrl() {
@@ -51,7 +53,7 @@ function CopyUrl() {
 // A chat, with the screen the agent made inside it. Reply opens the Confirm
 // step the real canvas shows before any write.
 function ChatWindow() {
-  const [confirming, setConfirming] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState<(typeof ROWS)[number] | null>(null);
   const [sent, setSent] = useState<Record<string, boolean>>({});
   return (
     <AppWindow className="flex flex-col">
@@ -64,8 +66,15 @@ function ChatWindow() {
         </p>
 
         <div className="relative overflow-hidden rounded-lg border border-border bg-background/60">
+          <div className="flex items-center gap-2 border-b border-border bg-card/60 px-3 py-2 text-11 text-muted-foreground">
+            <span>Sources</span>
+            <span className="grid size-6 place-items-center rounded-md border border-foreground/20 bg-background">
+              <PlatformLogo platform="gmail" className="size-3.5" />
+            </span>
+            <span className="flex-1" />
+            Generated UI, sandboxed
+          </div>
           <header className="flex items-center gap-2 border-b border-border px-3 py-2">
-            <img src={connectorLogo("gmail")} alt="" className="size-3.5" />
             <span className="text-13 font-medium">Needs a reply this week</span>
             <span className="flex-1" />
             <span className="text-11 text-muted-foreground">Acme Inc sample</span>
@@ -73,7 +82,7 @@ function ChatWindow() {
           <ul className="flex flex-col p-1.5">
             {ROWS.map((r) => (
               <li key={r.from} className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-13">
-                <span className="w-24 shrink-0 truncate font-medium">{r.from}</span>
+                <span className="w-28 shrink-0 truncate font-medium">{r.from}</span>
                 <span className="min-w-0 flex-1 truncate text-muted-foreground">{r.subject}</span>
                 <span className="hidden shrink-0 text-11 text-muted-foreground sm:inline">{r.due}</span>
                 {sent[r.from] ? (
@@ -84,7 +93,7 @@ function ChatWindow() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => setConfirming(r.from)}
+                    onClick={() => setConfirming(r)}
                     className="shrink-0 rounded-md bg-accent-fill px-2.5 py-1 text-11 font-medium text-accent-ink transition-transform active:scale-[0.97]"
                   >
                     Reply yes
@@ -97,35 +106,8 @@ function ChatWindow() {
             <Glyph id="F6" className="size-3 text-accent-fg" />
             Saved to your blocks
           </footer>
-
           {confirming && (
-            <div className="absolute inset-0 grid place-items-center bg-background/70 p-4 backdrop-blur-sm">
-              <div className="w-full max-w-xs rounded-lg border border-border bg-card p-4 shadow-[var(--window-shadow)]">
-                <p className="text-13 font-medium">Send an email to {confirming}?</p>
-                <p className="mt-1.5 text-11 text-muted-foreground">
-                  Gmail · Send an email. Written by the server, not the screen.
-                </p>
-                <div className="mt-4 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setConfirming(null)}
-                    className="rounded-md px-2.5 py-1 text-11 text-muted-foreground hover:text-foreground"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSent((s) => ({ ...s, [confirming]: true }));
-                      setConfirming(null);
-                    }}
-                    className="rounded-md bg-foreground px-2.5 py-1 text-11 font-medium text-background"
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </div>
+            <div className="pointer-events-none absolute inset-0 rounded-lg outline-2 -outline-offset-2 outline-dashed outline-foreground/40" aria-hidden />
           )}
         </div>
       </div>
@@ -135,6 +117,24 @@ function ChatWindow() {
           <ArrowUp className="size-3.5 text-muted-foreground" strokeWidth={2} />
         </span>
       </div>
+
+      {confirming && (
+        <ConfirmLayer
+          c={{
+            headline: "Send with Gmail: Send Email",
+            platform: "gmail",
+            fields: [
+              { label: "To", value: confirming.email },
+              { label: "Subject", value: `Re: ${confirming.subject.replace(/^Re:\s*/, "")}` },
+              { label: "Message", value: confirming.yes },
+            ],
+            resolve: (ok) => {
+              if (ok) setSent((s) => ({ ...s, [confirming.from]: true }));
+              setConfirming(null);
+            },
+          }}
+        />
+      )}
     </AppWindow>
   );
 }
@@ -149,7 +149,14 @@ export function ChatSection() {
         <span className="text-foreground">It runs on your own accounts.</span>
       </SectionHead>
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a
+          href="/mcp"
+          className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-13 font-medium text-background transition-[box-shadow,transform] duration-300 hover:shadow-[0_0_0_4px_var(--accent-glow),0_0_40px_var(--accent-glow)] active:scale-[0.98]"
+        >
+          See it in your chat
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
+        </a>
         <CopyUrl />
       </div>
 
@@ -174,21 +181,38 @@ export function ChatSection() {
           </div>
         </div>
 
-        <div className="t-stagger-line t-stagger-line--4 mt-3 flex flex-col gap-4 rounded-xl border border-border bg-card/50 p-4 sm:flex-row sm:items-center">
-          <div className="flex-1">
-            <h3 className="text-15 font-medium">Build your own MCP</h3>
-            <p className="mt-1.5 max-w-xl text-13 text-muted-foreground">
-              Start from the same open source code. Sign in with One is its login, so every tool call runs on the
-              person's own accounts.
-            </p>
+        <div className="t-stagger-line t-stagger-line--4 squircle relative mt-3 overflow-hidden rounded-xl border border-border bg-card/50 p-6 sm:p-8">
+          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
+            <div className="flex-1">
+              <span className="font-mono text-11 uppercase tracking-wide text-muted-foreground">Open source</span>
+              <h3 className="mt-2 font-serif text-36 tracking-tight">Run your own MCP</h3>
+              <p className="mt-2 max-w-xl text-15 text-muted-foreground">
+                The code behind blocks.forkable.dev is yours to fork. Put it on your own domain and brand. Sign in with
+                One is its login, so every tool call runs on that person's own accounts, not a shared key.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 lg:w-80">
+              <ul className="flex flex-col gap-1.5 text-13 text-muted-foreground">
+                <li className="flex items-center gap-2"><Check className="size-3.5 shrink-0 text-accent-fg" strokeWidth={2.5} />One Cloudflare Worker with its own OAuth</li>
+                <li className="flex items-center gap-2"><Check className="size-3.5 shrink-0 text-accent-fg" strokeWidth={2.5} />Runs on the Acme Inc sample with no keys</li>
+                <li className="flex items-center gap-2"><Check className="size-3.5 shrink-0 text-accent-fg" strokeWidth={2.5} />Claude and ChatGPT add it directly</li>
+              </ul>
+              <div className="flex flex-wrap items-center gap-1">
+                <a
+                  href="/mcp#run-your-own"
+                  className="rounded-full bg-foreground px-5 py-2.5 text-13 font-medium text-background transition-[box-shadow,transform] duration-300 hover:shadow-[0_0_0_4px_var(--accent-glow),0_0_40px_var(--accent-glow)] active:scale-[0.98]"
+                >
+                  Run your own MCP
+                </a>
+                <LearnMore href="https://github.com/withoneai/forkable/tree/main/mcp">Get the code</LearnMore>
+              </div>
+            </div>
           </div>
-          <LearnMore href="https://github.com/withoneai/forkable/tree/main/mcp">
-            Read the code
-          </LearnMore>
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex flex-col items-center justify-center gap-1 sm:flex-row">
+        <LearnMore href="/mcp">See six apps to ask for</LearnMore>
         <LearnMore href="https://blocks.forkable.dev">Open blocks.forkable.dev</LearnMore>
       </div>
     </section>
