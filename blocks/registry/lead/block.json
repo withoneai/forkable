@@ -1,0 +1,18 @@
+{
+  "name": "lead",
+  "title": "Lead shared",
+  "description": "Lead's provider waterfall (People Data Labs, Coresignal, Findymail, Hunter, Clearout), how each provider says hit, miss or failure, the receipt every call returns, which providers are on and what they cost (lead/config.ts, all off until you have a contract) and the Acme Inc sample. Installed once with the first Lead block.",
+  "kind": "lib",
+  "files": [
+    { "from": "lead/types.ts", "to": "ui/src/components/forkable/lead/types.ts", "alsoTo": "server/src/routes/forkable/lead/types.ts" },
+    { "from": "lead/actions.ts", "to": "server/src/routes/forkable/lead/actions.ts" },
+    { "from": "lead/config.ts", "to": "server/src/routes/forkable/lead/config.ts" },
+    { "from": "lead/providers.ts", "to": "server/src/routes/forkable/lead/providers.ts" },
+    { "from": "lead/waterfall.ts", "to": "server/src/routes/forkable/lead/waterfall.ts" },
+    { "from": "lead/Receipt.tsx", "to": "ui/src/components/forkable/lead/Receipt.tsx" }
+  ],
+  "fixtures": [{ "from": "../fixtures/lead.json", "to": "server/src/routes/forkable/fixtures/lead.json" }],
+  "requires": ["lib"],
+  "routes": [],
+  "actions": []
+}

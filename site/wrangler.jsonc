@@ -1,0 +1,11 @@
+{
+  // forkable.dev: the static launch page, served as Workers Static Assets on
+  // the Buildable account. `pnpm build` first, then `npx wrangler deploy`.
+  "name": "forkable-site",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" },
+  "routes": [
+    { "pattern": "forkable.dev", "custom_domain": true },
+    { "pattern": "www.forkable.dev", "custom_domain": true }
+  ]
+}

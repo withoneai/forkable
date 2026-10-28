@@ -1,0 +1,348 @@
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Forkable site palette (Moe, 2026-10-26): dark mode is pure black
+   (#000000), light mode is near-white with a hint of green (#fbfdfc).
+   One exact brand accent, #cced73, never darkened or hue-shifted, used as
+   a fill (buttons, badges) with black ink on top (`--accent-fill`,
+   `--accent-ink`). A free-standing accent (text, icons, the marks) is
+   `--accent-fg`: #cced73 on black, and #809d08 on the light page, since
+   #cced73 is 1.3:1 on white (#809d08 is 3.1:1, fine for icons and large
+   text). */
+:root {
+  --background: #fbfdfc;
+  --foreground: #002215;
+  --muted-foreground: #627b6f;
+  --card: color-mix(in oklch, var(--background) 92%, #002215 8%);
+  --border: color-mix(in oklch, var(--background) 78%, #002215 22%);
+  --accent-fg: #809d08;
+  --accent-fill: #cced73;
+  --accent-ink: #000000;
+  --accent-glow: color-mix(in oklch, #cced73 22%, transparent);
+  --headline-from: #002215;
+  --headline-to: color-mix(in oklch, #002215 55%, var(--background) 45%);
+  --window-shadow: 0 30px 80px -40px rgb(0 0 0 / 0.35);
+  --rim: color-mix(in oklch, #002215 75%, transparent);
+  --rim-glow: color-mix(in oklch, #cced73 22%, transparent);
+  --rim-glow-clear: color-mix(in oklch, #cced73 0%, transparent);
+  --halo: color-mix(in oklch, #cced73 12%, transparent);
+  --lane: color-mix(in oklch, #002215 70%, transparent);
+  --lane-glow: color-mix(in oklch, #002215 25%, transparent);
+  --lane-accent: var(--accent-fg);
+  --dot: color-mix(in oklch, #002215 50%, transparent);
+  color-scheme: light;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #e9faf2;
+  --muted-foreground: #779084;
+  --card: color-mix(in oklch, var(--background) 94%, #e9faf2 6%);
+  --border: color-mix(in oklch, var(--background) 88%, #e9faf2 12%);
+  --accent-fg: #cced73;
+  --accent-fill: #cced73;
+  --accent-ink: #000000;
+  --accent-glow: color-mix(in oklch, #cced73 18%, transparent);
+  --headline-from: #e9faf2;
+  --headline-to: color-mix(in oklch, #e9faf2 55%, var(--background) 45%);
+  --window-shadow: 0 50px 140px -50px rgb(0 0 0 / 0.9);
+  --rim: color-mix(in oklch, #e9faf2 95%, transparent);
+  --rim-glow: color-mix(in oklch, #cced73 35%, transparent);
+  --rim-glow-clear: color-mix(in oklch, #cced73 0%, transparent);
+  --halo: color-mix(in oklch, #cced73 10%, transparent);
+  --lane: color-mix(in oklch, #e9faf2 85%, transparent);
+  --lane-glow: color-mix(in oklch, #e9faf2 45%, transparent);
+  --lane-accent: var(--accent-fg);
+  --dot: color-mix(in oklch, #e9faf2 55%, transparent);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-ink: var(--accent-ink);
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* The type ladder (design/SPACING.md), plus the display steps a landing
+     page needs. 12/14/20 stay out: Tailwind already owns them. Spacing:
+     inside a block only ladder steps (2 4 6 8 10 12 16 24); between blocks
+     and sections, multiples of the 24 step (48 96 144). */
+  --text-11: 0.6875rem;
+  --text-11--line-height: 1rem;
+  --text-13: 0.8125rem;
+  --text-13--line-height: 1.25rem;
+  --text-15: 0.9375rem;
+  --text-15--line-height: 1.5rem;
+  --text-17: 1.0625rem;
+  --text-17--line-height: 1.625rem;
+  --text-28: 1.75rem;
+  --text-28--line-height: 2.125rem;
+  --text-36: 2.25rem;
+  --text-36--line-height: 2.5rem;
+  --text-44: 2.75rem;
+  --text-44--line-height: 2.875rem;
+  --text-56: 3.5rem;
+  --text-56--line-height: 3.5rem;
+  --text-80: 5rem;
+  --text-80--line-height: 4.75rem;
+}
+
+@layer base {
+  html {
+    background: var(--background);
+    transition: background-color 250ms ease;
+  }
+  body {
+    @apply bg-background text-foreground font-sans text-15 antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--accent-fill) 35%, transparent);
+  }
+}
+
+@layer utilities {
+  .text-gradient-headline {
+    background: linear-gradient(180deg, var(--headline-from) 0%, var(--headline-to) 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-accent {
+    background: linear-gradient(90deg, var(--foreground) 0%, var(--accent-fg) 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .fade-bottom-soft {
+    mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+  }
+  .fade-edges {
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 100%);
+  }
+  .fade-stem {
+    mask-image: linear-gradient(to right, transparent 0%, black 45%), linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 45%), linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-composite: source-in;
+  }
+  .fade-bottom {
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+  }
+}
+
+/* Generated art plates: the dark one is drawn on near-black and screens
+   into the page, the light one on white and multiplies. */
+.art { mix-blend-mode: screen; pointer-events: none; user-select: none; }
+.art-light { mix-blend-mode: multiply; pointer-events: none; user-select: none; }
+
+/* The horizon. A circle far wider than any screen, so its rim always runs
+   edge to edge and drops at the sides; drawn in CSS, so it is sharp at any
+   width. Its top sits on the hero window's top edge. */
+.horizon {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: max(240vw, 2800px);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: var(--background);
+  box-shadow:
+    0 -1px 0 0 var(--rim),
+    0 -2px 8px 0 var(--rim-glow),
+    0 -12px 60px 0 var(--rim-glow),
+    0 -60px 220px 40px var(--halo);
+}
+.horizon-halo {
+  position: absolute;
+  left: 50%;
+  top: -18rem;
+  width: min(140vw, 110rem);
+  height: 22rem;
+  translate: -50% 0;
+  background: radial-gradient(50% 100% at 50% 100%, var(--halo), transparent 70%);
+  pointer-events: none;
+}
+
+/* Lane lights: a pulse runs each lane on its own clock. */
+@keyframes lane-pulse { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+.lane-pulse { stroke-dasharray: 22 978; animation: lane-pulse 7s linear infinite; }
+
+/* Grain over everything, very faint. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html:not(.dark) .grain::after { opacity: 0.03; }
+
+/* Scroll layers. useScrollVars writes --p (0 entering, 1 settled) and
+   --c (-1 below centre, 0 at centre, 1 above) on the stage element. */
+.stage { --p: 0; --c: 0; }
+.stage-tilt {
+  transform-origin: 50% 0%;
+  transform: perspective(2200px) rotateX(calc((1 - var(--p)) * 16deg)) scale(calc(0.94 + var(--p) * 0.06));
+  will-change: transform;
+}
+.layer-slow { transform: translate3d(0, calc(var(--c) * -24px), 0); will-change: transform; }
+.layer-fast { transform: translate3d(0, calc(var(--c) * -72px), 0); will-change: transform; }
+.layer-faster { transform: translate3d(0, calc(var(--c) * -120px), 0); will-change: transform; }
+.glow-accent {
+  background: radial-gradient(closest-side, var(--accent-glow), transparent);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+.live-dot { animation: pulse-dot 2.4s ease-in-out infinite; }
+
+/* Motion: recipes from transitions.dev (free set), tokens as published. */
+:root {
+  --stagger-dur: 500ms;
+  --stagger-distance: 12px;
+  --stagger-stagger: 40ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --panel-open-dur: 400ms;
+  --panel-close-dur: 350ms;
+  --panel-translate-y: 48px;
+  --panel-blur: 2px;
+  --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+
+  --learn-shift: 2px;
+  --learn-spread: 8deg;
+  --learn-in: 350ms;
+  --learn-out: 350ms;
+  --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Texts reveal */
+.t-stagger-line {
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  filter: blur(var(--stagger-blur));
+  transition:
+    opacity var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter var(--stagger-dur) var(--stagger-ease);
+  will-change: transform, opacity, filter;
+}
+.t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
+.t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
+.t-stagger-line--4 { transition-delay: calc(var(--stagger-stagger) * 3); }
+.t-stagger.is-shown .t-stagger-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Panel reveal */
+.t-panel-slide {
+  transform: translateY(var(--panel-translate-y));
+  opacity: 0;
+  filter: blur(var(--panel-blur));
+  transition:
+    transform var(--panel-close-dur) var(--panel-ease),
+    opacity var(--panel-close-dur) var(--panel-ease),
+    filter var(--panel-close-dur) var(--panel-ease);
+  will-change: transform, opacity, filter;
+}
+.t-panel-slide[data-open="true"] {
+  transform: translateY(0);
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    transform var(--panel-open-dur) var(--panel-ease),
+    opacity var(--panel-open-dur) var(--panel-ease),
+    filter var(--panel-open-dur) var(--panel-ease);
+}
+
+/* Icon swap */
+.t-icon-swap {
+  position: relative;
+  display: inline-grid;
+}
+.t-icon-swap .t-icon {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  transition:
+    opacity var(--icon-swap-dur) var(--icon-swap-ease),
+    filter var(--icon-swap-dur) var(--icon-swap-ease),
+    transform var(--icon-swap-dur) var(--icon-swap-ease);
+  will-change: opacity, filter, transform;
+}
+.t-icon-swap[data-state="a"] .t-icon[data-icon="a"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="b"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+.t-icon-swap[data-state="a"] .t-icon[data-icon="b"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="a"] {
+  opacity: 0;
+  filter: blur(var(--icon-swap-blur));
+  transform: scale(var(--icon-swap-start-scale));
+}
+
+/* Learn more hover */
+.t-learn-chevron {
+  display: inline-flex;
+  transform: translateX(0);
+  transition: transform var(--learn-out) var(--learn-ease);
+}
+.t-learn-arm {
+  transform-box: view-box;
+  transform-origin: 10px 8px;
+  vector-effect: non-scaling-stroke;
+  transition: transform var(--learn-out) var(--learn-ease);
+}
+.t-learn:hover .t-learn-chevron { transform: translateX(var(--learn-shift)); transition-duration: var(--learn-in); }
+.t-learn:hover .t-learn-arm { transition-duration: var(--learn-in); }
+.t-learn:hover .t-learn-arm-top { transform: rotate(var(--learn-spread)); }
+.t-learn:hover .t-learn-arm-bot { transform: rotate(calc(var(--learn-spread) * -1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-stagger-line,
+  .t-panel-slide,
+  .t-icon-swap .t-icon,
+  .t-learn-chevron,
+  .t-learn-arm,
+  html { transition: none !important; }
+  .stage-tilt, .layer-slow, .layer-fast, .layer-faster { transform: none !important; }
+  .lane-pulse { animation: none; }
+  .lane-pulse { opacity: 0; }
+  .live-dot { animation: none; }
+}
+
+@keyframes row-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes caret { 50% { opacity: 0; } }
+.caret { display: inline-block; width: 1px; height: 1em; vertical-align: -0.15em; background: currentColor; animation: caret 1s steps(1) infinite; }
+

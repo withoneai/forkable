@@ -1,0 +1,3467 @@
+{
+ "me": "Dana Reyes, CEO of Acme Inc, a 12-person startup raising a seed round, hiring two senior engineers and signing design partners.",
+ "address": "dana@acme.com",
+ "teamDomain": "acme.com",
+ "goals": [
+  {
+   "id": "g1",
+   "title": "Close the seed round",
+   "detail": "Anything from investors, intros to investors, term sheets, data room requests."
+  },
+  {
+   "id": "g2",
+   "title": "Hire 2 senior engineers",
+   "detail": "Candidates, recruiters we work with, offer approvals. Not cold recruiter pitches."
+  },
+  {
+   "id": "g3",
+   "title": "Land 3 design partners",
+   "detail": "Pilots, pricing questions, champions at target companies."
+  }
+ ],
+ "vips": [
+  {
+   "id": "v1",
+   "name": "Priya Nair",
+   "matchKind": "address",
+   "match": "priya@northwind.vc"
+  },
+  {
+   "id": "v2",
+   "name": "Acme team",
+   "matchKind": "domain",
+   "match": "acme.com"
+  },
+  {
+   "id": "v3",
+   "name": "Board members",
+   "matchKind": "description",
+   "match": "anyone on our board at Acme"
+  },
+  {
+   "id": "v4",
+   "name": "Elena Ruiz",
+   "matchKind": "address",
+   "match": "elena@globex.com"
+  }
+ ],
+ "sent": [
+  {
+   "email": "priya@northwind.vc",
+   "name": "Priya Nair",
+   "count": 9
+  },
+  {
+   "email": "marcus@acme.com",
+   "name": "Marcus Lee",
+   "count": 14
+  },
+  {
+   "email": "rosa@delgadopearson.com",
+   "name": "Rosa Delgado",
+   "count": 7
+  },
+  {
+   "email": "elena@globex.com",
+   "name": "Elena Ruiz",
+   "count": 6
+  },
+  {
+   "email": "victor@langpartners.com",
+   "name": "Victor Lang",
+   "count": 5
+  },
+  {
+   "email": "jordan@acme.com",
+   "name": "Jordan Park",
+   "count": 11
+  },
+  {
+   "email": "leo@vandelay.com",
+   "name": "Leo Martins",
+   "count": 4
+  },
+  {
+   "email": "hannah@brookstalent.co",
+   "name": "Hannah Brooks",
+   "count": 3
+  },
+  {
+   "email": "omar@farouk.dev",
+   "name": "Omar Farouk",
+   "count": 2
+  },
+  {
+   "email": "ben@adlerandco.com",
+   "name": "Ben Adler",
+   "count": 2
+  },
+  {
+   "email": "riley@acme.com",
+   "name": "Riley Chen",
+   "count": 8
+  },
+  {
+   "email": "noreply@calendar.example",
+   "name": "Calendar",
+   "count": 3
+  }
+ ],
+ "threads": [
+  {
+   "id": "t01",
+   "subject": "Term sheet redlines, need you by Thursday",
+   "messages": [
+    {
+     "id": "t01m1",
+     "from": {
+      "name": "Dana Reyes",
+      "email": "dana@acme.com"
+     },
+     "to": [
+      "priya@northwind.vc"
+     ],
+     "minutesAgo": 1510,
+     "body": "Hi Priya,\n\nThanks for turning the redlines around so fast. I have read through them twice with Rosa.\n\nMost of it is fine as drafted. Two points I want to think about overnight: the board seat timing (we had talked about it kicking in at close, the redline moves it to signing) and the pro rata clause, which now covers every future round rather than the next one.\n\nI will come back to you with a position on both by Wednesday so we stay on track for Thursday.\n\nDana",
+     "labelIds": [
+      "SENT"
+     ]
+    },
+    {
+     "id": "t01m2",
+     "from": {
+      "name": "Priya Nair",
+      "email": "priya@northwind.vc"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 18,
+     "body": "Dana,\n\nQuick one before our IC meets Thursday at 5pm. I need your answer on the two open points, board seat timing and pro rata.\n\nOn the board seat, we can live with it kicking in at close if that matters to you. On pro rata, my partners want it to survive past the next round. I can probably get them to a cap at the Series B if you push, but I need to know today whether you are pushing.\n\nThe rest of the document is clean. Our counsel is standing by to turn a signature version the moment we agree, so Thursday is still real if I hear from you by tomorrow morning.\n\nCall me any time this afternoon if a conversation is faster.\n\nPriya\n\nPriya Nair\nPartner, Northwind VC",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.99,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.93
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 1,
+      "g2": 0,
+      "g3": 0,
+      "none": 0
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.98
+    },
+    "urgency": {
+     "score": 2.01
+    },
+    "vip_v3": {
+     "noul": 0.14
+    }
+   },
+   "summary": {
+    "summary": "Priya Nair of Northwind VC needs Dana's position on two term sheet points before Thursday's 5pm IC: board seat timing and pro rata. She says the rest of the document is clean and counsel can sign once agreed.",
+    "ask": "Decide whether to push on pro rata; send position by tomorrow morning."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t02",
+   "subject": "Re: Q4 hiring plan",
+   "messages": [
+    {
+     "id": "t02m1",
+     "from": {
+      "name": "Marcus Lee",
+      "email": "marcus@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 95,
+     "body": "Dana,\n\nBoth finalists cleared the last loop yesterday. Summary:\n\nOmar Farouk, staff backend at his current place, 9 years. Panel was unanimous. Wants $215k base, which is top of our band, plus the standard 0.25% grant.\n\nJess Tanaka, senior platform, 7 years. Strong on infra, a bit lighter on product sense, but the team loved working with her in the pairing session. Asking $205k, also top of band.\n\nI want to send both offers today. Omar has a competing offer that expires Friday and Jess has a second onsite elsewhere next week. If we wait we lose at least one of them.\n\nCan you approve top of band for both, or tell me where you want to land? I have the offer letters drafted and Rosa has reviewed the template.\n\nMarcus\n\nMarcus Lee\nVP Engineering, Acme Inc",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.09
+    },
+    "goal": {
+     "choice": "g2",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 1,
+      "g3": 0,
+      "none": 0
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.97
+    },
+    "urgency": {
+     "score": 2.04
+    },
+    "vip_v3": {
+     "noul": 0.09
+    }
+   },
+   "summary": {
+    "summary": "Marcus Lee, VP Engineering, reports both finalists cleared the final loop: Omar Farouk (staff backend) and Jess Tanaka (senior platform). Both are asking top of band, and Omar's competing offer expires Friday.",
+    "ask": "Approve top-of-band offers for both candidates today, or set a different number."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t03",
+   "subject": "Board deck for next week",
+   "messages": [
+    {
+     "id": "t03m1",
+     "from": {
+      "name": "Victor Lang",
+      "email": "victor@langpartners.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 150,
+     "body": "Dana,\n\nLooking ahead to Thursday's board sync. Can you send the deck by Tuesday evening so the three of us have a day with it before the call? Last quarter it arrived two hours ahead and we spent most of the meeting reading instead of talking.\n\nThings I would like to see this time: the burn number against the plan we approved in July, where the seed conversation with Northwind stands, and a slide on the two engineering hires, even if it is just names and start dates.\n\nIf the Northwind terms land before Thursday, add them to the deck and we can use the meeting to approve.\n\nThanks,\nVictor\n\nVictor Lang\nBoard member, Acme Inc\nGeneral Partner, Lang Partners",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.99,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0.01
+     }
+    },
+    "commitment": {
+     "noul": 0.21
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 0.73,
+     "probabilities": {
+      "g1": 0.8,
+      "g2": 0.05,
+      "g3": 0,
+      "none": 0.15
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.91
+    },
+    "urgency": {
+     "score": 1.37
+    },
+    "vip_v3": {
+     "noul": 0.98
+    }
+   },
+   "summary": {
+    "summary": "Victor Lang, a board member, wants the board deck by Tuesday evening before Thursday's sync. He asks for burn against the July plan, the Northwind seed status, and a slide on the two engineering hires. If Northwind terms land, he wants them added for approval.",
+    "ask": "Send board deck by Tuesday evening, with burn, Northwind status, hires."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t04",
+   "subject": "Can you review the launch post?",
+   "messages": [
+    {
+     "id": "t04m1",
+     "from": {
+      "name": "Jordan Park",
+      "email": "jordan@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 310,
+     "body": "Hey Dana,\n\nThe launch post draft is ready for your eyes. Link is in the shared Launch folder, file is \"Acme launch post v3\".\n\nIt is about 900 words. The structure is: the problem we kept hearing from design partners, what we built, two short customer quotes (Globex approved theirs, the Vandelay one is still pending Leo), and a quiet mention that we are hiring.\n\nI would like your comments by tomorrow midday so I can get a final to the designer for the hero image on Wednesday. Mostly I want you to check the second paragraph, where I describe the pricing. I kept it vague on purpose but tell me if it is too vague.\n\nJordan\n\nJordan Park\nHead of Marketing, Acme Inc",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0.01
+     }
+    },
+    "commitment": {
+     "noul": 0.17
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.51,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.04,
+      "g3": 0.33,
+      "none": 0.63
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.96
+    },
+    "urgency": {
+     "score": 1.68
+    },
+    "vip_v3": {
+     "noul": 0.07
+    }
+   },
+   "summary": {
+    "summary": "Jordan Park, Head of Marketing, sends the draft launch post (v3, about 900 words) for review. He wants feedback by tomorrow midday, mainly on whether the vague pricing paragraph is too vague. The Vandelay customer quote is still pending approval from Leo.",
+    "ask": "Review launch post draft; advise if pricing paragraph is too vague, by tomorrow midday."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t05",
+   "subject": "Pilot results and next steps",
+   "messages": [
+    {
+     "id": "t05m1",
+     "from": {
+      "name": "Elena Ruiz",
+      "email": "elena@globex.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 240,
+     "body": "Hi Dana,\n\nThe four week pilot wrapped on Friday and I pulled the numbers this morning.\n\nWeekly active users on the Acme workspace went 11, 17, 24, 31. Average time to resolve a ticket in the pilot team dropped from 2.3 days to 1.4. The team lead said she would be upset if we took it away, which is the best signal I have.\n\nI want to take this to our VP of Ops next week and ask for 40 seats across two teams. For that I need a pricing proposal from you: per seat cost at 40, what an annual commitment does to it, and whether onboarding is included. If you have a one page summary of the security posture, add that too, it will save me a round with procurement.\n\nCan you get me something by Friday?\n\nElena\n\nElena Ruiz\nDirector of Operations, Globex",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0.01
+     }
+    },
+    "commitment": {
+     "noul": 0.14
+    },
+    "goal": {
+     "choice": "g3",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.99,
+      "none": 0.01
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.93
+    },
+    "urgency": {
+     "score": 1.31
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Elena Ruiz, Director of Operations at Globex, reports a four week pilot with strong results: weekly active users rose from 11 to 31 and ticket resolution time fell from 2.3 to 1.4 days. She plans to propose 40 seats to her VP of Ops next week.",
+    "ask": "Pricing proposal for 40 seats, annual discount, onboarding, and security summary by Friday."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t06",
+   "subject": "Offsite date: need a decision today",
+   "messages": [
+    {
+     "id": "t06m1",
+     "from": {
+      "name": "Riley Chen",
+      "email": "riley@acme.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 6,
+     "body": "Dana,\n\nThe venue in Half Moon Bay will only hold both dates until 5pm today. Options:\n\nA) Nov 13 to 14 (Thu to Fri). Everyone can make it except Jordan, who is at a conference on the 13th and would join Friday morning.\n\nB) Nov 20 to 21. Everyone can make it, but it is the week before Thanksgiving and the rate is 18% higher.\n\nMy vote is A. Jordan is fine missing the first morning. Just reply A or B and I will book.\n\nRiley",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.99,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.1
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0.01,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.98
+    },
+    "urgency": {
+     "score": 2.67
+    },
+    "vip_v3": {
+     "noul": 0.09
+    }
+   },
+   "summary": {
+    "summary": "Riley Chen needs a decision today, before the Half Moon Bay venue releases both offsite dates at 5pm. Option A is Nov 13 to 14, which Riley recommends, though Jordan would miss the first morning. Option B is Nov 20 to 21, which works for everyone but costs 18% more during the week before Thanksgiving.",
+    "ask": "Reply A or B so Riley can book today."
+   },
+   "firstTimeSender": false,
+   "expectLane": "vip"
+  },
+  {
+   "id": "t07",
+   "subject": "Intro: you and Lena from Initech",
+   "messages": [
+    {
+     "id": "t07m1",
+     "from": {
+      "name": "Sam Okafor",
+      "email": "sam@initech.io"
+     },
+     "to": [
+      "dana@acme.com",
+      "lena@initech.vc"
+     ],
+     "minutesAgo": 380,
+     "body": "Dana, meet Lena. Lena, meet Dana.\n\nLena Fischer is a partner at Initech Ventures and sits on their platform team, which works with the operations groups at Initech's portfolio companies. She saw the Acme demo at the founder dinner last month and asked me to connect you two.\n\nLena, Dana is the CEO of Acme. They are twelve people, have three design partners in pilot, and from what I hear are in the middle of a round. I think there is something here either way, whether that is the round or getting Acme in front of your portfolio ops teams.\n\nI will leave you both to it.\n\nSam\n\nSam Okafor\nInitech",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.88,
+     "probabilities": {
+      "me": 0.91,
+      "nobody": 0,
+      "them": 0.06,
+      "third_party": 0.03
+     }
+    },
+    "commitment": {
+     "noul": 0.06
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 0.95,
+     "probabilities": {
+      "g1": 0.96,
+      "g2": 0,
+      "g3": 0.02,
+      "none": 0.02
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.98,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.02,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.98,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.68
+    },
+    "urgency": {
+     "score": 1
+    },
+    "vip_v3": {
+     "noul": 0.08
+    }
+   },
+   "summary": {
+    "summary": "Sam Okafor introduces you to Lena Fischer, a partner at Initech Ventures on their platform team, who saw the Acme demo at a founder dinner. Sam thinks there's a fit, either for your seed round or for getting Acme in front of Initech's portfolio ops teams.",
+    "ask": "Reply to Lena and set up a conversation about Acme."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t08",
+   "subject": "Data room access",
+   "messages": [
+    {
+     "id": "t08m1",
+     "from": {
+      "name": "Grace Lindqvist",
+      "email": "grace@lindqvist.me"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 700,
+     "body": "Hi Dana,\n\nGood to talk on Friday. As promised I am interested in coming into the seed for $150k alongside Northwind, assuming the terms are what you described.\n\nBefore I commit I would like access to the data room. Specifically the last 12 months of financials, the cap table, the design partner agreements, and the Northwind term sheet once it is signed. My email for the data room is this one.\n\nI can move quickly. If I have the documents by Wednesday I can give you a yes or no by the end of the week.\n\nBest,\nGrace",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.89,
+     "probabilities": {
+      "me": 0.92,
+      "nobody": 0,
+      "them": 0.02,
+      "third_party": 0.06
+     }
+    },
+    "commitment": {
+     "noul": 0.32
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 1,
+      "g2": 0,
+      "g3": 0,
+      "none": 0
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.05
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.01,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.91
+    },
+    "urgency": {
+     "score": 1.59
+    },
+    "vip_v3": {
+     "noul": 0.07
+    }
+   },
+   "summary": {
+    "summary": "Grace Lindqvist, a prospective seed investor, says she will invest $150k alongside Northwind if terms hold. Before committing she wants data room access for financials, cap table, design partner agreements, and the signed Northwind term sheet, promising a decision by week's end if docs arrive Wednesday.",
+    "ask": "Grant data room access for financials, cap table, partner agreements, and Northwind term sheet by Wednesday."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t09",
+   "subject": "Re: Onsite interview, Thursday",
+   "messages": [
+    {
+     "id": "t09m1",
+     "from": {
+      "name": "Omar Farouk",
+      "email": "omar@farouk.dev"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 420,
+     "body": "Hi Dana,\n\nThank you for the invitation. Thursday at 10am works for me and I will plan to be at the office by 9:45.\n\nMarcus mentioned the day would end with 30 minutes with you. If there is anything you would like me to prepare for that conversation, let me know. Otherwise I will come with questions about how you think about the first ten engineers and what you want the team to look like a year from now.\n\nOne practical thing: I have a competing offer with a Friday deadline. I am not trying to rush you, I would just rather you know now than on Thursday afternoon.\n\nSee you then,\nOmar",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.95,
+     "probabilities": {
+      "me": 0.96,
+      "nobody": 0,
+      "them": 0.04,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.14
+    },
+    "goal": {
+     "choice": "g2",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.99,
+      "g3": 0,
+      "none": 0.01
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0.01,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.87
+    },
+    "urgency": {
+     "score": 1.6
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Omar Farouk confirms his Thursday 10am onsite interview and expects a 30-minute closing conversation with you. He has a competing offer with a Friday deadline and wants you to know now.",
+    "ask": "Tell him if you want anything prepared for the closing conversation."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t10",
+   "subject": "Two senior profiles for the backend role",
+   "messages": [
+    {
+     "id": "t10m1",
+     "from": {
+      "name": "Hannah Brooks",
+      "email": "hannah@brookstalent.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1100,
+     "body": "Hi Dana,\n\nTwo profiles for the senior backend role, both pre-screened against the brief Marcus sent over.\n\n1. Devi Raman. 8 years, most recently tech lead on a payments team at a fintech. Strong on reliability and on-call culture. Based in Oakland, wants hybrid. Comp expectation $200k to $220k.\n\n2. Paul Nkemelu. 10 years, has been the first senior hire at two startups and stayed through Series B at both. Based in Denver, open to relocating. Comp expectation $210k.\n\nBoth are available for a first call this week. Tell me which you want to see and I will set up 30 minutes with Marcus. If neither fits, tell me what is off and I will adjust the search.\n\nHannah\n\nHannah Brooks\nBrooks Talent Partners",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.99,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.08
+    },
+    "goal": {
+     "choice": "g2",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 1,
+      "g3": 0,
+      "none": 0
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.96,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.03,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.97,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.96
+    },
+    "urgency": {
+     "score": 1.03
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Recruiter Hannah Brooks sends two pre-screened senior backend candidates: Devi Raman, a fintech payments tech lead expecting $200k to $220k, and Paul Nkemelu, a serial first senior hire expecting $210k. Both can take a first call this week.",
+    "ask": "Pick which candidate to meet, or say what to change in the search."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t11",
+   "subject": "SSO timeline before we roll out wider",
+   "messages": [
+    {
+     "id": "t11m1",
+     "from": {
+      "name": "Leo Martins",
+      "email": "leo@vandelay.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 520,
+     "body": "Dana,\n\nThe pilot team here is happy and I am ready to ask for budget to roll Acme out to the whole operations group, about 60 people, in Q1.\n\nThe blocker is SSO. Our IT policy requires SAML for anything that touches more than 25 users, and the pilot is currently on email and password. I know it is on your roadmap. What I need is a date I can put in the budget request, even a rough one like \"end of January\".\n\nSeparately, Jordan asked me for a quote for your launch post. I am fine with it in principle, I just need to clear it with our comms team, so give me a few days on that.\n\nThanks,\nLeo\n\nLeo Martins\nOperations Lead, Vandelay Industries",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.92,
+     "probabilities": {
+      "me": 0.94,
+      "nobody": 0,
+      "them": 0.04,
+      "third_party": 0.02
+     }
+    },
+    "commitment": {
+     "noul": 0.1
+    },
+    "goal": {
+     "choice": "g3",
+     "confidence": 0.91,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.93,
+      "none": 0.07
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.96
+    },
+    "urgency": {
+     "score": 1.34
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Leo Martins of Vandelay Industries says the pilot is going well and he wants budget to roll Acme out to about 60 operations staff in Q1. SSO (SAML) is the blocker, and he needs a rough date for it. He also says he is fine in principle with Jordan's launch-post quote pending his comms team's review.",
+    "ask": "Give a rough SSO delivery date, like end of January, for the budget request."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t12",
+   "subject": "Security questionnaire for the Acme engagement",
+   "messages": [
+    {
+     "id": "t12m1",
+     "from": {
+      "name": "Patricia Gomez",
+      "email": "patricia.gomez@globex.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1700,
+     "body": "Hello Dana,\n\nI am in procurement at Globex and I am working with Elena Ruiz on the Acme engagement. Before we can move from pilot to a paid contract, our vendor process requires a completed security questionnaire.\n\nThe questionnaire is 84 questions and is attached. Most vendors complete it in about a week. The sections that typically take the longest are data retention, subprocessors, and incident response. If you already have a SOC 2 report or a security overview, you can attach it and skip the questions it covers.\n\nPlease return it by November 3 so we can keep to Elena's timeline for the 40 seat rollout.\n\nRegards,\nPatricia Gomez\nProcurement, Globex",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.87,
+     "probabilities": {
+      "me": 0.9,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0.1
+     }
+    },
+    "commitment": {
+     "noul": 0.08
+    },
+    "goal": {
+     "choice": "g3",
+     "confidence": 0.83,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.87,
+      "none": 0.13
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.06
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.86
+    },
+    "urgency": {
+     "score": 0.85
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Patricia Gomez from Globex procurement says a completed 84-question security questionnaire is required before moving from pilot to a paid contract for the 40-seat rollout. A SOC 2 report or security overview can replace covered questions. Due November 3.",
+    "ask": "Return the completed security questionnaire by November 3."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t13",
+   "subject": "Someone you should meet",
+   "messages": [
+    {
+     "id": "t13m1",
+     "from": {
+      "name": "Maya Chen",
+      "email": "maya@piedpiper.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2300,
+     "body": "Dana,\n\nHow is the round going? I had coffee yesterday with Tom Reyes at Stark Logistics' corporate venture arm (no relation, I asked). They are writing $250k to $500k checks into B2B seed rounds where their ops teams could be customers, and he specifically asked whether I knew anyone in the operations tooling space.\n\nI told him about Acme without naming you. He wants an intro. Want me to make it? Say yes and I will send a double opt-in email this week.\n\nAlso, dinner soon. It has been too long.\n\nMaya",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0,
+      "them": 0.02,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.15
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 0.97,
+     "probabilities": {
+      "g1": 0.98,
+      "g2": 0,
+      "g3": 0.01,
+      "none": 0.01
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.01,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.96
+    },
+    "urgency": {
+     "score": 1
+    },
+    "vip_v3": {
+     "noul": 0.08
+    }
+   },
+   "summary": {
+    "summary": "Maya Chen offers to introduce Dana to Tom Reyes at Stark Logistics' corporate venture arm, which writes $250k to $500k seed checks into B2B companies whose ops teams could be customers. She also suggests dinner soon.",
+    "ask": "Reply yes so Maya sends a double opt-in intro email"
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t14",
+   "subject": "Withdrawing from the process",
+   "messages": [
+    {
+     "id": "t14m1",
+     "from": {
+      "name": "Ingrid Solberg",
+      "email": "ingrid@solberg.io"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2800,
+     "body": "Hi Dana,\n\nI wanted to tell you directly rather than through Marcus. I am withdrawing from the senior platform process at Acme.\n\nIt is not about the team or the work. I accepted an offer on Friday from a company where a close friend is the CTO, and it was a decision about people more than anything else. Acme was my second choice out of six, which I hope reads as the compliment it is meant to be.\n\nI enjoyed every conversation, especially the one with you about how you decide what not to build. If I can ever be useful, including pointing engineers your way, please ask.\n\nIngrid",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.41,
+     "probabilities": {
+      "me": 0.5599999999999999,
+      "nobody": 0.42,
+      "them": 0.01,
+      "third_party": 0.01
+     }
+    },
+    "commitment": {
+     "noul": 0.09
+    },
+    "goal": {
+     "choice": "g2",
+     "confidence": 0.93,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.95,
+      "g3": 0,
+      "none": 0.05
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.11
+    },
+    "urgency": {
+     "score": 1.19
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Ingrid Solberg is withdrawing from the senior platform hiring process because she accepted another offer, where a close friend is CTO. She calls Acme her second choice out of six and offers to refer engineers to Dana.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t15",
+   "subject": "Q3 filing ready for your signature",
+   "messages": [
+    {
+     "id": "t15m1",
+     "from": {
+      "name": "Ben Adler",
+      "email": "ben@adlerandco.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 900,
+     "body": "Dana,\n\nThe Q3 payroll tax filing and the Delaware franchise estimate are ready. Both are in your e-sign queue under \"Acme Inc Q3\".\n\nPayroll tax: $48,212, which matches the register Riley sent. Franchise estimate: $4,000, same as last quarter.\n\nThe filing deadline is October 31, but the e-sign has to be back to me by the 28th so I can submit with a buffer. Should take you five minutes.\n\nOne question: Riley mentioned two new hires starting in November. If either is out of state, tell me which state so I can register for withholding before the first payroll.\n\nBen\n\nBen Adler, CPA\nAdler and Co",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.18
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.81,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.14,
+      "g3": 0,
+      "none": 0.86
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.96
+    },
+    "urgency": {
+     "score": 0.97
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Ben Adler, Acme's CPA, says the Q3 payroll tax filing ($48,212) and Delaware franchise estimate ($4,000) are ready in your e-sign queue under Acme Inc Q3. Filing is due October 31, so he needs your signature by the 28th.",
+    "ask": "Sign the Q3 e-sign by October 28; tell him any out-of-state hire's state."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t16",
+   "subject": "Dev Horizons: AV and stage setup for your talk",
+   "messages": [
+    {
+     "id": "t16m1",
+     "from": {
+      "name": "Chloe Dubois",
+      "email": "chloe@devhorizons.events"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1400,
+     "body": "Hi Dana,\n\nWe are finalizing the stage setups for Dev Horizons on November 7. You are on the main stage at 2:15pm for 25 minutes plus 5 for questions.\n\nPlease confirm the following by Friday:\n\n1. Will you present from your own laptop (we have HDMI and USB-C) or send slides ahead?\n2. Lapel mic or handheld?\n3. Do you need a live demo with internet? If yes, we will put you on the wired line.\n4. Your headshot and bio are still the ones from last year. Fine to reuse?\n\nAlso, there is a speaker dinner on the 6th at 7pm. Let me know if you can make it so I can give the restaurant a count.\n\nChloe\n\nChloe Dubois\nProgram Director, Dev Horizons",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.11
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.98,
+     "probabilities": {
+      "calendar": 0.02,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.98,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.97
+    },
+    "urgency": {
+     "score": 1.18
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Dev Horizons organizers are finalizing your November 7 main stage slot at 2:15pm (25 minutes plus 5 for questions). They need AV choices, a mic preference, whether you need a live internet demo, and bio/headshot reuse, plus a yes or no on the November 6 speaker dinner.",
+    "ask": "Confirm AV, mic, demo, bio, and dinner attendance by Friday."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t17",
+   "subject": "Option pool: need your pick before we send to Northwind",
+   "messages": [
+    {
+     "id": "t17m1",
+     "from": {
+      "name": "Rosa Delgado",
+      "email": "rosa@delgadopearson.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 70,
+     "body": "Dana,\n\nNorthwind's counsel has asked us to confirm the option pool size in the signature version. We discussed two options on the call this morning and I need you to pick one in writing before I send anything.\n\nOption 1: 10% post-money pool, all of it created pre-money. Cleanest for the investors, costs you and the founders about 1.1 points of dilution more than Option 2.\n\nOption 2: 8% pool pre-money, with a board commitment to top up to 10% after the two engineering hires. Better for you now, but Northwind may push back since it was 10% in the term sheet.\n\nGiven the Thursday IC, I recommend Option 1 unless the extra dilution is a real problem. Reply with \"1\" or \"2\" and I will finalize. I need it by noon tomorrow at the latest.\n\nRosa\n\nRosa Delgado\nPartner, Delgado Pearson",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.22
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0.99,
+      "g2": 0,
+      "g3": 0,
+      "none": 0.01
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.05
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.98
+    },
+    "urgency": {
+     "score": 1.76
+    },
+    "vip_v3": {
+     "noul": 0.06
+    }
+   },
+   "summary": {
+    "summary": "Rosa Delgado, outside counsel for the Northwind seed round, needs you to choose an option pool structure before she finalizes signature documents. Option 1 is a 10% pre-money pool costing about 1.1 more points of dilution; Option 2 is 8% with a top-up to 10% after the engineering hires, which Northwind may resist.",
+    "ask": "Reply 1 or 2 by noon tomorrow."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t18",
+   "subject": "Lease renewal for Suite 410",
+   "messages": [
+    {
+     "id": "t18m1",
+     "from": {
+      "name": "Frank Molinari",
+      "email": "frank@molinariproperties.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 3100,
+     "body": "Dana,\n\nYour lease on Suite 410 expires January 31. I am reaching out now because I have had two inquiries about the floor and I would rather keep you than show it.\n\nRenewal terms: 24 months at $9,400 per month, up from $8,800, which is below the 9% the rest of the building took this year. Or 12 months at $9,900 if you want to stay flexible. Both include the two parking spots you have now.\n\nIf you are going to need more space in the new year, Suite 420 next door (about 1,800 square feet) comes free in March and we could talk about combining.\n\nLet me know which way you are leaning by mid November so I can get paperwork started.\n\nFrank\n\nFrank Molinari\nMolinari Properties",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.08
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.96,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.03,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.97,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.94
+    },
+    "urgency": {
+     "score": 0.28
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Frank Molinari, your landlord, offers to renew Suite 410, which expires January 31. Options are 24 months at $9,400 or 12 months at $9,900 monthly, and he suggests combining with Suite 420 if you need more space.",
+    "ask": "Pick 24-month or 12-month renewal by mid November."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t19",
+   "subject": "Coffee?",
+   "messages": [
+    {
+     "id": "t19m1",
+     "from": {
+      "name": "Tariq Rahman",
+      "email": "tariq@stark-logistics.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 3600,
+     "body": "Dana,\n\nIt has been almost two years. I saw the Acme news on LinkedIn and realized I have been meaning to write for about six months of that.\n\nI moved to Stark Logistics in the spring, running their internal tools group, which is more fun than it sounds. Would love to hear how the CEO thing is treating you and swap notes on hiring, which is eating my life right now.\n\nCoffee near your office some morning in the next couple of weeks? I am flexible, you pick the day.\n\nTariq",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.95,
+     "probabilities": {
+      "me": 0.96,
+      "nobody": 0,
+      "them": 0.04,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.09
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.51,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.37,
+      "g3": 0,
+      "none": 0.63
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.01,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.89
+    },
+    "urgency": {
+     "score": 0.29
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Tariq Rahman, now running internal tools at Stark Logistics, reconnects after about two years after seeing Acme's news on LinkedIn. He wants to catch up over coffee near your office in the next couple of weeks and compare notes on hiring.",
+    "ask": "Coffee in the next couple of weeks; you pick the day."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t20",
+   "subject": "Escalation: exports failing since Monday",
+   "messages": [
+    {
+     "id": "t20m1",
+     "from": {
+      "name": "Wes Carter",
+      "email": "wes@oceanicsupply.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 200,
+     "body": "Dana,\n\nI am writing to you directly because the support thread (ticket 2291) has been open since Monday and I have not had a reply since Tuesday morning.\n\nOur CSV exports have been failing with a timeout for every report over about 2,000 rows. We are a small customer, six seats, but we use the Friday export for payroll and Friday is tomorrow. If this is not fixed by then I have to rebuild the report by hand, which is most of a day.\n\nI do not need a long explanation. I need to know whether it will work tomorrow, and if not, whether someone can run the export for us on your side.\n\nWes Carter\nHead of Operations, Oceanic Supply Co",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.8,
+     "probabilities": {
+      "me": 0.85,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0.14
+     }
+    },
+    "commitment": {
+     "noul": 0.05
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.01,
+      "none": 0.99
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.89
+    },
+    "urgency": {
+     "score": 1.96
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Wes Carter, Head of Operations at customer Oceanic Supply Co, escalates that CSV exports over about 2,000 rows have timed out since Monday on ticket 2291, with no reply since Tuesday. Friday payroll depends on it.",
+    "ask": "Confirm whether the export will work by Friday, or run it for them."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t21",
+   "subject": "PO number for invoice 10482",
+   "messages": [
+    {
+     "id": "t21m1",
+     "from": {
+      "name": "Dmitri Volkov",
+      "email": "dmitri@cyberdyne-office.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2000,
+     "body": "Hello Dana,\n\nInvoice 10482 for the standing desks and monitor arms (12 units, $7,140) was approved by Riley on October 9, but your accounts payable system rejected it for a missing PO number.\n\nRiley is out this week and suggested I ask you. Could you send me the PO number, or confirm that I can submit without one? Our terms are net 30 from the original invoice date, so we are at day 12.\n\nThank you,\nDmitri Volkov\nAccount Manager, Cyberdyne Office",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.91,
+     "probabilities": {
+      "me": 0.93,
+      "nobody": 0,
+      "them": 0.01,
+      "third_party": 0.06
+     }
+    },
+    "commitment": {
+     "noul": 0.06
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.07
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.03
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0.01
+     }
+    },
+    "needs_reply": {
+     "noul": 0.89
+    },
+    "urgency": {
+     "score": 1.26
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Dmitri Volkov of Cyberdyne Office says invoice 10482 for 12 standing desks and monitor arms ($7,140) was approved by Riley on October 9 but rejected by your accounts payable system for a missing PO number. Riley is out, and net 30 terms are at day 12.",
+    "ask": "Send the PO number, or confirm he can submit without one."
+   },
+   "firstTimeSender": false,
+   "expectLane": "reply"
+  },
+  {
+   "id": "t22",
+   "subject": "How the best PMs run discovery",
+   "messages": [
+    {
+     "id": "t22m1",
+     "from": {
+      "name": "The Product Weekly",
+      "email": "hello@productweekly.news"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 950,
+     "body": "The Product Weekly, issue 212\n\nThis week: how the best PMs run discovery.\n\nWe interviewed product leads at eight companies between 20 and 200 people about how they decide what to build next. Three patterns showed up everywhere.\n\n1. They talk to customers on a schedule, not when they have a question. Five conversations a week was the median.\n2. They write the problem down before the solution, and share the problem write-up with engineering before any mockup exists.\n3. They kill more than they ship. The best teams had a graveyard doc and were proud of it.\n\nFull piece on the site, about an 8 minute read.\n\nAlso this week: a template for a one page problem brief, and a reader question about pricing experiments.\n\nYou are receiving this because you subscribed at productweekly.news. Unsubscribe any time from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.8,
+     "probabilities": {
+      "me": 0.15,
+      "nobody": 0.85,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.95,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.04,
+      "none": 0.96
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "newsletter",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 1,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.03
+    },
+    "urgency": {
+     "score": 0.13
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "A newsletter from The Product Weekly, issue 212, on how strong product teams run customer discovery. Key points: talk to customers on a fixed schedule, write the problem before the solution, and maintain a graveyard of killed ideas. It is a general 8-minute read, not a message to you personally.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t23",
+   "subject": "Seed Signals: October round-up",
+   "messages": [
+    {
+     "id": "t23m1",
+     "from": {
+      "name": "Seed Signals",
+      "email": "digest@seedsignals.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 2400,
+     "body": "Seed Signals, October round-up\n\nRound sizes are up and round counts are down. Median seed in our tracked set was $3.4M this month, against $2.9M in October last year, with about 15% fewer deals closed.\n\nWhat founders are telling us:\n\nTerm sheets are taking longer. The median from first meeting to signed term sheet was 41 days, up from 33.\n\nPro rata is back on the table. Two thirds of the term sheets we saw this month included some form of pro rata rights, and about a quarter extended them past the next round. Push back on that one if you can.\n\nOption pools are being negotiated harder, with 10% post-money still the most common ask.\n\nOn the site this week: a founder's annotated term sheet, and a comparison of three data room tools.\n\nSeed Signals is free. Forward it to a founder who needs it!\n\nUnsubscribe from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.79,
+     "probabilities": {
+      "me": 0.16,
+      "nobody": 0.84,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.84,
+     "probabilities": {
+      "g1": 0.12,
+      "g2": 0,
+      "g3": 0,
+      "none": 0.88
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.07
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "newsletter",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 1,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.03
+    },
+    "urgency": {
+     "score": 0.4
+    },
+    "vip_v3": {
+     "noul": 0.05
+    }
+   },
+   "summary": {
+    "summary": "Seed Signals' October newsletter says median seed rounds rose to $3.4M while deal counts fell about 15%. Term sheets now take a median 41 days, pro rata rights are common, and 10% option pools remain the usual ask.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t24",
+   "subject": "Stack Notes #148: the cost of a flaky test suite",
+   "messages": [
+    {
+     "id": "t24m1",
+     "from": {
+      "name": "Stack Notes",
+      "email": "newsletter@stacknotes.dev"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 4200,
+     "body": "Stack Notes, issue 148\n\nThe cost of a flaky test suite\n\nWe instrumented CI at six companies for a month. Average time lost to re-running flaky tests was 4.2 engineer hours per week per team, or about one engineer in ten doing nothing. Fixing the top 5% of flaky tests eliminated 80% of the retries.\n\nAlso in this issue:\n\nA short write-up on moving a 40-service deployment from cron-based jobs to a queue, including what broke.\n\nPostgres connection pooling for serverless, with the numbers on what a 6 connection cap actually means at load.\n\nA reader's checklist for interviewing senior engineers that does not involve a whiteboard.\n\nRead online or reply with topics you want covered.\n\nUnsubscribe from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.84,
+     "probabilities": {
+      "me": 0.12,
+      "nobody": 0.88,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.01,
+      "g3": 0,
+      "none": 0.99
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "newsletter",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 1,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.03
+    },
+    "urgency": {
+     "score": 0.03
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Stack Notes issue 148, a newsletter about the cost of flaky test suites. It reports that flaky tests cost about 4.2 engineer hours per team weekly, and fixing the top 5% removed 80% of retries. Other items cover a queue migration, serverless Postgres pooling, and senior engineer interviews.",
+    "ask": "Reply with topics you want covered, or read online."
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t25",
+   "subject": "Founders Digest: your week in 5 minutes",
+   "messages": [
+    {
+     "id": "t25m1",
+     "from": {
+      "name": "Founders Digest",
+      "email": "weekly@foundersdigest.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 5900,
+     "body": "Founders Digest, week of October 13\n\nThe five things founders were reading this week:\n\n1. A long post on why first time CEOs under-delegate, and a one page exercise to fix it.\n2. The quiet rise of design partner programs, and how to structure one so it converts to revenue.\n3. A compensation survey for engineers at companies under 50 people. Senior backend median base was $198k in the Bay Area.\n4. What to say to a candidate who turns you down, with examples.\n5. A short interview with a founder who runs her inbox in 30 minutes a day.\n\nEvents this month: Dev Horizons on November 7, Umbrella Summit CFP closes October 31.\n\nReply to this email with something you read that we missed.\n\nUnsubscribe from the link below.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.49,
+     "probabilities": {
+      "me": 0.62,
+      "nobody": 0.38,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.05
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.91,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.03,
+      "g3": 0.04,
+      "none": 0.93
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "newsletter",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 1,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.07
+    },
+    "urgency": {
+     "score": 0.34
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Founders Digest's weekly newsletter for the week of October 13, listing five founder reads on delegation, design partner programs, engineer compensation, declining candidates, and inbox habits. It also flags the Dev Horizons event on November 7 and the Umbrella Summit CFP closing October 31.",
+    "ask": "Reply with an article you read that they missed."
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t26",
+   "subject": "Your Figma invoice for October",
+   "messages": [
+    {
+     "id": "t26m1",
+     "from": {
+      "name": "Figma",
+      "email": "no-reply@figma.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 700,
+     "body": "Your invoice is ready\n\nAcme Inc\nFigma Professional, 3 editors\nBilling period: October 1 to October 31\nAmount: $45.00\nPayment method: Visa ending 4417\nStatus: Paid\n\nInvoice number FIG-2026-10-88213. You can download the PDF from your billing settings.\n\nThis is an automated message. Replies to this address are not monitored.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 1,
+     "probabilities": {
+      "me": 0,
+      "nobody": 1,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.01,
+      "none": 0.99
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.04
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "receipt",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0,
+      "receipt": 1
+     }
+    },
+    "needs_reply": {
+     "noul": 0.02
+    },
+    "urgency": {
+     "score": 0.02
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Figma notifies Dana that the October invoice for Acme's three Professional editors is paid, totaling $45.00 on a Visa ending 4417. No action is needed beyond optional PDF download for records.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t27",
+   "subject": "Amazon Web Services invoice available",
+   "messages": [
+    {
+     "id": "t27m1",
+     "from": {
+      "name": "Amazon Web Services",
+      "email": "no-reply-aws@amazon.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 3000,
+     "body": "Greetings from Amazon Web Services.\n\nYour invoice for the billing period September 1 to September 30 is now available.\n\nAccount: Acme Inc (ending 7731)\nTotal: $2,318.46\nPayment: charged to the card on file\n\nTop services this period: Amazon RDS $912.10, Amazon EC2 $704.55, Amazon S3 $221.80, data transfer $188.02.\n\nYou can view detailed usage and download the PDF invoice in the Billing and Cost Management console.\n\nThis email was sent from a notification-only address that cannot accept incoming email.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.95,
+     "probabilities": {
+      "me": 0.04,
+      "nobody": 0.96,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.03
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "receipt",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0.01,
+      "person": 0,
+      "receipt": 0.99
+     }
+    },
+    "needs_reply": {
+     "noul": 0.02
+    },
+    "urgency": {
+     "score": 0.25
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Amazon Web Services says the September 2026 invoice for Acme Inc is ready, totaling $2,318.46, charged to the card on file. RDS was the largest cost at $912.10, followed by EC2 at $704.55.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t28",
+   "subject": "Your receipt: SFO to AUS, November 6",
+   "messages": [
+    {
+     "id": "t28m1",
+     "from": {
+      "name": "Skyline Air",
+      "email": "receipts@skylineair.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 4500,
+     "body": "Thanks for flying with Skyline Air.\n\nPassenger: Dana Reyes\nConfirmation: QX7R4N\n\nOutbound: Thursday November 6, SFO 7:40am to AUS 1:15pm, flight 882, seat 9C\nReturn: Saturday November 8, AUS 4:05pm to SFO 6:10pm, flight 891, seat 11A\n\nFare: $388.00\nTaxes and fees: $47.60\nTotal charged: $435.60 to Visa ending 4417\n\nManage your booking or change seats at skylineair.com. Check in opens 24 hours before departure.\n\nThis is an automated receipt.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.01,
+      "nobody": 0.99,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.03
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "receipt",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0,
+      "receipt": 1
+     }
+    },
+    "needs_reply": {
+     "noul": 0.02
+    },
+    "urgency": {
+     "score": 0.41
+    },
+    "vip_v3": {
+     "noul": 0.06
+    }
+   },
+   "summary": {
+    "summary": "Skyline Air receipt for Dana's round trip SFO to AUS, departing November 6 and returning November 8, confirmation QX7R4N, total $435.60 on Visa ending 4417. Check-in opens 24 hours before departure.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t29",
+   "subject": "[acme/platform] Merged: Rate limit the export endpoint (#412)",
+   "messages": [
+    {
+     "id": "t29m1",
+     "from": {
+      "name": "GitHub",
+      "email": "notifications@github.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 260,
+     "body": "Merged #412 into main.\n\nmarcus-acme merged 3 commits into main from fix/export-timeouts.\n\nRate limit the export endpoint and stream CSV rows instead of buffering the full result. Fixes the timeouts reported on exports over 2,000 rows (ticket 2291).\n\nChanges: 6 files changed, 184 additions, 61 deletions.\n\nChecks: all 14 passed.\n\nYou are receiving this because you are watching this repository.\nReply to this email directly, view it on GitHub, or unsubscribe.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.99,
+     "probabilities": {
+      "me": 0.01,
+      "nobody": 0.99,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.03
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.03
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "notification",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 1,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.03
+    },
+    "urgency": {
+     "score": 0.05
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "GitHub notice that Marcus merged PR #412 into main, which rate limits the export endpoint and streams CSV rows to fix timeouts on exports over 2,000 rows (ticket 2291). All 14 checks passed.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t30",
+   "subject": "Invitation: Board sync @ Thu",
+   "messages": [
+    {
+     "id": "t30m1",
+     "from": {
+      "name": "Google Calendar",
+      "email": "calendar-notification@google.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 480,
+     "body": "Board sync\n\nThursday October 29, 2026, 10:00am to 11:00am Pacific Time\n\nOrganizer: victor@langpartners.com\nGuests: dana@acme.com, priya@northwind.vc, victor@langpartners.com, and 1 more\n\nJoining info: meet.google.com/kqp-wzrt-bnm\n\nAgenda: Q3 review, seed round terms, hiring update.\n\nReply for dana@acme.com: Yes, No, Maybe\n\nYou are receiving this email because you are a guest on this event. Forwarding this invitation could allow any recipient to send a response to the organizer.",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0.01,
+      "them": 0.01,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.07
+    },
+    "goal": {
+     "choice": "g1",
+     "confidence": 0.63,
+     "probabilities": {
+      "g1": 0.72,
+      "g2": 0,
+      "g3": 0,
+      "none": 0.28
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.04
+    },
+    "inj_agent_addressed": {
+     "noul": 0.06
+    },
+    "inj_override": {
+     "noul": 0.03
+    },
+    "kind": {
+     "choice": "calendar",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 1,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.53
+    },
+    "urgency": {
+     "score": 1.13
+    },
+    "vip_v3": {
+     "noul": 0.44
+    }
+   },
+   "summary": {
+    "summary": "Victor from LangPartners invites Dana to a Board sync on Thursday October 29, 2026, 10:00 to 11:00am Pacific, covering Q3 review, seed round terms, and a hiring update. Priya from Northwind VC is also a guest.",
+    "ask": "Confirm attendance: Yes, No, or Maybe"
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t31",
+   "subject": "Re: Updated contract, final version",
+   "messages": [
+    {
+     "id": "t31m1",
+     "from": {
+      "name": "Nina Patel",
+      "email": "nina@brightwater.design"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1300,
+     "body": "Hi Dana,\n\nThanks, all set. The signed copy came through fine and the deposit landed in my account this morning.\n\nI will start on the brand refresh on the 27th as planned and send the first round of directions the following week.\n\nNina",
+     "labelIds": [
+      "INBOX"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "nobody",
+     "confidence": 0.39,
+     "probabilities": {
+      "me": 0.03,
+      "nobody": 0.54,
+      "them": 0.43,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.18
+    },
+    "goal": {
+     "choice": "g3",
+     "confidence": 0.59,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.69,
+      "none": 0.31
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.07
+    },
+    "urgency": {
+     "score": 0.05
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Nina Patel of Brightwater Design confirms the signed contract arrived and the deposit has been received. She will begin the brand refresh on the 27th and send first-round directions the following week.",
+    "ask": null
+   },
+   "firstTimeSender": false,
+   "expectLane": "other"
+  },
+  {
+   "id": "t32",
+   "subject": "Pipeline for Acme in Q4",
+   "messages": [
+    {
+     "id": "t32m1",
+     "from": {
+      "name": "Tyler Brooks",
+      "email": "tyler@pipelinepros.io"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 330,
+     "body": "Hi Dana,\n\nI run PipelinePros, an outsourced SDR team for B2B startups between seed and Series A. We book qualified meetings for your founders so you can keep building instead of cold calling.\n\nOur clients see 12 to 18 qualified meetings a month within 60 days. We work on a flat retainer of $6,500 a month with no long term contract, and we only staff reps who have sold operations software before.\n\nI noticed Acme is hiring, which usually means a round just closed or is about to. That is exactly when a predictable top of funnel matters most.\n\nDo you have 15 minutes this week or next for a quick call? Happy to send case studies first if you prefer.\n\nBest,\nTyler Brooks\nFounder, PipelinePros",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.96,
+     "probabilities": {
+      "me": 0.97,
+      "nobody": 0,
+      "them": 0.03,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.1
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.89,
+     "probabilities": {
+      "g1": 0.03,
+      "g2": 0.01,
+      "g3": 0.04,
+      "none": 0.92
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 1,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.73
+    },
+    "urgency": {
+     "score": 0.5
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Tyler Brooks of PipelinePros, an outsourced SDR firm, is pitching a $6,500 monthly retainer to book qualified meetings for Acme. He cites Acme's hiring as a sign of a recent or upcoming funding round.",
+    "ask": "A 15-minute call this week or next."
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t33",
+   "subject": "Quick question about your onboarding",
+   "messages": [
+    {
+     "id": "t33m1",
+     "from": {
+      "name": "Alex Kim",
+      "email": "alex@growthloop.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 130,
+     "body": "Hi Dana,\n\nI signed up for Acme last week to take a look (nice product) and noticed the onboarding emails stop after day 2. Was that on purpose?\n\nAt GrowthLoop we write onboarding and lifecycle email for B2B products. Typical result for a team your size is a 20 to 35% lift in week two activation, and we can usually show a before and after within a month.\n\nI put together three quick ideas for your day 3 to day 14 sequence. Would you like me to send them over? No cost, no strings, just curious whether it is useful.\n\nAlex Kim\nGrowthLoop",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.83,
+     "probabilities": {
+      "me": 0.87,
+      "nobody": 0,
+      "them": 0.13,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.07
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.69,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.23,
+      "none": 0.77
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 0.98,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.98,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.02,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.79
+    },
+    "urgency": {
+     "score": 0.37
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Alex Kim from GrowthLoop, a lifecycle email agency, noticed Acme's onboarding emails stop after day 2 and offers three free ideas for the day 3 to 14 sequence. The pitch cites a 20 to 35% week two activation lift, which is unverified.",
+    "ask": "Reply if you want the three free onboarding ideas sent."
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t34",
+   "subject": "Speaking slot at Umbrella Summit",
+   "messages": [
+    {
+     "id": "t34m1",
+     "from": {
+      "name": "Nadia Hassan",
+      "email": "nadia@umbrella.org"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 300,
+     "body": "Dear Dana,\n\nI am the program chair for Umbrella Summit, which takes place March 12 to 13 in Austin. About 1,400 people attend, mostly engineers and engineering leaders at companies under 500 people.\n\nWe are putting together a track on building small, senior engineering teams, and your name came up twice when I asked speakers who else we should hear from. I would like to invite you to give a 30 minute talk on how Acme hires and runs its engineering team.\n\nWe cover travel and two nights of hotel. There is no fee either way, we do not pay speakers and we do not charge them.\n\nThe program locks on November 15. If you are interested, a one paragraph abstract by then is all I need.\n\nWarm regards,\nNadia Hassan\nProgram Chair, Umbrella Summit",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 1,
+     "probabilities": {
+      "me": 1,
+      "nobody": 0,
+      "them": 0,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.06
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0,
+      "none": 1
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 0.5,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.58,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.42,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.83
+    },
+    "urgency": {
+     "score": 0.1
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Nadia Hassan, program chair of Umbrella Summit in Austin on March 12 to 13, invites Dana to give a 30 minute talk on how Acme hires and runs engineering. Travel and two hotel nights are covered, with no speaker fee. The program locks November 15.",
+    "ask": "Send a one paragraph talk abstract by November 15."
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t35",
+   "subject": "Comment request: ops tooling for small teams",
+   "messages": [
+    {
+     "id": "t35m1",
+     "from": {
+      "name": "Casey Monroe",
+      "email": "casey@signalreport.news"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 540,
+     "body": "Hi Dana,\n\nI write about B2B software for The Signal Report. I am working on a piece about why operations teams at small companies are moving off spreadsheets, and Acme came up in two of my interviews with customers.\n\nWould you be willing to answer three questions by email, or do a 20 minute call? The questions are about what you are seeing in how teams buy, not about your fundraising, and I would send them ahead.\n\nMy deadline is next Wednesday. Happy to share the quotes I plan to use before publication.\n\nThanks,\nCasey Monroe\nThe Signal Report",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0,
+      "them": 0.02,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.08
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.83,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.13,
+      "none": 0.87
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 0.51,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.59,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.41,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.85
+    },
+    "urgency": {
+     "score": 0.73
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": {
+    "summary": "Casey Monroe, a B2B software writer for The Signal Report, is working on a piece about small operations teams leaving spreadsheets. Acme came up in two customer interviews. She requests three emailed questions or a 20-minute call on buying trends, with a deadline next Wednesday.",
+    "ask": "Answer three emailed questions or join a 20-minute call by next Wednesday."
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t36",
+   "subject": "Advice from a student who read your post",
+   "messages": [
+    {
+     "id": "t36m1",
+     "from": {
+      "name": "Aisha Bello",
+      "email": "abello@student.northfield.edu"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 1900,
+     "body": "Hello Ms. Reyes,\n\nI am a third year computer science student at Northfield University. I read your post about leaving a large company to start Acme and it has stuck with me for weeks.\n\nI am trying to decide between a big company internship next summer and joining a five person startup that a friend's older brother runs. Everyone I ask gives me the answer that matches their own path. I would really value 15 minutes of yours, by email or call, whichever is easier, to hear how you would think about it.\n\nI understand you are busy and will not be offended by a no.\n\nThank you for reading this,\nAisha Bello",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.96,
+     "probabilities": {
+      "me": 0.97,
+      "nobody": 0.01,
+      "them": 0.02,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.04
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.99,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.01,
+      "g3": 0,
+      "none": 0.99
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 0.51,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.59,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.41,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.82
+    },
+    "urgency": {
+     "score": 0.22
+    },
+    "vip_v3": {
+     "noul": 0.02
+    }
+   },
+   "summary": {
+    "summary": "Aisha Bello, a third-year computer science student at Northfield University, is weighing a big company summer internship against joining a five-person startup. She read your post about leaving a large company and asks for 15 minutes to hear how you would think about it, by email or call, and says a no is fine.",
+    "ask": "15 minutes by email or call to discuss her internship choice"
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t37",
+   "subject": "Partnership between Wonka Labs and Acme",
+   "messages": [
+    {
+     "id": "t37m1",
+     "from": {
+      "name": "Yusuf Demir",
+      "email": "yusuf@wonkalabs.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 800,
+     "body": "Hi Dana,\n\nI lead partnerships at Wonka Labs. We make a workflow engine used by about 300 mid-market operations teams, and several of them have asked us whether we integrate with Acme.\n\nI think there is a natural fit: Acme as the front end for the team, Wonka running the automations behind it. We have done two integrations like this in the past year and both drove meaningful signups for the partner.\n\nWould you be open to a 30 minute call to explore it? I can bring our integration lead and a short deck on what the previous two looked like.\n\nBest regards,\nYusuf Demir\nHead of Partnerships, Wonka Labs",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.96,
+     "probabilities": {
+      "me": 0.97,
+      "nobody": 0,
+      "them": 0.03,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.08
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.61,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.29,
+      "none": 0.71
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "cold_pitch",
+     "confidence": 0.96,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.97,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.03,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.77
+    },
+    "urgency": {
+     "score": 0.52
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Yusuf Demir, Head of Partnerships at Wonka Labs, proposes a partnership where Acme serves as the front end and Wonka's workflow engine runs the automations. He cites about 300 mid-market customers asking for an integration and two past partner integrations that drove signups.",
+    "ask": "A 30-minute call to explore the integration partnership."
+   },
+   "firstTimeSender": true,
+   "expectLane": "screener"
+  },
+  {
+   "id": "t38",
+   "subject": "Updated logo files",
+   "messages": [
+    {
+     "id": "t38m1",
+     "from": {
+      "name": "Theo Brandt",
+      "email": "theo@brandtstudio.co"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 230,
+     "body": "Hi Dana,\n\nThe updated logo files are in the shared folder: the wordmark in SVG and PNG, the icon on light and dark, and a one page usage sheet.\n\nLet me know if you also want the monochrome variant for the swag order. It is a quick export.\n\nTheo\n\nTheo Brandt\nBrandt Studio",
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ],
+     "hiddenText": "(hidden html block)"
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.93,
+     "probabilities": {
+      "me": 0.95,
+      "nobody": 0.03,
+      "them": 0.02,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.07
+    },
+    "goal": {
+     "choice": "none",
+     "confidence": 0.87,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 0.1,
+      "none": 0.9
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.97
+    },
+    "inj_agent_addressed": {
+     "noul": 0.98
+    },
+    "inj_hidden": {
+     "noul": 0.98
+    },
+    "inj_override": {
+     "noul": 0.97
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.95,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.04,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.96,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.85
+    },
+    "urgency": {
+     "score": 0.85
+    },
+    "vip_v3": {
+     "noul": 0.03
+    }
+   },
+   "summary": null,
+   "firstTimeSender": true,
+   "expectLane": "other"
+  },
+  {
+   "id": "t39",
+   "subject": "Pilot at Hooli: proposal and timeline",
+   "messages": [
+    {
+     "id": "t39m1",
+     "from": {
+      "name": "Richard Hale",
+      "email": "richard.hale@hooli.com"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 6900,
+     "body": "Dana,\n\nThanks for the demo on Tuesday. The platform team is interested in a pilot. Before I take it upstairs I need to understand what a pilot looks like with Acme: how many seats, how long, what it costs, and what you would need from us.\n\nSend me whatever you usually send and I will get it in front of my VP.\n\nRichard\n\nRichard Hale\nDirector, Platform Operations, Hooli",
+     "labelIds": [
+      "INBOX"
+     ]
+    },
+    {
+     "id": "t39m2",
+     "from": {
+      "name": "Dana Reyes",
+      "email": "dana@acme.com"
+     },
+     "to": [
+      "richard.hale@hooli.com"
+     ],
+     "minutesAgo": 5100,
+     "body": "Richard,\n\nGreat to hear. Here is how we usually run a pilot:\n\nScope: one team, 10 to 15 seats, 4 weeks. Globex and Vandelay both ran it this way.\nCost: free for the pilot. If you convert, the pilot month counts toward the first year.\nFrom you: one champion on your side (I assume that is you), a kickoff call, and a 30 minute check-in each week.\nSuccess criteria: we agree on two numbers up front, usually time to resolve and weekly active users, and we review them together at the end.\n\nI can have a one page pilot agreement to you tomorrow. Which team were you thinking of starting with, and when could they kick off?\n\nDana",
+     "labelIds": [
+      "SENT"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.97,
+     "probabilities": {
+      "me": 0.98,
+      "nobody": 0,
+      "them": 0.02,
+      "third_party": 0
+     }
+    },
+    "commitment": {
+     "noul": 0.26
+    },
+    "goal": {
+     "choice": "g3",
+     "confidence": 1,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0,
+      "g3": 1,
+      "none": 0
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.03
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 0.99,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0.01,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 0.99,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.93
+    },
+    "urgency": {
+     "score": 1.22
+    },
+    "vip_v3": {
+     "noul": 0.04
+    }
+   },
+   "summary": {
+    "summary": "Richard Hale, Director of Platform Operations at Hooli, follows up after Tuesday's demo. Hooli's platform team wants a pilot and he needs seats, duration, cost, and what Acme needs from Hooli before taking it to his VP.",
+    "ask": "Send your standard pilot proposal covering seats, duration, cost, and requirements."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  },
+  {
+   "id": "t40",
+   "subject": "Re: Next steps, references",
+   "messages": [
+    {
+     "id": "t40m1",
+     "from": {
+      "name": "Lucas Ferreira",
+      "email": "lucas@ferreira.dev"
+     },
+     "to": [
+      "dana@acme.com"
+     ],
+     "minutesAgo": 6200,
+     "body": "Hi Dana,\n\nThank you for the conversation yesterday. I came away even more interested in the role and in how you are thinking about the platform work for next year.\n\nMarcus said the next step is with you. Happy to do whatever is useful.\n\nLucas",
+     "labelIds": [
+      "INBOX"
+     ]
+    },
+    {
+     "id": "t40m2",
+     "from": {
+      "name": "Dana Reyes",
+      "email": "dana@acme.com"
+     },
+     "to": [
+      "lucas@ferreira.dev"
+     ],
+     "minutesAgo": 4700,
+     "body": "Lucas,\n\nThe feeling was mutual. We are at the reference stage, which is the last step before an offer.\n\nCould you send me two or three references by Thursday? Ideally one former manager and one engineer you worked closely with. Names, how you worked together, and the best way to reach them is all I need. I will reach out directly and keep it to 20 minutes each.\n\nIf anyone needs a heads up before I contact them, just say so and I will wait.\n\nDana",
+     "labelIds": [
+      "SENT"
+     ]
+    }
+   ],
+   "jev": {
+    "ball": {
+     "choice": "me",
+     "confidence": 0.75,
+     "probabilities": {
+      "me": 0.81,
+      "nobody": 0.01,
+      "them": 0.16,
+      "third_party": 0.02
+     }
+    },
+    "commitment": {
+     "noul": 0.11
+    },
+    "goal": {
+     "choice": "g2",
+     "confidence": 0.95,
+     "probabilities": {
+      "g1": 0,
+      "g2": 0.96,
+      "g3": 0,
+      "none": 0.04
+     }
+    },
+    "inj_action_request": {
+     "noul": 0.02
+    },
+    "inj_agent_addressed": {
+     "noul": 0.02
+    },
+    "inj_override": {
+     "noul": 0.02
+    },
+    "kind": {
+     "choice": "person",
+     "confidence": 1,
+     "probabilities": {
+      "calendar": 0,
+      "cold_pitch": 0,
+      "newsletter": 0,
+      "notification": 0,
+      "person": 1,
+      "receipt": 0
+     }
+    },
+    "needs_reply": {
+     "noul": 0.85
+    },
+    "urgency": {
+     "score": 1.03
+    },
+    "vip_v3": {
+     "noul": 0.06
+    }
+   },
+   "summary": {
+    "summary": "Lucas Ferreira, a job candidate, thanks Dana for their conversation yesterday and says he is more interested in the role and the platform work for next year. He says Marcus told him the next step is with Dana.",
+    "ask": "Next step on the hiring process; he is open to helping."
+   },
+   "firstTimeSender": false,
+   "expectLane": "goals"
+  }
+ ]
+}

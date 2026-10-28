@@ -1,0 +1,24 @@
+{
+  "name": "lead-email-finder",
+  "title": "Email find and verify",
+  "description": "A name and a company domain in, a work email out (Findymail, then Hunter), then verified (Clearout, then Hunter) when the user presses Verify. Hunter's opt-out stops the run. Ships on the Acme sample; each provider needs a data contract before it serves real lookups.",
+  "kind": "component",
+  "group": "Lead",
+  "files": [
+    { "from": "lead-email-finder/LeadEmailFinder.tsx", "to": "ui/src/components/forkable/LeadEmailFinder.tsx" },
+    { "from": "lead-email-finder/route.ts", "to": "server/src/routes/forkable/lead-email-finder.ts" }
+  ],
+  "requires": ["lib", "lead"],
+  "routes": [
+    { "method": "POST", "path": "/api/lead/email" },
+    { "method": "POST", "path": "/api/lead/verify" }
+  ],
+  "actions": [
+    { "platform": "findymail", "actionId": "conn_mod_def::GNVodNTamNg::q5zktdhfSEaEM9bqCnWWUQ", "title": "Find an Email Address from a Name", "access": "read", "reason": "First email finder; spends a credit only on a verified find." },
+    { "platform": "hunter", "actionId": "conn_mod_def::GKHsq4zExrg::RWffHccvRj6CleVN4L6KAA", "title": "Find an Email Address (Email Finder)", "access": "read", "reason": "Second email finder.", "optional": true },
+    { "platform": "clearout", "actionId": "conn_mod_def::GMYgfFhQuZ4::CPNo1QzxQguZP0qsSAb5cw", "title": "Instant Verify Email", "access": "read", "reason": "First verifier; no answer is free." },
+    { "platform": "hunter", "actionId": "conn_mod_def::GKHsrEOOBQg::cV6dy4XITlSBL97UlSc3QQ", "title": "Verify an Email Address (Email Verifier)", "access": "read", "reason": "Second verifier.", "optional": true }
+  ],
+  "usage": "<LeadEmailFinder defaults={{ name: \"Priya Shah\", domain: \"acme-inc.example\" }} />",
+  "route": "leadEmailFinderRoute"
+}

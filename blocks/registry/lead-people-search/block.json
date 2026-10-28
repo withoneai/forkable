@@ -1,0 +1,20 @@
+{
+  "name": "lead-people-search",
+  "title": "People search",
+  "description": "Find people by title, company, domain and place through a provider waterfall: People Data Labs first, Coresignal next, stop on the first hit. Every answer carries a receipt of what was tried and what it cost. Ships on the Acme sample; each provider needs a data contract before it serves real lookups.",
+  "kind": "component",
+  "group": "Lead",
+  "files": [
+    { "from": "lead-people-search/LeadPeopleSearch.tsx", "to": "ui/src/components/forkable/LeadPeopleSearch.tsx" },
+    { "from": "lead-people-search/route.ts", "to": "server/src/routes/forkable/lead-people-search.ts" }
+  ],
+  "requires": ["lib", "lead"],
+  "routes": [{ "method": "POST", "path": "/api/lead/search" }],
+  "actions": [
+    { "platform": "people-data-labs", "actionId": "conn_mod_def::GJ6CPAXoxMA::2a83EikOTXORH7h12QAqHg", "title": "Search People (Person Search)", "access": "read", "reason": "First provider in the search waterfall." },
+    { "platform": "coresignal", "actionId": "conn_mod_def::GJ2LgE_gQSI::xAMiIrQyRuaks6rd2aalmQ", "title": "Search Base Employee Profiles", "access": "read", "reason": "Second provider: finds candidates (free).", "optional": true },
+    { "platform": "coresignal", "actionId": "conn_mod_def::GJ2LfpIXUPQ::CPKIuzUTTE2YuYSnBdNYJA", "title": "Collect a Base Employee Profile", "access": "read", "reason": "Second provider: reads each candidate (the credited call).", "optional": true }
+  ],
+  "usage": "<LeadPeopleSearch onPick={(person) => setPicked(person)} />",
+  "route": "leadPeopleSearchRoute"
+}

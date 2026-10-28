@@ -1,0 +1,21 @@
+{
+  "name": "rill",
+  "title": "Rill shared",
+  "description": "Rill's lane policy, the Jev request it sends per thread, the judged inbox every Rill block reads, your goals and VIPs (rill/config.ts) and the Acme sample with Rill's recorded Jev answers. Installed once with the first Rill block.",
+  "kind": "lib",
+  "files": [
+    { "from": "rill/types.ts", "to": "ui/src/components/forkable/rill/types.ts", "alsoTo": "server/src/routes/forkable/rill/types.ts" },
+    { "from": "rill/actions.ts", "to": "server/src/routes/forkable/rill/actions.ts" },
+    { "from": "rill/config.ts", "to": "server/src/routes/forkable/rill/config.ts" },
+    { "from": "rill/jev.ts", "to": "server/src/routes/forkable/rill/jev.ts" },
+    { "from": "rill/policy.ts", "to": "server/src/routes/forkable/rill/policy.ts" },
+    { "from": "rill/sample.ts", "to": "server/src/routes/forkable/rill/sample.ts" },
+    { "from": "rill/inbox.ts", "to": "server/src/routes/forkable/rill/inbox.ts" }
+  ],
+  "fixtures": [
+    { "from": "../fixtures/rill.json", "to": "server/src/routes/forkable/fixtures/rill.json" }
+  ],
+  "requires": ["lib", "gmail"],
+  "routes": [],
+  "actions": []
+}

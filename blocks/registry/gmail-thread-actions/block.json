@@ -1,0 +1,38 @@
+{
+  "name": "gmail-thread-actions",
+  "title": "Gmail Thread Actions",
+  "description": "Archive with Undo, mark unread, star. Writes labels on the user's grant, never deletes.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "gmail-thread-actions/GmailThreadActions.tsx",
+      "to": "ui/src/components/forkable/GmailThreadActions.tsx"
+    },
+    {
+      "from": "gmail-thread-actions/route.ts",
+      "to": "server/src/routes/forkable/gmail-thread-actions.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "gmail"
+  ],
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/gmail/threads/:id/modify"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3olIfJ9E0::xBAV1bF_RXG94_j4bmye2A",
+      "title": "Modify thread labels",
+      "access": "write",
+      "reason": "Archive, mark unread and star change labels on a thread."
+    }
+  ],
+  "usage": "<GmailThreadActions threadId={id} onDone={refresh} />",
+  "group": "Gmail",
+  "route": "gmailThreadActionsRoute"
+}

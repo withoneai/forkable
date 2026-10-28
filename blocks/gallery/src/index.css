@@ -1,0 +1,110 @@
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "tailwindcss";
+@import "../../registry/lib/blocks.css";
+@source "../../registry";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The Forkable site palette. The components only read the shadcn-style
+   tokens below, so a fork restyles every one of them from its own CSS. */
+:root {
+  --background: #fbfdfc;
+  --foreground: #002215;
+  --muted-foreground: #627b6f;
+  --card: color-mix(in oklch, #fbfdfc 97%, #002215 3%);
+  --raised: #ffffff;
+  --border: color-mix(in oklch, #fbfdfc 88%, #002215 12%);
+  --strong: color-mix(in oklch, #fbfdfc 76%, #002215 24%);
+  --dots: color-mix(in oklch, #fbfdfc 82%, #002215 18%);
+  --accent: #809d08;
+  --primary: #cced73;
+  --primary-hover: #b3d258;
+  --primary-press: #9ab83b;
+  --primary-foreground: #000000;
+  --danger: #b42318;
+  --soft-shadow: 0 1px 2px rgb(0 34 21 / 0.04), 0 8px 24px -12px rgb(0 34 21 / 0.12);
+  --overlay-shadow: 0 1px 2px rgb(0 34 21 / 0.06), 0 16px 40px -12px rgb(0 34 21 / 0.28);
+  /* Older names, same values. */
+  --accent-fg: var(--accent);
+  --accent-fill: var(--primary);
+  --accent-ink: var(--primary-foreground);
+  /* Code colors, the same as the Builder's editor. */
+  --code-keyword: oklch(0.5 0.17 300);
+  --code-string: oklch(0.5 0.12 150);
+  --code-number: oklch(0.55 0.14 50);
+  --code-comment: oklch(0.6 0.01 70);
+  --code-type: oklch(0.5 0.13 230);
+  --code-fn: oklch(0.48 0.15 265);
+  --code-tag: oklch(0.52 0.16 20);
+  --code-attr: oklch(0.55 0.12 80);
+  color-scheme: light;
+}
+.dark {
+  --background: #000000;
+  --foreground: #e9faf2;
+  --muted-foreground: #779084;
+  --card: color-mix(in oklch, #000000 91%, #e9faf2 9%);
+  --raised: color-mix(in oklch, #000000 81%, #e9faf2 19%);
+  --border: color-mix(in oklch, #000000 82%, #e9faf2 18%);
+  --strong: color-mix(in oklch, #000000 68%, #e9faf2 32%);
+  --dots: color-mix(in oklch, #000000 80%, #e9faf2 20%);
+  --accent: #cced73;
+  --danger: #f97066;
+  --soft-shadow: 0 0 0 1px rgb(233 250 242 / 0.02), 0 12px 32px -16px rgb(0 0 0 / 0.8);
+  --overlay-shadow: 0 0 0 1px rgb(233 250 242 / 0.03), 0 16px 40px -12px rgb(0 0 0 / 0.9);
+  --code-keyword: oklch(0.78 0.13 305);
+  --code-string: oklch(0.8 0.12 150);
+  --code-number: oklch(0.8 0.12 60);
+  --code-comment: oklch(0.58 0.01 70);
+  --code-type: oklch(0.8 0.1 220);
+  --code-fn: oklch(0.8 0.11 265);
+  --code-tag: oklch(0.76 0.13 20);
+  --code-attr: oklch(0.82 0.1 85);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-raised: var(--raised);
+  --color-border: var(--border);
+  --color-strong: var(--strong);
+  --color-dots: var(--dots);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-press: var(--primary-press);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent-fg: var(--accent);
+  --color-accent-fill: var(--primary);
+  --color-accent-ink: var(--primary-foreground);
+  --shadow-soft: var(--soft-shadow);
+  --shadow-overlay: var(--overlay-shadow);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html { font-feature-settings: "cv11", "ss01"; }
+::selection { background: color-mix(in oklch, var(--primary) 45%, transparent); }
+@layer base {
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+@supports (corner-shape: squircle) {
+  [class*="rounded-"]:not([class*="rounded-full"]) { corner-shape: squircle; }
+}
+/* The dotted ground a preview sits on, like the art plates on blocks.forkable.dev. */
+.preview-ground { background: radial-gradient(circle at 1px 1px, var(--dots) 1px, transparent 0) 0 0 / 1rem 1rem, var(--card); }
+
+/* Syntax tokens (gallery/src/CodeBlock.tsx). */
+[data-code] .tok-keyword { color: var(--code-keyword); }
+[data-code] .tok-string { color: var(--code-string); }
+[data-code] .tok-number { color: var(--code-number); }
+[data-code] .tok-comment { color: var(--code-comment); font-style: italic; }
+[data-code] .tok-type { color: var(--code-type); }
+[data-code] .tok-fn { color: var(--code-fn); }
+[data-code] .tok-tag { color: var(--code-tag); }
+[data-code] .tok-attr { color: var(--code-attr); }

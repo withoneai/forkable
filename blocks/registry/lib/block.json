@@ -1,0 +1,27 @@
+{
+  "name": "lib",
+  "title": "One helpers",
+  "description": "Installed once with the first component. one-server calls a platform on the user's grant (or the sample before Connect is set up); one-client fetches routes; one-ui holds the shared bits.",
+  "kind": "lib",
+  "files": [
+    {
+      "from": "lib/one-server.ts",
+      "to": "server/src/routes/forkable/lib/one-server.ts"
+    },
+    {
+      "from": "lib/one-client.ts",
+      "to": "ui/src/components/forkable/lib/one-client.ts"
+    },
+    {
+      "from": "lib/one-ui.tsx",
+      "to": "ui/src/components/forkable/lib/one-ui.tsx"
+    },
+    {
+      "from": "lib/blocks.css",
+      "to": "ui/src/components/forkable/blocks.css"
+    }
+  ],
+  "requires": [],
+  "routes": [],
+  "actions": []
+}

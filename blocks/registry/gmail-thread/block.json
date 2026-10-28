@@ -1,0 +1,38 @@
+{
+  "name": "gmail-thread",
+  "title": "Gmail Thread",
+  "description": "One thread, every message in order with the newest open. Slots for actions in the header and a reply under it.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "gmail-thread/GmailThread.tsx",
+      "to": "ui/src/components/forkable/GmailThread.tsx"
+    },
+    {
+      "from": "gmail-thread/route.ts",
+      "to": "server/src/routes/forkable/gmail-thread.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "gmail"
+  ],
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/gmail/threads/:id"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+      "title": "Get a thread",
+      "access": "read",
+      "reason": "Opens one thread with every message in it."
+    }
+  ],
+  "usage": "<GmailThread threadId={open} />",
+  "group": "Gmail",
+  "route": "gmailThreadRoute"
+}

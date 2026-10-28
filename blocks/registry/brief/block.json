@@ -1,0 +1,20 @@
+{
+  "name": "brief",
+  "title": "Brief shared",
+  "description": "Brief's engines (ChatGPT, Claude, Gemini, Perplexity through One), the Jev judge, the metrics from Brief's spec, a run store, your brand and competitors (brief/config.ts) and the Acme Inc sample. Installed once with the first Brief block.",
+  "kind": "lib",
+  "files": [
+    { "from": "brief/types.ts", "to": "ui/src/components/forkable/brief/types.ts", "alsoTo": "server/src/routes/forkable/brief/types.ts" },
+    { "from": "brief/actions.ts", "to": "server/src/routes/forkable/brief/actions.ts" },
+    { "from": "brief/config.ts", "to": "server/src/routes/forkable/brief/config.ts" },
+    { "from": "brief/engines.ts", "to": "server/src/routes/forkable/brief/engines.ts" },
+    { "from": "brief/judge.ts", "to": "server/src/routes/forkable/brief/judge.ts" },
+    { "from": "brief/metrics.ts", "to": "server/src/routes/forkable/brief/metrics.ts" },
+    { "from": "brief/store.ts", "to": "server/src/routes/forkable/brief/store.ts" },
+    { "from": "brief/sample.ts", "to": "server/src/routes/forkable/brief/sample.ts" }
+  ],
+  "fixtures": [{ "from": "../fixtures/brief.json", "to": "server/src/routes/forkable/fixtures/brief.json" }],
+  "requires": ["lib"],
+  "routes": [],
+  "actions": []
+}

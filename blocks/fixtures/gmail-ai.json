@@ -1,0 +1,202 @@
+{
+ "t01": {
+  "summary": "Priya Nair of Northwind VC needs Dana's position on two term sheet points before Thursday's 5pm IC: board seat timing and pro rata. She says the rest of the document is clean and counsel can sign once agreed.",
+  "ask": "Decide whether to push on pro rata; send position by tomorrow morning.",
+  "draft": null
+ },
+ "t02": {
+  "summary": "Marcus Lee, VP Engineering, reports both finalists cleared the final loop: Omar Farouk (staff backend) and Jess Tanaka (senior platform). Both are asking top of band, and Omar's competing offer expires Friday.",
+  "ask": "Approve top-of-band offers for both candidates today, or set a different number.",
+  "draft": "Thanks for moving this along so quickly, I know the timing is tight.\n\nBefore I give you a yes on both, I want to look at how the two offers fit together against our hiring budget. Could you send me the total cost for both, including equity, and tell me whether you see any flexibility on Jess's number given the product gap? I'd like to settle this quickly so neither offer sits.\n\nPlease hold off on sending anything until you hear back from me.\n\nTalk soon,\nDana"
+ },
+ "t03": {
+  "summary": "Victor Lang, a board member, wants the board deck by Tuesday evening before Thursday's sync. He asks for burn against the July plan, the Northwind seed status, and a slide on the two engineering hires. If Northwind terms land, he wants them added for approval.",
+  "ask": "Send board deck by Tuesday evening, with burn, Northwind status, hires.",
+  "draft": "Victor,\n\nHappy to get you the deck with a full day to digest it, so I'll plan around Tuesday evening. I'll aim to cover the burn against the July plan, the Northwind status, and a slide on the engineering hires.\n\nIf the Northwind terms are in hand before Thursday, I'll make sure the deck reflects them so the meeting can focus on a decision.\n\nTalk soon,\nDana"
+ },
+ "t04": {
+  "summary": "Jordan Park, Head of Marketing, sends the draft launch post (v3, about 900 words) for review. He wants feedback by tomorrow midday, mainly on whether the vague pricing paragraph is too vague. The Vandelay customer quote is still pending approval from Leo.",
+  "ask": "Review launch post draft; advise if pricing paragraph is too vague, by tomorrow midday.",
+  "draft": "Thanks, Jordan, and good timing on getting this ready ahead of the designer.\n\nI'll take a look today and get my comments back to you before midday tomorrow, with a close read on the pricing paragraph. Since the Vandelay quote is still waiting on Leo, I'd hold off on locking that section until it clears.\n\nIf anything is time-sensitive on your end before then, just ping me.\n\nBest,\nDana"
+ },
+ "t05": {
+  "summary": "Elena Ruiz, Director of Operations at Globex, reports a four week pilot with strong results: weekly active users rose from 11 to 31 and ticket resolution time fell from 2.3 to 1.4 days. She plans to propose 40 seats to her VP of Ops next week.",
+  "ask": "Pricing proposal for 40 seats, annual discount, onboarding, and security summary by Friday.",
+  "draft": "Hi Elena,\n\nGreat to hear from you, and I'm glad the pilot has gone this well. Taking it to your VP of Ops next week makes sense, and I'd like to help make that conversation easy.\n\nFriday works as a target for the pricing proposal. I'll make sure it covers per seat cost at 40, the effect of an annual commitment, and what onboarding includes. On the security summary, I'll check what we have in a shareable form so it's ready for your procurement team.\n\nIf anything about the two teams would change how you want this structured (rollout timing, for example), let me know and I'll fold it in.\n\nBest,\nDana"
+ },
+ "t06": {
+  "summary": "Riley Chen needs a decision today, before the Half Moon Bay venue releases both offsite dates at 5pm. Option A is Nov 13 to 14, which Riley recommends, though Jordan would miss the first morning. Option B is Nov 20 to 21, which works for everyone but costs 18% more during the week before Thanksgiving.",
+  "ask": "Reply A or B so Riley can book today.",
+  "draft": "Thanks for wrangling the venue on such short notice, I know it's a lot of moving pieces.\n\nBefore I give you a final answer, one quick question: is anything planned for the first morning that Jordan would need to be in the room for, like a session he's leading? If not, that makes the call much easier. Please hold off on booking until you hear back from me.\n\nTalk soon,\nDana"
+ },
+ "t07": {
+  "summary": "Sam Okafor introduces you to Lena Fischer, a partner at Initech Ventures on their platform team, who saw the Acme demo at a founder dinner. Sam thinks there's a fit, either for your seed round or for getting Acme in front of Initech's portfolio ops teams.",
+  "ask": "Reply to Lena and set up a conversation about Acme.",
+  "draft": "Sam, thank you for the warm intro, I really appreciate it.\n\nLena, great to meet you. I'm glad the demo caught your eye at the dinner, and I'd love to talk about both sides of this: the round we're in the middle of, and how Acme might be useful to the ops teams across your portfolio. Could you share a bit about what the platform team is focused on right now, and what a good first conversation would look like from your end? If you have a calendar link or a few times that suit you, I'm happy to work around your schedule.\n\nTalk soon,\nDana"
+ },
+ "t08": {
+  "summary": "Grace Lindqvist, a prospective seed investor, says she will invest $150k alongside Northwind if terms hold. Before committing she wants data room access for financials, cap table, design partner agreements, and the signed Northwind term sheet, promising a decision by week's end if docs arrive Wednesday.",
+  "ask": "Grant data room access for financials, cap table, partner agreements, and Northwind term sheet by Wednesday.",
+  "draft": "Great speaking with you on Friday, and I appreciate you being so open about your timeline.\n\nThat pace works for us, and I'll do my best to get the documents to you in time. The Northwind term sheet will have to follow once it's signed, since I can't share it before then. If anything else would help you get to a decision, just let me know and I'll see what we can do.\n\nTalk soon,\nDana"
+ },
+ "t09": {
+  "summary": "Omar Farouk confirms his Thursday 10am onsite interview and expects a 30-minute closing conversation with you. He has a competing offer with a Friday deadline and wants you to know now.",
+  "ask": "Tell him if you want anything prepared for the closing conversation.",
+  "draft": "Hi Omar,\n\nGlad Thursday works, and 9:45 at the office is perfect. Nothing to prepare for our 30 minutes. Those are exactly the questions I'd like to dig into, so come with as many as you have.\n\nI'm glad you flagged the Friday deadline. I can't promise anything on timing until I've talked with Marcus and the team, but we'll keep it in mind as we plan the day.\n\nLooking forward to meeting you.\n\nBest,\nDana"
+ },
+ "t10": {
+  "summary": "Recruiter Hannah Brooks sends two pre-screened senior backend candidates: Devi Raman, a fintech payments tech lead expecting $200k to $220k, and Paul Nkemelu, a serial first senior hire expecting $210k. Both can take a first call this week.",
+  "ask": "Pick which candidate to meet, or say what to change in the search.",
+  "draft": "Thanks for sending these over, Hannah.\n\nI'm going to go through both with Marcus before deciding who to meet, and I'll come back to you on that shortly. One question that would help in the meantime: how flexible is Paul on timing and on whether a move to the Bay Area is needed, or could he work remotely from Denver for a while? Also, is Devi currently interviewing elsewhere, so we know how quickly we'd need to move?\n\nAppreciate you working on this with us.\n\nBest,\nDana"
+ },
+ "t11": {
+  "summary": "Leo Martins of Vandelay Industries says the pilot is going well and he wants budget to roll Acme out to about 60 operations staff in Q1. SSO (SAML) is the blocker, and he needs a rough date for it. He also says he is fine in principle with Jordan's launch-post quote pending his comms team's review.",
+  "ask": "Give a rough SSO delivery date, like end of January, for the budget request.",
+  "draft": "Leo, great to hear the pilot team is getting real value, and rolling out to the whole operations group in Q1 is exactly what we hoped for.\n\nOn SAML SSO, I want to give you a date you can safely put in a budget request rather than a guess, so let me confirm it with our engineering team and come back to you shortly. Could you tell me which identity provider your IT team uses (Okta, Azure AD, or something else)? That will help us scope it accurately and make sure it fits your policy.\n\nNo rush on the quote. Take the time you need with your comms team.\n\nTalk soon,\nDana"
+ },
+ "t12": {
+  "summary": "Patricia Gomez from Globex procurement says a completed 84-question security questionnaire is required before moving from pilot to a paid contract for the 40-seat rollout. A SOC 2 report or security overview can replace covered questions. Due November 3.",
+  "ask": "Return the completed security questionnaire by November 3.",
+  "draft": "Hi Patricia,\n\nGood to connect, and glad to be working with you and Elena on this. We'll get the questionnaire completed and back to you ahead of the November 3 deadline.\n\nOne quick question so we point you to the right material: do you have a preference between a completed questionnaire alone, or a security overview alongside it? If there are specific sections your team weighs most heavily, let me know and we'll prioritize those.\n\nBest,\nDana"
+ },
+ "t13": {
+  "summary": "Maya Chen offers to introduce Dana to Tom Reyes at Stark Logistics' corporate venture arm, which writes $250k to $500k seed checks into B2B companies whose ops teams could be customers. She also suggests dinner soon.",
+  "ask": "Reply yes so Maya sends a double opt-in intro email",
+  "draft": "Maya, it's so good to hear from you, and yes, please make the intro. A corporate venture arm whose ops teams could be real customers is exactly the kind of fit we're hoping for, so I'm grateful you thought of us.\n\nThe round is moving well and we're talking with a handful of investors. Happy to share a short deck or a one-pager with you beforehand if that would help you frame things for Tom.\n\nAnd yes to dinner, it has been far too long. Let's find a evening once things calm down a bit, or sooner if you're free.\n\nTalk soon,\nDana"
+ },
+ "t14": {
+  "summary": "Ingrid Solberg is withdrawing from the senior platform hiring process because she accepted another offer, where a close friend is CTO. She calls Acme her second choice out of six and offers to refer engineers to Dana.",
+  "ask": null,
+  "draft": null
+ },
+ "t15": {
+  "summary": "Ben Adler, Acme's CPA, says the Q3 payroll tax filing ($48,212) and Delaware franchise estimate ($4,000) are ready in your e-sign queue under Acme Inc Q3. Filing is due October 31, so he needs your signature by the 28th.",
+  "ask": "Sign the Q3 e-sign by October 28; tell him any out-of-state hire's state.",
+  "draft": "Thanks for getting this over to me, Ben. I'll sign it well ahead of the 28th.\n\nOn the new hires, I don't have the final details in front of me yet. I'll confirm where each of them will be working and get that to you before the first payroll so you have time to register for withholding if it's needed.\n\nBest,\nDana"
+ },
+ "t16": {
+  "summary": "Dev Horizons organizers are finalizing your November 7 main stage slot at 2:15pm (25 minutes plus 5 for questions). They need AV choices, a mic preference, whether you need a live internet demo, and bio/headshot reuse, plus a yes or no on the November 6 speaker dinner.",
+  "ask": "Confirm AV, mic, demo, bio, and dinner attendance by Friday.",
+  "draft": "Thanks for the details, Chloe. I'm looking forward to being on the main stage at Dev Horizons.\n\nI'm still pinning down a few things on my side, including the setup, the demo plans, and the dinner, so I'd rather give you firm answers than guesses. You'll have all of it from me by Friday, and I'll let you know sooner if anything is time sensitive for the restaurant count.\n\nIf there's a hard deadline on any one item before Friday, just say so and I'll prioritize it.\n\nThanks for all the work pulling this together.\n\nBest,\nDana"
+ },
+ "t17": {
+  "summary": "Rosa Delgado, outside counsel for the Northwind seed round, needs you to choose an option pool structure before she finalizes signature documents. Option 1 is a 10% pre-money pool costing about 1.1 more points of dilution; Option 2 is 8% with a top-up to 10% after the engineering hires, which Northwind may resist.",
+  "ask": "Reply 1 or 2 by noon tomorrow.",
+  "draft": "Rosa,\n\nHope the rest of your day is going smoothly after this morning's call. I'm weighing the dilution tradeoff against how Northwind is likely to react, and I want to give you a definite answer rather than a rushed one.\n\nYou'll have my pick in writing before your noon deadline tomorrow. If there's anything on Northwind's side that would make Option 2 a harder sell than it looks, I'd welcome your read on that in the meantime.\n\nBest,\nDana"
+ },
+ "t18": {
+  "summary": "Frank Molinari, your landlord, offers to renew Suite 410, which expires January 31. Options are 24 months at $9,400 or 12 months at $9,900 monthly, and he suggests combining with Suite 420 if you need more space.",
+  "ask": "Pick 24-month or 12-month renewal by mid November.",
+  "draft": "Hi Frank,\n\nThanks for getting in touch early, it gives us room to plan properly. We're growing the team this fall and into the new year, so space is a real consideration for us, and the Suite 420 option is interesting.\n\nI can't commit to a term yet, as we're still working through our headcount plans. I'll aim to give you a clear answer before mid November. In the meantime, could you tell me roughly what the rent for Suite 420 would look like, and whether combining it with 410 would change the terms on either renewal option?\n\nTalk soon,\nDana"
+ },
+ "t19": {
+  "summary": "Tariq Rahman, now running internal tools at Stark Logistics, reconnects after about two years after seeing Acme's news on LinkedIn. He wants to catch up over coffee near your office in the next couple of weeks and compare notes on hiring.",
+  "ask": "Coffee in the next couple of weeks; you pick the day.",
+  "draft": "So good to hear from you, Tariq.\n\nI'd love to grab coffee. Let me check my calendar and I'll come back to you shortly with a couple of mornings that work. I have plenty of hiring stories to trade, so come ready.\n\nTalk soon,\nDana"
+ },
+ "t20": {
+  "summary": "Wes Carter, Head of Operations at customer Oceanic Supply Co, escalates that CSV exports over about 2,000 rows have timed out since Monday on ticket 2291, with no reply since Tuesday. Friday payroll depends on it.",
+  "ask": "Confirm whether the export will work by Friday, or run it for them.",
+  "draft": "Thanks for writing to me directly, and I'm sorry you've had to chase this.\n\nI don't want to promise tomorrow before I've confirmed it with our engineers, so I'm getting a straight answer from them today. Having someone on our side run the Friday export is a reasonable fallback, and I'll push for it if the fix isn't certain.\n\nTo make that quick, could you reply with the name of the report and the date range or filters you use for payroll? Then nobody has to guess when they run it. You'll hear from me again today with a clear yes or no.\n\nBest,\nDana"
+ },
+ "t21": {
+  "summary": "Dmitri Volkov of Cyberdyne Office says invoice 10482 for 12 standing desks and monitor arms ($7,140) was approved by Riley on October 9 but rejected by your accounts payable system for a missing PO number. Riley is out, and net 30 terms are at day 12.",
+  "ask": "Send the PO number, or confirm he can submit without one.",
+  "draft": "Hi Dmitri,\n\nThanks for flagging this, and sorry for the hassle while Riley is out. I don't have the PO number on hand, and I don't want to guess and have it bounce again. I'm going to check with our team on whether one was issued for this purchase, and whether it's fine to process without one.\n\nCould you tell me whether your invoice has a field where the PO would normally go, and whether you've seen this kind of rejection from us before? That will help me get it sorted quickly. Since you're at day 12 of net 30, there's plenty of runway, and I'll aim to get you an answer soon.\n\nTalk soon,\nDana"
+ },
+ "t22": {
+  "summary": "A newsletter from The Product Weekly, issue 212, on how strong product teams run customer discovery. Key points: talk to customers on a fixed schedule, write the problem before the solution, and maintain a graveyard of killed ideas. It is a general 8-minute read, not a message to you personally.",
+  "ask": null,
+  "draft": null
+ },
+ "t23": {
+  "summary": "Seed Signals' October newsletter says median seed rounds rose to $3.4M while deal counts fell about 15%. Term sheets now take a median 41 days, pro rata rights are common, and 10% option pools remain the usual ask.",
+  "ask": null,
+  "draft": null
+ },
+ "t24": {
+  "summary": "Stack Notes issue 148, a newsletter about the cost of flaky test suites. It reports that flaky tests cost about 4.2 engineer hours per team weekly, and fixing the top 5% removed 80% of retries. Other items cover a queue migration, serverless Postgres pooling, and senior engineer interviews.",
+  "ask": "Reply with topics you want covered, or read online.",
+  "draft": null
+ },
+ "t25": {
+  "summary": "Founders Digest's weekly newsletter for the week of October 13, listing five founder reads on delegation, design partner programs, engineer compensation, declining candidates, and inbox habits. It also flags the Dev Horizons event on November 7 and the Umbrella Summit CFP closing October 31.",
+  "ask": "Reply with an article you read that they missed.",
+  "draft": null
+ },
+ "t26": {
+  "summary": "Figma notifies Dana that the October invoice for Acme's three Professional editors is paid, totaling $45.00 on a Visa ending 4417. No action is needed beyond optional PDF download for records.",
+  "ask": null,
+  "draft": null
+ },
+ "t27": {
+  "summary": "Amazon Web Services says the September 2026 invoice for Acme Inc is ready, totaling $2,318.46, charged to the card on file. RDS was the largest cost at $912.10, followed by EC2 at $704.55.",
+  "ask": null,
+  "draft": null
+ },
+ "t28": {
+  "summary": "Skyline Air receipt for Dana's round trip SFO to AUS, departing November 6 and returning November 8, confirmation QX7R4N, total $435.60 on Visa ending 4417. Check-in opens 24 hours before departure.",
+  "ask": null,
+  "draft": null
+ },
+ "t29": {
+  "summary": "GitHub notice that Marcus merged PR #412 into main, which rate limits the export endpoint and streams CSV rows to fix timeouts on exports over 2,000 rows (ticket 2291). All 14 checks passed.",
+  "ask": null,
+  "draft": null
+ },
+ "t30": {
+  "summary": "Victor from LangPartners invites Dana to a Board sync on Thursday October 29, 2026, 10:00 to 11:00am Pacific, covering Q3 review, seed round terms, and a hiring update. Priya from Northwind VC is also a guest.",
+  "ask": "Confirm attendance: Yes, No, or Maybe",
+  "draft": null
+ },
+ "t31": {
+  "summary": "Nina Patel of Brightwater Design confirms the signed contract arrived and the deposit has been received. She will begin the brand refresh on the 27th and send first-round directions the following week.",
+  "ask": null,
+  "draft": null
+ },
+ "t32": {
+  "summary": "Tyler Brooks of PipelinePros, an outsourced SDR firm, is pitching a $6,500 monthly retainer to book qualified meetings for Acme. He cites Acme's hiring as a sign of a recent or upcoming funding round.",
+  "ask": "A 15-minute call this week or next.",
+  "draft": "Thanks for reaching out, Tyler. We're not looking at outsourced SDR support right now, so I'll pass on a call this round. Our focus for the next few months is closing design partners directly, and we're keeping that in-house for now.\n\nI appreciate you being upfront on pricing and terms, and I wish you a strong Q4.\n\nBest,\nDana"
+ },
+ "t33": {
+  "summary": "Alex Kim from GrowthLoop, a lifecycle email agency, noticed Acme's onboarding emails stop after day 2 and offers three free ideas for the day 3 to 14 sequence. The pitch cites a 20 to 35% week two activation lift, which is unverified.",
+  "ask": "Reply if you want the three free onboarding ideas sent.",
+  "draft": "Thanks for taking the time to try Acme out, I hope the first week was useful.\n\nI can't say yet whether the day 2 cutoff was deliberate, so I'll look into it on our side. We're a small team in the middle of a busy stretch, so I can't promise a quick turnaround on anything beyond that.\n\nFeel free to send the three ideas over. I'll read them when I can, though I can't commit to a call or a engagement at this point.\n\nBest,\nDana"
+ },
+ "t34": {
+  "summary": "Nadia Hassan, program chair of Umbrella Summit in Austin on March 12 to 13, invites Dana to give a 30 minute talk on how Acme hires and runs engineering. Travel and two hotel nights are covered, with no speaker fee. The program locks November 15.",
+  "ask": "Send a one paragraph talk abstract by November 15.",
+  "draft": "Hi Nadia,\n\nThank you for thinking of me, this sounds like a great event, and the topic is close to what we spend our days on at Acme. I'm interested in principle, but I need to check my calendar for those March dates and see what the next few months look like for us before I commit.\n\nI'll aim to get back to you well ahead of the November 15 deadline. In the meantime, is there a particular angle you'd like the talk to take, say hiring, how the team runs day to day, or both? That would help me shape a useful abstract if it works out.\n\nTalk soon,\nDana"
+ },
+ "t35": {
+  "summary": "Casey Monroe, a B2B software writer for The Signal Report, is working on a piece about small operations teams leaving spreadsheets. Acme came up in two customer interviews. She requests three emailed questions or a 20-minute call on buying trends, with a deadline next Wednesday.",
+  "ask": "Answer three emailed questions or join a 20-minute call by next Wednesday.",
+  "draft": "Happy to help with this. Email works best for me, so please send the three questions over and I'll get back to you well before your Wednesday deadline.\n\nSince the piece is about how teams buy, I'll stick to what I'm seeing from customers and leave fundraising out of it. I'd appreciate the chance to see the quotes before publication, as you offered.\n\nBest,\nDana"
+ },
+ "t36": {
+  "summary": "Aisha Bello, a third-year computer science student at Northfield University, is weighing a big company summer internship against joining a five-person startup. She read your post about leaving a large company and asks for 15 minutes to hear how you would think about it, by email or call, and says a no is fine.",
+  "ask": "15 minutes by email or call to discuss her internship choice",
+  "draft": "Hi Aisha,\n\nThanks for reaching out, and it's great to hear the post resonated. I'm happy to help where I can, though with our seed raise and hiring right now a call is hard to fit in. Email works much better for me.\n\nIf you send me the two or three things you're weighing most (what you want to learn, how much risk you can take on, what kind of mentorship each place offers), I'll reply with how I'd think it through. A few specifics about the startup, like what they're building and whether they've raised money, would help me give you something useful rather than generic.\n\nTalk soon,\nDana"
+ },
+ "t37": {
+  "summary": "Yusuf Demir, Head of Partnerships at Wonka Labs, proposes a partnership where Acme serves as the front end and Wonka's workflow engine runs the automations. He cites about 300 mid-market customers asking for an integration and two past partner integrations that drove signups.",
+  "ask": "A 30-minute call to explore the integration partnership.",
+  "draft": "Thanks for reaching out, Yusuf. A workflow engine with that kind of reach among operations teams sounds like it could be a good fit for what we are building.\n\nWe are heads down on a few priorities right now, so I want to be thoughtful about where I spend time. Before we set up a call, could you share a bit more on what the integration would involve on our side, such as the engineering effort and what the two earlier partners saw in practice? That will help me decide who from our team should join.\n\nTalk soon,\nDana"
+ },
+ "t38": {
+  "summary": null,
+  "ask": null,
+  "draft": null
+ },
+ "t39": {
+  "summary": "Richard Hale, Director of Platform Operations at Hooli, follows up after Tuesday's demo. Hooli's platform team wants a pilot and he needs seats, duration, cost, and what Acme needs from Hooli before taking it to his VP.",
+  "ask": "Send your standard pilot proposal covering seats, duration, cost, and requirements.",
+  "draft": "Richard,\n\nGlad the demo was useful, and happy to help you make the case upstairs.\n\nI'll put together a pilot overview covering scope, duration, pricing, and what we'd need from your team, so your VP has something concrete to review. To size it properly, it would help to know roughly how many people on the platform team would use it, and whether there is a timeline your VP is working against (a quarter-end or budget cycle, for example).\n\nIf it's easier, we can also do a quick 20-minute call this week to walk through the details, and I can shape the overview around what comes out of it.\n\nTalk soon,\nDana"
+ },
+ "t40": {
+  "summary": "Lucas Ferreira, a job candidate, thanks Dana for their conversation yesterday and says he is more interested in the role and the platform work for next year. He says Marcus told him the next step is with Dana.",
+  "ask": "Next step on the hiring process; he is open to helping.",
+  "draft": "I really enjoyed getting to talk through the platform work with you, Lucas.\n\nI'm still working through a few things on our side, so I don't have a firm next step to share yet. Do you have any timing constraints, or other processes with deadlines coming up? I'd like to keep your timeline in mind as we decide.\n\nBest,\nDana"
+ }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@withone/forkable",
+  "version": "0.1.0",
+  "description": "Add Forkable blocks to your fork: the UI, its server route, and the access it needs, in one command.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "forkable": "bin/forkable.mjs"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://forkable.dev/blocks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withoneai/forkable",
+    "directory": "blocks/package"
+  },
+  "keywords": [
+    "forkable",
+    "blocks",
+    "one",
+    "connect",
+    "gmail",
+    "hono",
+    "react"
+  ]
+}

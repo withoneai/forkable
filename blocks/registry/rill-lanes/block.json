@@ -1,0 +1,19 @@
+{
+  "name": "rill-lanes",
+  "title": "Lane inbox",
+  "description": "Rill's inbox in five lanes: VIPs, Goals, Needs reply, Other and New senders. Jev judges each thread on the user's grant and Rill's policy, in code you can read, picks the lane and says why.",
+  "kind": "component",
+  "group": "Rill",
+  "files": [
+    { "from": "rill-lanes/RillLanes.tsx", "to": "ui/src/components/forkable/RillLanes.tsx" },
+    { "from": "rill-lanes/route.ts", "to": "server/src/routes/forkable/rill-lanes.ts" }
+  ],
+  "requires": ["lib", "gmail", "rill"],
+  "routes": [{ "method": "GET", "path": "/api/rill/lanes" }],
+  "actions": [
+    { "platform": "gmail", "actionId": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ", "title": "Get threads", "access": "read", "reason": "Reads your inbox and who you have written to." },
+    { "platform": "typesafe", "actionId": "conn_mod_def::GNh4bXcHPaU::V2ndvy5CQJmYHvkElwVM_w", "title": "System One (Jev)", "access": "read", "reason": "Jev judges each thread: kind, goal, needs a reply, whose move, urgency." }
+  ],
+  "usage": "<RillLanes onSelect={(t) => setOpen(t.id)} selectedId={open} />",
+  "route": "rillLanesRoute"
+}

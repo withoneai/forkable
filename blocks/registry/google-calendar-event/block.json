@@ -1,0 +1,19 @@
+{
+  "name": "google-calendar-event",
+  "title": "Calendar Event",
+  "description": "One event: when, a Join button, Going / Maybe / No for invites, and who is coming. Answers on the user's grant, with no email unless the fork asks for one.",
+  "kind": "component",
+  "group": "Google Calendar",
+  "route": "googleCalendarEventRoute",
+  "files": [
+    { "from": "google-calendar-event/GoogleCalendarEvent.tsx", "to": "ui/src/components/forkable/GoogleCalendarEvent.tsx" },
+    { "from": "google-calendar-event/route.ts", "to": "server/src/routes/forkable/google-calendar-event.ts" }
+  ],
+  "requires": ["lib", "google-calendar"],
+  "routes": [{ "method": "POST", "path": "/api/calendar/events/:id/rsvp" }],
+  "actions": [
+    { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlPEQKQw::rxHzaO_TTtKVIcxgFrWUKA", "title": "Get an event", "access": "read", "reason": "Reads the guest list before answering, since Google replaces it whole." },
+    { "platform": "google-calendar", "actionId": "conn_mod_def::GJ6RlmhNiKo::48w5XxsbRx24lge7XAzN_w", "title": "Update an event", "access": "write", "reason": "Saves your Going, Maybe or No on an invite." }
+  ],
+  "usage": "<GoogleCalendarEvent event={event} onChange={setEvent} onClose={() => setEvent(null)} />"
+}

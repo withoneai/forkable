@@ -1,0 +1,40 @@
+{
+  "name": "google-calendar",
+  "title": "Google Calendar shared",
+  "description": "The Google Calendar action ids, the shapes routes return, the mappers, date helpers and the Acme sample calendar. Installed once with the first calendar component.",
+  "kind": "lib",
+  "files": [
+    {
+      "from": "google-calendar/actions.ts",
+      "to": "server/src/routes/forkable/google-calendar/actions.ts"
+    },
+    {
+      "from": "google-calendar/types.ts",
+      "to": "ui/src/components/forkable/google-calendar/types.ts",
+      "alsoTo": "server/src/routes/forkable/google-calendar/types.ts"
+    },
+    {
+      "from": "google-calendar/map.ts",
+      "to": "server/src/routes/forkable/google-calendar/map.ts"
+    },
+    {
+      "from": "google-calendar/sample.ts",
+      "to": "server/src/routes/forkable/google-calendar/sample.ts"
+    },
+    {
+      "from": "google-calendar/time.ts",
+      "to": "ui/src/components/forkable/google-calendar/time.ts"
+    }
+  ],
+  "fixtures": [
+    {
+      "from": "../fixtures/google-calendar.json",
+      "to": "server/src/routes/forkable/fixtures/google-calendar.json"
+    }
+  ],
+  "requires": [
+    "lib"
+  ],
+  "routes": [],
+  "actions": []
+}

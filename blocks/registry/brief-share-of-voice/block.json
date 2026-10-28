@@ -1,0 +1,16 @@
+{
+  "name": "brief-share-of-voice",
+  "title": "Share of voice",
+  "description": "Who AI answers name for your category: the brand's share of every mention against each competitor, visibility per engine and its trend, and the average order it is mentioned in. Brief's metrics over the runs the visibility check stored.",
+  "kind": "component",
+  "group": "Brief",
+  "files": [
+    { "from": "brief-share-of-voice/BriefShareOfVoice.tsx", "to": "ui/src/components/forkable/BriefShareOfVoice.tsx" },
+    { "from": "brief-share-of-voice/route.ts", "to": "server/src/routes/forkable/brief-share-of-voice.ts" }
+  ],
+  "requires": ["lib", "brief", "brief-visibility-check"],
+  "routes": [{ "method": "GET", "path": "/api/brief/report" }],
+  "actions": [],
+  "usage": "<BriefShareOfVoice days={7} />",
+  "route": "briefShareOfVoiceRoute"
+}

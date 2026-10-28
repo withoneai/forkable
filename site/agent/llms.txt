@@ -1,0 +1,42 @@
+# Forkable
+
+> Forkable lets you fork a whole working business, not a blank page: the app, the agents that run it, its integrations and a go-to-market kit, MIT licensed.
+> Every business comes with Sign in with One and its integrations already wired through One Connect, and starts on a keyless Acme Inc sample.
+
+## Start
+
+npm create forkable@latest <dir> -- --template <id>
+
+The `--` matters. Without it npm keeps the flags for itself and the command fails.
+
+## Templates
+
+{{TEMPLATE_LINES}}
+
+Machine-readable list: https://forkable.dev/templates.json
+
+## If you are an agent
+
+1. Pick a template id from https://forkable.dev/templates.json (only ones with "status": "available").
+2. Fork it: `npm create forkable@latest <dir> -- --template <id> --json --yes`. If that version of create-forkable says it does not know `--json`, run `npm create forkable@latest <dir> -- --template <id>` instead. Add `--for "<who>" --in "<where>"` when the human said who the business is for and where.
+3. Read AGENTS.md in the fork before you change anything. It has the rules the repo runs on.
+4. Run the demo (`npm start`, or `pnpm start` for pnpm templates). Success means it exits 0. No account and no keys are needed.
+5. Stop and ask the human before any secret, git push, deploy or publish. Never write a secret into .env, a file, a log or the chat. Going live needs one Connect app that the human makes in the One dashboard.
+
+The full walkthrough, with what each command prints: https://forkable.dev/start.md
+
+## Pages
+
+- [Home](https://forkable.dev/index.md): what a fork comes with, integrations, templates, blocks, the MCP in chat, publishing
+- [Agent quickstart](https://forkable.dev/start.md): the exact commands in order, what each prints, where to stop and ask
+- [Contribute](https://forkable.dev/contribute.md): build a business on the starter and publish it as a template
+- [Templates JSON](https://forkable.dev/templates.json): every template with its id, platforms, package manager and commands
+
+## Agent skill
+
+- [forkable skill](https://forkable.dev/.well-known/agent-skills/forkable/SKILL.md): how to start a business from a template. Index with digest at https://forkable.dev/.well-known/agent-skills/index.json
+
+## Source
+
+- [GitHub](https://github.com/withoneai/forkable): the starter, create-forkable and the official templates, MIT
+- [One](https://withone.ai/llms.txt): One Connect, the sign-in and integrations every fork is built on

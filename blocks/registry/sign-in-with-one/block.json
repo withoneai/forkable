@@ -1,0 +1,41 @@
+{
+  "name": "sign-in-with-one",
+  "title": "Sign in with One",
+  "description": "The login for a fork. Users connect their own accounts through One, then see what they granted and can sign out.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "sign-in-with-one/SignInWithOne.tsx",
+      "to": "ui/src/components/forkable/SignInWithOne.tsx"
+    },
+    {
+      "from": "sign-in-with-one/route.ts",
+      "to": "server/src/routes/forkable/sign-in-with-one.ts"
+    }
+  ],
+  "requires": [
+    "lib"
+  ],
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/one/authorize"
+    },
+    {
+      "method": "GET",
+      "path": "/api/one/callback"
+    },
+    {
+      "method": "GET",
+      "path": "/api/one/status"
+    },
+    {
+      "method": "POST",
+      "path": "/api/one/disconnect"
+    }
+  ],
+  "actions": [],
+  "usage": "<SignInWithOne />",
+  "group": "Auth",
+  "route": "signInWithOneRoute"
+}

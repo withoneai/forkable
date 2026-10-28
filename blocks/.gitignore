@@ -1,0 +1,4 @@
+node_modules
+dist
+gallery/public/r
+docs/qa/*.png

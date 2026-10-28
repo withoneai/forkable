@@ -1,0 +1,38 @@
+{
+  "name": "gmail-inbox",
+  "title": "Gmail Inbox",
+  "description": "The user's Gmail threads with Inbox, Unread, Starred and Sent views and search. Reads on their grant.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "gmail-inbox/GmailInbox.tsx",
+      "to": "ui/src/components/forkable/GmailInbox.tsx"
+    },
+    {
+      "from": "gmail-inbox/route.ts",
+      "to": "server/src/routes/forkable/gmail-inbox.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "gmail"
+  ],
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/gmail/threads"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ",
+      "title": "Get threads",
+      "access": "read",
+      "reason": "Lists your threads for the inbox."
+    }
+  ],
+  "usage": "<GmailInbox onSelect={(t) => setOpen(t.id)} selectedId={open} />",
+  "group": "Gmail",
+  "route": "gmailInboxRoute"
+}

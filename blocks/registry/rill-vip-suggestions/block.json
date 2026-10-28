@@ -1,0 +1,18 @@
+{
+  "name": "rill-vip-suggestions",
+  "title": "VIP suggestions",
+  "description": "The people the user writes to most, counted from their Sent mail, with the ones already on the VIP list marked. Add as VIP hands the pick to your app; nothing is written to Gmail.",
+  "kind": "component",
+  "group": "Rill",
+  "files": [
+    { "from": "rill-vip-suggestions/RillVipSuggestions.tsx", "to": "ui/src/components/forkable/RillVipSuggestions.tsx" },
+    { "from": "rill-vip-suggestions/route.ts", "to": "server/src/routes/forkable/rill-vip-suggestions.ts" }
+  ],
+  "requires": ["lib", "gmail", "rill"],
+  "routes": [{ "method": "GET", "path": "/api/rill/vip-suggestions" }],
+  "actions": [
+    { "platform": "gmail", "actionId": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ", "title": "Get threads", "access": "read", "reason": "Reads the recipients of your Sent mail to suggest VIPs." }
+  ],
+  "usage": "<RillVipSuggestions onAdd={(p) => saveVip(p)} />",
+  "route": "rillVipSuggestionsRoute"
+}

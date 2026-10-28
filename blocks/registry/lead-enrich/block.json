@@ -1,0 +1,20 @@
+{
+  "name": "lead-enrich",
+  "title": "Enrich a person",
+  "description": "Turn an email or a LinkedIn URL into a profile: name, title, company, place and sources. People Data Labs first, Coresignal when it misses, with the receipt. Ships on the Acme sample; each provider needs a data contract before it serves real lookups.",
+  "kind": "component",
+  "group": "Lead",
+  "files": [
+    { "from": "lead-enrich/LeadEnrich.tsx", "to": "ui/src/components/forkable/LeadEnrich.tsx" },
+    { "from": "lead-enrich/route.ts", "to": "server/src/routes/forkable/lead-enrich.ts" }
+  ],
+  "requires": ["lib", "lead"],
+  "routes": [{ "method": "POST", "path": "/api/lead/enrich" }],
+  "actions": [
+    { "platform": "people-data-labs", "actionId": "conn_mod_def::GJ6COy96zDI::ZYpZX860TvitHrndkLitnQ", "title": "Enrich a Person", "access": "read", "reason": "First provider in the enrich waterfall." },
+    { "platform": "coresignal", "actionId": "conn_mod_def::GJ2LgE_gQSI::xAMiIrQyRuaks6rd2aalmQ", "title": "Search Base Employee Profiles", "access": "read", "reason": "Second provider: finds the person by name (free).", "optional": true },
+    { "platform": "coresignal", "actionId": "conn_mod_def::GJ2LfpIXUPQ::CPKIuzUTTE2YuYSnBdNYJA", "title": "Collect a Base Employee Profile", "access": "read", "reason": "Second provider: reads the profile (the credited call).", "optional": true }
+  ],
+  "usage": "<LeadEnrich defaultEmail=\"jane.doe@acme-inc.example\" />",
+  "route": "leadEnrichRoute"
+}

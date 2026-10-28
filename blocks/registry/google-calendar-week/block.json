@@ -1,0 +1,21 @@
+{
+  "name": "google-calendar-week",
+  "title": "Calendar Week",
+  "description": "A Monday-to-Sunday week grid of the user's Google Calendar, with overlapping events side by side, a line at now and previous and next week. Uses the Agenda's events route.",
+  "kind": "component",
+  "group": "Google Calendar",
+  "files": [
+    {
+      "from": "google-calendar-week/GoogleCalendarWeek.tsx",
+      "to": "ui/src/components/forkable/GoogleCalendarWeek.tsx"
+    }
+  ],
+  "requires": [
+    "lib",
+    "google-calendar",
+    "google-calendar-agenda"
+  ],
+  "routes": [],
+  "actions": [],
+  "usage": "<GoogleCalendarWeek onSelect={(e) => setOpen(e.id)} onCreateAt={(start, end) => setDraft({ start, end })} />"
+}

@@ -1,0 +1,334 @@
+{
+ "brand": {
+  "name": "Acme Inc",
+  "domain": "acme-inc.example"
+ },
+ "queries": {
+  "search": {
+   "title": "VP Sales",
+   "domain": "acme-inc.example"
+  },
+  "enrich": {
+   "email": "jane.doe@acme-inc.example"
+  },
+  "emailFind": {
+   "name": "Priya Shah",
+   "domain": "acme-inc.example"
+  },
+  "emailVerify": {
+   "email": "ghost@acme-inc.example"
+  }
+ },
+ "sampleUnitCostsCredits": {
+  "people-data-labs": 280,
+  "coresignal": 196,
+  "hunter": 50,
+  "findymail": 20,
+  "clearout": 7
+ },
+ "startingCredits": 1000,
+ "recorded": {
+  "people-data-labs": {
+   "search": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "data": [
+       {
+        "full_name": "Priya Shah",
+        "job_title": "VP Sales",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Austin",
+        "location_region": "Texas",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/priya-shah-acme"
+         }
+        ],
+        "work_email": "priya.shah@acme-inc.example",
+        "likelihood": 9
+       },
+       {
+        "full_name": "Marcus Lee",
+        "job_title": "VP Engineering",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Austin",
+        "location_region": "Texas",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/marcus.lee-acme"
+         }
+        ],
+        "work_email": "marcus.lee@acme-inc.example",
+        "likelihood": 8
+       },
+       {
+        "full_name": "Rosa Alvarez",
+        "job_title": "VP Sales, West",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Denver",
+        "location_region": "Colorado",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/rosa.alvarez-acme"
+         }
+        ],
+        "work_email": "rosa.alvarez@acme-inc.example",
+        "likelihood": 7
+       },
+       {
+        "full_name": "Sam Okafor",
+        "job_title": "Sales Director",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Chicago",
+        "location_region": "Illinois",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/sam.okafor-acme"
+         }
+        ],
+        "work_email": "sam.okafor@acme-inc.example",
+        "likelihood": 8
+       },
+       {
+        "full_name": "Jordan Park",
+        "job_title": "Head of Marketing",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Austin",
+        "location_region": "Texas",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/jordan.park-acme"
+         }
+        ],
+        "work_email": "jordan.park@acme-inc.example",
+        "likelihood": 9
+       },
+       {
+        "full_name": "Riley Chen",
+        "job_title": "Account Executive",
+        "job_company_name": "Acme Inc",
+        "job_company_website": "acme-inc.example",
+        "location_locality": "Seattle",
+        "location_region": "Washington",
+        "location_country": "United States",
+        "profiles": [
+         {
+          "network": "linkedin",
+          "url": "https://linkedin.com/in/riley.chen-acme"
+         }
+        ],
+        "work_email": "riley.chen@acme-inc.example",
+        "likelihood": 6
+       }
+      ]
+     }
+    },
+    "miss": {
+     "status": 404,
+     "body": {
+      "status": 404,
+      "error": {
+       "message": "Request didn't return any records"
+      }
+     }
+    },
+    "failure_account_max": {
+     "status": 402,
+     "body": {
+      "status": 402,
+      "error": {
+       "message": "You have reached your account maximum (all matches used)"
+      }
+     }
+    }
+   },
+   "enrich": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "full_name": "Jane Doe",
+      "job_title": "Director of Finance",
+      "job_company_name": "Acme Inc",
+      "job_company_website": "acme-inc.example",
+      "location_locality": "Austin",
+      "location_region": "Texas",
+      "location_country": "United States",
+      "profiles": [
+       {
+        "network": "linkedin",
+        "url": "https://linkedin.com/in/jane-doe-acme"
+       }
+      ],
+      "work_email": "jane.doe@acme-inc.example",
+      "likelihood": 8
+     }
+    },
+    "miss": {
+     "status": 404,
+     "body": {
+      "status": 404,
+      "error": {
+       "message": "Request didn't return any records"
+      }
+     }
+    },
+    "low_confidence": {
+     "status": 200,
+     "body": {
+      "full_name": "J. Doe",
+      "job_title": null,
+      "job_company_name": "Acme Inc",
+      "job_company_website": "acme-inc.example",
+      "likelihood": 3
+     }
+    }
+   }
+  },
+  "coresignal": {
+   "search": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "employeeIds": [
+       84213
+      ]
+     }
+    },
+    "miss": {
+     "status": 200,
+     "body": {
+      "employeeIds": []
+     }
+    }
+   },
+   "collect": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "full_name": "Jane Doe",
+      "active_experience_title": "Director of Finance",
+      "active_experience_company_name": "Acme Inc",
+      "active_experience_company_website": "acme-inc.example",
+      "location_full": "Austin, Texas",
+      "location_country": "United States",
+      "linkedin_url": "https://linkedin.com/in/jane-doe-acme"
+     }
+    },
+    "failure_unconfirmed": {
+     "status": 500,
+     "body": null
+    }
+   }
+  },
+  "hunter": {
+   "find": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "data": {
+       "email": "priya.shah@acme-inc.example",
+       "score": 92
+      }
+     }
+    },
+    "miss": {
+     "status": 200,
+     "body": {
+      "data": {
+       "email": null,
+       "score": null
+      }
+     }
+    },
+    "claimed": {
+     "status": 451,
+     "body": {
+      "errors": [
+       {
+        "id": "claimed_email"
+       }
+      ]
+     }
+    }
+   },
+   "verify": {
+    "hit_valid": {
+     "status": 200,
+     "body": {
+      "data": {
+       "status": "valid"
+      }
+     }
+    },
+    "miss_unknown": {
+     "status": 200,
+     "body": {
+      "data": {
+       "status": "unknown"
+      }
+     }
+    }
+   }
+  },
+  "findymail": {
+   "find": {
+    "hit": {
+     "status": 200,
+     "body": {
+      "contact": {
+       "name": "Someone Else",
+       "domain": "acme-inc.example",
+       "email": "someone.else@acme-inc.example"
+      }
+     }
+    },
+    "miss": {
+     "status": 200,
+     "body": {
+      "contact": {
+       "name": null,
+       "domain": null,
+       "email": null
+      }
+     }
+    }
+   }
+  },
+  "clearout": {
+   "verify": {
+    "hit_valid": {
+     "status": 200,
+     "body": {
+      "data": {
+       "status": "valid"
+      }
+     }
+    },
+    "miss_unknown": {
+     "status": 200,
+     "body": {
+      "data": {
+       "status": "failed"
+      }
+     }
+    }
+   }
+  }
+ }
+}

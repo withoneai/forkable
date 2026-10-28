@@ -1,0 +1,23 @@
+{
+  "name": "mail-app",
+  "title": "Mail app",
+  "description": "A whole mail client built from the Gmail components: inbox, thread, triage, AI reply and compose. Add it, then make it yours.",
+  "kind": "app",
+  "files": [
+    {
+      "from": "mail-app/MailApp.tsx",
+      "to": "ui/src/components/forkable/MailApp.tsx"
+    }
+  ],
+  "requires": [
+    "gmail-inbox",
+    "gmail-thread",
+    "gmail-thread-actions",
+    "gmail-compose",
+    "gmail-ai-reply"
+  ],
+  "routes": [],
+  "actions": [],
+  "usage": "<MailApp />",
+  "group": "Apps"
+}

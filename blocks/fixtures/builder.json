@@ -1,0 +1,291 @@
+{
+ "catalog": [
+  {
+   "platform": "slack",
+   "intent": "send a message to a channel",
+   "actionId": "conn_mod_def::GJ7H84zBlaI::BCfuA16aTaGVIax5magsLA",
+   "title": "Send a Message to a Channel (chat.postMessage)",
+   "method": "POST",
+   "path": "/chat.postMessage",
+   "knowledge": "# Send a Message to a Channel (chat.postMessage)\n\n## Prerequisites\n\n- Your Slack app must have the required scope:\n  - Bot token: `chat:write`\n  - User token: `chat:write`\n- The app/bot/user must have permission to post in the target conversation (and typically be a member of the conversation unless using `chat:write.public` for public channels).\n- You must know the target conversation identifier to provide as `channel` (channel ID, channel name in limited cases, DM ID, MPIM ID, or a user ID to open a DM).\n\n## Method\n\n`POST`\n\n## URL\n\n`https://slack.com/api/chat.postMessage`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nSends a message to a public channel, private channel, multi-person DM (MPIM), or direct message (DM/IM). You can send plain text, Block Kit blocks, and/or legacy attachments, and optionally post into threads.\n\n> **When to use Block Kit vs plain text:**\n> - **Use `blocks` (Block Kit)** for any message containing structured data, tables, multiple sections, headers, or rich formatting. Block Kit is the **recommended approach** for all non-trivial messages.\n> - **Use plain `text` only** for simple, single-line notifications or fallback content.\n> - **Always include `text`** as a fallback when using `blocks` \u2014 it appears in notifications, screen readers, and non-Block Kit surfaces.\n\n## Enforcement Rules\n\n- This endpoint has **no path parameters**.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body.\n- The documentation states `token` can be sent as a POST parameter, but tokens should be passed via an HTTP Authorization header. **Do not include auth headers or auth fields in this knowledge file.**\n- Content types supported by Slack: `application/json` and `application/x-www-form-urlencoded`. This knowledge file uses `application/json`.\n\n## Required Query Parameters\n\nNone.\n\n## Optional Query Parameters\n\nNone.\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `channel` | string | Channel identifier or destination. Can be an encoded ID or (in some cases) a channel name representing a public channel, private channel, MPIM, or IM/DM destination. Examples of IDs: public channel `C123...`, private channel `C123...`, MPIM `G123...`, DM `D123...`. You may also pass "
+  },
+  {
+   "platform": "slack",
+   "intent": "send a message to a channel",
+   "actionId": "conn_mod_def::GJ7H87okrcQ::LJkKPjK_QF6O-Syo4DOjHQ",
+   "title": "Post a \u201cMe Message\u201d to a Channel (chat.meMessage)",
+   "method": "POST",
+   "path": "/chat.meMessage",
+   "knowledge": ""
+  },
+  {
+   "platform": "slack",
+   "intent": "send a message to a channel",
+   "actionId": "conn_mod_def::GJ7H9ERx2yI::jbqXWpp7Sq-PevPmi3Hl_A",
+   "title": "Schedule a Message in a Channel",
+   "method": "POST",
+   "path": "/chat.scheduleMessage",
+   "knowledge": ""
+  },
+  {
+   "platform": "slack",
+   "intent": "list channels",
+   "actionId": "conn_mod_def::GJ7H9zmRFIk::1RxrzeicS-ibnXF4sFC5Ww",
+   "title": "List Conversations (Channels) in a Workspace",
+   "method": "GET",
+   "path": "/conversations.list",
+   "knowledge": "# List Conversations (Channels) in a Workspace\n\n## Prerequisites\n\n- The calling app/token must have at least one of the required scopes for the conversation types you want to list:\n  - `channels:read` (public channels)\n  - `groups:read` (private channels)\n  - `im:read` (DMs)\n  - `mpim:read` (group DMs)\n- To use `team_id`, the token must belong to an org-wide app; otherwise `team_id` is ignored.\n\n## Method\n\n`GET`\n\n## URL\n\n`https://slack.com/api/conversations.list`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nLists all channel-like conversations in a Slack workspace that the calling token has access to. The set of conversations returned depends on the token\u2019s access and the `types` filter. Results are returned in pages using cursor-based pagination.\n\n## Enforcement Rules\n\n- **No path parameters** are used for this endpoint.\n- When executing the action, ensure to send **Query Parameters** in the URL query string, **not** in the body.\n- Do **not** send authentication parameters (like `token`) in the query string or body in your final request (authentication is handled separately by the system).\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|---|---|---|\n| `cursor` | string | Pagination cursor. Set this to the `response_metadata.next_cursor` value from a prior response to fetch the next page. If omitted, fetches the first page. Example: `dXNlcjpVMDYxTkZUVDI=` |\n| `exclude_archived` | boolean | If `true`, excludes archived channels. Default: `false`. Example: `true` |\n| `limit` | number | Maximum number of items to return. Must be an integer **under 1000**. Default: `100`. Slack recommends no more than `200` at a time. Example: `20` |\n| `team_id` | string | Encoded team ID to list channels in. **Required only** if the token belongs to an org-wide app. Ignored for workspace-level tokens. |\n| `types` | string | Comma-separated list of conversation types to include. Any combination of: `public_channel`, `private_channel`, `mpim`, `im`. Default: `public_channel`. Example: `public_channel,private_channel` |\n\n## Response Fields\n\n| Field | Type | Description |\n|---|---|---|\n| `ok` | boolean | Indicates whether the request succeeded. |\n| `channels` | array | List of limited channel-like conversation objects. |\n| `response_metadata` | object | Metadata for pagination. |\n| `response_metadata.next_cursor` | string | Cursor "
+  },
+  {
+   "platform": "slack",
+   "intent": "list channels",
+   "actionId": "conn_mod_def::GJ7H43eJ2w8::xLUm-4e8TgS-FOsyi8X5zg",
+   "title": "Bulk Archive Channels (Admin)",
+   "method": "POST",
+   "path": "/admin.conversations.bulkArchive",
+   "knowledge": ""
+  },
+  {
+   "platform": "slack",
+   "intent": "list channels",
+   "actionId": "conn_mod_def::GJ7IBj7Dd6w::ihz7sFwEQRyvbklr2HSFVQ",
+   "title": "List Featured Workflows for Channels",
+   "method": "POST",
+   "path": "/workflows.featured.list",
+   "knowledge": ""
+  },
+  {
+   "platform": "stripe",
+   "intent": "list customers",
+   "actionId": "conn_mod_def::GJ7KsRfyH8M::DEPSKKu2TUK22IjVPP1Hfg",
+   "title": "List Customers",
+   "method": "GET",
+   "path": "/customers",
+   "knowledge": "# List Customers\n\n## Prerequisites\n\n- Stripe account with access to read customer objects\n\n## Method\n\n`GET`\n\n## URL\n\n`https://api.stripe.com/v1/customers`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nReturns a list of your customers, sorted by creation date with the most recent customers appearing first.\n\n## Enforcement Rules\n\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters (not in the body).\n- This endpoint has **no path parameters**.\n- Although the scraped content mentions a request body type (`application/x-www-form-urlencoded`), this is a **GET** request; do not send a request body unless explicitly required by your HTTP client/tooling.\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|---|---|---|\n| `created` | object \\| integer | Only return customers created during the given date interval. Can be either an integer Unix timestamp (seconds) or an object with any of: `gt`, `gte`, `lt`, `lte` (each integer Unix timestamp). |\n| `email` | string | Case-sensitive filter based on the customer's `email` field. |\n| `ending_before` | string | Pagination cursor (object ID). Fetches the previous page of results ending before this object ID. |\n| `expand` | string[] | Specifies which fields in the response should be expanded. |\n| `limit` | integer | Number of objects to return. Range: 1\u2013100. Default: 10. |\n| `starting_after` | string | Pagination cursor (object ID). Fetches the next page of results starting after this object ID. |\n| `test_clock` | string | Only return customers associated with the specified test clock. If not set, customers with test clocks are not included. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"object\": \"list\",\n  \"url\": \"/v1/customers\",\n  \"has_more\": false,\n  \"data\": [\n    {\n      \"id\": \"cus_Rp9pH2mZJw0abc\",\n      \"object\": \"customer\",\n      \"address\": null,\n      \"balance\": 0,\n      \"business_name\": \"Acme Corp\",\n      \"cash_balance\": null,\n      \"created\": 1710000000,\n      \"currency\": \"usd\",\n      \"customer_account\": null,\n      \"default_source\": null,\n      \"delinquent\": false,\n      \"description\": \"Enterprise customer\",\n      \"discount\": null,\n      \"email\": \"billing@acme.example\",\n      \"individual_name\": null,\n      \"invoice_credit_balance\": {},\n      \"invoice_prefix\": \"ACME\",\n      \"invoice_settings\": {\n        \"custom_field"
+  },
+  {
+   "platform": "stripe",
+   "intent": "list customers",
+   "actionId": "conn_mod_def::GJ7K6GQFqoM::jSNC3ykpSqG7RdLQOF2rWQ",
+   "title": "Search Customers",
+   "method": "GET",
+   "path": "/customers/search",
+   "knowledge": ""
+  },
+  {
+   "platform": "stripe",
+   "intent": "list customers",
+   "actionId": "conn_mod_def::GJ7KrkzkpqU::KRvjQaTsQCajvxNGNZNOPg",
+   "title": "List a Customer\u2019s Active Subscriptions",
+   "method": "GET",
+   "path": "/customers/{{customer}}/subscriptions",
+   "knowledge": ""
+  },
+  {
+   "platform": "stripe",
+   "intent": "create a customer",
+   "actionId": "conn_mod_def::GJ7Km59Uuu8::vs6mIDiNQoylVhbsc1sy6A",
+   "title": "Create a Customer",
+   "method": "POST",
+   "path": "/customers",
+   "knowledge": "# Create a Customer\n\n## Prerequisites\n\n- Ability to create Customers in the Stripe account.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.stripe.com/v1/customers`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\n```\n\n## Description\n\nCreates a new customer object.\n\n## Enforcement Rules\n\n- When executing the action, send body fields as `application/x-www-form-urlencoded` (not JSON).\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body.\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|---|---|---|\n| `expand` | array of strings | Specifies which fields in the response should be expanded. |\n\n## Optional Request Body Fields (application/x-www-form-urlencoded)\n\n| Parameter | Type | Description |\n|---|---|---|\n| `address` | object \\| `\"\"` | Customer address object, or empty string. |\n| `address.city` | string | Max length 5000. |\n| `address.country` | string | Max length 5000. |\n| `address.line1` | string | Max length 5000. |\n| `address.line2` | string | Max length 5000. |\n| `address.postal_code` | string | Max length 5000. |\n| `address.state` | string | Max length 5000. |\n| `balance` | integer | An integer amount in cents (or local equivalent) that represents the customer's current balance, which affects the customer's future invoices. Negative = credit; positive = increases amount due. |\n| `business_name` | string \\| `\"\"` | Business name. |\n| `cash_balance` | object | Cash balance configuration. |\n| `cash_balance.settings` | object | Cash balance settings. |\n| `cash_balance.settings.reconciliation_mode` | string | One of: `automatic`, `manual`, `merchant_default`. |\n| `description` | string | Max length 5000. An arbitrary string to attach to a customer object (shown in dashboard). |\n| `email` | string | Max length 512. Customer email address (shown in dashboard). |\n| `individual_name` | string \\| `\"\"` | Individual name. |\n| `invoice_prefix` | string | Max length 5000. Prefix used to generate unique invoice numbers. Must be 3\u201312 uppercase letters or numbers. |\n| `invoice_settings` | object | Invoice settings for the customer. |\n| `invoice_settings.custom_fields` | array of objects \\| `\"\"` | Custom fields array, or empty string. Each entry has required `name`, `value`. |\n| `invoice_settings.custom_fields[].name` | string | **R"
+  },
+  {
+   "platform": "stripe",
+   "intent": "create a customer",
+   "actionId": "conn_mod_def::GJ7KmgtZe18::Gu5cLDnBQYaheXOIFa0S-A",
+   "title": "Create a Customer Card",
+   "method": "POST",
+   "path": "/customers/{{customer}}/cards",
+   "knowledge": ""
+  },
+  {
+   "platform": "stripe",
+   "intent": "create a customer",
+   "actionId": "conn_mod_def::GJ7Km5MPDcc::V8Fswu8pQz6a8fWPdrFv1g",
+   "title": "Create a Customer Session",
+   "method": "POST",
+   "path": "/customer_sessions",
+   "knowledge": ""
+  },
+  {
+   "platform": "notion",
+   "intent": "create a page",
+   "actionId": "conn_mod_def::GHmt2usus_k::6Dk4f-RQSqq6WmD5WOkdJQ",
+   "title": "Create One or More Pages",
+   "method": "POST",
+   "path": "/v1/notion/create-multiple-pages",
+   "knowledge": "# Create One or More Pages\n\n## Endpoint\n\n`POST http://one-medley/v1/notion/create-multiple-pages`\n\n## Description\n\nCreates several Notion pages in one call. Each page is created in turn, a page failing does not stop the ones after it, and every result is reported at the index of the page it came from.\n\n## Required Body Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `connectionKey` | string | The Notion connection to act as |\n| `pages` | array | The pages to create, 1-100 of them. See below |\n\n## Optional Body Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `parent` | object | Where a page that names no `parent` of its own is created |\n\n### Each entry of `pages`\n\nNotion's own create-a-page body, and nothing else - a field this does not declare is refused rather than dropped, because dropping one would create a page that is not the one you asked for and report it as a success.\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `parent` | object | Where this page goes: `{\"type\": \"data_source_id\", \"data_source_id\": \u2026}`, `{\"type\": \"page_id\", \"page_id\": \u2026}`, and Notion's other parent shapes. Falls back to the call-level `parent` |\n| `properties` | object | The page's properties, keyed by property name. Optional: a page created without them is untitled |\n| `children` | array | Block objects to put in the page |\n| `content` | array | Initial page content as block objects |\n| `markdown` | string | The page's content as markdown |\n| `icon` | object | `emoji`, `external`, `file_upload` or `custom_emoji` |\n| `cover` | object | `external` or `file_upload` |\n| `position` | object | Where the page sits among its siblings: `{\"type\": \"after_block\" \\| \"page_start\" \\| \"page_end\"}`, with `position.after_block` (a block id) required for the first. Notion's append-children endpoint takes a `position` too, but its enum is `after_block`, `start`, `end` - the two are not interchangeable |\n| `template` | object | The template to create it from: `{\"type\": \"none\" \\| \"default\" \\| \"template_id\"}`, with `template.template_id` required for the last. `default` is refused unless this page's parent is a data source |\n\n**Every page needs a parent**, either its own or the call-level one, and the whole call is refused before the first page is created when one does not have either. Notion's own refusal for a mi"
+  },
+  {
+   "platform": "notion",
+   "intent": "create a page",
+   "actionId": "conn_mod_def::GJ5EntUR1NM::0CtCVtZ8RIi-l6NROlnlGg",
+   "title": "Move a Page",
+   "method": "POST",
+   "path": "/pages/{{pageId}}/move",
+   "knowledge": ""
+  },
+  {
+   "platform": "notion",
+   "intent": "create a page",
+   "actionId": "conn_mod_def::GJ5En6Rb6Bg::HBiyT8YHSkWyd8Wg5qHFCg",
+   "title": "Update a Page",
+   "method": "PATCH",
+   "path": "/pages/{{pageId}}",
+   "knowledge": ""
+  },
+  {
+   "platform": "gmail",
+   "intent": "send an email",
+   "actionId": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+   "title": "Send Email",
+   "method": "POST",
+   "path": "/v1/gmail/send-email",
+   "knowledge": "# Send Email\n\n## Endpoint\n\n`POST http://one-medley/v1/gmail/send-email`\n\n## Description\n\nSends an email through Gmail. Takes the message as fields - recipients, subject, body - and assembles the RFC 2822 message Gmail's API requires, so the caller never builds MIME or base64.\n\nSupports multiple recipients, CC and BCC, HTML or plain-text bodies, custom labels, and replying into an existing conversation via `threadId` with the `In-Reply-To` and `References` headers a standards-compliant client reads.\n\nPlain-text bodies are escaped and wrapped in HTML, which avoids Gmail's plain-text line wrapping. A caller who already has HTML passes `isHtml: true` and it is sent as written.\n\n## Request Body\n\n### Required Request Body Fields\n\n| Parameter       | Type               | Description                                                                  |\n|-----------------|--------------------|------------------------------------------------------------------------------|\n| `connectionKey` | string             | The connection key for Gmail authentication                                  |\n| `to`            | string \\| string[] | Recipient(s). A comma-separated string or an array                           |\n| `subject`       | string             | Subject line. Non-ASCII subjects are RFC 2047 encoded automatically          |\n| `body`          | string             | Body content. Plain text unless `isHtml` is set                              |\n\n### Optional Request Body Fields\n\n| Parameter    | Type               | Description                                                                                  |\n|--------------|--------------------|----------------------------------------------------------------------------------------------|\n| `cc`         | string \\| string[] | CC recipients                                                                                 |\n| `bcc`        | string \\| string[] | BCC recipients                                                                                |\n| `isHtml`     | boolean            | Treat `body` as HTML and send it unescaped (default: `false`)                                  |\n| `from`       | string             | The `From` header. Must be an address the account is allowed to send as                        |\n| `replyTo`    | string             | The `Reply-To` header                                                "
+  },
+  {
+   "platform": "gmail",
+   "intent": "send an email",
+   "actionId": "conn_mod_def::GJ3oatTRIQc::fj4wiYxZRuG68hX235-sUg",
+   "title": "Send a User\u2019s Draft Email",
+   "method": "POST",
+   "path": "/gmail/v1/users/{{userId}}/drafts/send",
+   "knowledge": ""
+  },
+  {
+   "platform": "gmail",
+   "intent": "send an email",
+   "actionId": "conn_mod_def::GJ3ojvJP0VQ::HEVQ9Gm1QI2TntLejFuWfA",
+   "title": "Send a Verification Email for a User\u2019s Send-as Alias",
+   "method": "POST",
+   "path": "/gmail/v1/users/{{userId}}/settings/sendAs/{{sendAsEmail}}/verify",
+   "knowledge": ""
+  },
+  {
+   "platform": "hubspot",
+   "intent": "create a contact",
+   "actionId": "conn_mod_def::GJ3kRa59YdQ::k6o-IYauSoqishpRytOX-Q",
+   "title": "Create a Contact",
+   "method": "POST",
+   "path": "/crm/v3/objects/contacts",
+   "knowledge": "# Create a Contact\n\n## Prerequisites\n\n- Must have CRM permissions to create contact records.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.hubapi.com/crm/v3/objects/contacts`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a contact with the given properties and returns a copy of the created object, including its ID. HubSpot documentation and examples for creating standard contacts are provided in the source docs.\n\n## Required Request Body Fields\n\n| Parameter | Type | Description |\n|---|---|---|\n| `associations` | array | Associations to other CRM objects. |\n| `associations[].types` | array | **Required.** Association types to apply. |\n| `associations[].types[].associationCategory` | string | **Required.** Association category. Allowed values: `HUBSPOT_DEFINED`, `USER_DEFINED`, `INTEGRATOR_DEFINED`. |\n| `associations[].types[].associationTypeId` | integer | **Required.** Association type ID. |\n| `associations[].to` | object | **Required.** Target object identifier. (Schema name in docs: `<PublicObjectId>`.) |\n| `properties` | object | **Required.** Key-value map of contact properties, where each value is a string: `{[key: string]: string}`. |\n\n## Response\n\n### Success Response (201 Created)\n\n```json\n{\n  \"createdAt\": \"2024-01-15T10:30:00Z\",\n  \"archived\": false,\n  \"archivedAt\": \"2024-01-15T10:30:00Z\",\n  \"propertiesWithHistory\": {\n    \"email\": [\n      {\n        \"sourceId\": \"string\",\n        \"sourceType\": \"string\",\n        \"sourceLabel\": \"string\",\n        \"updatedByUserId\": 123,\n        \"value\": \"person@example.com\",\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n      }\n    ]\n  },\n  \"id\": \"512\",\n  \"properties\": {\n    \"email\": \"person@example.com\",\n    \"firstname\": \"Pat\",\n    \"lastname\": \"Lee\"\n  },\n  \"updatedAt\": \"2024-01-15T10:30:00Z\"\n}\n```\n\n### Error Response (default)\n\nContent type in docs: `*/*`\n\n```json\n{\n  \"subCategory\": \"string\",\n  \"context\": {\n    \"propertyName\": [\"string\"]\n  },\n  \"correlationId\": \"aeb5f871-7f07-4993-9211-075dc63e7cbf\",\n  \"links\": {\n    \"string\": \"string\"\n  },\n  \"message\": \"Invalid input (details will vary based on the error)\",\n  \"category\": \"VALIDATION_ERROR\",\n  \"errors\": [\n    {\n      \"subCategory\": \"string\",\n      \"code\": \"string\",\n      \"in\": \"string\",\n      \"context\": {\n        \"propertyName\": [\"string\"]\n      },\n      \"message\": \"string\"\n    }\n  ]\n}\n```\n\n## Response"
+  },
+  {
+   "platform": "hubspot",
+   "intent": "create a contact",
+   "actionId": "conn_mod_def::GJ3kRjExl30::OSDEcFlJRHWffxh13YT8Zg",
+   "title": "Create a Batch of Contacts",
+   "method": "POST",
+   "path": "/crm/v3/objects/contacts/batch/create",
+   "knowledge": ""
+  },
+  {
+   "platform": "hubspot",
+   "intent": "create a contact",
+   "actionId": "conn_mod_def::GJ3kR64ZW-w::FKNC0bubRHiyC4vlsxC2Hg",
+   "title": "Merge Two Contacts",
+   "method": "POST",
+   "path": "/crm/v3/objects/contacts/merge",
+   "knowledge": ""
+  },
+  {
+   "platform": "github",
+   "intent": "create a repository for the authenticated user",
+   "actionId": "conn_mod_def::GJ3Z4tE4G5A::lTHBrlzlSouqu-x8AHeT3Q",
+   "title": "Create a Repository for the Authenticated User",
+   "method": "POST",
+   "path": "/user/repos",
+   "knowledge": "# Create a Repository for the Authenticated User\n\n## Prerequisites\n\n- Must have permission to create repositories for the authenticated user (required scopes vary by visibility: `public_repo` or `repo` to create a public repository; `repo` to create a private repository)\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.github.com/user/repos`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new repository for the authenticated user. You can control repository visibility and enable/disable features like issues, projects, wiki, discussions, merge strategies, and initialization options.\n\n## Enforcement Rules\n\n- There are **no path parameters** for this endpoint.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body. (This endpoint does not document any query parameters.)\n- When executing the action, ensure to send **Path Parameters** in the URL and **not** in the body. (This endpoint has none.)\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `name`   | string | The name of the repository. Example: `\"Team Environment\"` |\n\n## Optional Request Body Fields\n\n| Parameter | Type | Description |\n|---|---|---|\n| `description` | string | A short description of the repository. |\n| `homepage` | string | A URL with more information about the repository. |\n| `private` | boolean | Whether the repository is private. Default: `false`. |\n| `has_issues` | boolean | Whether issues are enabled. Default: `true`. Example: `true`. |\n| `has_projects` | boolean | Whether projects are enabled. Default: `true`. Example: `true`. |\n| `has_wiki` | boolean | Whether the wiki is enabled. Default: `true`. Example: `true`. |\n| `has_discussions` | boolean | Whether discussions are enabled. Default: `false`. Example: `true`. |\n| `team_id` | integer | The id of the team that will be granted access to this repository. **Only valid when creating a repository in an organization.** |\n| `auto_init` | boolean | Whether the repository is initialized with a minimal README. Default: `false`. |\n| `gitignore_template` | string | The desired language or platform to apply to the `.gitignore`. Example: `\"Haskell\"`. |\n| `license_template` | string | The license keyword of the open source license for this repository. Exampl"
+  },
+  {
+   "platform": "github",
+   "intent": "create a repository for the authenticated user",
+   "actionId": "conn_mod_def::GJ3Yp4aTkqA::FcGQb-50Ru2tXiOfz9L15w",
+   "title": "Unstar a Repository for the Authenticated User",
+   "method": "DELETE",
+   "path": "/user/starred/{{owner}}/{{repo}}",
+   "knowledge": ""
+  },
+  {
+   "platform": "github",
+   "intent": "create a repository for the authenticated user",
+   "actionId": "conn_mod_def::GJ3Ypwxdt5w::h_MyDKjYS1GVn9fCoFX1-Q",
+   "title": "Star a Repository for the Authenticated User",
+   "method": "PUT",
+   "path": "/user/starred/{{owner}}/{{repo}}",
+   "knowledge": ""
+  },
+  {
+   "platform": "google-calendar",
+   "intent": "list events",
+   "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+   "title": "List a Calendar's Events",
+   "method": "GET",
+   "path": "/calendars/{{calendarId}}/events",
+   "knowledge": "# List a Calendar's Events\n\n## Prerequisites\n\n- You must know the target `calendarId`\n- To access the authenticated user's primary calendar, you can use `primary` as the `calendarId`\n\n## Method\n\n`GET`\n\n## URL\n\n`https://www.googleapis.com/calendar/v3/calendars/{{calendarId}}/events`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nReturns events on the specified calendar. This endpoint supports filtering, pagination, free-text search, incremental synchronization via `syncToken`, and repeated query parameters for event types and extended properties.\n\n## Enforcement Rules\n\n- The `calendarId` path parameter **must always be present**.\n- If the user provides a `calendarId`, use that value directly.\n- Do **not** call the API with a missing or empty `calendarId`.\n- The special value `primary` is valid for the currently logged-in user's primary calendar.\n- Always construct the path as `/calendars/{{calendarId}}/events`, where `{{calendarId}}` is a **non-empty string**.\n- Do **not** infer or guess the `calendarId` beyond the user's input.\n- When executing the action, ensure to send \"Path Parameters\" in the URL and not in the body.\n- When executing the action, ensure to send \"Query Parameters\" in the URL as query parameters and not in the body.\n\n### Valid Examples\n\n```http\n/calendars/primary/events\n/calendars/user@example.com/events\n/calendars/c_1883qf4v9j1abc123def456ghi@group.calendar.google.com/events\n```\n\n### Invalid Examples\n\n```http\n/calendars//events\n/calendars/events\n/events\n```\n\n## Required Path Parameters\n\n| Parameter | Type | Description |\n|---|---|---|\n| `calendarId` | string | Calendar identifier. To retrieve calendar IDs, call the calendar list endpoint. Use `primary` to access the currently logged-in user's primary calendar. Send in the URL path. |\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|---|---|---|\n| `alwaysIncludeEmail` | boolean | Deprecated and ignored. Send as a query parameter. |\n| `eventTypes` | string | Event types to return. May be repeated multiple times to include multiple types. If omitted, all event types are returned. Possible values: `birthday`, `default`, `focusTime`, `fromGmail`, `outOfOffice`, `workingLocation`. Send as a query parameter. |\n| `iCalUID` | string | Search for an event by its iCalendar ID. Send as a query parameter. |\n| `maxAttendees` | integer | Maximum number of at"
+  },
+  {
+   "platform": "google-calendar",
+   "intent": "list events",
+   "actionId": "conn_mod_def::GJ6Rlzrfb_k::Oi-ZtyZ3See3CXbl6lQ6Ww",
+   "title": "Watch a Calendar's Events",
+   "method": "POST",
+   "path": "/calendar/v3/calendars/{{calendarId}}/events/watch",
+   "knowledge": ""
+  },
+  {
+   "platform": "google-calendar",
+   "intent": "list events",
+   "actionId": "conn_mod_def::GJ6RlnP3LOc::4ImRHRcFSBm2s5L-QqwFlg",
+   "title": "List Instances of a Calendar Event",
+   "method": "GET",
+   "path": "/v3/calendars/{{calendarId}}/events/{{eventId}}/instances",
+   "knowledge": ""
+  },
+  {
+   "platform": "linear",
+   "intent": "create an issue",
+   "actionId": "conn_mod_def::GJ4vJJJqwWo::nUMJLIhORKaqb57y36SEjw",
+   "title": "Create an Issue",
+   "method": "POST",
+   "path": "/graphql",
+   "knowledge": "# Create an Issue\n\n## Prerequisites\n\n- Access to a Linear workspace with permission to create issues in the target team\n- A valid `teamId` to associate the new issue with\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.linear.app/graphql`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new Linear issue using the `issueCreate` GraphQL mutation. You provide the issue fields via the `input` object (at minimum, `teamId`) and specify which fields you want returned for the created issue in the GraphQL selection set.\n\n## Enforcement Rules\n\n- This is a GraphQL endpoint: send the mutation in the JSON request body under `query`, and pass inputs via `variables`.\n- When executing, send **Path Parameters in the URL, not in the body** (not applicable; this endpoint has no path parameters).\n- When executing, send **Query Parameters as URL query parameters, not in the body** (not applicable; this endpoint has no query parameters).\n- The mutation requires `input` and `input.teamId` must be provided and non-empty.\n\n## Required Path Parameters\n\nNone.\n\n## Required Query Parameters\n\nNone.\n\n## Required Request Body Fields\n\n| Parameter | Type | Description |\n|---|---|---|\n| `query` | string | GraphQL mutation document. Must include `mutation issueCreate($input: IssueCreateInput!) { issueCreate(input: $input) { ... } }`. |\n| `variables` | object | Variables map for the GraphQL operation. Must include `input`. |\n| `variables.input` | object | The issue object to create. |\n| `variables.input.teamId` | string | **Required.** Identifier of the team associated with the issue. |\n\n## Optional Request Body Fields\n\nAll fields below are properties of `variables.input` (type `IssueCreateInput`):\n\n| Parameter | Type | Description |\n|---|---|---|\n| `assigneeId` | string | Identifier of the user to assign the issue to. |\n| `completedAt` | string (DateTime) | Date when the issue was completed (e.g., import). Must be in the past and after `createdAt`. Cannot be provided with an incompatible workflow state. |\n| `createAsUser` | string | Create issue as a user with the provided name. Only available to OAuth applications creating issues in `actor=app` mode. |\n| `createdAt` | string (DateTime) | Date when the issue was created (e.g., import). Must be in the past. If omitted, backend generates current time. |\n| `cycleId` | string | C"
+  },
+  {
+   "platform": "linear",
+   "intent": "create an issue",
+   "actionId": "conn_mod_def::GJ4vKHpIvP0::SYDSvBDjRQ-RUcVKnSu7Lg",
+   "title": "Create an Issue Label",
+   "method": "POST",
+   "path": "/graphql",
+   "knowledge": ""
+  },
+  {
+   "platform": "linear",
+   "intent": "create an issue",
+   "actionId": "conn_mod_def::GJ4vJchHTnA::FSjAZDZqRHWDD6Zcd09ooA",
+   "title": "Update an Issue",
+   "method": "POST",
+   "path": "/graphql",
+   "knowledge": ""
+  }
+ ],
+ "app": {
+  "name": "acme-standup",
+  "files": [
+   {
+    "path": "server/routes/standup.ts",
+    "content": "import { Hono } from \"hono\";\nimport { one } from \"../one/index.js\";\n\n// Acme standup bot: posts the day's standup to Slack and files it in Notion.\nconst SLACK_POST = { platform: \"slack\", actionId: \"conn_mod_def::GJ7H84zBlaI::BCfuA16aTaGVIax5magsLA\", method: \"POST\", path: \"/chat.postMessage\", access: \"write\" } as const;\nconst SLACK_CHANNELS = { platform: \"slack\", actionId: \"conn_mod_def::GJ7H9zmRFIk::1RxrzeicS-ibnXF4sFC5Ww\", method: \"GET\", path: \"/conversations.list\", access: \"read\" } as const;\nconst NOTION_PAGES = { platform: \"notion\", actionId: \"conn_mod_def::GHmt2usus_k::6Dk4f-RQSqq6WmD5WOkdJQ\", method: \"POST\", path: \"/v1/notion/create-multiple-pages\", access: \"write\" } as const;\n\nexport const standup = new Hono();\nstandup.get(\"/api/channels\", async (c) => c.json(await one.call(c, { action: SLACK_CHANNELS, sample: () => ({ channels: [] }) })));\nstandup.post(\"/api/standup\", async (c) => {\n  const { channel, text } = await c.req.json();\n  await one.call(c, { action: SLACK_POST, body: { channel, text }, sample: () => ({ ok: true }) });\n  await one.call(c, { action: NOTION_PAGES, body: { pages: [{ title: \"Standup\", content: text }] }, sample: () => ({}) });\n  return c.json({ ok: true });\n});\n"
+   },
+   {
+    "path": "server/routes/customers.ts",
+    "content": "import { Hono } from \"hono\";\nimport Stripe from \"stripe\";\nimport { one } from \"../one/index.js\";\n\nconst LIST_CUSTOMERS = { platform: \"stripe\", actionId: \"conn_mod_def::GJ7KsRfyH8M::DEPSKKu2TUK22IjVPP1Hfg\", method: \"GET\", path: \"/customers\", access: \"read\" } as const;\n\nexport const customers = new Hono();\ncustomers.get(\"/api/customers\", async (c) => c.json(await one.call(c, { action: LIST_CUSTOMERS, query: { limit: \"20\" }, sample: () => ({ data: [] }) })));\n\n// Left over from before One: a direct Stripe client with a secret key.\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? \"\");\ncustomers.get(\"/api/customers/raw\", async (c) => c.json(await stripe.customers.list({ limit: 5 })));\n"
+   },
+   {
+    "path": "README.md",
+    "content": "# Acme standup\\n\\nPosts the daily standup to Slack and files it in Notion. Forked from the Forkable starter.\\n"
+   }
+  ]
+ }
+}

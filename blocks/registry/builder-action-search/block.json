@@ -1,0 +1,19 @@
+{
+  "name": "builder-action-search",
+  "title": "Action catalog search",
+  "description": "Search One's action catalog in words, per platform, and read an action's docs: method, path, what it takes and what it answers. Copy the id or hand the action to your app. Reads the catalog on the user's grant; no provider is called.",
+  "kind": "component",
+  "group": "Builder",
+  "files": [
+    { "from": "builder-action-search/BuilderActionSearch.tsx", "to": "ui/src/components/forkable/BuilderActionSearch.tsx" },
+    { "from": "builder-action-search/route.ts", "to": "server/src/routes/forkable/builder-action-search.ts" }
+  ],
+  "requires": ["lib", "builder"],
+  "routes": [
+    { "method": "GET", "path": "/api/builder/actions" },
+    { "method": "GET", "path": "/api/builder/actions/:id" }
+  ],
+  "actions": [],
+  "usage": "<BuilderActionSearch onPick={(a) => addToManifest(a)} />",
+  "route": "builderActionSearchRoute"
+}

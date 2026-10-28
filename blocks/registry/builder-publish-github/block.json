@@ -1,0 +1,22 @@
+{
+  "name": "builder-publish-github",
+  "title": "Publish to GitHub",
+  "description": "Publish a set of files as a new repository on the user's GitHub: private by default, public only behind a checkbox the server checks again. One confirm says exactly what will be created; then a blob per file, one tree, one commit and main, all on the user's grant.",
+  "kind": "component",
+  "group": "Builder",
+  "files": [
+    { "from": "builder-publish-github/BuilderPublishGithub.tsx", "to": "ui/src/components/forkable/BuilderPublishGithub.tsx" },
+    { "from": "builder-publish-github/route.ts", "to": "server/src/routes/forkable/builder-publish-github.ts" }
+  ],
+  "requires": ["lib", "builder"],
+  "routes": [{ "method": "POST", "path": "/api/builder/publish/github" }],
+  "actions": [
+    { "platform": "github", "actionId": "conn_mod_def::GJ3Z4tE4G5A::lTHBrlzlSouqu-x8AHeT3Q", "title": "Create a Repository for the Authenticated User", "access": "write", "reason": "Makes the new repository, private unless you choose public." },
+    { "platform": "github", "actionId": "conn_mod_def::GJ3ZJkM0oow::6pCvkMJYSue8xhH4Bvy6eQ", "title": "Create a Repository Blob", "access": "write", "reason": "Uploads each file." },
+    { "platform": "github", "actionId": "conn_mod_def::GJ3ZKCHKkUA::xHBDE-LtSkWfVdTQxLIp3g", "title": "Create a Repository Git Tree", "access": "write", "reason": "Writes the file tree." },
+    { "platform": "github", "actionId": "conn_mod_def::GJ3ZJrwmLbo::Rp9vt2o3RBqDxBLQ1sRRng", "title": "Create a Commit in a Repository", "access": "write", "reason": "Makes the one commit." },
+    { "platform": "github", "actionId": "conn_mod_def::GJ3ZJzQSbw4::FMDSgh1WS5mvn2imiAkk2w", "title": "Create a Repository Git Reference", "access": "write", "reason": "Points main at the commit." }
+  ],
+  "usage": "<BuilderPublishGithub defaultRepo=\"acme-standup\" files={files} />",
+  "route": "builderPublishGithubRoute"
+}

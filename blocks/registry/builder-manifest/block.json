@@ -1,0 +1,16 @@
+{
+  "name": "builder-manifest",
+  "title": "Manifest viewer",
+  "description": "connect.manifest.json derived from code: every One action the files call, read or write, and where. It flags provider SDKs and hosts that go around the user's grant and secrets left in the code. Titles come from One's catalog.",
+  "kind": "component",
+  "group": "Builder",
+  "files": [
+    { "from": "builder-manifest/BuilderManifest.tsx", "to": "ui/src/components/forkable/BuilderManifest.tsx" },
+    { "from": "builder-manifest/route.ts", "to": "server/src/routes/forkable/builder-manifest.ts" }
+  ],
+  "requires": ["lib", "builder"],
+  "routes": [{ "method": "POST", "path": "/api/builder/manifest" }],
+  "actions": [],
+  "usage": "<BuilderManifest files={[{ path: \"server/routes/standup.ts\", content: source }]} />",
+  "route": "builderManifestRoute"
+}

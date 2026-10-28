@@ -1,0 +1,12 @@
+{
+  "name": "brief-citations",
+  "title": "Citations",
+  "description": "The sites AI answers cite for your category, ranked, with your own pages and competitors' marked and the most-cited pages under each domain. Reads the Share of voice block's report route.",
+  "kind": "component",
+  "group": "Brief",
+  "files": [{ "from": "brief-citations/BriefCitations.tsx", "to": "ui/src/components/forkable/BriefCitations.tsx" }],
+  "requires": ["lib", "brief", "brief-share-of-voice"],
+  "routes": [],
+  "actions": [],
+  "usage": "<BriefCitations days={7} limit={12} />"
+}

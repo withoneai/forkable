@@ -1,0 +1,38 @@
+{
+  "name": "google-calendar-offer-times",
+  "title": "Calendar Offer Times",
+  "description": "Pick open times from the user's free/busy and get a sentence to paste into an email. Reads busy times only, never event titles, and sends nothing.",
+  "kind": "component",
+  "group": "Google Calendar",
+  "files": [
+    {
+      "from": "google-calendar-offer-times/GoogleCalendarOfferTimes.tsx",
+      "to": "ui/src/components/forkable/GoogleCalendarOfferTimes.tsx"
+    },
+    {
+      "from": "google-calendar-offer-times/route.ts",
+      "to": "server/src/routes/forkable/google-calendar-offer-times.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "google-calendar"
+  ],
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/calendar/free-busy"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "google-calendar",
+      "actionId": "conn_mod_def::GJ6Rlvk1bgM::h5exn4dzTkyhjoA89wddmQ",
+      "title": "Query free/busy",
+      "access": "read",
+      "reason": "Sees when you are busy, not what the events are, to offer open times."
+    }
+  ],
+  "route": "googleCalendarOfferTimesRoute",
+  "usage": "<GoogleCalendarOfferTimes onInsert={(text) => setBody((b) => b + text)} />"
+}

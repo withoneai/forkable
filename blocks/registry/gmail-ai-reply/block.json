@@ -1,0 +1,46 @@
+{
+  "name": "gmail-ai-reply",
+  "title": "Gmail AI Reply",
+  "description": "Summarizes a thread, names the ask and drafts a reply with Claude through One. The user edits it and saves to Drafts.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "gmail-ai-reply/GmailAiReply.tsx",
+      "to": "ui/src/components/forkable/GmailAiReply.tsx"
+    },
+    {
+      "from": "gmail-ai-reply/route.ts",
+      "to": "server/src/routes/forkable/gmail-ai-reply.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "gmail",
+    "gmail-compose"
+  ],
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/gmail/threads/:id/assist"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+      "title": "Get a thread",
+      "access": "read",
+      "reason": "Reads the thread it drafts a reply to."
+    },
+    {
+      "platform": "anthropic",
+      "actionId": "conn_mod_def::GJfJ6hmtpYo::zy68VQHpRFmqayjAzxkjDA",
+      "title": "Create a message",
+      "access": "write",
+      "reason": "Claude writes the summary and the draft, on the user's own Anthropic account."
+    }
+  ],
+  "usage": "<GmailAiReply threadId={id} replyTo={thread.from.email} subject={thread.subject} />",
+  "group": "Gmail",
+  "route": "gmailAiReplyRoute"
+}

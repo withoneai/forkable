@@ -1,0 +1,50 @@
+{
+  "name": "gmail-compose",
+  "title": "Gmail Compose",
+  "description": "Write a message and save it to the user's Gmail Drafts. Send is opt-in with allowSend.",
+  "kind": "component",
+  "files": [
+    {
+      "from": "gmail-compose/GmailCompose.tsx",
+      "to": "ui/src/components/forkable/GmailCompose.tsx"
+    },
+    {
+      "from": "gmail-compose/route.ts",
+      "to": "server/src/routes/forkable/gmail-compose.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "gmail"
+  ],
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/gmail/drafts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/gmail/send"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GGZUe0SIuk8::nhwEKp2cQ6uARsH3513VeQ",
+      "title": "Create a draft",
+      "access": "write",
+      "reason": "Saves what you write to your Gmail Drafts."
+    },
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+      "title": "Send an email",
+      "access": "write",
+      "reason": "Only when the fork turns on allowSend.",
+      "optional": true
+    }
+  ],
+  "usage": "<GmailCompose open={open} onClose={() => setOpen(false)} />",
+  "group": "Gmail",
+  "route": "gmailComposeRoute"
+}

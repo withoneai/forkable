@@ -1,0 +1,16 @@
+{
+  "name": "builder",
+  "title": "Builder shared",
+  "description": "The GitHub actions Builder's export runs, the manifest scanner (action ids, provider SDKs that go around the grant, secret shapes) and the Builder sample: real One catalog entries and a small Acme app. Installed once with the first Builder block.",
+  "kind": "lib",
+  "files": [
+    { "from": "builder/types.ts", "to": "ui/src/components/forkable/builder/types.ts", "alsoTo": "server/src/routes/forkable/builder/types.ts" },
+    { "from": "builder/actions.ts", "to": "server/src/routes/forkable/builder/actions.ts" },
+    { "from": "builder/scan.ts", "to": "server/src/routes/forkable/builder/scan.ts" },
+    { "from": "builder/sample.ts", "to": "server/src/routes/forkable/builder/sample.ts" }
+  ],
+  "fixtures": [{ "from": "../fixtures/builder.json", "to": "server/src/routes/forkable/fixtures/builder.json" }],
+  "requires": ["lib"],
+  "routes": [],
+  "actions": []
+}

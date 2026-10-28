@@ -1,0 +1,38 @@
+{
+  "name": "google-calendar-new-event",
+  "title": "Calendar New Event",
+  "description": "A form that adds an event to the user's Google Calendar: title, time, guests and an optional Google Meet link. Guests get no email unless the user asks for one.",
+  "kind": "component",
+  "group": "Google Calendar",
+  "files": [
+    {
+      "from": "google-calendar-new-event/GoogleCalendarNewEvent.tsx",
+      "to": "ui/src/components/forkable/GoogleCalendarNewEvent.tsx"
+    },
+    {
+      "from": "google-calendar-new-event/route.ts",
+      "to": "server/src/routes/forkable/google-calendar-new-event.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "google-calendar"
+  ],
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/calendar/events"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "google-calendar",
+      "actionId": "conn_mod_def::GJ6RlnjZAh4::CSya4eHtRbeXRM7PHiXuRA",
+      "title": "Create an event in a calendar",
+      "access": "write",
+      "reason": "Adds the events you make here to your calendar."
+    }
+  ],
+  "route": "googleCalendarNewEventRoute",
+  "usage": "<GoogleCalendarNewEvent initial={{ start, end }} onCreated={() => setRefresh((n) => n + 1)} onClose={() => setOpen(false)} />"
+}

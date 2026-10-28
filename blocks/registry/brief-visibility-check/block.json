@@ -1,0 +1,22 @@
+{
+  "name": "brief-visibility-check",
+  "title": "Prompt visibility check",
+  "description": "Ask one buyer's question of ChatGPT, Claude, Gemini and Perplexity on the user's own accounts, then see per engine whether the brand is named, in what order, in what tone, which competitors come up and which pages are cited. Jev judges each answer.",
+  "kind": "component",
+  "group": "Brief",
+  "files": [
+    { "from": "brief-visibility-check/BriefVisibilityCheck.tsx", "to": "ui/src/components/forkable/BriefVisibilityCheck.tsx" },
+    { "from": "brief-visibility-check/route.ts", "to": "server/src/routes/forkable/brief-visibility-check.ts" }
+  ],
+  "requires": ["lib", "brief"],
+  "routes": [{ "method": "POST", "path": "/api/brief/check" }],
+  "actions": [
+    { "platform": "openai", "actionId": "conn_mod_def::GJ563wrwc5Q::nxVg0tlnR-6fNNpRZkHuKg", "title": "Create a chat completion", "access": "write", "reason": "Asks ChatGPT the prompt, with web search on.", "optional": true },
+    { "platform": "anthropic", "actionId": "conn_mod_def::GJfJ6hmtpYo::zy68VQHpRFmqayjAzxkjDA", "title": "Create a message", "access": "write", "reason": "Asks Claude the prompt.", "optional": true },
+    { "platform": "gemini", "actionId": "conn_mod_def::GKYsL21usZ8::V-gBgeQuT06Ynd5FjAyvnA", "title": "Generate content", "access": "write", "reason": "Asks Gemini the prompt, grounded on Google Search.", "optional": true },
+    { "platform": "perplexity", "actionId": "conn_mod_def::GJ6CZeTvPJc::zmkwnSM8S6egtsvqG96MKQ", "title": "Sonar chat completion", "access": "write", "reason": "Asks Perplexity the prompt, with its native citations.", "optional": true },
+    { "platform": "typesafe", "actionId": "conn_mod_def::GNh4bXcHPaU::V2ndvy5CQJmYHvkElwVM_w", "title": "System One (Jev)", "access": "read", "reason": "Jev judges each answer: mentioned, recommended, order, tone, competitors." }
+  ],
+  "usage": "<BriefVisibilityCheck defaultPrompt=\"What's the best expense management software for a mid-size company?\" />",
+  "route": "briefVisibilityCheckRoute"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "google-calendar-agenda",
+  "title": "Calendar Agenda",
+  "description": "The user's upcoming Google Calendar events, grouped by day, with join links and events waiting on their reply. Reads on their grant.",
+  "kind": "component",
+  "group": "Google Calendar",
+  "files": [
+    {
+      "from": "google-calendar-agenda/GoogleCalendarAgenda.tsx",
+      "to": "ui/src/components/forkable/GoogleCalendarAgenda.tsx"
+    },
+    {
+      "from": "google-calendar-agenda/route.ts",
+      "to": "server/src/routes/forkable/google-calendar-agenda.ts"
+    }
+  ],
+  "requires": [
+    "lib",
+    "google-calendar"
+  ],
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/calendar/events"
+    }
+  ],
+  "actions": [
+    {
+      "platform": "google-calendar",
+      "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+      "title": "List a calendar's events",
+      "access": "read",
+      "reason": "Shows your events for the days on screen."
+    }
+  ],
+  "route": "googleCalendarAgendaRoute",
+  "usage": "<GoogleCalendarAgenda days={7} onSelect={(e) => setOpen(e.id)} selectedId={open} />"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "calendar-app",
+  "title": "Calendar app",
+  "description": "A whole calendar built from the Google Calendar components: week grid, agenda, event details with RSVP, new event and offer times. Add it, then make it yours.",
+  "kind": "app",
+  "group": "Apps",
+  "files": [
+    {
+      "from": "calendar-app/CalendarApp.tsx",
+      "to": "ui/src/components/forkable/CalendarApp.tsx"
+    }
+  ],
+  "requires": [
+    "google-calendar-agenda",
+    "google-calendar-event",
+    "google-calendar-week",
+    "google-calendar-new-event",
+    "google-calendar-offer-times"
+  ],
+  "routes": [],
+  "actions": [],
+  "usage": "<CalendarApp />"
+}

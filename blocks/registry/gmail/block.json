@@ -1,0 +1,40 @@
+{
+  "name": "gmail",
+  "title": "Gmail shared",
+  "description": "The Gmail action ids, the shapes routes return, the mappers and the Acme sample inbox. Installed once with the first Gmail component.",
+  "kind": "lib",
+  "files": [
+    {
+      "from": "gmail/actions.ts",
+      "to": "server/src/routes/forkable/gmail/actions.ts"
+    },
+    {
+      "from": "gmail/types.ts",
+      "to": "ui/src/components/forkable/gmail/types.ts",
+      "alsoTo": "server/src/routes/forkable/gmail/types.ts"
+    },
+    {
+      "from": "gmail/map.ts",
+      "to": "server/src/routes/forkable/gmail/map.ts"
+    },
+    {
+      "from": "gmail/sample.ts",
+      "to": "server/src/routes/forkable/gmail/sample.ts"
+    }
+  ],
+  "fixtures": [
+    {
+      "from": "../fixtures/gmail.json",
+      "to": "server/src/routes/forkable/fixtures/gmail.json"
+    },
+    {
+      "from": "../fixtures/gmail-ai.json",
+      "to": "server/src/routes/forkable/fixtures/gmail-ai.json"
+    }
+  ],
+  "requires": [
+    "lib"
+  ],
+  "routes": [],
+  "actions": []
+}

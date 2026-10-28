@@ -1,0 +1,20 @@
+{
+  "name": "rill-ask-inbox",
+  "title": "Ask your inbox",
+  "description": "A question box over the user's own mail. Code finds the evidence in Gmail, Claude answers only from it, and every citation is an exact quote checked against the thread before it is shown.",
+  "kind": "component",
+  "group": "Rill",
+  "files": [
+    { "from": "rill-ask-inbox/RillAskInbox.tsx", "to": "ui/src/components/forkable/RillAskInbox.tsx" },
+    { "from": "rill/ask.ts", "to": "server/src/routes/forkable/rill/ask.ts" },
+    { "from": "rill-ask-inbox/route.ts", "to": "server/src/routes/forkable/rill-ask-inbox.ts" }
+  ],
+  "requires": ["lib", "gmail", "rill"],
+  "routes": [{ "method": "POST", "path": "/api/rill/ask" }],
+  "actions": [
+    { "platform": "gmail", "actionId": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ", "title": "Get threads", "access": "read", "reason": "Searches your mail for the evidence." },
+    { "platform": "anthropic", "actionId": "conn_mod_def::GJfJ6hmtpYo::zy68VQHpRFmqayjAzxkjDA", "title": "Create a message", "access": "write", "reason": "Claude answers from the evidence, on your own Anthropic account." }
+  ],
+  "usage": "<RillAskInbox onOpen={(threadId) => setOpen(threadId)} />",
+  "route": "rillAskInboxRoute"
+}
