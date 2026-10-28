@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@source "./canvas.tsx";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The trusted shell: the same green-tinted tokens as the website (web-ui.ts). */
+:root {
+  --background: #fbfdfc; --foreground: #002215; --muted-foreground: #627b6f;
+  --card: color-mix(in oklch, #fbfdfc 97%, #002215 3%);
+  --raised: #ffffff;
+  --border: color-mix(in oklch, #fbfdfc 88%, #002215 12%);
+  --strong: color-mix(in oklch, #fbfdfc 76%, #002215 24%);
+  --green: #809d08;
+  --fill: #cced73; --fill-hover: #b3d258; --fill-press: #9ab83b;
+  --soft-shadow: 0 1px 2px rgb(0 34 21 / .04), 0 8px 24px -12px rgb(0 34 21 / .12);
+  color-scheme: light;
+}
+.dark {
+  --background: #000000; --foreground: #e9faf2; --muted-foreground: #779084;
+  --card: color-mix(in oklch, #000000 91%, #e9faf2 9%);
+  --raised: color-mix(in oklch, #000000 81%, #e9faf2 19%);
+  --border: color-mix(in oklch, #000000 82%, #e9faf2 18%);
+  --strong: color-mix(in oklch, #000000 68%, #e9faf2 32%);
+  --green: #cced73;
+  --soft-shadow: 0 0 0 1px rgb(233 250 242 / .02), 0 12px 32px -16px rgb(0 0 0 / .8);
+  color-scheme: dark;
+}
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground); --color-card: var(--card);
+  --color-raised: var(--raised); --color-border: var(--border); --color-strong: var(--strong);
+  --color-green: var(--green);
+  --color-fill: var(--fill); --color-fill-hover: var(--fill-hover); --color-fill-press: var(--fill-press);
+  --shadow-soft: var(--soft-shadow);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-11: 0.6875rem; --text-11--line-height: 1rem;
+  --text-13: 0.8125rem; --text-13--line-height: 1.25rem;
+  --text-15: 0.9375rem; --text-15--line-height: 1.375rem;
+}
+html, body { margin: 0; }
+@supports (corner-shape: squircle) {
+  .squircle { corner-shape: squircle; }
+}

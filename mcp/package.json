@@ -1,0 +1,49 @@
+{
+  "name": "forkable-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An MCP server whose login is Sign in with One. The agent writes a UI that renders inside Claude or ChatGPT and runs on the signed-in person's own accounts.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build:view": "VIEW=runner vite build && VIEW=canvas vite build",
+    "dev": "pnpm build:view && wrangler d1 migrations apply forkable-mcp --local && wrangler dev --port 52290",
+    "deploy": "pnpm build:view && wrangler d1 migrations apply forkable-mcp --remote && wrangler deploy",
+    "typecheck": "tsc -p . && tsc -p tsconfig.view.json",
+    "harness": "vite --config harness/vite.config.ts",
+    "test": "node --test scripts/stylecheck.test.mjs",
+    "test:render": "node scripts/canvas.mjs && node scripts/web.mjs && node scripts/kit.mjs"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "^1.2.4",
+    "@cloudflare/workers-types": "^5.20261027.1",
+    "@modelcontextprotocol/ext-apps": "^2.0.4",
+    "@tailwindcss/browser": "^4.3.3",
+    "@withone/connect": "^0.18.0",
+    "dev": "^0.1.5",
+    "hono": "^4.7.0",
+    "lucide-react": "^0.510.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sucrase": "^3.35.1",
+    "vite-plugin-singlefile": "^2.3.4",
+    "wrangler": "^4.154.0",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "playwright": "^1.49.1",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
+  }
+}

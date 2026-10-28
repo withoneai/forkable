@@ -1,0 +1,45 @@
+// The icons a UI the agent writes can import from "lucide-react". Deep
+// imports keep the canvas small; an unknown name renders a plain square.
+import type { ComponentType } from "react";
+import Mail from "lucide-react/dist/esm/icons/mail";
+import Calendar from "lucide-react/dist/esm/icons/calendar";
+import Search from "lucide-react/dist/esm/icons/search";
+import Check from "lucide-react/dist/esm/icons/check";
+import X from "lucide-react/dist/esm/icons/x";
+import Star from "lucide-react/dist/esm/icons/star";
+import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
+import ChevronRight from "lucide-react/dist/esm/icons/chevron-right";
+import ChevronDown from "lucide-react/dist/esm/icons/chevron-down";
+import Plus from "lucide-react/dist/esm/icons/plus";
+import Trash2 from "lucide-react/dist/esm/icons/trash-2";
+import RefreshCw from "lucide-react/dist/esm/icons/refresh-cw";
+import ExternalLink from "lucide-react/dist/esm/icons/external-link";
+import Users from "lucide-react/dist/esm/icons/users";
+import User from "lucide-react/dist/esm/icons/user";
+import Clock from "lucide-react/dist/esm/icons/clock";
+import Inbox from "lucide-react/dist/esm/icons/inbox";
+import Send from "lucide-react/dist/esm/icons/send";
+import Filter from "lucide-react/dist/esm/icons/filter";
+import BarChart3 from "lucide-react/dist/esm/icons/bar-chart-3";
+import TrendingUp from "lucide-react/dist/esm/icons/trending-up";
+import TrendingDown from "lucide-react/dist/esm/icons/trending-down";
+import DollarSign from "lucide-react/dist/esm/icons/dollar-sign";
+import CreditCard from "lucide-react/dist/esm/icons/credit-card";
+import FileText from "lucide-react/dist/esm/icons/file-text";
+import Folder from "lucide-react/dist/esm/icons/folder";
+import Tag from "lucide-react/dist/esm/icons/tag";
+import AlertCircle from "lucide-react/dist/esm/icons/alert-circle";
+import Info from "lucide-react/dist/esm/icons/info";
+import Loader2 from "lucide-react/dist/esm/icons/loader-2";
+import MoreHorizontal from "lucide-react/dist/esm/icons/more-horizontal";
+import Settings from "lucide-react/dist/esm/icons/settings";
+import Link from "lucide-react/dist/esm/icons/link";
+import Globe from "lucide-react/dist/esm/icons/globe";
+import Phone from "lucide-react/dist/esm/icons/phone";
+import MessageSquare from "lucide-react/dist/esm/icons/message-square";
+import Bell from "lucide-react/dist/esm/icons/bell";
+import Archive from "lucide-react/dist/esm/icons/archive";
+import Square from "lucide-react/dist/esm/icons/square";
+
+const named: Record<string, ComponentType<any>> = { Mail, Calendar, Search, Check, X, Star, ArrowRight, ChevronRight, ChevronDown, Plus, Trash2, RefreshCw, ExternalLink, Users, User, Clock, Inbox, Send, Filter, BarChart3, TrendingUp, TrendingDown, DollarSign, CreditCard, FileText, Folder, Tag, AlertCircle, Info, Loader2, MoreHorizontal, Settings, Link, Globe, Phone, MessageSquare, Bell, Archive, Square };
+export const icons = new Proxy(named, { get: (t, k) => (typeof k === "string" && t[k]) || Square });

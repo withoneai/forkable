@@ -1,0 +1,5 @@
+node_modules
+dist-view
+.wrangler
+.dev.vars
+docs/qa

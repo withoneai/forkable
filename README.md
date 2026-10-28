@@ -6,7 +6,7 @@ Fork a business. The team comes with it.
 npm create forkable@latest my-business --for "real estate agents" --in "Los Angeles"
 ```
 
-This repo has two things:
+This repo has three things:
 
 - **[`starter/`](./starter)** — the base every Forkable business starts
   from. [One Connect](https://withone.ai) prewired, a keyless Acme Inc
@@ -15,6 +15,10 @@ This repo has two things:
 - **[`create-forkable/`](./create-forkable)** — the `npm create forkable`
   CLI. Copies the starter, fills in who a fork is for and where, installs,
   and runs the keyless demo.
+- **[`mcp/`](./mcp)**: the MCP server behind
+  [blocks.forkable.dev](https://blocks.forkable.dev). Sign in with One is its
+  login, so the agent builds working interfaces inside Claude or ChatGPT on
+  each person's own accounts. Fork it to run your own MCP on a One Connect app.
 
 See each folder's own README for details.
 

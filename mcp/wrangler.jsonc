@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Your Worker's name. Rename it to anything.
+  "name": "forkable-mcp",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "rules": [{ "type": "Text", "globs": ["**/*.html", "**/*.svg"], "fallthrough": true }],
+  // Favicon and icons, served before the Worker.
+  "assets": { "directory": "./public" },
+  // Your own domain, once you have one (see README, "Deploy"):
+  // "routes": [{ "pattern": "mcp.example.com", "custom_domain": true }],
+  "vars": {
+    // "off" = no sign-in, every tool answers from the Acme Inc sample.
+    // "one" = Sign in with One. Needs the three secrets in the README.
+    "AUTH": "off",
+    // The public URL of this Worker, no trailing slash. Your Connect app's
+    // redirect URI is this plus /api/one/callback.
+    "PUBLIC_URL": "http://localhost:52290",
+    // The Ask id from your Connect app. Leave empty for an app in
+    // "Everything the user has connected" mode.
+    "ONE_PERMISSION_SET": ""
+  },
+  // `npx wrangler d1 create forkable-mcp` prints a database_id. Paste it here.
+  "d1_databases": [{ "binding": "DB", "database_name": "forkable-mcp", "database_id": "REPLACE_WITH_YOUR_D1_ID", "migrations_dir": "migrations" }],
+  // `npx wrangler kv namespace create OAUTH_KV` prints an id. Paste it here.
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "REPLACE_WITH_YOUR_KV_ID" }],
+  "observability": { "enabled": true }
+}
