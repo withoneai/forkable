@@ -10,7 +10,7 @@ export const SHORTCUTS: { group: string; items: { keys: string; label: string }[
     { keys: "E", label: "Done" }, { keys: "R", label: "Edit the draft" }, { keys: "H", label: "Snooze" }, { keys: "L", label: "Reply later" }, { keys: "V", label: "Add VIP" }, { keys: "Z", label: "Undo the last action" }, { keys: "W", label: "Compose" },
   ] },
   { group: "Jump", items: [
-    { keys: "G V", label: "VIP" }, { keys: "G G", label: "Goals" }, { keys: "G R", label: "Reply" }, { keys: "G O", label: "Other" }, { keys: "G S", label: "Screener" }, { keys: "G B", label: "Brief" }, { keys: "G C", label: "Calendar" }, { keys: "G A", label: "Access" },
+    { keys: "G I", label: "All inboxes" }, { keys: "G V", label: "VIP" }, { keys: "G G", label: "Goals" }, { keys: "G R", label: "Reply" }, { keys: "G O", label: "Other" }, { keys: "G S", label: "Screener" }, { keys: "G B", label: "Brief" }, { keys: "G C", label: "Calendar" }, { keys: "G A", label: "Access" },
   ] },
   { group: "Calendar", items: [
     { keys: "1–7", label: "Week of N days" }, { keys: "D", label: "Day view" }, { keys: "M", label: "Month" }, { keys: "A", label: "Agenda" }, { keys: "T", label: "Today" }, { keys: "C", label: "New event" }, { keys: "Drag", label: "Move or resize your event" },

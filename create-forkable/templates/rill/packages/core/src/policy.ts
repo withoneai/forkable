@@ -34,10 +34,10 @@ export interface CompiledPolicy extends Policy {
   me: string | null;
   laneRules: LaneRule[];
   screening: { quarantine: number | null; strip: number | null; screenedOutNeverJudged: boolean };
-  priority: { goalMultiplier: number; tier: Record<VipTier, number>; urgency: [number, number, number, number]; needsReply: number; kind: Partial<Record<Kind, number>> };
+  priority: { goalMultiplier: number; tier: Record<VipTier, number>; urgency: [number, number, number, number]; needsReply: number; meetingSoon: number; kind: Partial<Record<Kind, number>> };
   check: { threshold: number | null; keepLane: boolean };
   drafts: { whenNeedsReply: boolean; respectNeverDraft: boolean; neverSend: boolean };
-  followUp: { days: number; vipCanOverride: boolean };
+  followUp: { days: number; businessDays: boolean; vipCanOverride: boolean };
   /** Thresholds INBOX.md states; settings can still override them. */
   thresholds: Partial<Thresholds>;
 }
@@ -165,10 +165,10 @@ export function compileInbox(markdown: string): CompiledPolicy {
     me: null,
     laneRules: [],
     screening: { quarantine: null, strip: null, screenedOutNeverJudged: false },
-    priority: { goalMultiplier: 5, tier: { inner: 0, key: 0, team: 0 }, urgency: [0, 0, 0, 0], needsReply: 0, kind: {} },
+    priority: { goalMultiplier: 5, tier: { inner: 0, key: 0, team: 0 }, urgency: [0, 0, 0, 0], needsReply: 0, meetingSoon: 0, kind: {} },
     check: { threshold: null, keepLane: true },
     drafts: { whenNeedsReply: false, respectNeverDraft: true, neverSend: true },
-    followUp: { days: 3, vipCanOverride: true },
+    followUp: { days: 3, businessDays: false, vipCanOverride: true },
     thresholds: {},
   };
   const lines = markdown.split(/\r?\n/);
@@ -255,6 +255,12 @@ export function compileInbox(markdown: string): CompiledPolicy {
           policy.priority.urgency = [0, week ?? 0, today ?? 0, hour ?? 0];
           return;
         }
+        if (/meeting with them/.test(c)) {
+          const v = num(c.replace(/\b48 hours\b|\bnext \d+ hours\b/, ""));
+          if (v === null) return fail(n, text);
+          policy.priority.meetingSoon = v;
+          return;
+        }
         if (/^needs a reply/.test(c)) {
           const v = num(c);
           if (v === null) return fail(n, text);
@@ -277,6 +283,12 @@ export function compileInbox(markdown: string): CompiledPolicy {
         }
       }
       case "check": {
+        if (/within [\d.]+ of its (line|threshold)/.test(c)) {
+          const v = num(c);
+          if (v === null) return fail(n, text);
+          policy.thresholds.checkBand = v;
+          return;
+        }
         if (/^show it when/.test(c) || /below [\d.]+ confidence/.test(c)) {
           const v = num(c);
           if (v === null) return fail(n, text);
@@ -310,6 +322,7 @@ export function compileInbox(markdown: string): CompiledPolicy {
           const v = num(c);
           if (v === null) return fail(n, text);
           policy.followUp.days = v;
+          policy.followUp.businessDays = /business days?/.test(c);
           return;
         }
         if (/^a vip rule can (shorten|lengthen|change|override)/.test(c)) {
@@ -358,6 +371,46 @@ export function effectiveThresholds(policy: CompiledPolicy, input: Thresholds): 
 }
 
 const noulConfidence = (p: number) => Math.min(1, Math.abs(p - 0.5) * 2);
+const pct = (p: number) => `${Math.round(p * 100)}%`;
+
+/** Cold pitch probability that counts when code already knows the sender is a stranger. */
+const COLD_PITCH_UNKNOWN = 0.35;
+
+/**
+ * A stranger who opens a thread with something that reads like a pitch is a
+ * cold pitch, even when Jev's top choice is "person": code knows they never
+ * wrote to them or met them, so a weaker signal is enough. No reply owed, no draft.
+ */
+function isColdOutreach(input: DecideInput): boolean {
+  const a = input.answers;
+  return Boolean(
+    a && input.facts.firstTimeSender && !input.facts.isReply &&
+      (a.kind.choice === "cold_pitch" || (a.kind.probabilities.cold_pitch ?? 0) >= COLD_PITCH_UNKNOWN),
+  );
+}
+
+/**
+ * Judgments that sit close to the line they were measured against. A 0.62
+ * "needs a reply" against a 0.6 line files the same as a 0.98 one, so these
+ * get the Check badge with the reason in words. Only the lines that moved the
+ * thread count: needs-reply, the goal, and an injection signal just under
+ * quarantine.
+ */
+function borderline(input: DecideInput, t: Thresholds, lane: Lane, goal: { id: string; p: number } | null): string | null {
+  const a = input.answers;
+  if (!a || t.checkBand <= 0) return null;
+  const near = (p: number, line: number) => Math.abs(p - line) < t.checkBand;
+  const reasons: string[] = [];
+  const signals = [a.screen.agentAddressed, a.screen.override, a.screen.actionRequest, a.screen.hidden ?? 0, a.screen.inviteSpam ?? 0];
+  const top = Math.max(...signals);
+  if (top < t.quarantine && top >= t.quarantine - t.checkBand) reasons.push(`an injection signal at ${pct(top)}, just under the ${pct(t.quarantine)} quarantine line`);
+  if (lane !== "screener" && near(a.needsReply, t.needsReply)) reasons.push(`needs a reply at ${pct(a.needsReply)}, close to the ${pct(t.needsReply)} line`);
+  if (goal && (lane === "goals" || lane === "reply" || lane === "other") && near(goal.p, t.goal)) {
+    const title = input.goals.find((g) => g.id === goal.id)?.title ?? "a goal";
+    reasons.push(`"${title}" at ${pct(goal.p)}, close to the ${pct(t.goal)} line`);
+  }
+  return reasons.length ? `Borderline: ${reasons.join("; ")}` : null;
+}
 
 interface Eval { pass: boolean; confidence: number }
 
@@ -390,6 +443,7 @@ function evalCond(cond: Cond, input: DecideInput, t: Thresholds, descVip: { id: 
     }
     case "needsReply": {
       if (!answers) return { pass: false, confidence: 0 };
+      if (isColdOutreach(input)) return { pass: false, confidence: 1 };
       return { pass: answers.needsReply >= (cond.threshold ?? t.needsReply), confidence: noulConfidence(answers.needsReply) };
     }
     case "ballMe":
@@ -441,19 +495,20 @@ export function decide(policyIn: Policy, input: DecideInput): Decision {
   const vipTier = vip?.tier ?? facts.vipTier ?? null;
   const goal = bestGoal(input);
   const goalId = goal && goal.p >= t.goal ? goal.id : null;
-  const needsReply = answers ? answers.needsReply >= t.needsReply : false;
+  const coldOutreach = isColdOutreach(input);
+  const needsReply = answers && !coldOutreach ? answers.needsReply >= t.needsReply : false;
   const followUpDays = facts.meSentLast ? (policy.followUp.vipCanOverride && typeof vip?.rules.followUpDays === "number" ? vip.rules.followUpDays : policy.followUp.days) : null;
 
   // Screened-out senders go to Other and are never judged.
   if (input.senderStatus === "screened_out") {
-    return { lane: "other", rule: "sender screened out", priority: 0, confidence: 1, check: false, goalId: null, vipId, needsReply: false, draft: false, followUpDays };
+    return { lane: "other", rule: "sender screened out", priority: 0, confidence: 1, check: false, checkReason: null, goalId: null, vipId, needsReply: false, draft: false, followUpDays };
   }
 
   // Quarantine: an injection signal, or a spam-looking invite, over the line. Other, priority 0, Check on, no draft.
   if (answers) {
     const s = screenOf(answers, t);
     if (s.screen === "quarantine") {
-      return { lane: "other", rule: `quarantined: ${s.reason}`, priority: 0, confidence: 1, check: true, goalId: null, vipId, needsReply: false, draft: false, followUpDays };
+      return { lane: "other", rule: `quarantined: ${s.reason}`, priority: 0, confidence: 1, check: true, checkReason: `Quarantined: ${s.reason}`, goalId: null, vipId, needsReply: false, draft: false, followUpDays };
     }
   }
 
@@ -487,15 +542,23 @@ export function decide(policyIn: Policy, input: DecideInput): Decision {
     priority += policy.priority.urgency[Math.max(0, Math.min(3, answers.urgency.score))] ?? 0;
     if (needsReply) priority += policy.priority.needsReply;
     const kind = answers.kind.choice;
-    const coldPitch = kind === "cold_pitch" || (answers.kind.probabilities.cold_pitch ?? 0) >= t.coldPitch;
+    const coldPitch = coldOutreach || kind === "cold_pitch" || (answers.kind.probabilities.cold_pitch ?? 0) >= t.coldPitch;
     if (coldPitch && policy.priority.kind.cold_pitch !== undefined) priority += policy.priority.kind.cold_pitch;
     else if (policy.priority.kind[kind] !== undefined) priority += policy.priority.kind[kind]!;
   }
   if (vipTier) priority += policy.priority.tier[vipTier];
+  if (facts.meetingSoon) priority += policy.priority.meetingSoon;
   priority = Math.round(Math.max(0, Math.min(100, priority)));
   if (vip?.rules.alwaysTop) priority = 100;
 
-  const check = answers ? confidence < t.check : false;
+  if (coldOutreach && lane !== "screener") rule = `${rule} (cold pitch from someone you never wrote to or met)`;
+  if (facts.meetingSoon && policy.priority.meetingSoon) rule = `${rule} (you meet them within 48 hours)`;
+
+  const shaky = answers ? confidence < t.check : false;
+  const band = borderline(input, t, lane, goal);
+  const check = shaky || band !== null;
+  // The borderline reason names the number and its line, so it wins when both apply.
+  const checkReason = band ?? (shaky ? `Jev was unsure: ${pct(confidence)} confidence, under the ${pct(t.check)} line` : null);
   const draft = Boolean(
     answers &&
       policy.drafts.whenNeedsReply &&
@@ -503,7 +566,7 @@ export function decide(policyIn: Policy, input: DecideInput): Decision {
       !(policy.drafts.respectNeverDraft && vip?.rules.neverDraft),
   );
 
-  return { lane, rule, priority, confidence, check, goalId, vipId, needsReply, draft, followUpDays };
+  return { lane, rule, priority, confidence, check, checkReason, goalId, vipId, needsReply, draft, followUpDays };
 }
 
 export const policy: PolicyLayer = { compileInbox, loadPolicy, decide };

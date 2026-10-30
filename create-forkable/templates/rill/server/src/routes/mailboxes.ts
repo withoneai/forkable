@@ -27,7 +27,8 @@ export async function ensureSampleMailbox(deps: Deps, user: { id: string }): Pro
   if (!mailbox) throw new Error("could not create the sample mailbox");
   // The fixture calendar's events are all authored in America/Los_Angeles; pin the
   // sample's own timezone there so the demo reads correctly on any machine.
-  await db.insert(schema.settings).values({ mailboxId, me: inbox.me, onboarded: true, timezone: "America/Los_Angeles" }).onConflictDoNothing();
+  // The sample reads every Gmail tab so the demo shows its newsletters and receipts; turn tabs off in Settings to watch them go.
+  await db.insert(schema.settings).values({ mailboxId, me: inbox.me, onboarded: true, timezone: "America/Los_Angeles", mailCategories: ["primary", "promotions", "updates", "social", "forums"] }).onConflictDoNothing();
 
   // Fixture ids are kept when free so recordings line up; a second sample mailbox gets prefixed ids.
   const taken = new Set((await db.select({ id: schema.goals.id }).from(schema.goals)).map((r) => r.id));

@@ -34,6 +34,8 @@ export function App() {
         <Route element={<Shell />}>
           <Route path="/inbox/:lane?" element={<Inbox />} />
           <Route path="/thread/:threadId" element={<Inbox />} />
+          <Route path="/all/thread/:threadId" element={<Inbox all />} />
+          <Route path="/all/:lane?" element={<Inbox all />} />
           <Route path="/brief" element={<Brief />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/access" element={<Access />} />

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
-import { schema, type ApiSettings, type PaletteResponse, type SyncResponse, type Thresholds } from "@rill/core";
+import { normalizeCategories, schema, type ApiSettings, type PaletteResponse, type SyncResponse, type Thresholds } from "@rill/core";
 import type { AppEnv } from "../deps.js";
 import { badRequest } from "../errors.js";
 import { loadMailboxCtx, readJson } from "./lib.js";
@@ -72,6 +72,7 @@ async function settingsBody(c: Parameters<typeof loadMailboxCtx>[0], s: typeof s
     allowWrites: s.allowWrites, applyLabels: s.applyLabels, showImages: s.showImages, autoDraft: s.autoDraft, onboarded: s.onboarded, me: s.me,
     database: { kind: dbInfo.kind, url: dbInfo.url, sizeBytes: Number.isFinite(size) ? size : null, dataDir: dbInfo.dataDir },
     secondaryTimezone: s.secondaryTimezone, workingHours: s.workingHours, defaultCalendarId: s.defaultCalendarId, todayRail: s.todayRail, defaultConferencing: s.defaultConferencing ?? null,
+    mailCategories: normalizeCategories(s.mailCategories),
   };
 }
 
@@ -80,7 +81,7 @@ miscRoutes.get("/mailboxes/:id/settings", async (c) => {
   return c.json(await settingsBody(c, ctx.settings));
 });
 
-const THRESHOLD_KEYS: (keyof Thresholds)[] = ["quarantine", "strip", "needsReply", "goal", "check", "coldPitch"];
+const THRESHOLD_KEYS: (keyof Thresholds)[] = ["quarantine", "strip", "needsReply", "goal", "check", "coldPitch", "checkBand"];
 
 miscRoutes.put("/mailboxes/:id/settings", async (c) => {
   const { ctx, mailbox, db } = await loadMailboxCtx(c);
@@ -120,7 +121,20 @@ miscRoutes.put("/mailboxes/:id/settings", async (c) => {
     if (!Array.isArray(wh.days) || typeof wh.startMinute !== "number" || typeof wh.endMinute !== "number") throw badRequest("workingHours needs days[], startMinute and endMinute");
     patch.workingHours = { days: wh.days.filter((d) => Number.isInteger(d) && d >= 0 && d <= 6), startMinute: wh.startMinute, endMinute: wh.endMinute };
   }
+  let tabsAdded = false;
+  if (input.mailCategories !== undefined) {
+    if (!Array.isArray(input.mailCategories)) throw badRequest("mailCategories must be a list");
+    const next = normalizeCategories(input.mailCategories);
+    const before = normalizeCategories(ctx.settings.mailCategories);
+    tabsAdded = next.some((k) => !before.includes(k));
+    patch.mailCategories = next;
+  }
   const [row] = await db.update(schema.settings).set(patch).where(eq(schema.settings.mailboxId, mailbox.id)).returning();
-  void ctx;
+  if (input.mailCategories !== undefined) {
+    const deps = c.get("deps");
+    deps.hub.emit(mailbox.id, { type: "health" });
+    // A tab turned on: re-read the last week so its mail comes in and gets judged.
+    if (tabsAdded) void deps.scheduler.kick(mailbox.id, { full: true }).catch(() => {});
+  }
   return c.json(await settingsBody(c, row!));
 });

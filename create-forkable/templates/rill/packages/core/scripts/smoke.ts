@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   compileInbox, decide, fixtures, jev, screenOf, validateDraft, hiddenText,
+  addDays, categoryAllowed, categoryOf, categoryQuery, excludedLabels, normalizeCategories,
   DEFAULT_THRESHOLDS, type Facts, type JevAnswers, type JevInput, type GoalRow, type VipRow,
 } from "../src/index.js";
 
@@ -52,6 +53,7 @@ const facts: Facts = {
   isReply: t01.messages.length > 1,
   calendarInvite: false,
   messageCount: t01.messageCount,
+  meetingSoon: false,
 };
 const input: JevInput = { me: inbox.me, goals, vips, mail, thread: t01, facts };
 const req = jev.buildRequest(input, "jev-latest") as { model: string; state: Record<string, unknown>; questions: Record<string, unknown> };
@@ -130,6 +132,51 @@ const v2 = validateDraft(bad, inbound);
 console.log(`\nvalidator good: ${JSON.stringify(v1)}\nvalidator bad:  ${JSON.stringify(v2)}`);
 check("good draft passes", v1.ok);
 check("bad draft fails for dash, new URL, claimed action, bullets, mirroring", !v2.ok && v2.reasons.length >= 4, v2.reasons.join("; "));
+
+// 7. Inbox tabs, the Check band, facts the model is not asked, follow-up timers.
+check("default tabs are Primary only", JSON.stringify(normalizeCategories(undefined)) === '["primary"]');
+check("Gmail query skips every tab that is off", categoryQuery("gmail", ["primary"]) === "in:inbox -category:promotions -category:updates -category:social -category:forums", categoryQuery("gmail", ["primary"]));
+check("Gmail query with Updates on keeps Updates", !categoryQuery("gmail", ["primary", "updates"]).includes("-category:updates"));
+check("Outlook query keeps Focused only", categoryQuery("outlook-mail", ["primary"]) === "in:inbox -category:other");
+check("a promotions label reads as promotions", categoryOf(["INBOX", "CATEGORY_PROMOTIONS"]) === "promotions" && categoryOf(["INBOX"]) === "primary");
+check("a promotion is skipped under Primary only", !categoryAllowed(["CATEGORY_PROMOTIONS"], ["primary"]) && categoryAllowed(["CATEGORY_PERSONAL"], ["primary"]));
+check("excluded labels cover the tabs that are off", excludedLabels(["primary", "updates"]).join(",") === "CATEGORY_PROMOTIONS,CATEGORY_SOCIAL,CATEGORY_FORUMS,CATEGORY_OTHER");
+{
+  const { graphQuery } = await import("../src/providers/outlook/mailMappers.js");
+  const g = graphQuery("in:inbox -category:other newer_than:2d", new Date("2026-10-27T12:00:00Z"));
+  check("Graph filter reads Focused and the date", g.filter === "isDraft eq false and receivedDateTime ge 2026-10-25T12:00:00.000Z and inferenceClassification eq 'focused'" && !g.search, JSON.stringify(g));
+}
+check("INBOX.md sets the check band", policy.thresholds.checkBand === 0.15 && policy.priority.meetingSoon === 15);
+
+const goalNone = { choice: "none", confidence: 0.9, probabilities: { none: 0.9 } };
+const nearReply = decide(policy, { facts: plain, answers: { ...answers, goal: goalNone, needsReply: 0.66 }, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("needs reply 0.66 against 0.6 lands in Reply with Check and a reason", nearReply.lane === "reply" && nearReply.check && /needs a reply at 66%/.test(nearReply.checkReason ?? ""), JSON.stringify(nearReply));
+const farReply = decide(policy, { facts: plain, answers: { ...answers, goal: goalNone, needsReply: 0.95 }, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("needs reply 0.95 has no Check", !farReply.check && farReply.checkReason === null);
+const nearGoal = decide(policy, { facts: plain, answers: { ...answers, goal: { choice: "g1", confidence: 0.8, probabilities: { g1: 0.56, none: 0.44 } } }, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("goal at 0.56 against 0.5 gets Check naming the goal", nearGoal.lane === "goals" && nearGoal.check && /at 56%/.test(nearGoal.checkReason ?? ""), nearGoal.checkReason ?? "");
+const nearInj = decide(policy, { facts: plain, answers: { ...answers, screen: { ...answers.screen, override: 0.62 } }, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("an injection signal just under quarantine gets Check", nearInj.check && /quarantine line/.test(nearInj.checkReason ?? ""));
+
+const pitchy: JevAnswers = { ...answers, goal: goalNone, kind: { choice: "person", confidence: 0.6, probabilities: { person: 0.55, cold_pitch: 0.4 } }, needsReply: 0.8 };
+const stranger = decide(policy, { facts: { ...plain, firstTimeSender: true, isReply: false }, answers: pitchy, goals, vips, senderStatus: "unknown", thresholds: t, judgedBy: "jev" });
+const known = decide(policy, { facts: { ...plain, firstTimeSender: false, isReply: false }, answers: pitchy, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("a stranger's pitchy email goes to the screener with no reply owed and no draft", stranger.lane === "screener" && !stranger.needsReply && !stranger.draft, JSON.stringify(stranger));
+check("the same email from someone you know still needs a reply", known.needsReply && known.draft);
+check("a stranger's pitch ranks under the known sender's", stranger.priority < known.priority, `${stranger.priority} vs ${known.priority}`);
+
+const soon = decide(policy, { facts: { ...plain, meetingSoon: true }, answers, goals, vips, senderStatus: "let_in", thresholds: t, judgedBy: "jev" });
+check("a meeting within 48 hours adds 15", soon.priority === d2.priority + 15 && /48 hours/.test(soon.rule), `${soon.priority}`);
+
+check("3 days after Friday noon is Monday noon", addDays(new Date("2026-10-23T12:00:00Z"), 3, false).toISOString() === "2026-10-26T12:00:00.000Z");
+check("3 business days after Friday is Wednesday", addDays(new Date("2026-10-23T12:00:00Z"), 3, true).toISOString() === "2026-10-28T12:00:00.000Z");
+{
+  const fb = compileInbox(md.replace("nudge after 3 days", "nudge after 5 business days"));
+  check("INBOX.md reads business days", fb.followUp.days === 5 && fb.followUp.businessDays);
+}
+
+const v3 = validateDraft("Hi [Name],\n\nI hope this email finds you well. Thursday works.\n\nDana", inbound);
+check("placeholders and stock AI openers fail the draft", !v3.ok && v3.reasons.some((r) => r.includes("placeholder")) && v3.reasons.some((r) => r.includes("stock")), v3.reasons.join("; "));
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
 process.exit(failures ? 1 : 0);

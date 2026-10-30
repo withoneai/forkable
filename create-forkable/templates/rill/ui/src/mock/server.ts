@@ -72,6 +72,7 @@ function row(t: D.MockThread): InboxRow {
     priority: t.priority,
     confidence: t.confidence,
     check: t.check,
+    checkReason: null,
     goal: t.goal,
     vip: s.vip,
     kind: t.kind,
@@ -84,6 +85,7 @@ function row(t: D.MockThread): InboxRow {
     replyLater: s.replyLater,
     unread: s.unread,
     invite: null,
+    followUpDue: false,
   };
 }
 
@@ -299,7 +301,8 @@ async function handle(method: string, url: URL, body: unknown): Promise<Response
       const includeDone = url.searchParams.get("includeDone") === "1";
       const rows = visible(includeDone).map(row).filter((r) => r.lane === lane)
         .sort((a, b) => b.priority - a.priority || b.lastMessageAt.localeCompare(a.lastMessageAt));
-      const res: InboxResponse = { rows, counts: counts(), syncing: judgedCount() < D.judgeOrder.length, judging: D.judgeOrder.length - judgedCount() };
+      const res: InboxResponse = { rows, counts: counts(), syncing: judgedCount() < D.judgeOrder.length, judging: D.judgeOrder.length - judgedCount(),
+        health: { lastSyncAt: null, stale: false, jevDownSince: null, jevFallback: false, held: 0, reconcile: null, categories: ["primary", "promotions", "updates", "social", "forums"], hiddenByTabs: 0 } };
       return json(res);
     }
     case "threads": {

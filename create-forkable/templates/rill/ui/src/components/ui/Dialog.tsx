@@ -17,7 +17,7 @@ export function Dialog({ open, onClose, title, children, className, size = "md" 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         // An open combobox (the attendee suggestions) closes itself first.
-        if ((e.target as HTMLElement | null)?.getAttribute?.("aria-expanded") === "true") return;
+        if ((e.target as HTMLElement | null)?.getAttribute?.("aria-expanded") === "true" || (e.target as HTMLElement | null)?.closest?.("[data-select-menu]")) return;
         e.stopPropagation(); closeRef.current(); return;
       }
       if (e.key !== "Tab" || !ref.current) return;

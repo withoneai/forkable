@@ -198,6 +198,7 @@ function threadRecord(t: FixtureThread, me: string, now: Date): ThreadRecord {
       if (isFromMe && !labelIds.includes("SENT")) labelIds.push("SENT");
       if (!isFromMe && !labelIds.includes("INBOX")) labelIds.push("INBOX");
       if (m.listUnsubscribe && !labelIds.includes(LIST_UNSUBSCRIBE_LABEL)) labelIds.push(LIST_UNSUBSCRIBE_LABEL);
+      if (!isFromMe && t.category) labelIds.push(`CATEGORY_${t.category.toUpperCase()}`);
       const body = stripQuoted(m.body);
       const mail: Mail = {
         id: m.id,

@@ -235,12 +235,13 @@ export function Reader({ mailboxId, threadId, onBack, onAct, snoozeOpen, setSnoo
                 <span className="shrink-0 whitespace-nowrap font-medium">Why it's here</span>
                 <span className="min-w-0 truncate text-muted-foreground">{data.rule}</span>
                 <span className="ml-auto flex shrink-0 items-center gap-1.5 text-muted-foreground">
-                  {state.check && <span className="font-medium text-warning-text">Review suggested</span>}
+                  {state.check && <span className="font-medium text-warning-text" title={state.checkReason ?? undefined}>Review suggested</span>}
                   {data.judgedBy && <span className="hidden sm:inline">{state.check ? "· " : ""}{data.judgedBy}</span>}
                 </span>
               </button>
               {whyOpen && (
                 <div className="fade-in flex flex-col border-t border-border px-3 py-2">
+                  {state.check && state.checkReason && <p className="pb-1 text-11 font-medium text-warning-text">{state.checkReason}.</p>}
                   {data.why.length > 0 && <p className="pb-1 text-11 text-muted-foreground">Jev's answers, with how strongly it leaned each way. Overall: <span className="tnum">{pct(state.confidence)}</span>.</p>}
                   {data.why.map((j) => <JudgmentLine key={j.question} j={j} />)}
                   {data.why.length === 0 && <p className="py-1 text-xs text-muted-foreground">Not judged yet.</p>}

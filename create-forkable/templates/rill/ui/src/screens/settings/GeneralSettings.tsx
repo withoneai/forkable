@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
+import { CATEGORIES_BY_PROVIDER, type MailCategory } from "@rill/core/categories";
+import { useInbox } from "@/lib/queries";
 import { api } from "@/lib/api";
 import { useMailbox, useMailboxId } from "@/lib/mailbox";
 import { useSettings, useSettingsMutation } from "@/lib/queries";
@@ -74,6 +76,13 @@ export function GeneralSettings() {
         </SettingRow>
       </div>
 
+      <InboxTabs
+        provider={mailbox?.mailProvider ?? "gmail"}
+        value={s.mailCategories}
+        onChange={(v) => save.mutate({ mailCategories: v })}
+      />
+      <MailHealthCard mailboxId={mailboxId} />
+
       <div className="rounded-lg border border-border bg-card px-4">
         <SettingRow label="Apply labels" hint="Mirror lanes as Rill labels in Gmail, or categories in Outlook.">
           <Switch label="Apply labels" checked={s.applyLabels} onChange={(v) => save.mutate({ applyLabels: v })} />
@@ -89,6 +98,70 @@ export function GeneralSettings() {
       <div className="flex items-center justify-between">
         <span className="text-xs text-muted-foreground">Signing out clears this browser's session. Your data stays.</span>
         <Button size="sm" variant="ghost" icon={<LogOut />} onClick={() => void signOut()}>Sign out</Button>
+      </div>
+    </div>
+  );
+}
+
+/** Which inbox tabs Rill reads. Primary (Focused) always stays on. */
+function InboxTabs({ provider, value, onChange }: { provider: keyof typeof CATEGORIES_BY_PROVIDER; value: MailCategory[]; onChange: (v: MailCategory[]) => void }) {
+  const tabs = CATEGORIES_BY_PROVIDER[provider];
+  const toggle = (k: MailCategory, on: boolean) => onChange(on ? [...value, k] : value.filter((c) => c !== k));
+  return (
+    <div className="flex flex-col gap-1.5">
+      <SectionTitle
+        title="Inbox tabs"
+        hint={provider === "gmail"
+          ? "Rill reads only the tabs that are on. Mail in the others is never fetched or judged. Turning a tab on reads its last 7 days."
+          : "Rill reads only what is on. Turning Other on reads its last 7 days."}
+      />
+      <div className="rounded-lg border border-border bg-card px-4">
+        {tabs.map((t) => (
+          <SettingRow key={t.key} label={t.label} hint={t.key === "primary" ? "Always on." : undefined}>
+            <Switch label={t.label} checked={t.key === "primary" || value.includes(t.key)} disabled={t.key === "primary"} onChange={(v) => toggle(t.key, v)} />
+          </SettingRow>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const ago = (iso: string | null) => {
+  if (!iso) return "never";
+  const m = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 48 * 60 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`;
+};
+
+/** Proof nothing slipped through: last sync, Jev's state, the last reconcile. */
+function MailHealthCard({ mailboxId }: { mailboxId: string }) {
+  const q = useInbox(mailboxId, "vip");
+  const h = q.data?.health;
+  if (!h) return null;
+  const r = h.reconcile;
+  return (
+    <div className="flex flex-col gap-1.5">
+      <SectionTitle title="Mail health" hint="Rill checks its own work after every sync." />
+      <div className="rounded-lg border border-border bg-card px-4">
+        <SettingRow label="Last sync">
+          <span className={cn("tnum text-13", h.stale ? "font-medium text-warning-text" : "text-muted-foreground")}>{ago(h.lastSyncAt)}{h.stale ? ", over two hours" : ""}</span>
+        </SettingRow>
+        <SettingRow label="Jev" hint={h.jevDownSince ? (h.jevFallback ? "Down over an hour. Your writer judges new mail, with no drafts and Check on every row." : "Not answering. New mail waits unjudged for up to an hour instead of being guessed.") : undefined}>
+          <span className={cn("text-13", h.jevDownSince ? "font-medium text-warning-text" : "text-muted-foreground")}>
+            {h.jevDownSince ? `Down since ${ago(h.jevDownSince)}${h.held ? `, ${h.held} held` : ""}` : "Answering"}
+          </span>
+        </SettingRow>
+        <SettingRow label="Reconcile" hint="Every listed thread has a lane, and nothing waits over 30 minutes for a judgment.">
+          <span className={cn("tnum text-13", r && (r.missing || r.stuck) ? "font-medium text-warning-text" : "text-muted-foreground")}>
+            {!r ? "Not run yet" : r.missing || r.stuck || r.requeued
+              ? [r.missing && `${r.missing} missing`, r.stuck && `${r.stuck} stuck`, r.requeued && `${r.requeued} requeued`].filter(Boolean).join(", ")
+              : `${r.listed} of ${r.listed} accounted for, ${ago(r.at)}`}
+          </span>
+        </SettingRow>
+        {h.hiddenByTabs > 0 && (
+          <SettingRow label="Hidden by tabs">
+            <span className="tnum text-13 text-muted-foreground">{h.hiddenByTabs} {h.hiddenByTabs === 1 ? "thread" : "threads"} from tabs that are off</span>
+          </SettingRow>
+        )}
       </div>
     </div>
   );

@@ -87,12 +87,68 @@ export async function whoami(oneConnect: OneConnectClient, userId: string): Prom
 
 const looksLikeEmail = (v: string | null | undefined): v is string => !!v && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
+interface GrantConnection { key: string; platform: string; name?: string; title?: string }
+
+const MAIL_PLATFORMS: MailProviderKey[] = ["gmail", "outlook-mail"];
+const CALENDAR_PLATFORMS: CalendarProviderKey[] = ["google-calendar", "outlook-calendar"];
+const CALENDAR_FOR: Record<MailProviderKey, CalendarProviderKey[]> = {
+  gmail: ["google-calendar", "outlook-calendar"],
+  "outlook-mail": ["outlook-calendar", "google-calendar"],
+};
+
+/** A connection's own title or name, when it reads like the account's address. */
+export function connectionEmail(c: { name?: string; title?: string }): string | null {
+  for (const v of [c.title, c.name]) if (looksLikeEmail(v)) return v.trim().toLowerCase();
+  return null;
+}
+
 /**
- * After a connected callback: whoami, account merge, the live mailbox, a first sync.
+ * Which calendar connection goes with which mailbox, when the grant holds
+ * several accounts. In order: a calendar a mailbox already has and the grant
+ * still reaches; a calendar whose connection reads as the mailbox's address
+ * (dana@gmail.com's Gmail gets dana@gmail.com's Google Calendar); then, for a
+ * mailbox still without one, the next unclaimed calendar of its own vendor.
+ * Mailboxes come first-connected first, so with one account of each kind
+ * this is what the single-account code always did.
+ */
+export function pairCalendars(
+  mailboxes: { id: string; mailProvider: MailProviderKey; address: string | null; calendarConnectionKey: string | null }[],
+  calendars: GrantConnection[],
+): Map<string, GrantConnection> {
+  const out = new Map<string, GrantConnection>();
+  const taken = new Set<string>();
+  const claim = (mailboxId: string, c: GrantConnection) => { out.set(mailboxId, c); taken.add(c.key); };
+  for (const m of mailboxes) {
+    const kept = calendars.find((c) => c.key === m.calendarConnectionKey);
+    if (kept) claim(m.id, kept);
+  }
+  for (const m of mailboxes) {
+    if (out.has(m.id) || !m.address) continue;
+    const same = calendars.find((c) => !taken.has(c.key) && connectionEmail(c) === m.address);
+    if (same) claim(m.id, same);
+  }
+  for (const m of mailboxes) {
+    if (out.has(m.id)) continue;
+    for (const p of CALENDAR_FOR[m.mailProvider]) {
+      // Never hand a mailbox a calendar that plainly belongs to another address.
+      const next = calendars.find((c) => !taken.has(c.key) && c.platform === p && (!connectionEmail(c) || !m.address || connectionEmail(c) === m.address));
+      if (next) { claim(m.id, next); break; }
+    }
+  }
+  return out;
+}
+
+/**
+ * After a connected callback: whoami, account merge, one live mailbox per
+ * mail connection, a first sync.
  * Two emails, kept apart: whoami's is the One account (who signed in, and the
- * merge key), Gmail's profile is the mailbox (what "from me" means). They
- * differ whenever someone signs in to One with a work address and grants a
- * personal Gmail, so the mailbox never takes the account email when Gmail answers.
+ * merge key), each mail provider's profile is that mailbox's address (what
+ * "from me" means). They differ whenever someone signs in to One with a work
+ * address and grants a personal Gmail, so a mailbox never takes the account
+ * email when its provider answers.
+ * A grant can hold several connections of one platform (two Gmail accounts,
+ * a Gmail and an Outlook). Each becomes its own mailbox, keyed by its
+ * connection key, and each pairs with its own account's calendar.
  */
 export async function onConnected(deps: Deps, userId: string): Promise<void> {
   const { db, oneConnect, scheduler } = deps;
@@ -108,20 +164,13 @@ export async function onConnected(deps: Deps, userId: string): Promise<void> {
     }),
     oneConnect.listConnections(userId).catch((err: unknown) => {
       log(`listConnections failed: ${err instanceof Error ? err.message : String(err)}`);
-      return [];
+      return [] as GrantConnection[];
     }),
   ]);
-  // Gmail first, else Outlook. The calendar follows the mail's vendor when the grant has both kinds.
-  const mailConn = connections.find((c) => c.platform === "gmail") ?? connections.find((c) => c.platform === "outlook-mail");
-  if (!mailConn) log("the grant reaches no Gmail or Outlook connection");
-  const mailProvider: MailProviderKey = mailConn?.platform === "outlook-mail" ? "outlook-mail" : "gmail";
-  const mailLabel = MAIL_PROVIDERS[mailProvider].label;
-  const gmailKey = mailConn?.key ?? null;
-  const gmailName = mailConn ? (mailConn.title ?? mailConn.name ?? null) : null;
-  const calendarOrder: CalendarProviderKey[] = mailProvider === "outlook-mail" ? ["outlook-calendar", "google-calendar"] : ["google-calendar", "outlook-calendar"];
-  const calendarConn = calendarOrder.map((p) => connections.find((c) => c.platform === p)).find(Boolean);
-  const calendarKey = calendarConn?.key ?? null;
-  const calendarProvider = calendarConn?.platform as CalendarProviderKey | undefined;
+  // Gmail accounts first, then Outlook, each in the order One lists them. The first is the one the app opens on.
+  const mailConns = MAIL_PLATFORMS.flatMap((p) => connections.filter((c) => c.platform === p));
+  const calendarConns = connections.filter((c) => (CALENDAR_PLATFORMS as string[]).includes(c.platform));
+  if (mailConns.length === 0) log("the grant reaches no Gmail or Outlook connection");
   const email = who?.email ?? null;
   const name = who?.name ?? null;
   const oneUserId = who?.id ?? null;
@@ -161,47 +210,102 @@ export async function onConnected(deps: Deps, userId: string): Promise<void> {
   const patch = { ...(name ? { name } : {}), ...(email ? { email } : {}), ...(oneUserId ? { oneUserId } : {}), ...(avatarUrl ? { avatarUrl } : {}) };
   if (Object.keys(patch).length > 0) await db.update(schema.users).set(patch).where(eq(schema.users.id, targetId));
 
-  // 3. The live mailbox over the first mail connection the grant reaches.
-  if (!gmailKey) return;
-
-  const [current] = await db
+  // 3. One live mailbox per mail connection. An existing mailbox is matched by
+  // its connection key, then by address (a connection made again after a
+  // removal gets a new key); a mailbox whose connection left the grant pauses
+  // with its mail kept, and comes back when the account is granted again.
+  const live = await db
     .select()
     .from(schema.mailboxes)
     .where(and(eq(schema.mailboxes.userId, targetId), eq(schema.mailboxes.mode, "connect")))
-    .limit(1);
-  // Until the provider answers, the connection's own title is the best guess at the address.
-  const guess = looksLikeEmail(gmailName) ? gmailName.trim().toLowerCase() : null;
-  let mailboxId: string;
-  const calendarPatch = calendarKey && calendarProvider ? { calendarProvider, calendarConnectionKey: calendarKey } : {};
-  if (current) {
-    mailboxId = current.id;
-    await db.update(schema.mailboxes).set({ connectionKey: gmailKey, mailProvider, status: "active", ...(current.address ? {} : { address: guess }), ...calendarPatch }).where(eq(schema.mailboxes.id, current.id));
-  } else {
-    mailboxId = newId("mbx");
-    await db.insert(schema.mailboxes).values({ id: mailboxId, userId: targetId, source: "live", mode: "connect", connectionKey: gmailKey, mailProvider, address: guess, label: guess ?? gmailName ?? `Your ${mailLabel}`, ...calendarPatch });
-    await db.insert(schema.settings).values({ mailboxId, me: name ?? null }).onConflictDoNothing();
+    .orderBy(schema.mailboxes.createdAt);
+  // A new account starts from the settings of the user's first live mailbox (time zone, name, writing), so it skips the wizard; goals and VIPs stay per account.
+  const [template] = live.length > 0
+    ? await db.select().from(schema.settings).where(eq(schema.settings.mailboxId, live[0]!.id)).limit(1)
+    : [];
+  const claimed = new Set<string>();
+  const ordered: string[] = [];
+  for (const conn of mailConns) {
+    const mailProvider = conn.platform as MailProviderKey;
+    const mailLabel = MAIL_PROVIDERS[mailProvider].label;
+    const connName = conn.title ?? conn.name ?? null;
+    const guess = connectionEmail(conn);
+    const match =
+      live.find((m) => !claimed.has(m.id) && m.connectionKey === conn.key) ??
+      (guess ? live.find((m) => !claimed.has(m.id) && m.mailProvider === mailProvider && m.address === guess && !mailConns.some((c) => c.key === m.connectionKey)) : undefined) ??
+      // The single-account era: one connect mailbox, its connection replaced. Keep its mail rather than start over.
+      (live.length === 1 && mailConns.length === 1 && live[0]!.mailProvider === mailProvider && !claimed.has(live[0]!.id) ? live[0] : undefined);
+    if (match) {
+      claimed.add(match.id);
+      ordered.push(match.id);
+      await db.update(schema.mailboxes).set({ connectionKey: conn.key, mailProvider, status: "active", ...(match.address ? {} : { address: guess }) }).where(eq(schema.mailboxes.id, match.id));
+      continue;
+    }
+    const mailboxId = newId("mbx");
+    claimed.add(mailboxId);
+    ordered.push(mailboxId);
+    await db.insert(schema.mailboxes).values({ id: mailboxId, userId: targetId, source: "live", mode: "connect", connectionKey: conn.key, mailProvider, address: guess, label: guess ?? connName ?? `Your ${mailLabel}` });
+    if (template) {
+      const { mailboxId: _from, updatedAt: _updated, ...rest } = template;
+      await db.insert(schema.settings).values({ ...rest, mailboxId }).onConflictDoNothing();
+    } else {
+      await db.insert(schema.settings).values({ mailboxId, me: name ?? null }).onConflictDoNothing();
+    }
+    log(`new ${mailLabel} mailbox ${mailboxId}`);
   }
-
-  // 4. The mailbox's own address, from the mail provider, before the first sync reads "from me" off it.
-  let [mailboxRow] = await db.select().from(schema.mailboxes).where(eq(schema.mailboxes.id, mailboxId)).limit(1);
+  for (const m of live) {
+    if (claimed.has(m.id) || m.status === "paused") continue;
+    await db.update(schema.mailboxes).set({ status: "paused" }).where(eq(schema.mailboxes.id, m.id));
+    log(`mailbox ${m.id} paused: its connection is no longer in the grant`);
+  }
+  if (ordered.length === 0) return;
   const [userRow] = await db.select().from(schema.users).where(eq(schema.users.id, targetId)).limit(1);
-  if (!mailboxRow || !userRow) return;
-  const ctx = await buildCtx(deps, mailboxRow, userRow);
-  const address = await getMailProvider(mailboxRow.mailProvider).address?.(ctx).catch((err: unknown) => {
-    log(`${mailLabel} profile failed: ${err instanceof Error ? err.message : String(err)}`);
-    return null;
-  });
-  if (address && address !== mailboxRow.address) {
-    // The label follows the address unless the user renamed the mailbox.
-    const renamed = mailboxRow.label !== (mailboxRow.address ?? guess ?? gmailName ?? `Your ${mailLabel}`);
-    await db.update(schema.mailboxes).set({ address, ...(renamed ? {} : { label: address }) }).where(eq(schema.mailboxes.id, mailboxId));
-    [mailboxRow] = await db.select().from(schema.mailboxes).where(eq(schema.mailboxes.id, mailboxId)).limit(1);
-    ctx.mailbox = mailboxRow!;
+  if (!userRow) return;
+
+  // 4. Each mailbox's own address, from its mail provider, before the first sync reads "from me" off it.
+  const rows = await Promise.all(ordered.map(async (mailboxId) => {
+    let [row] = await db.select().from(schema.mailboxes).where(eq(schema.mailboxes.id, mailboxId)).limit(1);
+    if (!row) return null;
+    const mailLabel = MAIL_PROVIDERS[row.mailProvider].label;
+    const ctx = await buildCtx(deps, row, userRow);
+    const address = await getMailProvider(row.mailProvider).address?.(ctx).catch((err: unknown) => {
+      log(`${mailLabel} profile failed for ${mailboxId}: ${err instanceof Error ? err.message : String(err)}`);
+      return null;
+    });
+    if (address && address !== row.address) {
+      // The label follows the address unless the user renamed the mailbox.
+      const conn = mailConns.find((c) => c.key === row!.connectionKey);
+      const guess = conn ? connectionEmail(conn) : null;
+      const connName = conn ? (conn.title ?? conn.name ?? null) : null;
+      const renamed = row.label !== (row.address ?? guess ?? connName ?? `Your ${mailLabel}`);
+      await db.update(schema.mailboxes).set({ address, ...(renamed ? {} : { label: address }) }).where(eq(schema.mailboxes.id, mailboxId));
+      [row] = await db.select().from(schema.mailboxes).where(eq(schema.mailboxes.id, mailboxId)).limit(1);
+    }
+    return row ?? null;
+  }));
+  const mailboxes = rows.filter((r): r is NonNullable<typeof r> => !!r);
+
+  // 5. Each mailbox's calendar: its own account's, never another account's.
+  const pairs = pairCalendars(mailboxes, calendarConns);
+  for (const m of mailboxes) {
+    const cal = pairs.get(m.id);
+    const next = cal ? { calendarProvider: cal.platform as CalendarProviderKey, calendarConnectionKey: cal.key } : { calendarProvider: null, calendarConnectionKey: null };
+    if (next.calendarConnectionKey === m.calendarConnectionKey && next.calendarProvider === m.calendarProvider) continue;
+    // A calendar the grant no longer reaches is dropped; one that was never set stays unset.
+    if (!cal && !m.calendarConnectionKey) continue;
+    await db.update(schema.mailboxes).set(next).where(eq(schema.mailboxes.id, m.id));
+    m.calendarProvider = next.calendarProvider;
+    m.calendarConnectionKey = next.calendarConnectionKey;
   }
 
-  // 5. First sync and judge, off the request path.
-  void scheduler.kick(mailboxId, { full: true });
-  if (calendarKey) void calendar.syncCalendar(ctx).catch((err) => log(`calendar sync failed: ${err instanceof Error ? err.message : String(err)}`));
+  // 6. First sync and judge for each, off the request path.
+  for (const m of mailboxes) {
+    void scheduler.kick(m.id, { full: true });
+    if (m.calendarConnectionKey) {
+      const ctx = await buildCtx(deps, m, userRow);
+      void calendar.syncCalendar(ctx).catch((err) => log(`calendar sync failed for ${m.id}: ${err instanceof Error ? err.message : String(err)}`));
+    }
+  }
 }
 
 /**

@@ -1,7 +1,8 @@
 import type { Context } from "hono";
 import { and, desc, eq, gt, inArray, isNull, ne, or, sql } from "drizzle-orm";
 import {
-  LANES, schema,
+  LANES, JEV_HOLD_MS, excludedLabels, normalizeCategories, schema,
+  type MailHealth,
   type ApiDraft, type ApiMailbox, type Ctx, type Db, type InboxRow, type Lane, type Mail, type MailboxRow, type SettingsRow, type ThreadRecord, type UserRow, type VipTier,
 } from "@rill/core";
 import { buildCtx, loadSettings } from "../ctx.js";
@@ -16,7 +17,19 @@ type DraftRow = typeof schema.drafts.$inferSelect;
 
 export const emptyCounts = (): Record<Lane, number> => ({ vip: 0, goals: 0, reply: 0, other: 0, screener: 0 });
 
-export async function laneCounts(db: Db, mailboxId: string): Promise<Record<Lane, number>> {
+/**
+ * A thread shows when it has an inbound message in a tab the user reads, or
+ * no inbound message at all (only your own). `off` is the labels of the tabs
+ * that are off (excludedLabels); empty means every thread shows.
+ */
+export function inReadTabsSql(off: string[]) {
+  if (off.length === 0) return undefined;
+  const arr = sql`array[${sql.join(off.map((l) => sql`${l}`), sql`, `)}]::text[]`;
+  return sql`(exists (select 1 from ${schema.messages} m where m.thread_id = ${schema.threadState.threadId} and m.is_from_me = false and not (m.label_ids ?| ${arr}))
+    or not exists (select 1 from ${schema.messages} m where m.thread_id = ${schema.threadState.threadId} and m.is_from_me = false))`;
+}
+
+export async function laneCounts(db: Db, mailboxId: string, off: string[] = []): Promise<Record<Lane, number>> {
   const rows = await db
     .select({ lane: schema.threadState.lane, n: sql<number>`count(*)::int` })
     .from(schema.threadState)
@@ -24,11 +37,40 @@ export async function laneCounts(db: Db, mailboxId: string): Promise<Record<Lane
       eq(schema.threadState.mailboxId, mailboxId),
       eq(schema.threadState.done, false),
       or(isNull(schema.threadState.snoozedUntil), sql`${schema.threadState.snoozedUntil} <= now()`),
+      inReadTabsSql(off),
     ))
     .groupBy(schema.threadState.lane);
   const counts = emptyCounts();
   for (const r of rows) if ((LANES as readonly string[]).includes(r.lane)) counts[r.lane] = Number(r.n);
   return counts;
+}
+
+const STALE_MS = 2 * 3600_000;
+
+/** Sync freshness, Jev's state and the last reconcile, for the inbox banner and Settings. */
+export async function mailHealth(db: Db, mailbox: MailboxRow, settings: SettingsRow, judging: number): Promise<MailHealth> {
+  const categories = normalizeCategories(settings.mailCategories);
+  const off = excludedLabels(categories);
+  const st = mailbox.syncState ?? {};
+  const since = st.jevDownSince ? new Date(st.jevDownSince) : null;
+  let hiddenByTabs = 0;
+  if (off.length) {
+    const [r] = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(schema.threadState)
+      .where(and(eq(schema.threadState.mailboxId, mailbox.id), eq(schema.threadState.done, false), sql`not ${inReadTabsSql(off)}`));
+    hiddenByTabs = Number(r?.n ?? 0);
+  }
+  return {
+    lastSyncAt: mailbox.lastSyncAt ? mailbox.lastSyncAt.toISOString() : null,
+    stale: mailbox.source === "live" && mailbox.status === "active" && (!mailbox.lastSyncAt || Date.now() - mailbox.lastSyncAt.getTime() > STALE_MS),
+    jevDownSince: since ? since.toISOString() : null,
+    jevFallback: since !== null && Date.now() - since.getTime() >= JEV_HOLD_MS,
+    held: since ? judging : 0,
+    reconcile: st.reconcile ?? null,
+    categories,
+    hiddenByTabs,
+  };
 }
 
 export async function toApiMailbox(db: Db, m: MailboxRow, settings?: SettingsRow): Promise<ApiMailbox> {
@@ -42,7 +84,7 @@ export async function toApiMailbox(db: Db, m: MailboxRow, settings?: SettingsRow
     status: m.status,
     lastSyncAt: m.lastSyncAt ? m.lastSyncAt.toISOString() : null,
     onboarded: s.onboarded,
-    counts: await laneCounts(db, m.id),
+    counts: await laneCounts(db, m.id, excludedLabels(normalizeCategories(s.mailCategories))),
     mailProvider: m.mailProvider,
     calendarProvider: m.calendarProvider,
   };
@@ -116,7 +158,7 @@ export function latestInbound(msgs: MessageRow[]): MessageRow | null {
   return msgs[msgs.length - 1] ?? null;
 }
 
-export interface InboxFilter { lane?: Lane; includeDone?: boolean; threadIds?: string[]; limit?: number }
+export interface InboxFilter { lane?: Lane; includeDone?: boolean; threadIds?: string[]; limit?: number; /** excludedLabels() of the tabs that are off. */ off?: string[] }
 
 /** Rows for the inbox list: thread_state joined with its thread, latest message, goal, vip and draft flag. */
 export async function inboxRows(db: Db, mailboxId: string, filter: InboxFilter = {}): Promise<InboxRow[]> {
@@ -126,6 +168,7 @@ export async function inboxRows(db: Db, mailboxId: string, filter: InboxFilter =
     conds.push(eq(schema.threadState.done, false));
     conds.push(or(isNull(schema.threadState.snoozedUntil), sql`${schema.threadState.snoozedUntil} <= now()`)!);
   }
+  if (filter.off?.length) conds.push(inReadTabsSql(filter.off)!);
   if (filter.threadIds) {
     if (filter.threadIds.length === 0) return [];
     conds.push(inArray(schema.threadState.threadId, filter.threadIds));
@@ -192,6 +235,7 @@ export function toInboxRow(
     priority: state.priority,
     confidence: state.confidence,
     check: state.check,
+    checkReason: state.checkReason,
     goal: extra.goal ? { id: extra.goal.id, title: extra.goal.title } : null,
     vip: extra.vip ? { id: extra.vip.id, name: extra.vip.name, tier: extra.vip.tier } : null,
     kind: state.kind,
@@ -204,6 +248,7 @@ export function toInboxRow(
     replyLater: state.replyLater,
     unread: !!latest && latest.labelIds.includes("UNREAD"),
     invite: extra.invite ?? null,
+    followUpDue: state.followUpAt !== null && state.followUpAt.getTime() <= Date.now(),
   };
 }
 

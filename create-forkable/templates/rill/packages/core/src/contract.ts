@@ -64,8 +64,8 @@ export interface CallInput<Out, T = Out> {
   /** Replayed on sample mailboxes, and for Jev/writer when recordings exist. */
   fixture: () => T | Promise<T>;
   pick?: (data: Out) => T;
-  /** Which connection of the user's grant: the mailbox's Gmail, or the grant's connection for that platform (TypeSafe, LLMs). Default by platform. */
-  credential?: "mailbox" | "grant";
+  /** Which connection of the user's grant: the mailbox's mail connection, the mailbox's calendar connection, or the grant's connection for that platform (TypeSafe, LLMs). Default by platform. */
+  credential?: "mailbox" | "calendar" | "grant";
 }
 
 /** What patchEvent sends. `current` is the event as Rill has it, so a fixture can answer with the patch applied. */
@@ -92,7 +92,7 @@ export interface CallResultMeta { mode: CallMode; status: number; ok: boolean; b
 
 export interface OneLayer {
   /** Resolves how a platform would be called for this mailbox, without calling. */
-  modeFor(ctx: Ctx, platform: Platform, credential?: "mailbox" | "grant"): Promise<CallMode | "missing">;
+  modeFor(ctx: Ctx, platform: Platform, credential?: "mailbox" | "calendar" | "grant"): Promise<CallMode | "missing">;
   /** platform -> connection key the user's grant reaches (cached briefly). Empty when Connect is not configured or the user never connected. */
   grantedConnections(oneConnect: OneConnectClient | null, userId: string): Promise<Map<string, string>>;
   /** Drop the cached grant for a user (after connect, disconnect or reconnect_required). */
@@ -311,6 +311,8 @@ export interface FixtureThread {
     isFromMe?: boolean;
     listUnsubscribe?: boolean;
   }[];
+  /** Gmail's inbox tab for the thread. Absent means Primary. */
+  category?: "promotions" | "updates" | "social" | "forums";
   /** For the keyless CLI's expected output and tests. */
   expect?: { lane: Decision["lane"]; note?: string };
 }
@@ -368,7 +370,8 @@ export interface SyncLayer {
   /** Imports new threads for the mailbox, upserts, enqueues judging. Returns counts. Sample: loads fixtures once. */
   syncMailbox(ctx: Ctx, opts?: { full?: boolean; max?: number }): Promise<{ imported: number; updated: number; toJudge: number }>;
   /** Judges every unjudged message in the mailbox, newest first, writing judgments, thread_state, summary, and a draft when the policy says so. Emits progress. */
-  judgePending(ctx: Ctx, opts?: { limit?: number; concurrency?: number }): Promise<{ judged: number; failed: number }>;
+  /** `held`: messages left unjudged because Jev is down and the hour has not passed (live only). */
+  judgePending(ctx: Ctx, opts?: { limit?: number; concurrency?: number }): Promise<{ judged: number; failed: number; held: number }>;
   /** Re-runs decide() over stored judgments only (goal weights, pauses, VIP edits). */
   redecide(ctx: Ctx): Promise<{ updated: number }>;
   /** Marks messages judged against an older goal set as unjudged so judgePending re-asks (sample: only when a recording exists). */

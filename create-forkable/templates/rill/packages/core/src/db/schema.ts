@@ -1,10 +1,22 @@
 import {
   boolean, index, integer, jsonb, pgTable, primaryKey, real, serial, text, timestamp, uniqueIndex,
 } from "drizzle-orm/pg-core";
+import type { MailCategory } from "../categories.js";
 import type { Attendee, CalendarProviderKey, ChatBlocks, Decision, EventStatus, Judgment, MailProviderKey, RsvpResponse, Thresholds, VipRules, WorkingHours, ConferencingProvider } from "../types.js";
 
 // One schema, local (embedded Postgres) or hosted (Hyperdrive + Neon).
 // Ids are text: Gmail ids for threads/messages, random ids elsewhere.
+
+export interface MailboxSyncState {
+  historyId?: string;
+  newestInternalDate?: string;
+  initialImportDone?: boolean;
+  lastError?: string | null;
+  /** Set on the first failed Jev call, cleared on the next good one. Rill holds mail while it is set and only lets the writer judge after an hour, with drafting off. */
+  jevDownSince?: string | null;
+  /** The last reconcile: what the provider listed against what Rill has judged. */
+  reconcile?: { at: string; listed: number; missing: number; requeued: number; stuck: number } | null;
+}
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -40,7 +52,7 @@ export const mailboxes = pgTable("mailboxes", {
   label: text("label").notNull(),          // "Acme sample inbox", "moe@…"
   status: text("status").$type<"active" | "reconnect_required" | "paused">().default("active").notNull(),
   lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
-  syncState: jsonb("sync_state").$type<{ historyId?: string; newestInternalDate?: string; initialImportDone?: boolean; lastError?: string | null }>().default({}).notNull(),
+  syncState: jsonb("sync_state").$type<MailboxSyncState>().default({}).notNull(),
   /** Which MailProvider this mailbox talks through: "gmail", or "outlook-mail" when the grant reaches Outlook and no Gmail (fixture-verified, not yet on a real grant). */
   mailProvider: text("mail_provider").$type<MailProviderKey>().default("gmail").notNull(),
   /** null until the user connects a calendar. */
@@ -113,6 +125,7 @@ export const threadState = pgTable("thread_state", {
   priority: integer("priority").default(0).notNull(),
   confidence: real("confidence").default(1).notNull(),
   check: boolean("check").default(false).notNull(),
+  checkReason: text("check_reason"),
   goalId: text("goal_id"),
   vipId: text("vip_id"),
   needsReply: boolean("needs_reply").default(false).notNull(),
@@ -127,6 +140,8 @@ export const threadState = pgTable("thread_state", {
   snoozedUntil: timestamp("snoozed_until", { withTimezone: true }),
   replyLater: boolean("reply_later").default(false).notNull(),
   followUpAt: timestamp("follow_up_at", { withTimezone: true }),
+  /** When a due follow-up last brought the thread back. Cleared when anyone writes again. */
+  followUpShownAt: timestamp("follow_up_shown_at", { withTimezone: true }),
   judgedBy: text("judged_by"),              // jev | writer-fallback
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (t) => [index("thread_state_lane_idx").on(t.mailboxId, t.lane, t.done)]);
@@ -293,6 +308,8 @@ export const settings = pgTable("settings", {
   defaultCalendarId: text("default_calendar_id"),
   defaultConferencing: text("default_conferencing").$type<ConferencingProvider>(),
   todayRail: boolean("today_rail").default(true).notNull(),
+  /** Inbox tabs Rill reads: Gmail's Primary/Promotions/Updates/Social/Forums, Outlook's Focused ("primary") and Other. */
+  mailCategories: jsonb("mail_categories").$type<MailCategory[]>().default(["primary"]).notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

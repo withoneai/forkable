@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Inbox as InboxIcon, PenSquare, RefreshCw } from "lucide-react";
-import type { InboxRow, ThreadAction } from "@rill/core/api-types";
+import type { InboxResponse, InboxRow, ThreadAction } from "@rill/core/api-types";
 import { LANES, type Lane } from "@rill/core/types";
-import { useMailboxId } from "@/lib/mailbox";
+import { useMailbox, useMailboxId } from "@/lib/mailbox";
 import { useChatOpen } from "@/lib/chatPanel";
-import { useInbox, useSettings, useSettingsMutation, useSync, useThread, useThreadAction } from "@/lib/queries";
+import { useAllInbox, useInbox, useSettings, useSettingsMutation, useSync, useSyncAll, useThread, useThreadAction } from "@/lib/queries";
 import { TodayRail } from "@/components/calendar/TodayRail";
 import { useKeys } from "@/lib/keys";
 import { toast } from "@/lib/toast";
@@ -37,20 +37,39 @@ const LANE_EMPTY: Record<Lane, string> = {
 
 function isLane(v: string | undefined): v is Lane { return !!v && (LANES as readonly string[]).includes(v); }
 
-export function Inbox() {
+/**
+ * One lane. `all` is All inboxes: the same lane across every live mailbox,
+ * where each thread opens and acts in its own account (its mailbox comes on
+ * the row, or from the thread id, which is `${mailboxId}:${providerThreadId}`).
+ */
+export function Inbox({ all = false }: { all?: boolean }) {
   const mailboxId = useMailboxId();
+  const { mailboxes } = useMailbox();
   const nav = useNavigate();
   const params = useParams<{ lane?: string; threadId?: string }>();
   const openId = params.threadId ?? null;
-  const openThread = useThread(mailboxId, openId);
-  const lane: Lane = isLane(params.lane) ? params.lane
-    : openThread.data?.state.lane ?? ((sessionStorage.getItem("rill.lane") as Lane | null) ?? "vip");
-  useEffect(() => { sessionStorage.setItem("rill.lane", lane); }, [lane]);
+  const laneParam: Lane | null = isLane(params.lane) ? params.lane : null;
+  const storedLane = (sessionStorage.getItem("rill.lane") as Lane | null) ?? "vip";
 
-  const inbox = useInbox(mailboxId, lane);
+  const single = useInbox(mailboxId, laneParam ?? storedLane, !all);
+  const allQ = useAllInbox(laneParam ?? storedLane, all);
+  const inbox = all ? allQ : single;
   const rows = inbox.data?.rows ?? [];
-  const act = useThreadAction(mailboxId);
+  const mailboxOf = useCallback((threadId: string | null): string => {
+    if (!all || !threadId) return mailboxId;
+    const row = rows.find((r) => r.threadId === threadId);
+    if (row?.mailbox) return row.mailbox.id;
+    const prefix = threadId.split(":")[0]!;
+    return mailboxes.some((m) => m.id === prefix) ? prefix : mailboxId;
+  }, [all, rows, mailboxId, mailboxes]);
+
+  const openMailboxId = mailboxOf(openId);
+  const openThread = useThread(openMailboxId, openId);
+  const lane: Lane = laneParam ?? openThread.data?.state.lane ?? storedLane;
+  useEffect(() => { sessionStorage.setItem("rill.lane", lane); }, [lane]);
   const sync = useSync(mailboxId);
+  const syncAll = useSyncAll();
+  const liveIds = mailboxes.filter((m) => m.source === "live" && m.status === "active").map((m) => m.id);
 
   const [selected, setSelected] = useState<string | null>(null);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
@@ -67,14 +86,16 @@ export function Inbox() {
     : (selected && rows.some((r) => r.threadId === selected)) ? selected
     : rows[0]?.threadId ?? null;
   const selIndex = rows.findIndex((r) => r.threadId === selId);
+  // Actions run on the selected thread's own mailbox.
+  const act = useThreadAction(mailboxOf(selId ?? openId));
 
   useEffect(() => {
     if (!selId) return;
     listRef.current?.querySelector<HTMLElement>(`[data-thread="${selId}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [selId]);
 
-  const open = useCallback((id: string) => nav(`/thread/${id}`), [nav]);
-  const back = useCallback(() => nav(`/inbox/${lane}`), [nav, lane]);
+  const open = useCallback((id: string) => nav(all ? `/all/thread/${id}` : `/thread/${id}`), [nav, all]);
+  const back = useCallback(() => nav(all ? `/all/${lane}` : `/inbox/${lane}`), [nav, lane, all]);
 
   const move = useCallback((d: 1 | -1) => {
     if (rows.length === 0) return;
@@ -128,7 +149,9 @@ export function Inbox() {
   });
 
   const count = inbox.data?.counts?.[lane] ?? rows.length;
-  const busy = sync.isPending || !!inbox.data?.syncing;
+  const syncing = all ? syncAll.isPending : sync.isPending;
+  const busy = syncing || !!inbox.data?.syncing;
+  const runSync = () => (all ? syncAll.mutate(liveIds) : sync.mutate());
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
@@ -144,10 +167,11 @@ export function Inbox() {
             {LANE_LABEL[lane]}
             {count > 0 && <span className="tnum text-xs font-normal text-muted-foreground">{count}</span>}
           </h1>
+          {all && <span className="shrink-0 text-xs text-muted-foreground">All inboxes</span>}
           {!openId && <span className="ml-2 hidden min-w-0 truncate text-xs text-muted-foreground md:inline">{LANE_HINT[lane]}</span>}
           <span className="flex-1" />
           {!openId && <span className="hidden items-center gap-1.5 text-11 text-muted-foreground lg:flex"><Keys combo="?" /> shortcuts</span>}
-          <IconButton label={busy ? "Syncing" : "Sync now"} size="sm" onClick={() => sync.mutate()} disabled={sync.isPending}>
+          <IconButton label={busy ? "Syncing" : "Sync now"} size="sm" onClick={runSync} disabled={syncing}>
             <RefreshCw className={cn(busy && "animate-spin")} />
           </IconButton>
           {!openId && (
@@ -156,6 +180,7 @@ export function Inbox() {
             </Button>
           )}
         </header>
+        {!all && <HealthLine health={single.data?.health} onSettings={() => nav("/settings")} />}
         {inbox.isError && rows.length > 0 && (
           <div role="status" className="flex h-8 shrink-0 items-center gap-2 border-b border-border bg-faint px-3 text-11 text-muted-foreground">
             <span className="min-w-0 flex-1 truncate">Could not refresh. Showing what was loaded before.</span>
@@ -189,6 +214,7 @@ export function Inbox() {
                 open={r.threadId === openId}
                 onSelect={() => setSelected(r.threadId)}
                 onOpen={() => open(r.threadId)}
+                account={all ? r.mailbox?.address ?? r.mailbox?.label : undefined}
               />
             ))
           )}
@@ -197,7 +223,8 @@ export function Inbox() {
 
       {openId ? (
         <Reader
-          mailboxId={mailboxId}
+          key={openMailboxId}
+          mailboxId={openMailboxId}
           threadId={openId}
           onBack={back}
           onAct={(action, label) => perform(openId, action, label)}
@@ -209,6 +236,28 @@ export function Inbox() {
         <TodayRail mailboxId={mailboxId} />
       ) : null}
       <ComposeDialog mailboxId={mailboxId} open={composeOpen} onClose={() => setComposeOpen(false)} />
+    </div>
+  );
+}
+
+/** One quiet line when the pipeline is behind: no sync in two hours, Jev down, or the reconcile found a gap. */
+function HealthLine({ health, onSettings }: { health: InboxResponse["health"] | undefined; onSettings: () => void }) {
+  if (!health) return null;
+  const r = health.reconcile;
+  const text = health.jevDownSince
+    ? health.jevFallback
+      ? "Jev has been down for over an hour. Your writer is judging new mail, with no drafts and Check on every row."
+      : `Jev is not answering. ${health.held ? `${health.held} new ${health.held === 1 ? "email waits" : "emails wait"}` : "New mail waits"} unjudged instead of being guessed.`
+    : health.stale
+      ? "No sync has finished in over two hours. New mail may be missing."
+      : r && (r.missing || r.stuck)
+        ? `The last check found ${[r.missing && `${r.missing} missing`, r.stuck && `${r.stuck} stuck`].filter(Boolean).join(" and ")}. Rill is retrying.`
+        : null;
+  if (!text) return null;
+  return (
+    <div role="status" className="flex h-8 shrink-0 items-center gap-2 border-b border-border bg-warning-text/10 px-3 text-11 text-warning-text">
+      <span className="min-w-0 flex-1 truncate" title={text}>{text}</span>
+      <button type="button" onClick={onSettings} className="font-medium underline-offset-2 hover:underline">Details</button>
     </div>
   );
 }

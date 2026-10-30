@@ -22,9 +22,19 @@ import type { CallMode, Platform } from "./types.js";
 /** The delete action is never in the grant; the fixture replays One's refusal for it. */
 export const DELETE_ACTION_ID = "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA";
 
-/** The mail platforms answer on the mailbox's own connection; everything else on the grant's connection for that platform. */
-function defaultCredential(platform: Platform): "mailbox" | "grant" {
-  return platform === "gmail" || platform === "outlook-mail" ? "mailbox" : "grant";
+export type Credential = "mailbox" | "calendar" | "grant";
+
+/**
+ * The mail platforms answer on the mailbox's own connection and the calendar
+ * platforms on the mailbox's calendar connection, so a grant with two Gmail
+ * accounts (and their two calendars) keeps each account's calls on its own
+ * connection. Everything else (TypeSafe, the LLMs, Zoom) runs on the grant's
+ * connection for that platform.
+ */
+function defaultCredential(platform: Platform): Credential {
+  if (platform === "gmail" || platform === "outlook-mail") return "mailbox";
+  if (platform === "google-calendar" || platform === "outlook-calendar") return "calendar";
+  return "grant";
 }
 
 type Resolved = { mode: CallMode | "missing"; key: string | null };
@@ -55,7 +65,7 @@ export function forgetGrant(userId: string): void {
   grantCache.delete(userId);
 }
 
-async function resolve(ctx: Ctx, platform: Platform, credential: "mailbox" | "grant"): Promise<Resolved> {
+async function resolve(ctx: Ctx, platform: Platform, credential: Credential): Promise<Resolved> {
   const env = ctx.env;
   if (ctx.mailbox.source === "sample") {
     // Recording the sample inbox runs Jev and the writer live on the recording user's grant; Gmail stays on fixtures.
@@ -69,6 +79,10 @@ async function resolve(ctx: Ctx, platform: Platform, credential: "mailbox" | "gr
     if (ctx.mailbox.mode === "connect" && ctx.oneConnect && ctx.mailbox.connectionKey) return { mode: "connect", key: ctx.mailbox.connectionKey };
     return { mode: "missing", key: null };
   }
+  if (credential === "calendar" && ctx.mailbox.calendarProvider === platform && ctx.mailbox.calendarConnectionKey && ctx.oneConnect) {
+    return { mode: "connect", key: ctx.mailbox.calendarConnectionKey };
+  }
+  // A mailbox with no calendar of its own (made before calendars were paired per account) falls back to the grant's first one.
   const key = (await grantedConnections(ctx.oneConnect, ctx.user.id)).get(platform);
   return key ? { mode: "connect", key } : { mode: "missing", key: null };
 }

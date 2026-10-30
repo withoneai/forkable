@@ -11,6 +11,7 @@ export const rowDomId = (threadId: string) => `row-${threadId}`;
  *  even over a goal or VIP match: a ready draft is the more actionable fact. */
 function reasonFor(row: InboxRow): { label: string; title: string; accent?: boolean } | null {
   if (row.hasDraft) return { label: "Rill drafted", title: "Rill wrote a reply. Review it before it sends.", accent: true };
+  if (row.followUpDue) return { label: "Follow up", title: "You wrote last and nobody answered. Time to nudge." };
   if (row.goal) return { label: "Goal", title: `Goal · ${row.goal.title}` };
   if (row.vip) return { label: "VIP", title: `VIP · ${row.vip.name} · ${TIER_LABEL[row.vip.tier]}` };
   if (row.lane === "screener") return { label: "New sender", title: "First time this sender has written to you." };
@@ -19,14 +20,16 @@ function reasonFor(row: InboxRow): { label: string; title: string; accent?: bool
 }
 
 /** Lays itself out from the list's own width (container query), not the screen's. */
-export const Row = memo(function Row({ row, selected, open, onSelect, onOpen }: {
+export const Row = memo(function Row({ row, selected, open, onSelect, onOpen, account }: {
   row: InboxRow; selected: boolean; open: boolean; onSelect: () => void; onOpen: () => void;
+  /** All inboxes: which account the thread is in. */
+  account?: string;
 }) {
   const unread = row.unread;
   const reason = reasonFor(row);
   const flags = (
     <>
-      {row.check && <Badge tone="warning" title="Jev was unsure about the lane. Worth a look.">Check</Badge>}
+      {row.check && <Badge tone="warning" title={row.checkReason ?? "Jev was unsure about the lane. Worth a look."}>Check</Badge>}
       {row.screen === "quarantine" && <Badge tone="destructive">Quarantined</Badge>}
       {row.replyLater && <Badge tone="outline">Later</Badge>}
     </>
@@ -66,6 +69,7 @@ export const Row = memo(function Row({ row, selected, open, onSelect, onOpen }: 
           {dot}
           <span className={cn("min-w-0 flex-1 truncate", unread ? "font-semibold text-foreground" : "font-normal text-foreground/80")}>{row.from.name}</span>
           {flags}
+          {account && <span className="max-w-[120px] shrink truncate text-11 text-muted-foreground" title={account}>{account}</span>}
           {time}
           {owner}
         </div>
@@ -88,6 +92,7 @@ export const Row = memo(function Row({ row, selected, open, onSelect, onOpen }: 
           {row.snippet && <span className="text-muted-foreground"> · {row.snippet}</span>}
         </span>
         {flags}
+        {account && <span className="w-[140px] shrink-0 truncate text-right text-11 text-muted-foreground" title={account}>{account}</span>}
         <span className="w-10 shrink-0 text-right">{time}</span>
         {owner}
       </div>

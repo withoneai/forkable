@@ -630,6 +630,7 @@
     {
       "id": "t22",
       "subject": "How the best PMs run discovery",
+      "category": "promotions",
       "messages": [
         {
           "id": "t22m1",
@@ -656,6 +657,7 @@
     {
       "id": "t23",
       "subject": "Seed Signals: October round-up",
+      "category": "promotions",
       "messages": [
         {
           "id": "t23m1",
@@ -682,6 +684,7 @@
     {
       "id": "t24",
       "subject": "Stack Notes #148: the cost of a flaky test suite",
+      "category": "promotions",
       "messages": [
         {
           "id": "t24m1",
@@ -708,6 +711,7 @@
     {
       "id": "t25",
       "subject": "Founders Digest: your week in 5 minutes",
+      "category": "promotions",
       "messages": [
         {
           "id": "t25m1",
@@ -734,6 +738,7 @@
     {
       "id": "t26",
       "subject": "Your Figma invoice for October",
+      "category": "updates",
       "messages": [
         {
           "id": "t26m1",
@@ -759,6 +764,7 @@
     {
       "id": "t27",
       "subject": "Amazon Web Services invoice available",
+      "category": "updates",
       "messages": [
         {
           "id": "t27m1",
@@ -784,6 +790,7 @@
     {
       "id": "t28",
       "subject": "Your receipt: SFO to AUS, November 6",
+      "category": "updates",
       "messages": [
         {
           "id": "t28m1",
@@ -809,6 +816,7 @@
     {
       "id": "t29",
       "subject": "[acme/platform] Merged: Rate limit the export endpoint (#412)",
+      "category": "updates",
       "messages": [
         {
           "id": "t29m1",

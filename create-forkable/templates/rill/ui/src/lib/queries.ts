@@ -1,7 +1,7 @@
 import { toast } from "./toast";
 import { useMutation, useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import type {
-  ApiDraft, ApiGoal, ApiSettings, ApiVip, ComposeInput, CreateEventInput, EventPatchInput, GoalInput, InboxResponse, InboxRow, OfferTimesInput, RsvpAction, ThreadAction, ThreadResponse, VipInput,
+  AllInboxResponse, ApiDraft, ApiGoal, ApiSettings, ApiVip, ComposeInput, CreateEventInput, EventPatchInput, GoalInput, InboxResponse, InboxRow, OfferTimesInput, RsvpAction, ThreadAction, ThreadResponse, VipInput,
 } from "@rill/core/api-types";
 import type { Lane } from "@rill/core/types";
 import { LANES } from "@rill/core/types";
@@ -12,6 +12,9 @@ export const keys = {
   engines: ["engines"] as const,
   inbox: (id: string, lane: Lane) => ["mailbox", id, "inbox", lane] as const,
   inboxAll: (id: string) => ["mailbox", id, "inbox"] as const,
+  /** All inboxes: one lane across every live mailbox. Not under "mailbox", so each mailbox's own invalidations also refresh it below. */
+  allInbox: (lane: Lane) => ["all-inbox", lane] as const,
+  allInboxes: ["all-inbox"] as const,
   thread: (id: string, threadId: string) => ["mailbox", id, "thread", threadId] as const,
   threads: (id: string) => ["mailbox", id, "thread"] as const,
   goals: (id: string) => ["mailbox", id, "goals"] as const,
@@ -31,8 +34,21 @@ export const keys = {
 export const useMe = () => useQuery({ queryKey: keys.me, queryFn: api.me, staleTime: 30_000 });
 export const useEngines = () => useQuery({ queryKey: keys.engines, queryFn: api.engines, staleTime: 60_000 });
 
-export const useInbox = (id: string, lane: Lane) =>
-  useQuery({ queryKey: keys.inbox(id, lane), queryFn: () => api.inbox(id, lane), staleTime: 5_000, placeholderData: (prev) => prev });
+export const useInbox = (id: string, lane: Lane, enabled = true) =>
+  useQuery({ queryKey: keys.inbox(id, lane), queryFn: () => api.inbox(id, lane), enabled, staleTime: 5_000, placeholderData: (prev) => prev });
+
+/** All inboxes. No live stream spans mailboxes, so it polls while open. */
+export const useAllInbox = (lane: Lane, enabled = true) =>
+  useQuery({ queryKey: keys.allInbox(lane), queryFn: () => api.allInbox(lane), enabled, staleTime: 5_000, refetchInterval: 20_000, placeholderData: (prev) => prev });
+
+/** Sync every live mailbox at once, for the All inboxes refresh button. */
+export function useSyncAll() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (ids: string[]) => Promise.all(ids.map((id) => api.sync(id))),
+    onSettled: (_d, _e, ids) => { for (const id of ids ?? []) invalidateMailbox(qc, id); },
+  });
+}
 
 export const useThread = (id: string, threadId: string | null) =>
   useQuery({ queryKey: keys.thread(id, threadId ?? ""), queryFn: () => api.thread(id, threadId!), enabled: !!threadId, staleTime: 10_000 });
@@ -66,11 +82,24 @@ function removeRowEverywhere(qc: QueryClient, id: string, threadId: string) {
   }
 }
 
+function removeRowFromAll(qc: QueryClient, threadId: string) {
+  for (const lane of LANES) {
+    qc.setQueryData<AllInboxResponse>(keys.allInbox(lane), (old) => {
+      if (!old || !old.rows.some((r) => r.threadId === threadId)) return old;
+      return { ...old, rows: old.rows.filter((r) => r.threadId !== threadId), counts: { ...old.counts, [lane]: Math.max(0, old.counts[lane] - 1) } };
+    });
+  }
+}
+
 function patchRowEverywhere(qc: QueryClient, id: string, threadId: string, patch: Partial<InboxRow>) {
   for (const lane of LANES) {
     qc.setQueryData<InboxResponse>(keys.inbox(id, lane), (old) => {
       if (!old) return old;
       if (!old.rows.some((r) => r.threadId === threadId)) return old;
+      return { ...old, rows: old.rows.map((r) => (r.threadId === threadId ? { ...r, ...patch } : r)) };
+    });
+    qc.setQueryData<AllInboxResponse>(keys.allInbox(lane), (old) => {
+      if (!old || !old.rows.some((r) => r.threadId === threadId)) return old;
       return { ...old, rows: old.rows.map((r) => (r.threadId === threadId ? { ...r, ...patch } : r)) };
     });
   }
@@ -79,6 +108,7 @@ function patchRowEverywhere(qc: QueryClient, id: string, threadId: string, patch
 
 export function invalidateMailbox(qc: QueryClient, id: string) {
   qc.invalidateQueries({ queryKey: keys.inboxAll(id) });
+  qc.invalidateQueries({ queryKey: keys.allInboxes });
   qc.invalidateQueries({ queryKey: keys.threads(id) });
   qc.invalidateQueries({ queryKey: keys.me });
 }
@@ -90,7 +120,19 @@ export function useThreadAction(id: string) {
     mutationFn: ({ threadId, action }: { threadId: string; action: ThreadAction }) => api.threadAction(id, threadId, action),
     onMutate: async ({ threadId, action }) => {
       await qc.cancelQueries({ queryKey: keys.inboxAll(id) });
+      await qc.cancelQueries({ queryKey: keys.allInboxes });
       const snapshot = LANES.map((lane) => [lane, qc.getQueryData<InboxResponse>(keys.inbox(id, lane))] as const);
+      switch (action.action) {
+        case "done":
+        case "snooze":
+        case "screen_out":
+        case "let_in":
+        case "move":
+          removeRowFromAll(qc, threadId);
+          break;
+        default:
+          break;
+      }
       switch (action.action) {
         case "done":
         case "snooze":
@@ -120,6 +162,7 @@ export function useThreadAction(id: string) {
     },
     onSettled: (_d, _e, vars) => {
       qc.invalidateQueries({ queryKey: keys.inboxAll(id) });
+      qc.invalidateQueries({ queryKey: keys.allInboxes });
       qc.invalidateQueries({ queryKey: keys.thread(id, vars.threadId) });
       qc.invalidateQueries({ queryKey: keys.me });
       if (vars.action.action === "add_vip" || vars.action.action === "let_in" || vars.action.action === "screen_out") {
@@ -227,10 +270,11 @@ export function useSettingsMutation(id: string) {
     onMutate: (patch) => {
       qc.setQueryData<ApiSettings>(keys.settings(id), (old) => (old ? { ...old, ...patch } : old));
     },
-    onSuccess: (s) => {
+    onSuccess: (s, patch) => {
       qc.setQueryData(keys.settings(id), s);
       qc.invalidateQueries({ queryKey: keys.engines });
       qc.invalidateQueries({ queryKey: keys.me });
+      if (patch.mailCategories) qc.invalidateQueries({ queryKey: keys.inboxAll(id) });
     },
     onError: (e) => {
       qc.invalidateQueries({ queryKey: keys.settings(id) });

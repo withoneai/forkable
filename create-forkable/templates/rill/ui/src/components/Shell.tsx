@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { matchPath, Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Calendar, ChevronsUpDown, Crown, Inbox, Mail, MessageCircle, MessageSquareReply, Search, Settings, ShieldCheck, Sun, Target, UserPlus } from "lucide-react";
+import { Calendar, ChevronsUpDown, Crown, Inbox, Layers, Mail, MessageCircle, MessageSquareReply, Search, Settings, ShieldCheck, Sun, Target, UserPlus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useOneConnect } from "@withone/connect/react";
 import { LANES } from "@rill/core/types";
 import type { Lane } from "@rill/core/types";
+import type { ApiMailbox, MeResponse } from "@rill/core/api-types";
 import { useMailbox } from "@/lib/mailbox";
+import { keys, useAllInbox } from "@/lib/queries";
+import { toast } from "@/lib/toast";
 import { useKeys } from "@/lib/keys";
 import { toggleTheme } from "@/lib/theme";
 import { cn, LANE_LABEL, LANE_KEY, MOD, useMedia } from "@/lib/utils";
@@ -46,6 +51,15 @@ function ShellInner() {
   const [switcher, setSwitcher] = useState(false);
   const mb = mailbox!;
   const reconnect = mb.status === "reconnect_required" || live.reconnectRequired;
+  const paused = mb.status === "paused" && !reconnect;
+  const addAccount = useAddAccount();
+  // All inboxes shows once there are two live accounts; inside it the lanes stay in All.
+  const liveCount = mailboxes.filter((m) => m.source === "live").length;
+  const canAll = liveCount >= 2;
+  const allMode = canAll && loc.pathname.startsWith("/all");
+  const laneNow = (matchPath("/all/:lane", loc.pathname)?.params.lane as Lane | undefined) ?? ((sessionStorage.getItem("rill.lane") as Lane | null) ?? "vip");
+  const allCounts = useAllInbox(laneNow, allMode).data?.counts;
+  const lanePrefix = allMode ? "/all" : "/inbox";
 
   const [chatOpen, setChatOpen] = usePersistedBoolean("rill.chat.open", false);
   const [chatWidth, setChatWidth] = usePersistedNumber("rill.chat.width", 360);
@@ -55,7 +69,7 @@ function ShellInner() {
   // The nav folds to icons when the screen is small, or when the docked assistant needs its width.
   const rail = !large || (chatOpen && !roomy);
 
-  const go = useCallback((lane: Lane) => { nav(`/inbox/${lane}`); }, [nav]);
+  const go = useCallback((lane: Lane) => { nav(`${lanePrefix}/${lane}`); }, [nav, lanePrefix]);
   useKeys({ "mod+k": () => setPalette((v) => !v) }, { whileTyping: true });
   useKeys({
     "mod+j": () => setChatOpen(!chatOpen),
@@ -67,6 +81,7 @@ function ShellInner() {
     "g r": () => { go("reply"); },
     "g o": () => { go("other"); },
     "g s": () => { go("screener"); },
+    "g i": () => { if (canAll) nav(`/all/${laneNow}`); },
     "g b": () => { nav("/brief"); },
     "g c": () => { nav("/calendar"); },
     "g a": () => { nav("/access"); },
@@ -92,10 +107,13 @@ function ShellInner() {
           <RailButton rail={rail} icon={<MessageCircle />} label="Ask your inbox" hint={`${MOD}J`} active={chatOpen} onClick={() => setChatOpen(!chatOpen)} pressed={chatOpen} />
         </div>
         <nav className={cn("flex flex-1 flex-col gap-px pt-1", rail ? "items-center px-1.5" : "px-2")} aria-label="Lanes">
-          {!rail && <p className="label-caps px-2 pb-1 pt-1">Inbox</p>}
+          {canAll && (
+            <RailLink rail={rail} to={`/all/${laneNow}`} label="All inboxes" icon={<Layers />} keyHint="G I" active={allMode} />
+          )}
+          {!rail && <p className="label-caps px-2 pb-1 pt-1">{allMode ? "All inboxes" : "Inbox"}</p>}
           {LANES.map((lane) => (
-            <RailLink key={lane} rail={rail} to={`/inbox/${lane}`} label={LANE_LABEL[lane]} icon={LANE_ICON[lane]} count={mb.counts[lane]} keyHint={`G ${LANE_KEY[lane]}`}
-              active={loc.pathname.startsWith(`/inbox/${lane}`) || (loc.pathname.startsWith("/thread/") && sessionStorage.getItem("rill.lane") === lane)} />
+            <RailLink key={lane} rail={rail} to={`${lanePrefix}/${lane}`} label={LANE_LABEL[lane]} icon={LANE_ICON[lane]} count={allMode ? allCounts?.[lane] ?? 0 : mb.counts[lane]} keyHint={`G ${LANE_KEY[lane]}`}
+              active={loc.pathname.startsWith(`${lanePrefix}/${lane}`) || (loc.pathname.startsWith(allMode ? "/all/thread/" : "/thread/") && sessionStorage.getItem("rill.lane") === lane)} />
           ))}
           <div className={cn("my-2 h-px bg-border", rail ? "w-6" : "mx-2")} />
           <RailLink rail={rail} to="/brief" label="Brief" icon={<Sun />} keyHint="G B" />
@@ -109,20 +127,24 @@ function ShellInner() {
             open={switcher}
             onClose={() => setSwitcher(false)}
             className="bottom-full top-auto mb-1 w-[204px]"
-            items={mailboxes.map((m) => ({
+            items={(canAll ? [{ key: "all", label: "All inboxes", hint: `${liveCount} accounts`, onSelect: () => nav(`/all/${laneNow}`) }] : []).concat(mailboxes.map((m) => ({
               key: m.id,
               label: m.label,
-              hint: m.source === "sample" ? "sample" : m.mode,
+              hint: mailboxHint(m),
               onSelect: () => { select(m.id); nav("/inbox/vip"); },
-            })).concat([{ key: "add", label: "Sign in with One", hint: "Gmail or Outlook", onSelect: () => nav("/start") }])}
+            }))).concat([
+              user
+                ? { key: "add", label: addAccount.busy ? "Adding…" : "Add another account", hint: "Gmail or Outlook", onSelect: addAccount.open }
+                : { key: "add", label: "Sign in with One", hint: "Gmail or Outlook", onSelect: () => nav("/start") },
+            ])}
             anchor={
               <button
                 type="button"
                 onClick={() => setSwitcher((v) => !v)}
                 aria-haspopup="menu"
                 aria-expanded={switcher}
-                aria-label={`Mailbox: ${mb.label}`}
-                title={rail ? mb.label : undefined}
+                aria-label={`Mailbox: ${allMode ? "All inboxes" : mb.label}`}
+                title={rail ? (allMode ? "All inboxes" : mb.label) : undefined}
                 className={cn(
                   "flex h-10 items-center gap-2.5 rounded-md text-left transition-colors hover:bg-card-hover",
                   rail ? "w-10 justify-center" : "w-[204px] border border-border bg-card px-2 hover:border-border-strong",
@@ -132,8 +154,8 @@ function ShellInner() {
                 {!rail && (
                   <>
                     <span className="flex min-w-0 flex-1 flex-col leading-none">
-                      <span className="truncate text-xs font-medium">{mb.label}</span>
-                      <span className="mt-0.5 truncate text-11 text-muted-foreground">{mb.source === "sample" ? "Sample · replayed" : mb.address ?? "Connected"}</span>
+                      <span className="truncate text-xs font-medium">{allMode ? "All inboxes" : mb.label}</span>
+                      <span className="mt-0.5 truncate text-11 text-muted-foreground">{allMode ? `${liveCount} accounts` : mb.source === "sample" ? "Sample · replayed" : mb.address ?? "Connected"}</span>
                     </span>
                     <ChevronsUpDown className="size-3 text-muted-foreground" />
                   </>
@@ -150,6 +172,12 @@ function ShellInner() {
           <div role="alert" className="flex h-9 items-center justify-between gap-3 border-b border-border bg-muted px-4 text-xs">
             <span>Your access was revoked in One. Sign in with One again to continue. Nothing here was deleted.</span>
             <button type="button" className="shrink-0 font-medium underline-offset-2 hover:underline" onClick={() => nav("/start")}>Sign in with One</button>
+          </div>
+        )}
+        {paused && (
+          <div role="status" className="flex h-9 items-center justify-between gap-3 border-b border-border bg-muted px-4 text-xs">
+            <span>{mb.address ?? mb.label} is no longer in your grant, so it is not syncing. Its mail is kept here.</span>
+            <button type="button" className="shrink-0 font-medium underline-offset-2 hover:underline" onClick={addAccount.open}>Add it again</button>
           </div>
         )}
         <main className="flex min-h-0 flex-1 flex-col">
@@ -176,6 +204,46 @@ function ShellInner() {
       <Cheatsheet open={cheat} onClose={() => setCheat(false)} />
     </div>
   );
+}
+
+function mailboxHint(m: ApiMailbox): string {
+  if (m.source === "sample") return "sample";
+  if (m.status === "paused") return "not granted";
+  if (m.status === "reconnect_required") return "reconnect";
+  return m.mailProvider === "outlook-mail" ? "Outlook" : "Gmail";
+}
+
+/**
+ * Add another mail account to the same grant. One's consent page opens on the
+ * Gmail connect screen, then the list, where the user can pick a second Gmail
+ * or an Outlook. The callback makes one mailbox per mail connection, so the
+ * new account is the mailbox that was not there before: open it.
+ */
+function useAddAccount() {
+  const { mailboxes, select } = useMailbox();
+  const qc = useQueryClient();
+  const nav = useNavigate();
+  const before = useRef<Set<string>>(new Set());
+  const connect = useOneConnect({
+    authorizeUrl: "/api/one/authorize",
+    connector: "gmail",
+    onSuccess: async () => {
+      await qc.refetchQueries({ queryKey: keys.me });
+      const fresh = qc.getQueryData<MeResponse>(keys.me)?.mailboxes.find((m) => m.source === "live" && !before.current.has(m.id));
+      if (fresh) {
+        select(fresh.id);
+        nav("/inbox/vip");
+        toast({ title: `Added ${fresh.address ?? fresh.label}`, detail: "The first sync is running." });
+      } else {
+        toast({ title: "No new account", detail: "The grant has the same mail accounts as before." });
+      }
+    },
+    onError: (message) => toast({ title: "Could not add the account", detail: message, tone: "destructive" }),
+  });
+  return {
+    busy: connect.status === "connecting",
+    open: () => { before.current = new Set(mailboxes.map((m) => m.id)); connect.open(); },
+  };
 }
 
 /** Who is signed in with One. Opens Settings, where "Signed in as" lives. */

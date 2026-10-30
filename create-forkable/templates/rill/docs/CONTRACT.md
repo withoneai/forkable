@@ -86,11 +86,37 @@ cli/bin/rill.mjs              bin shim
 
 - `source: sample` + `mode: fixture`: the Acme inbox. Every call replays
   fixtures. Created by `POST /mailboxes/sample`. Always available, no keys.
-- `source: live` + `mode: connect`: the user's Gmail through their grant.
-  Created by the Connect callback (first connected Gmail connection).
+- `source: live` + `mode: connect`: one mailbox per mail connection in the
+  grant. A grant can hold several connections of one platform (two Gmail
+  accounts, a Gmail and an Outlook); the Connect callback (`onConnected`)
+  makes or updates one mailbox for each, Gmail first, then Outlook, in
+  One's list order. Matched by `connectionKey`, then by address (a
+  connection made again gets a new key), then the lone mailbox of the
+  single-account era. A mailbox whose connection left the grant goes
+  `status: paused` with its mail kept, and resumes when the account is
+  granted again. A new account copies the first live mailbox's settings row
+  (so it skips the wizard); goals and VIPs stay per mailbox.
+- Calendars pair per account (`pairCalendars`): keep a calendar the grant
+  still reaches, else the calendar connection whose title is the mailbox's
+  address, else the next unclaimed one of the mail's vendor whose title is
+  not another address. Unproven on a real grant: whether One titles Gmail
+  and Calendar connections with the account's address.
+- All inboxes (`GET /inbox/all?lane=`, `AllInboxResponse`): every live
+  mailbox's lane in one list, ranked by priority then the newest message,
+  counts summed, each row tagged `mailbox: { id, label, address }`. The UI
+  shows it at `/all/:lane` and `/all/thread/:threadId` once there are two
+  live accounts (sidebar entry, switcher item, `G I`); a thread opens, and
+  every action runs, on its own mailbox (the row's tag, else the thread
+  id's `mbx_…:` prefix). It polls every 20 s, since the live stream is per
+  mailbox. Compose and the Today rail use the mailbox picked in the switcher.
+- The UI's mailbox switcher lists every mailbox (hint Gmail / Outlook /
+  not granted / sample) and ends with "Add another account", which reopens
+  Connect on the Gmail screen; on return the new mailbox opens.
 - No key mode. Every platform call runs on the signed-in user's Connect grant:
-  Gmail through the mailbox's connection, TypeSafe (Jev) and the LLMs through
-  the grant's connection for that platform (`one.grantedConnections`). No
+  mail through the mailbox's connection (`connectionKey`), calendars through
+  the mailbox's calendar connection (`calendarConnectionKey`; the grant's
+  first calendar only for an old mailbox with none), TypeSafe (Jev) and the
+  LLMs through the grant's connection for that platform (`one.grantedConnections`). No
   `ONE_SECRET` or `ONE_CONNECTION_*` anywhere; never ask Moe for one. Sample
   mailboxes replay recordings; `rill record` needs a user who signed in with
   One and granted TypeSafe, and runs through that grant.
@@ -162,11 +188,22 @@ questions (keys fixed, used as `judgments.question`):
 - `vip_<id>` (noul) per description VIP
 - `commitment` (noul)
 Labels (for the UI): "Addressed to an AI", "Tries to override instructions", "Pushes for an action", "Hidden text", "Kind of email", "Which goal does this move?", "Does it need a reply from you?", "Whose move is next?", "Urgency", "Matches VIP: <name>", "Did you promise something?".
-Fallback when Jev is unreachable or unconfigured: the writer answers the same questions as JSON (`writer.judgeFallback`), `confidence` capped at 0.6, `judgedBy = "writer-fallback"`, Check badge on.
+Fallback when Jev is not in the grant (`code: "jev_missing"`): the writer answers the same questions as JSON (`writer.judgeFallback`), `confidence` capped at 0.6, `judgedBy = "writer-fallback"`. When Jev is in the grant but failing, a live mailbox fails closed: the first failure sets `mailboxes.sync_state.jevDownSince`, every message stays unjudged (`judgePending` returns it as `held`, one Jev attempt per run), and only after `JEV_HOLD_MS` (1 hour) does the writer judge, with `draft` forced off, Check on and `checkReason` saying so. The next good Jev answer clears `jevDownSince`. Sample mailboxes keep the old path (recordings, then the writer, then the fixture's expectation).
 
 ## Policy (packages/core/src/policy.ts)
 
 `compileInbox(markdown) -> Policy` reads the bullets in INBOX.md (the grammar is the file as written; unknown lines throw with the line number). `decide(input) -> Decision` where input = `{ facts, answers, goals, vips, senderStatus, thresholds }`. Priority per the INBOX.md formula, clamped 0..100. Pausing a goal or moving a weight re-runs `decide` over stored judgments only (no Jev call).
+
+Ported from email2 (2026-10-27):
+- **Check band.** Besides the low-confidence rule, Check shows when a deciding probability sits within `thresholds.checkBand` (0.15, INBOX.md "within 0.15 of its line") of its line: needs-reply, the best goal, or an injection signal just under quarantine. `Decision.checkReason` (stored as `thread_state.check_reason`) says which, in words; the borderline reason wins over the confidence one.
+- **Facts code knows.** `facts.firstTimeSender` now also needs "never met": any calendar event with them makes them known. `facts.meetingSoon` is an event with them in the next 48 hours (INBOX.md "a meeting with them in the next 48 hours adds 15"). Cold outreach: a first-time sender, not a reply, with `cold_pitch` >= 0.35 (lower than `coldPitch` 0.7 because code already knows they are a stranger) owes no reply, gets no draft and takes the cold pitch penalty.
+- **Follow-ups.** `sync.followUps(ctx)` runs after every scheduler pass and recomputes timers from the messages (a reply sent from Gmail never passes through the judge). You wrote last and the timer ran out: the thread comes back once per round (undone, unsnoozed, `follow_up_shown_at` set) and the row carries `followUpDue` (the "Follow up" chip). INBOX.md "N business days" skips weekends.
+
+## Inbox tabs and reconcile (packages/core/src/categories.ts, sync.ts)
+
+`settings.mail_categories` (default `["primary"]`; sample mailboxes get all five Gmail tabs so the demo keeps its newsletters). Gmail: `primary, promotions, updates, social, forums`; Outlook: `primary` (Focused) and `other`. The same list filters three places: the provider query (`categoryQuery`: `in:inbox -category:x ...`; the Outlook mapper turns `-category:other` into `inferenceClassification eq 'focused'` and ignores `in:inbox` so sent replies stay in the thread), the judging queue (`inReadTabs`), and the inbox rows and lane counts (a thread shows when it has an inbound message in a tab that is on). Turning a tab on kicks a full 7-day sync.
+
+`sync.reconcile(ctx, listedIds)` runs at the end of every `syncMailbox`: listed threads missing from the database (`missing`), listed threads with judged messages but no lane (put back in the queue, `requeued`), and inbound messages in read tabs unjudged for over 30 minutes (`stuck`). Stored in `sync_state.reconcile`. `InboxResponse.health` (`MailHealth`) carries it with `stale` (live, no finished sync in 2 hours), `jevDownSince`, `jevFallback`, `held` and `hiddenByTabs`; the inbox shows a one-line warning and Settings -> General a Mail health card. SSE event `{ type: "health" }` refreshes both. Tests: `packages/core/scripts/smoke.ts` section 7, `server/scripts/smoke-filtering.ts` (live path on a stubbed grant).
 
 ## Writer (packages/core/src/writer)
 

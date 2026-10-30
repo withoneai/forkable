@@ -1,4 +1,5 @@
 // The HTTP contract between server and ui. Browser-safe: no Node imports.
+import type { MailCategory } from "./categories.js";
 import type { Attendee, CalendarProviderKey, ChatBlocks, EventStatus, EventSummary, Judgment, Lane, MailProviderKey, RsvpResponse, Source, Thresholds, VipMatchKind, VipRules, VipTier, WorkingHours, WriterEngine, ConferencingProvider } from "./types.js";
 
 export interface ApiUser { id: string; name: string | null; email: string | null; avatarUrl: string | null }
@@ -38,6 +39,8 @@ export interface InboxRow {
   priority: number;
   confidence: number;
   check: boolean;
+  /** Why Check shows, in words. */
+  checkReason: string | null;
   goal: { id: string; title: string } | null;
   vip: { id: string; name: string; tier: VipTier } | null;
   kind: string | null;
@@ -51,6 +54,37 @@ export interface InboxRow {
   unread: boolean;
   /** This thread is a calendar invite tied to a synced event; the Reader shows the invite card. */
   invite: { eventId: string; state: "pending" | "answered" | "moved" | "cancelled" } | null;
+  /** You wrote last, nobody answered, and the follow-up timer ran out. */
+  followUpDue: boolean;
+  /** Set only in All inboxes: the account this thread lives in. */
+  mailbox?: { id: string; label: string; address: string | null };
+}
+
+/** Proof the pipeline is keeping up: sync freshness, Jev's state, the last reconcile. */
+export interface MailHealth {
+  lastSyncAt: string | null;
+  /** No finished sync in over two hours on a live mailbox. */
+  stale: boolean;
+  /** Jev has been failing since then; mail is held unjudged for the first hour. */
+  jevDownSince: string | null;
+  /** True once the hour has passed and the writer judges, without drafts. */
+  jevFallback: boolean;
+  /** Messages waiting on Jev right now. */
+  held: number;
+  reconcile: { at: string; listed: number; missing: number; requeued: number; stuck: number } | null;
+  /** The inbox tabs being read, e.g. ["primary"]. */
+  categories: string[];
+  /** Threads already imported from tabs that are now off, hidden from the inbox. */
+  hiddenByTabs: number;
+}
+
+/** GET /inbox/all: every live mailbox's lane in one list. */
+export interface AllInboxResponse {
+  rows: InboxRow[];
+  counts: Record<Lane, number>;
+  syncing: boolean;
+  judging: number;
+  mailboxes: { id: string; label: string; address: string | null }[];
 }
 
 export interface InboxResponse {
@@ -58,6 +92,7 @@ export interface InboxResponse {
   counts: Record<Lane, number>;
   syncing: boolean;
   judging: number;         // messages waiting for a judgment
+  health: MailHealth;
 }
 
 export interface ApiMessage {
@@ -366,6 +401,8 @@ export interface ApiSettings {
   todayRail: boolean;
   /** Preselected in New event when available; null means no link by default. */
   defaultConferencing: ConferencingProvider | null;
+  /** Inbox tabs Rill reads. Gmail: primary, promotions, updates, social, forums. Outlook: primary (Focused), other. */
+  mailCategories: MailCategory[];
 }
 
 export interface PaletteResponse {
@@ -381,6 +418,8 @@ export type MailboxEvent =
   | { type: "ledger"; row: LedgerRow }
   | { type: "reconnect_required" }
   | { type: "progress"; judged: number; total: number }
+  /** Mail health changed: Jev went down or came back, a reconcile finished, follow-ups came due. */
+  | { type: "health" }
   | { type: "calendar"; phase: "start" | "done" | "error"; changed?: number; error?: string };
 
 export interface SyncResponse { started: boolean; reason?: string }

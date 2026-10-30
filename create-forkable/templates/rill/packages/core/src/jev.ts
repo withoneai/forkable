@@ -262,7 +262,7 @@ export const jev: JevLayer = {
       const rec = fixtures.readRecording(ctx.env.ROOT, threadId);
       if (!rec?.jev) throw new Error(`No Jev recording for ${threadId}. Run \`rill record\` signed in with a TypeSafe grant, or let the writer judge it.`);
     } else if (mode === "missing") {
-      throw new Error("Jev is not in your grant: connect TypeSafe in One and grant it to Rill");
+      throw Object.assign(new Error("Jev is not in your grant: connect TypeSafe in One and grant it to Rill"), { code: "jev_missing" });
     }
     // Sample mailboxes ask and record with the fixture's own goal and VIP ids, so a
     // recording replays for any mailbox whose goals and VIPs carry the fixture titles.

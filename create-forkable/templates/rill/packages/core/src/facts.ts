@@ -1,14 +1,16 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, gte, lte, ne, sql } from "drizzle-orm";
 import type { MailboxRow, VipRow } from "./contract.js";
 import type { Db } from "./db/client.js";
-import { messages as messagesTable, senders as sendersTable } from "./db/schema.js";
+import { events as eventsTable, messages as messagesTable, senders as sendersTable } from "./db/schema.js";
 import { CALENDAR_INVITE_LABEL, LIST_UNSUBSCRIBE_LABEL } from "./fixtures.js";
 import { domainOf } from "./sanitize.js";
 import type { Facts, Mail, ThreadRecord, VipTier } from "./types.js";
 
 // Hard facts: everything that is true or false without judgment. Exact VIP
-// match, team domain, first-time sender, who wrote last, list mail, a reply,
-// a calendar invite. Jev gets these as state and the policy reads them first.
+// match, team domain, first-time sender (never wrote to them, never met them),
+// who wrote last, list mail, a reply, a calendar invite, a meeting with them
+// in the next 48 hours. Jev gets these as state and the policy reads them
+// first, so the model is never asked what the database already knows.
 
 export type SenderRow = typeof sendersTable.$inferSelect;
 
@@ -52,6 +54,30 @@ export async function everWroteTo(db: Db, mailboxId: string, email: string): Pro
   const v = Boolean(r);
   if (v) wroteCache.set(key, true);
   return v;
+}
+
+const MEETING_SOON_MS = 48 * 3600_000;
+
+/** Events (not cancelled) where this address is the organizer or a guest. `window` limits them to a start range. */
+async function eventsWith(db: Db, mailboxId: string, email: string, window?: { from: Date; to: Date }): Promise<boolean> {
+  const needle = JSON.stringify([{ email }]);
+  const [r] = await db
+    .select({ id: eventsTable.id })
+    .from(eventsTable)
+    .where(and(
+      eq(eventsTable.mailboxId, mailboxId),
+      ne(eventsTable.status, "cancelled"),
+      window ? gte(eventsTable.start, window.from) : undefined,
+      window ? lte(eventsTable.start, window.to) : undefined,
+      sql`(${eventsTable.attendees} @> ${needle}::jsonb or lower(${eventsTable.organizer}->>'email') = ${email})`,
+    ))
+    .limit(1);
+  return Boolean(r);
+}
+
+/** A meeting with this person starts in the next 48 hours. */
+export function meetingSoonWith(db: Db, mailboxId: string, email: string, now = new Date()): Promise<boolean> {
+  return eventsWith(db, mailboxId, email, { from: now, to: new Date(now.getTime() + MEETING_SOON_MS) });
 }
 
 /**
@@ -102,8 +128,11 @@ export async function computeFacts(
     const screened = senderRow ? senderRow.status !== "unknown" : false;
     let wroteToThem = Boolean(senderRow?.iWroteToThem) || thread.messages.some((m) => m.isFromMe && [...m.to, ...m.cc].includes(from));
     if (!screened && !wroteToThem) wroteToThem = await everWroteTo(db, mailbox.id, from);
-    firstTimeSender = !screened && !wroteToThem;
+    // Met them: any meeting on the calendar, past or future, makes them known.
+    const met = !screened && !wroteToThem ? await eventsWith(db, mailbox.id, from).catch(() => false) : false;
+    firstTimeSender = !screened && !wroteToThem && !met;
   }
+  const meetingSoon = fromMe ? false : await meetingSoonWith(db, mailbox.id, from).catch(() => false);
 
   return {
     vipId: vip?.id ?? null,
@@ -116,5 +145,6 @@ export async function computeFacts(
     isReply: before.length > 0 || /^\s*(re|aw|sv|antw)\s*:/i.test(mail.subject),
     calendarInvite: isCalendarInvite(mail),
     messageCount: thread.messageCount || ordered.length || 1,
+    meetingSoon,
   };
 }

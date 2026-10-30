@@ -156,7 +156,7 @@ const inbox = fixtures.loadInbox(ROOT);
 const goals: GoalRow[] = inbox.goals.map((g, i) => ({ id: g.id, mailboxId: "mb", title: g.title, detail: g.detail, weight: g.weight, paused: false, position: i, createdAt: new Date() }));
 const vips: VipRow[] = inbox.vips.map((v) => ({ id: v.id, mailboxId: "mb", name: v.name, matchKind: v.matchKind, match: v.match, tier: v.tier, rules: (v.rules ?? {}) as VipRow["rules"], createdAt: new Date() }));
 const priyaMail = term.messages[0]!;
-const facts: Facts = { vipId: null, vipTier: null, team: false, firstTimeSender: false, fromMe: false, meSentLast: true, hasListUnsubscribe: false, isReply: true, calendarInvite: false, messageCount: 2 };
+const facts: Facts = { vipId: null, vipTier: null, team: false, firstTimeSender: false, fromMe: false, meSentLast: true, hasListUnsubscribe: false, isReply: true, calendarInvite: false, messageCount: 2, meetingSoon: false };
 const jevInput: JevInput = { me: "Dana Reyes, CEO of Acme Inc", goals, vips, mail: priyaMail, thread: term, facts };
 const answers = await jev.judge(ctx, jevInput);
 const jevReq = [...sent].reverse().find((s) => s.path === "/v1/systemone")!;

@@ -401,7 +401,7 @@ export const settings: ApiSettings = {
   secondaryTimezone: null,
   workingHours: { days: [1, 2, 3, 4, 5], startMinute: 540, endMinute: 1080 },
   defaultCalendarId: null,
-  todayRail: true, defaultConferencing: null,
+  todayRail: true, defaultConferencing: null, mailCategories: ["primary", "promotions", "updates", "social", "forums"],
 };
 
 let ledgerSeq = 1;

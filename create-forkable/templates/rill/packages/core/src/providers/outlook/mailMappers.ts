@@ -1,3 +1,4 @@
+import { OUTLOOK_OTHER_LABEL } from "../../categories.js";
 import { CALENDAR_INVITE_LABEL, LIST_UNSUBSCRIBE_LABEL } from "../../fixtures.js";
 import { bodyText, cleanSnippet } from "../../sanitize.js";
 import type { Mail, ThreadRecord } from "../../types.js";
@@ -26,13 +27,14 @@ export interface GraphMessage {
   internetMessageId?: string;
   internetMessageHeaders?: { name?: string; value?: string }[];
   categories?: string[];
+  inferenceClassification?: "focused" | "other";
   isDraft?: boolean;
   parentFolderId?: string;
 }
 export interface GraphMessageList { value?: GraphMessage[]; "@odata.nextLink"?: string }
 
 /** Rill's own marks that ride in Mail.labelIds; never written back as Outlook categories. */
-export const OUTLOOK_SYNTHETIC_LABELS = new Set(["INBOX", "SENT", LIST_UNSUBSCRIBE_LABEL, CALENDAR_INVITE_LABEL]);
+export const OUTLOOK_SYNTHETIC_LABELS = new Set(["INBOX", "SENT", LIST_UNSUBSCRIBE_LABEL, CALENDAR_INVITE_LABEL, OUTLOOK_OTHER_LABEL]);
 
 function addressOf(a: GraphEmailAddress | undefined): { name: string; email: string } {
   return { name: a?.emailAddress?.name ?? "", email: (a?.emailAddress?.address ?? "").trim().toLowerCase() };
@@ -45,6 +47,7 @@ export function mailFromGraph(m: GraphMessage, threadId: string, me: string): Ma
   const isFromMe = me !== "" && from.email === me;
   const labelIds = [...(m.categories ?? []), isFromMe ? "SENT" : "INBOX"];
   if (m.internetMessageHeaders?.some((h) => h.name?.toLowerCase() === "list-unsubscribe")) labelIds.push(LIST_UNSUBSCRIBE_LABEL);
+  if (!isFromMe && m.inferenceClassification === "other") labelIds.push(OUTLOOK_OTHER_LABEL);
   // Graph marks a meeting request or reply as a derived type; there is no ICS part to read.
   const invite = /eventMessage/i.test(m["@odata.type"] ?? "");
   if (invite) labelIds.push(CALENDAR_INVITE_LABEL);
@@ -107,15 +110,29 @@ export function skipOf(nextLink: string | undefined): string | undefined {
   }
 }
 
-/** Gmail-style `newer_than:7d` (what sync.ts asks for) as a Graph `$filter`; anything else is a `$search` phrase. */
+/**
+ * Gmail-style `newer_than:7d in:inbox -category:other` (what sync.ts asks for)
+ * as Graph parameters: newer_than becomes a receivedDateTime `$filter` and
+ * `-category:other` keeps Focused only. `in:inbox` is dropped on purpose:
+ * reading every folder keeps the user's sent replies in the thread, which is
+ * how Rill knows who wrote last. Anything else is a `$search` phrase.
+ */
 export function graphQuery(query: string | undefined, now = new Date()): { filter?: string; search?: string } {
   const filters = ["isDraft eq false"];
   if (!query) return { filter: filters.join(" and ") };
-  const rest = query.replace(/\bnewer_than:(\d+)([dhm])\b/g, (_, n: string, unit: string) => {
-    const ms = Number(n) * (unit === "d" ? 864e5 : unit === "h" ? 36e5 : 60_000);
-    filters.push(`receivedDateTime ge ${new Date(now.getTime() - ms).toISOString()}`);
-    return "";
-  }).trim();
+  const rest = query
+    .replace(/\bnewer_than:(\d+)([dhm])\b/g, (_, n: string, unit: string) => {
+      const ms = Number(n) * (unit === "d" ? 864e5 : unit === "h" ? 36e5 : 60_000);
+      filters.push(`receivedDateTime ge ${new Date(now.getTime() - ms).toISOString()}`);
+      return "";
+    })
+    .replace(/(^|\s)in:inbox\b/g, " ")
+    .replace(/(^|\s)-category:other\b/g, () => {
+      filters.push("inferenceClassification eq 'focused'");
+      return " ";
+    })
+    .replace(/(^|\s)-category:\w+/g, " ") // Gmail-only tabs; Outlook has no such pile
+    .trim();
   // Graph refuses $search together with $filter on messages, so a phrase search drops the filter.
   if (rest) return { search: `"${rest.replace(/"/g, "")}"` };
   return { filter: filters.join(" and ") };

@@ -68,6 +68,7 @@ export function useMailboxEvents(mailboxId: string | null, onEvent?: (e: Mailbox
         case "ledger": mark("ledger"); break;
         case "reconnect_required": mark("me", "inbox"); break;
         case "progress": if (ev.judged >= ev.total) mark("inbox", "me"); break;
+        case "health": mark("inbox", "me"); break;
         default: break;
       }
     };

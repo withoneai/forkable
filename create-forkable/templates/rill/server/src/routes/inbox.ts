@@ -1,12 +1,14 @@
 import { Hono } from "hono";
 import { and, desc, eq, ne, sql } from "drizzle-orm";
 import {
-  LANES, calendar, getMailProvider, schema, sync,
-  type ApiMessage, type InboxResponse, type Judgment, type Lane, type ThreadAction, type ThreadHtmlResponse, type ThreadResponse, type VipTier,
+  LANES, calendar, excludedLabels, getMailProvider, normalizeCategories, schema, sync,
+  type AllInboxResponse, type ApiMessage, type InboxResponse, type Judgment, type Lane, type ThreadAction, type ThreadHtmlResponse, type ThreadResponse, type VipTier,
 } from "@rill/core";
 import type { AppEnv } from "../deps.js";
 import { badRequest, notFound } from "../errors.js";
-import { inboxRowFor, inboxRows, laneCounts, latestInbound, loadMailboxCtx, loadThread, readJson, threadMessages, toApiDraft } from "./lib.js";
+import { loadSettings } from "../ctx.js";
+import { currentUser } from "../session.js";
+import { inboxRowFor, inboxRows, laneCounts, latestInbound, loadMailboxCtx, mailHealth, loadThread, readJson, threadMessages, toApiDraft } from "./lib.js";
 
 export const inboxRoutes = new Hono<AppEnv>();
 
@@ -17,13 +19,52 @@ inboxRoutes.get("/mailboxes/:id/inbox", async (c) => {
   const lane = laneParam && (LANES as readonly string[]).includes(laneParam) ? (laneParam as Lane) : undefined;
   if (laneParam && !lane) throw badRequest(`Unknown lane "${laneParam}"`);
   const includeDone = c.req.query("includeDone") === "1";
+  const off = excludedLabels(normalizeCategories(ctx.settings.mailCategories));
   const [rows, counts, judging] = await Promise.all([
-    inboxRows(db, mailbox.id, { lane, includeDone }),
-    laneCounts(db, mailbox.id),
+    inboxRows(db, mailbox.id, { lane, includeDone, off }),
+    laneCounts(db, mailbox.id, off),
     deps.scheduler.judgingCount(mailbox.id),
   ]);
-  void ctx;
-  const body: InboxResponse = { rows, counts, syncing: deps.scheduler.isSyncing(mailbox.id), judging };
+  const health = await mailHealth(db, mailbox, ctx.settings, judging);
+  const body: InboxResponse = { rows, counts, syncing: deps.scheduler.isSyncing(mailbox.id), judging, health };
+  return c.json(body);
+});
+
+// All inboxes: one lane across every live mailbox, ranked together. Each row
+// carries its mailbox, so the UI opens and acts on it in its own account.
+inboxRoutes.get("/inbox/all", async (c) => {
+  const deps = c.get("deps");
+  const user = await currentUser(c, { create: false });
+  if (!user) throw notFound("Mailbox");
+  const laneParam = c.req.query("lane");
+  const lane = laneParam && (LANES as readonly string[]).includes(laneParam) ? (laneParam as Lane) : undefined;
+  if (laneParam && !lane) throw badRequest(`Unknown lane "${laneParam}"`);
+  const mailboxes = await deps.db
+    .select()
+    .from(schema.mailboxes)
+    .where(and(eq(schema.mailboxes.userId, user.id), eq(schema.mailboxes.source, "live")))
+    .orderBy(schema.mailboxes.createdAt);
+  const per = await Promise.all(mailboxes.map(async (m) => {
+    const settings = await loadSettings(deps, m.id);
+    const off = excludedLabels(normalizeCategories(settings.mailCategories));
+    const [rows, counts, judging] = await Promise.all([
+      inboxRows(deps.db, m.id, { lane, off }),
+      laneCounts(deps.db, m.id, off),
+      deps.scheduler.judgingCount(m.id),
+    ]);
+    const tag = { id: m.id, label: m.label, address: m.address };
+    return { rows: rows.map((r) => ({ ...r, mailbox: tag })), counts, judging, syncing: deps.scheduler.isSyncing(m.id) };
+  }));
+  const counts = Object.fromEntries(LANES.map((l) => [l, per.reduce((n, p) => n + (p.counts[l] ?? 0), 0)])) as Record<Lane, number>;
+  // The same order each mailbox uses on its own: priority, then the newest message.
+  const rows = per.flatMap((p) => p.rows).sort((a, b) => b.priority - a.priority || b.lastMessageAt.localeCompare(a.lastMessageAt));
+  const body: AllInboxResponse = {
+    rows,
+    counts,
+    syncing: per.some((p) => p.syncing),
+    judging: per.reduce((n, p) => n + p.judging, 0),
+    mailboxes: mailboxes.map((m) => ({ id: m.id, label: m.label, address: m.address })),
+  };
   return c.json(body);
 });
 

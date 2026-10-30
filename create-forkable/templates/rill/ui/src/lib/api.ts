@@ -1,6 +1,6 @@
 // Typed fetch wrapper over docs/CONTRACT.md "Server API".
 import type {
-  AccessResponse, ApiCalendar, ApiChat, ApiChatMessage, ApiDraft, ApiEvent, ApiGoal, ApiMailbox, ApiSettings, ApiVip, AskResponse, BriefResponse,
+  AccessResponse, AllInboxResponse, ApiCalendar, ApiChat, ApiChatMessage, ApiDraft, ApiEvent, ApiGoal, ApiMailbox, ApiSettings, ApiVip, AskResponse, BriefResponse,
   CalendarPatchInput, CalendarResponse, ComposeInput, ComposeResponse, ConferencingResponse, ContactsResponse, EventPatchInput, CreateEventInput, CreateEventResponse, EnginesResponse, EventResponse, FreeBusyResponse, GoalInput, InboxResponse,
   InboxRow, LedgerRow, MeetingPrep, MeResponse, OfferTimesInput, OfferTimesResponse, OnboardingSuggestions,
   PaletteResponse, ProposeTimeResponse, RsvpAction, SyncResponse, ThreadAction, ThreadHtmlResponse, ThreadResponse, VipInput, VipSuggestion,
@@ -65,6 +65,7 @@ export const api = {
 
   inbox: (id: string, lane: Lane, includeDone = false) =>
     request<InboxResponse>("GET", `/mailboxes/${id}/inbox${q({ lane, includeDone: includeDone ? 1 : 0 })}`),
+  allInbox: (lane: Lane) => request<AllInboxResponse>("GET", `/inbox/all${q({ lane })}`),
   thread: (id: string, threadId: string) => request<ThreadResponse>("GET", `/mailboxes/${id}/threads/${threadId}`),
   threadHtml: (id: string, threadId: string) => request<ThreadHtmlResponse>("GET", `/mailboxes/${id}/threads/${threadId}/html`),
   threadAction: (id: string, threadId: string, action: ThreadAction) =>

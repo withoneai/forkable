@@ -40,12 +40,14 @@ two numbers above, not a separate setting.
 - VIP tier adds: inner circle 30, key account 20, team 15
 - urgency adds: within the hour 20, today 12, this week 6
 - needs a reply adds 10
+- a meeting with them in the next 48 hours adds 15
 - a cold pitch loses 30
 - a newsletter, receipt or notification loses 40
 
 ## The Check badge
 
 - show it when the judgment the lane rests on is below 0.6 confidence
+- also show it when a probability sits within 0.15 of its line
 - never file silently: a Check row keeps its lane but asks you to confirm
 
 ## Drafts
@@ -58,3 +60,7 @@ two numbers above, not a separate setting.
 
 - when I wrote last and nobody answered, nudge after 3 days
 - a VIP rule can shorten or lengthen this
+
+Write "3 business days" to skip weekends. A due follow-up brings the thread
+back to the inbox once, even if you marked it done or snoozed it, with a
+Follow up chip. Anyone writing again resets it.

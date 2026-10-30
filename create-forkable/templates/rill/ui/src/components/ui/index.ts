@@ -15,3 +15,4 @@ export * from "./Menu";
 export * from "./Dialog";
 export * from "./ConfirmButton";
 export * from "./Toast";
+export * from "./Select";

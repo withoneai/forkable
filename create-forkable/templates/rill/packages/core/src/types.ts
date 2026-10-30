@@ -93,6 +93,8 @@ export interface Facts {
   isReply: boolean;
   calendarInvite: boolean;
   messageCount: number;
+  /** A calendar event with this sender starts in the next 48 hours. */
+  meetingSoon: boolean;
 }
 
 /** What the policy decides for a thread. */
@@ -102,6 +104,8 @@ export interface Decision {
   priority: number;        // 0..100
   confidence: number;      // the confidence of the judgment the lane rests on
   check: boolean;          // show the Check badge
+  /** Why Check shows, in words: a shaky judgment, or one that sits close to its line. */
+  checkReason: string | null;
   goalId: string | null;
   vipId: string | null;
   needsReply: boolean;
@@ -116,6 +120,7 @@ export interface Thresholds {
   goal: number;        // 0.5
   check: number;       // 0.6: below this the Check badge shows
   coldPitch: number;   // 0.7
+  checkBand: number;   // 0.15: a probability this close to its line gets the Check badge
 }
 
 export const DEFAULT_THRESHOLDS: Thresholds = {
@@ -125,6 +130,7 @@ export const DEFAULT_THRESHOLDS: Thresholds = {
   goal: 0.5,
   check: 0.6,
   coldPitch: 0.7,
+  checkBand: 0.15,
 };
 
 /** A normalized email message, the unit Jev judges. */

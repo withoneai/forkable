@@ -1,6 +1,6 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { OneConnectError } from "@withone/connect/server";
-import { calendar, schema, sync, type Ctx, type MailboxRow } from "@rill/core";
+import { calendar, excludedLabels, followUps, normalizeCategories, schema, sync, type Ctx, type MailboxRow } from "@rill/core";
 import { buildCtx } from "./ctx.js";
 import type { CoreDeps } from "./deps.js";
 
@@ -31,12 +31,30 @@ export function createScheduler(deps: CoreDeps): Scheduler {
     return { mailbox, ctx: await buildCtx(deps, mailbox, user) };
   }
 
+  /** Unjudged inbound messages in the tabs the mailbox reads. */
   async function unjudged(mailboxId: string): Promise<number> {
+    const [s] = await deps.db.select({ c: schema.settings.mailCategories }).from(schema.settings).where(eq(schema.settings.mailboxId, mailboxId)).limit(1);
+    const off = excludedLabels(normalizeCategories(s?.c));
     const [r] = await deps.db
       .select({ n: sql<number>`count(*)::int` })
       .from(schema.messages)
-      .where(and(eq(schema.messages.mailboxId, mailboxId), isNull(schema.messages.judgedAt), eq(schema.messages.isFromMe, false)));
+      .where(and(
+        eq(schema.messages.mailboxId, mailboxId),
+        isNull(schema.messages.judgedAt),
+        eq(schema.messages.isFromMe, false),
+        off.length ? sql`not (${schema.messages.labelIds} ?| array[${sql.join(off.map((l) => sql`${l}`), sql`, `)}]::text[])` : undefined,
+      ));
     return Number(r?.n ?? 0);
+  }
+
+  /** Follow-up timers after every run; a failure here never fails the sync. */
+  async function runFollowUps(ctx: Ctx): Promise<void> {
+    try {
+      const f = await followUps(ctx);
+      if (f.resurfaced) log(`mailbox ${ctx.mailbox.id}: ${f.resurfaced} follow-up(s) came due`);
+    } catch (e) {
+      log(`mailbox ${ctx.mailbox.id}: follow-ups failed: ${String((e as Error).message ?? e)}`);
+    }
   }
 
   /** A key-mode mailbox learns its own address from the most common recipient of inbound mail. */
@@ -64,6 +82,7 @@ export function createScheduler(deps: CoreDeps): Scheduler {
         await sync.syncMailbox(ctx, { full: opts.full });
         if ((await unjudged(mailbox.id)) > 0) await sync.judgePending(ctx);
         await calendar.syncCalendar(ctx);
+        await runFollowUps(ctx);
         return;
       }
       emit({ type: "sync", phase: "start" });
@@ -71,7 +90,11 @@ export function createScheduler(deps: CoreDeps): Scheduler {
       await deps.db.update(schema.mailboxes).set({ lastSyncAt: new Date() }).where(eq(schema.mailboxes.id, mailbox.id));
       await resolveAddress(mailbox);
       emit({ type: "sync", phase: "done", imported: r.imported });
-      if (r.toJudge > 0 || (await unjudged(mailbox.id)) > 0) await sync.judgePending(ctx);
+      if (r.toJudge > 0 || (await unjudged(mailbox.id)) > 0) {
+        const j = await sync.judgePending(ctx);
+        if (j.held) log(`mailbox ${mailbox.id}: Jev unavailable, ${j.held} message(s) held unjudged`);
+      }
+      await runFollowUps(ctx);
       if (mailbox.calendarProvider) await calendar.syncCalendar(ctx).catch((e) => log(`mailbox ${mailbox.id}: calendar sync failed: ${String((e as Error).message ?? e)}`));
     } catch (err) {
       if (err instanceof OneConnectError && err.code === "reconnect_required") {

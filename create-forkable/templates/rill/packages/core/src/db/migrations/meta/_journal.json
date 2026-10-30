@@ -57,6 +57,13 @@
       "when": 1792683949904,
       "tag": "0007_user_avatar",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793109856821,
+      "tag": "0008_mail_filtering",
+      "breakpoints": true
     }
   ]
 }
