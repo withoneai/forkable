@@ -1,0 +1,1601 @@
+{
+  "$shapedFrom": "TypeSafe systemone (conn_mod_def::GNh4bXcHPaU::V2ndvy5CQJmYHvkElwVM_w) answers for question set item-v1 (SPEC 9.1), reduced to core's fixture shape; `lane` is the expected lane with VIPs Priya Shah and Owen Price",
+  "vips": [
+    "email:priya@globex.com",
+    "email:owen@northwind.vc"
+  ],
+  "items": {
+    "hubspot:202": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:203": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "hubspot:204": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:207": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:208": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:302": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:305": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:306": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:401": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "hubspot:402": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "hubspot:403": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "hubspot:404": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:501": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "hubspot:502": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "hubspot:503": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "hubspot:504": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "hubspot:505": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "attio:2f95711c-de90-5c49-8ea2-774f6b6cd2f8": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "attio:0e7093cd-49f5-5063-a901-5229a7645759": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "attio:82b3f763-792d-59e8-ba76-a213488c5818": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "attio:7dcb5291-2a53-5acf-8dde-a0b8f30aa220": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "attio:8ccbe6ea-5cd5-5410-8c95-14e0d8e32cda": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "attio:19e26f18-bac0-598c-90d0-a1cbbcb7739a": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "attio:0a5b910f-d4dd-5dd1-9dbf-75432316d62f": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "attio:12438b41-be3c-5a65-8385-332dc243f7d6": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "attio:cdbc4a0e-3a0f-59cf-91fc-1be08fd23d63": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "attio:d55ae406-79bc-5a20-a6d6-e55e7a4f3692": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "attio:65c4a411-7c8a-5f4b-b067-2c923e34a3b3": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "attio:26322817-1545-5921-8503-6f882fda8cee": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "attio:8bbbc1c2-5407-5ae1-a299-997116c09fc6": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:08edfeefd7e3f863": {
+      "kind": "customer",
+      "needs_you": 0.82,
+      "ball": "me",
+      "ball_p": 0.84,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "gmail:11d9cab2b1fe3eca": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "gmail:b57d659c68004a1d": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "gmail:e1603a9300f38387": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "gmail:edb64e4c7f8df755": {
+      "kind": "customer",
+      "needs_you": 0.88,
+      "ball": "me",
+      "ball_p": 0.86,
+      "importance": 3,
+      "lane": "needs_you"
+    },
+    "gmail:87b09348091b5c18": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "gmail:a6fdaf1e067ec868": {
+      "kind": "investor",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "gmail:dbe07e2544aebb76": {
+      "kind": "investor",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "gmail:1861589cc3b3fe0b": {
+      "kind": "cold_pitch",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:abcc4869f3df1787": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "gmail:6c6ab8ff010f8ca4": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "gmail:7e81bd1f996564f3": {
+      "kind": "team_chat",
+      "needs_you": 0.9,
+      "ball": "me",
+      "ball_p": 0.9,
+      "importance": 3,
+      "lane": "needs_you"
+    },
+    "gmail:0471a56d88a437b7": {
+      "kind": "internal_doc",
+      "needs_you": 0.3,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "gmail:9db4207b184a1faa": {
+      "kind": "team_chat",
+      "needs_you": 0.86,
+      "ball": "me",
+      "ball_p": 0.82,
+      "importance": 3,
+      "lane": "needs_you"
+    },
+    "gmail:6e94e3aa03dcd8ed": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "gmail:2ba2c9c3776a1619": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.8,
+      "importance": 2,
+      "lane": "waiting"
+    },
+    "gmail:c972a61b16d56875": {
+      "kind": "newsletter",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:6f5925fd3fee5d2e": {
+      "kind": "newsletter",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:5932e8077f4c1db0": {
+      "kind": "newsletter",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:7db9ec1ecd545c7c": {
+      "kind": "receipt",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:5ac62ce1aa9e9fab": {
+      "kind": "receipt",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:4d540ab15d1fe41b": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "gmail:84344d908e74300d": {
+      "kind": "notification",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:1d9c784be9cbfa3d": {
+      "kind": "receipt",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "gmail:3182d15b95fcec81": {
+      "kind": "person_email",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "gmail:49b3ec1e490fad98": {
+      "kind": "notification",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "outlook-mail:AAMkADAcmeEu46d7df84632d192e24df547f=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "outlook-mail:AAMkADAcmeEuc504aceaa5888809f5dd48db=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "outlook-mail:AAMkADAcmeEua1a2a3e0a645099e06d65d0c=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEu2b1fcce2084f223a66c38fdb=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEu0010c7e16b2f282d74233b0c=": {
+      "kind": "customer",
+      "needs_you": 0.84,
+      "ball": "me",
+      "ball_p": 0.8,
+      "importance": 3,
+      "lane": "needs_you"
+    },
+    "outlook-mail:AAMkADAcmeEuead7a4aea0f61d15b21d9b6c=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEu266e18a4d571e12b963da9ed=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "waiting"
+    },
+    "outlook-mail:AAMkADAcmeEu0b8403932ea39f1c646607b3=": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEu57a98b5f295968f9fb06d176=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEua50fb981cd8b697740dcd503=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "waiting"
+    },
+    "outlook-mail:AAMkADAcmeEudf73a4ffb0553b7196eb1301=": {
+      "kind": "notification",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "outlook-mail:AAMkADAcmeEu5d86d4d45216559b32b25cfb=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "outlook-mail:AAMkADAcmeEu508ecbbd68f765a766f86912=": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "waiting"
+    },
+    "outlook-mail:AAMkADAcmeEu05b05fb47780e2039263e566=": {
+      "kind": "receipt",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "google-calendar:57719bcba03688bfe4d33b39d7": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "google-calendar:8c6e7dc6ba76e57aa23523b5e1": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "google-calendar:cc3ef76ff8ac770d1962e7f7ae": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "google-calendar:7bd75e1ce8437a2461d4a42394": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "google-calendar:c7a4ec3e73af5e942260800e97": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "google-calendar:aa23ddb9aa509ddb2d6eb835d2": {
+      "kind": "calendar",
+      "needs_you": 0.72,
+      "ball": "me",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "needs_you"
+    },
+    "google-calendar:b2a11faf0b2dcb25b13c561ccf": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "google-calendar:5d8f79b1f62470c9e0805b78d5": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "google-calendar:742f8b457d6515fab19dfc2c0a": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "google-calendar:d2e15500859b507e5b5c40dcd7": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "google-calendar:7cbb624fbec85e7fcd1970c10b": {
+      "kind": "other",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "google-calendar:716899b1528712084d4f9c72e5": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "google-calendar:80ff908ca2171ee6eda521940c": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "google-calendar:a44220d2f189a99d07fd6bed60": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "google-calendar:c488eb10a038890dbcbc56f374": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEvent3a34f24ef333444ae026=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEvent0cc0e5fa86c07aef37ce=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEventf4201a980fa837780b78=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEvent3b6bb04e57ff1e09c990=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEvent790a4727f0acb5a4de5e=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "outlook-calendar:AAMkADAcmeEuEvent0b104ab5d363ea5f6035=": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "notion:92a240c6-d852-5691-93dd-0b7d6fb05ff2": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "notion:cf9925ad-49e9-5f10-843f-35f947899599": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:e61c036d-a75a-5abd-ba2d-30e59cf29930": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:cac10fb4-e531-5945-b27d-638214cff75d": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:5f859f5f-3e36-5ee6-8707-8fdaf452c479": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:49fb051f-06be-523d-9447-00be6e41c0d0": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:9489a915-a163-5603-9a76-63ee5cdf3310": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "notion:7b5eb3c3-60ce-5614-b10d-435df026f8b1": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:24c87eaa-bdc8-52f2-81b7-4ed9b238d1af": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "linear:0aab917a-fdf0-50ef-aed4-109de0bcba99": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "linear:392796b7-bccd-53cf-80e6-49ca220f0aef": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:abf822d8-af3f-554c-8518-ce79ccab49d0": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:4655655c-4bf6-550d-a400-2c781a1205dc": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:aa80b5ac-1136-5f56-9930-a1b067e466bb": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:2446245c-2aad-5a4b-9fed-0df61a86aae2": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:c3d61b24-c690-5d49-97c0-21eb0e41b371": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:732e6cd1-3b8b-5d03-8c60-e6d81e9ccabf": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "linear:4ccd1b0d-ba99-58b5-a60a-665a968fa1d8": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:da41e081-ab6e-5cf2-89e5-24144d1f998e": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:d4c402cd-c22d-59f5-86aa-0e75b6e9dea0": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "linear:f7173c5f-ba39-5089-9574-decf49a2cae3": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:81784d8f-53e5-55a1-803d-3afd9640f2d8": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.5,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:51ca8e02-a5ca-5aa6-932b-dc50debbe643": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:052b0889-edc4-5b9c-8524-483431d74542": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:f5aab558-7c85-51ec-824e-3694d6c86a40": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:fec0ba1b-0661-5e73-bbc9-95a103463439": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:908ef7bd-48d3-565d-a0d7-c0b74904b752": {
+      "kind": "internal_doc",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "linear:393ad0b4-6db9-522c-bd7d-2228c0f12720": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:c67f1f6e-c5b4-5c3d-8cf6-e35304b830d7": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:5762c5a4-0b10-5034-a8e9-6c142f43833e": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:0123a01e-6baa-5207-9d05-0127a6a119cd": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:ee1d54e4-404c-58c7-900f-d0234313df33": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "linear:de806ea1-8b1b-5cf8-a748-97f434d3982a": {
+      "kind": "task",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-6h)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-370m)": {
+      "kind": "notification",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-1d 16:05)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-1d 16:30)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-2d 09:10)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-2d 09:15)": {
+      "kind": "notification",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-2d 11:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-3d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-3d 15:30)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-3d 16:10)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-4d 11:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-4d 11:20)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-5d 09:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-6d 14:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-7d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-8d 09:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-8d 09:05)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-9d 12:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-3h)": {
+      "kind": "team_chat",
+      "needs_you": 0.55,
+      "ball": "me",
+      "ball_p": 0.55,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-1d 09:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-1d 14:05)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-2d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-2d 16:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-3d 11:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-4d 15:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-5d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-6d 12:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-7d 09:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-8d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-9d 15:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-10d 10:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-11d 11:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-1d 10:00)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-1d 10:15)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-3d 12:00)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-3d 12:30)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-5d 09:05)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-5d 09:25)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-12d 10:00)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-12d 10:30)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-20d 09:00)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-20d 09:30)": {
+      "kind": "customer",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-1d 14:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "them",
+      "ball_p": 0.8,
+      "importance": 2,
+      "lane": "waiting"
+    },
+    "slack:$relSlackTs(-1d 13:50)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-2d 18:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "vip"
+    },
+    "slack:$relSlackTs(-2d 18:10)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "slack:$relSlackTs(-3d 09:00)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "slack:$relSlackTs(-3d 09:30)": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "teams:1761000007331": {
+      "kind": "team_chat",
+      "needs_you": 0.9,
+      "ball": "me",
+      "ball_p": 0.88,
+      "importance": 3,
+      "lane": "needs_you"
+    },
+    "teams:1761000014662": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000021993": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000029324": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000036655": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000043986": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000051317": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000058648": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000065979": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000073310": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "teams:1761000080641": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000087972": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000095303": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "teams:1761000102634": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000109965": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000117296": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1761000124627": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "teams:1761000131958": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 0,
+      "lane": "low"
+    },
+    "teams:1760900000000": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1760900001111": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "teams:1760900002222": {
+      "kind": "team_chat",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "granola:not_8z8z42c24fd5f3": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "vip"
+    },
+    "granola:not_4eQb42zce95789": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 2,
+      "lane": "fyi"
+    },
+    "granola:not_3z3z4Q56z8b8cf": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 3,
+      "lane": "fyi"
+    },
+    "granola:not_Qda6ba6244ecz8": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "granola:not_3429czbecb6a3Q": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    },
+    "granola:not_ec5b66Q95f5bd9": {
+      "kind": "calendar",
+      "needs_you": 0.1,
+      "ball": "nobody",
+      "ball_p": 0.7,
+      "importance": 1,
+      "lane": "fyi"
+    }
+  }
+}

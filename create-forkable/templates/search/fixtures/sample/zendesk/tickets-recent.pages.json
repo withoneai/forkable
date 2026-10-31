@@ -1,0 +1,182 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ8YsAbgwZU::v8t-TFnTR2e_ZcUlSsv1AA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List Recent Tickets; dry-run page only",
+  "actionId": "sample::zendesk::list-recent-tickets",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "tickets": [
+          {
+            "id": 1011,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1011.json",
+            "subject": "Data residency question",
+            "description": "Is EU customer data stored in the EU?",
+            "status": "pending",
+            "priority": "high",
+            "requester_id": 9004,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-6d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-2d 09:00"
+            },
+            "tags": [
+              "eu",
+              "security"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-2d 09:00"
+            }
+          },
+          {
+            "id": 1001,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1001.json",
+            "subject": "SSO login loops back to the sign-in page",
+            "description": "After enabling SAML our test user is sent back to the login page.",
+            "status": "open",
+            "priority": "high",
+            "requester_id": 9001,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-6d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 15:00"
+            },
+            "tags": [
+              "sso",
+              "globex"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 15:00"
+            }
+          },
+          {
+            "id": 1004,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1004.json",
+            "subject": "VAT ID missing on invoice",
+            "description": "Our German entity needs its VAT ID on the invoice.",
+            "status": "open",
+            "priority": "high",
+            "requester_id": 9004,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-5d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 12:00"
+            },
+            "tags": [
+              "billing",
+              "eu"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 12:00"
+            }
+          },
+          {
+            "id": 1007,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1007.json",
+            "subject": "Import sandbox credentials",
+            "description": "Please send the sandbox credentials to Anika.",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9002,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-4d 12:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 11:00"
+            },
+            "tags": [
+              "pilot"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 11:00"
+            }
+          },
+          {
+            "id": 1002,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1002.json",
+            "subject": "Nightly CSV import timed out",
+            "description": "The 02:00 import failed with a timeout on our 80 MB file.",
+            "status": "pending",
+            "priority": "urgent",
+            "requester_id": 9002,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-3d 08:00"
+            },
+            "updated_at": {
+              "$rel": "-3h"
+            },
+            "tags": [
+              "import",
+              "pilot"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-3h"
+            }
+          }
+        ],
+        "next_page": null,
+        "previous_page": null,
+        "count": 5
+      }
+    }
+  ]
+}

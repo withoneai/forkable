@@ -1,0 +1,109 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7M0XFmgfA::ccNbrhTlTROYTSZtYigXCg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 10; members via $expand=members (I)",
+  "actionId": "conn_mod_def::GJ7M0XFmgfA::ccNbrhTlTROYTSZtYigXCg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#chats(members())",
+        "@odata.count": 2,
+        "value": [
+          {
+            "id": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "topic": "Umbrella pricing",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastUpdatedDateTime": {
+              "$rel": "-2h"
+            },
+            "chatType": "group",
+            "webUrl": "https://teams.microsoft.com/l/chat/19:umbrella-pricing-c4700199ff4416eb@thread.v2/0?tenantId=6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "isHiddenForAllMembers": false,
+            "members": [
+              {
+                "@odata.type": "#microsoft.graph.aadUserConversationMember",
+                "id": "MCMjMSMjaaab68ec71fa",
+                "roles": [
+                  "owner"
+                ],
+                "displayName": "Dana Oyelaran",
+                "visibleHistoryStartDateTime": "0001-01-01T00:00:00Z",
+                "userId": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "email": "dana@acme.eu",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              },
+              {
+                "@odata.type": "#microsoft.graph.aadUserConversationMember",
+                "id": "MCMjMSMjbf69b076699b",
+                "roles": [
+                  "owner"
+                ],
+                "displayName": "Lena Vogt",
+                "visibleHistoryStartDateTime": "0001-01-01T00:00:00Z",
+                "userId": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "email": "lena@acme.eu",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            ]
+          },
+          {
+            "id": "19:eng-sync-b475d1964d660696@thread.v2",
+            "topic": "Eng sync",
+            "createdDateTime": {
+              "$rel": "-60d 09:00"
+            },
+            "lastUpdatedDateTime": {
+              "$rel": "-1d 08:00"
+            },
+            "chatType": "group",
+            "webUrl": "https://teams.microsoft.com/l/chat/19:eng-sync-b475d1964d660696@thread.v2/0?tenantId=6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "isHiddenForAllMembers": false,
+            "members": [
+              {
+                "@odata.type": "#microsoft.graph.aadUserConversationMember",
+                "id": "MCMjMSMjaaab68ec71fa",
+                "roles": [
+                  "owner"
+                ],
+                "displayName": "Dana Oyelaran",
+                "visibleHistoryStartDateTime": "0001-01-01T00:00:00Z",
+                "userId": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "email": "dana@acme.eu",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              },
+              {
+                "@odata.type": "#microsoft.graph.aadUserConversationMember",
+                "id": "MCMjMSMjce2f1577295b",
+                "roles": [
+                  "owner"
+                ],
+                "displayName": "Mia Park",
+                "visibleHistoryStartDateTime": "0001-01-01T00:00:00Z",
+                "userId": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                "email": "mia@acme.com",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              },
+              {
+                "@odata.type": "#microsoft.graph.aadUserConversationMember",
+                "id": "MCMjMSMjbf69b076699b",
+                "roles": [
+                  "owner"
+                ],
+                "displayName": "Lena Vogt",
+                "visibleHistoryStartDateTime": "0001-01-01T00:00:00Z",
+                "userId": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "email": "lena@acme.eu",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

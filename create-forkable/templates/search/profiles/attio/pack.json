@@ -1,0 +1,431 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Attio",
+  "platform": "attio",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "attio.people",
+      "platform": "attio",
+      "model": "people",
+      "kind": "person",
+      "title": "Attio people",
+      "description": "People records, read with Attio's native records query. Attio has no updated-since filter, so every run lists them all and reconciles.",
+      "author": "builtin",
+      "revision": 4,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+        "pathVars": {
+          "object": "people"
+        },
+        "body": {
+          "sorts": [
+            {
+              "direction": "asc",
+              "attribute": "created_at"
+            }
+          ]
+        },
+        "resultsPath": "data",
+        "idPath": "id.record_id",
+        "pagination": {
+          "type": "offset",
+          "passAs": "body:offset"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "full"
+      },
+      "deletes": {
+        "reconcile": "onFullPass"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.values.name[0].full_name",
+            "item.values.email_addresses[0].email_address"
+          ]
+        },
+        "body": {
+          "join": [
+            "item.values.job_title[0].value",
+            "item.values.description[0].value",
+            {
+              "join": [
+                "item.values.primary_location[0].locality",
+                "item.values.primary_location[0].country_code"
+              ],
+              "sep": ", "
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.created_at",
+          "decode": "datetime"
+        },
+        "url": "{{ item.web_url }}",
+        "facets": {
+          "email": {
+            "path": "item.values.email_addresses[0].email_address",
+            "decode": "email"
+          },
+          "phone": "item.values.phone_numbers[0].original_phone_number",
+          "jobTitle": "item.values.job_title[0].value",
+          "companyDomain": {
+            "path": "item.values.email_addresses[0].email_address",
+            "decode": "domain"
+          },
+          "location": {
+            "join": [
+              "item.values.primary_location[0].locality",
+              "item.values.primary_location[0].country_code"
+            ],
+            "sep": ", "
+          }
+        }
+      },
+      "entities": {
+        "is": {
+          "type": "person",
+          "email": {
+            "path": "item.values.email_addresses[].email_address",
+            "pick": "all",
+            "decode": "email"
+          },
+          "name": "item.values.name[0].full_name",
+          "externalId": {
+            "template": "attio:people:{{ item.id.record_id }}"
+          },
+          "title": "item.values.job_title[0].value",
+          "allEmails": true
+        },
+        "refs": [
+          {
+            "role": "about",
+            "type": "company",
+            "externalId": {
+              "template": "attio:companies:{{ item.values.company[0].target_record_id }}"
+            },
+            "domain": {
+              "path": "item.values.email_addresses[0].email_address",
+              "decode": "domain"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 300
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "attio.companies",
+      "platform": "attio",
+      "model": "companies",
+      "kind": "company",
+      "title": "Attio companies",
+      "description": "Company records with domain, categories and location, read with Attio's native records query.",
+      "author": "builtin",
+      "revision": 3,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+        "pathVars": {
+          "object": "companies"
+        },
+        "body": {
+          "sorts": [
+            {
+              "direction": "asc",
+              "attribute": "created_at"
+            }
+          ]
+        },
+        "resultsPath": "data",
+        "idPath": "id.record_id",
+        "pagination": {
+          "type": "offset",
+          "passAs": "body:offset"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "full"
+      },
+      "deletes": {
+        "reconcile": "onFullPass"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.values.name[0].value",
+            "item.values.domains[0].domain"
+          ]
+        },
+        "body": {
+          "join": [
+            "item.values.description[0].value",
+            {
+              "path": "item.values.categories[].option.title",
+              "pick": "join",
+              "sep": ", "
+            },
+            "item.values.employee_range[0].option.title",
+            {
+              "join": [
+                "item.values.primary_location[0].locality",
+                "item.values.primary_location[0].country_code"
+              ],
+              "sep": ", "
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.created_at",
+          "decode": "datetime"
+        },
+        "url": "{{ item.web_url }}",
+        "labels": {
+          "path": "item.values.categories[].option.title",
+          "pick": "all"
+        },
+        "facets": {
+          "domain": {
+            "path": "item.values.domains[0].domain",
+            "decode": "domain"
+          },
+          "size": "item.values.employee_range[0].option.title",
+          "location": {
+            "join": [
+              "item.values.primary_location[0].locality",
+              "item.values.primary_location[0].country_code"
+            ],
+            "sep": ", "
+          },
+          "categories": {
+            "path": "item.values.categories[].option.title",
+            "pick": "all"
+          }
+        }
+      },
+      "entities": {
+        "is": {
+          "type": "company",
+          "domain": {
+            "path": "item.values.domains[0].domain",
+            "decode": "domain"
+          },
+          "name": "item.values.name[0].value",
+          "externalId": {
+            "template": "attio:companies:{{ item.id.record_id }}"
+          }
+        }
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 300
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "attio.deals",
+      "platform": "attio",
+      "model": "deals",
+      "kind": "deal",
+      "title": "Attio deals",
+      "description": "Deals with stage, value and the company and people on them, read with Attio's native records query.",
+      "author": "builtin",
+      "revision": 3,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+        "pathVars": {
+          "object": "deals"
+        },
+        "body": {
+          "sorts": [
+            {
+              "direction": "asc",
+              "attribute": "created_at"
+            }
+          ]
+        },
+        "resultsPath": "data",
+        "idPath": "id.record_id",
+        "pagination": {
+          "type": "offset",
+          "passAs": "body:offset"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "full"
+      },
+      "deletes": {
+        "reconcile": "onFullPass"
+      },
+      "fields": {
+        "title": "item.values.name[0].value",
+        "body": {
+          "join": [
+            {
+              "template": "Stage {{ item.values.stage[0].status.title }}"
+            },
+            {
+              "join": [
+                "item.values.value[0].currency_value",
+                "item.values.value[0].currency_code"
+              ],
+              "sep": " "
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.created_at",
+          "decode": "datetime"
+        },
+        "url": "{{ item.web_url }}",
+        "status": "item.values.stage[0].status.title",
+        "facets": {
+          "amount": "item.values.value[0].currency_value",
+          "currency": "item.values.value[0].currency_code",
+          "stage": "item.values.stage[0].status.title",
+          "owner": "item.values.owner[0].referenced_actor_id"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "about",
+            "type": "company",
+            "externalId": {
+              "template": "attio:companies:{{ item.values.associated_company[0].target_record_id }}"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 300
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "attio.notes",
+      "platform": "attio",
+      "model": "notes",
+      "kind": "note",
+      "title": "Attio notes",
+      "description": "Notes on any Attio record, as plain text.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ0CZucANAI::qH4Oc4NvS1GWLSVnKugSCA",
+        "resultsPath": "data",
+        "idPath": "id.note_id",
+        "pagination": {
+          "type": "offset",
+          "passAs": "query:offset"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 50,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "full"
+      },
+      "deletes": {
+        "reconcile": "onFullPass"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.title",
+            {
+              "template": "Note on {{ item.parent_object }}"
+            }
+          ]
+        },
+        "body": {
+          "coalesce": [
+            "item.content_plaintext",
+            {
+              "path": "item.content_markdown",
+              "decode": "markdown"
+            }
+          ]
+        },
+        "occurredAt": {
+          "path": "item.created_at",
+          "decode": "datetime"
+        },
+        "url": "https://app.attio.com/workspace/{{ item.parent_object }}/{{ item.parent_record_id }}",
+        "facets": {
+          "parentKind": "item.parent_object",
+          "parentExternalId": "item.parent_record_id"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "about",
+            "type": "person",
+            "externalId": {
+              "template": "attio:{{ item.parent_object }}:{{ item.parent_record_id }}"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "paragraph",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 300
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    }
+  ]
+}

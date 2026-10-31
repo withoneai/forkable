@@ -1,0 +1,706 @@
+{
+  "$shapedFrom": "conn_mod_def::GMIYwcOQ0W0::zXQUrHvhTy-rXQG3h50Paw Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 4",
+  "actionId": "conn_mod_def::GMIYwcOQ0W0::zXQUrHvhTy-rXQG3h50Paw",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('dana%40acme.eu')/messages",
+        "@odata.nextLink": "https://graph.microsoft.com/v1.0/me/messages?$top=50&$skip=8&$filter=lastModifiedDateTime+ge+2025-10-29T00:00:00Z+and+isDraft+eq+false&$orderby=lastModifiedDateTime+asc",
+        "value": [
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB3c2c96df97\"",
+            "id": "AAMkADAcmeEu05b05fb47780e2039263e566=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB27253ac3cb",
+            "createdDateTime": {
+              "$rel": "-15d 05:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-15d 05:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Your subscription renews on November 30.</p>"
+            },
+            "bodyPreview": "Your subscription renews on November 30.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEu4e85631096e094b589c3=",
+            "from": {
+              "emailAddress": {
+                "name": "billing",
+                "address": "billing@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-15d 05:00"
+            },
+            "sentDateTime": {
+              "$rel": "-15d 05:00"
+            },
+            "subject": "Your Microsoft 365 renewal notice",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu05b05fb47780e2039263e566%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB50fb49c685\"",
+            "id": "AAMkADAcmeEu5d86d4d45216559b32b25cfb=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB4ed9016016",
+            "createdDateTime": {
+              "$rel": "-12d 09:30"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-12d 09:30"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana, Globex needs our standard DPA signed alongside the MSA. Attached.</p>"
+            },
+            "bodyPreview": "Dana, Globex needs our standard DPA signed alongside the MSA. Attached.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEu7eefe32693479a31b8e8=",
+            "from": {
+              "emailAddress": {
+                "name": "Marco Bellini",
+                "address": "marco@globex.com"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-12d 09:30"
+            },
+            "sentDateTime": {
+              "$rel": "-12d 09:30"
+            },
+            "subject": "Globex data processing agreement",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu5d86d4d45216559b32b25cfb%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB59da3bcbb4\"",
+            "id": "AAMkADAcmeEu508ecbbd68f765a766f86912=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB9946c5a2c8",
+            "createdDateTime": {
+              "$rel": "-11d 14:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-11d 14:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Signed DPA attached.</p>"
+            },
+            "bodyPreview": "Signed DPA attached.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEu7eefe32693479a31b8e8=",
+            "from": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuSentItemsAA==",
+            "receivedDateTime": {
+              "$rel": "-11d 14:00"
+            },
+            "sentDateTime": {
+              "$rel": "-11d 14:00"
+            },
+            "subject": "RE: Globex data processing agreement",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Marco Bellini",
+                  "address": "marco@globex.com"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu508ecbbd68f765a766f86912%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABbfd384844e\"",
+            "id": "AAMkADAcmeEu57a98b5f295968f9fb06d176=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB5485f74708",
+            "createdDateTime": {
+              "$rel": "-9d 10:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-9d 10:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Which Acme entity will invoice Umbrella's German subsidiary?</p>"
+            },
+            "bodyPreview": "Which Acme entity will invoice Umbrella's German subsidiary?",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEu21cc39bebaf905af775e=",
+            "from": {
+              "emailAddress": {
+                "name": "Felix Wagner",
+                "address": "felix.wagner@umbrella.co"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-9d 10:00"
+            },
+            "sentDateTime": {
+              "$rel": "-9d 10:00"
+            },
+            "subject": "Invoice entity for Acme Europe",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu57a98b5f295968f9fb06d176%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB017ccc26bc\"",
+            "id": "AAMkADAcmeEua50fb981cd8b697740dcd503=",
+            "categories": [],
+            "changeKey": "CQAAABYAAABe10a4502ef",
+            "createdDateTime": {
+              "$rel": "-8d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-8d 09:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Acme Europe B.V. will invoice all EU entities. Lena has the VAT details.</p>"
+            },
+            "bodyPreview": "Acme Europe B.V. will invoice all EU entities. Lena has the VAT details.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEu21cc39bebaf905af775e=",
+            "from": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuSentItemsAA==",
+            "receivedDateTime": {
+              "$rel": "-8d 09:00"
+            },
+            "sentDateTime": {
+              "$rel": "-8d 09:00"
+            },
+            "subject": "RE: Invoice entity for Acme Europe",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Felix Wagner",
+                  "address": "felix.wagner@umbrella.co"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEua50fb981cd8b697740dcd503%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABa431fb3402\"",
+            "id": "AAMkADAcmeEua1a2a3e0a645099e06d65d0c=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB03924008f8",
+            "createdDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Hello Dana, please find Umbrella's supplier questionnaire attached. We need it back within two weeks.</p>"
+            },
+            "bodyPreview": "Hello Dana, please find Umbrella's supplier questionnaire attached. We need it back within two weeks.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEuf78110a1aa17c7b65613=",
+            "from": {
+              "emailAddress": {
+                "name": "Hannah Cole",
+                "address": "hannah.cole@umbrella.co"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "sentDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "subject": "Procurement questionnaire",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEua1a2a3e0a645099e06d65d0c%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB50ab8deaac\"",
+            "id": "AAMkADAcmeEu2b1fcce2084f223a66c38fdb=",
+            "categories": [],
+            "changeKey": "CQAAABYAAABb51348899a",
+            "createdDateTime": {
+              "$rel": "-5d 11:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-5d 11:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Thanks Hannah. Lena will answer the data residency section, I will take the rest.</p>"
+            },
+            "bodyPreview": "Thanks Hannah. Lena will answer the data residency section, I will take the rest.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEuf78110a1aa17c7b65613=",
+            "from": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuSentItemsAA==",
+            "receivedDateTime": {
+              "$rel": "-5d 11:00"
+            },
+            "sentDateTime": {
+              "$rel": "-5d 11:00"
+            },
+            "subject": "RE: Procurement questionnaire",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Hannah Cole",
+                  "address": "hannah.cole@umbrella.co"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu2b1fcce2084f223a66c38fdb%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABfb8973ec17\"",
+            "id": "AAMkADAcmeEudf73a4ffb0553b7196eb1301=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB0e7db70fd3",
+            "createdDateTime": {
+              "$rel": "-5d 06:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-5d 06:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Reminder: the Acme Europe all-hands is next week in Amsterdam.</p>"
+            },
+            "bodyPreview": "Reminder: the Acme Europe all-hands is next week in Amsterdam.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEufc47824bebe0be8c6391=",
+            "from": {
+              "emailAddress": {
+                "name": "people",
+                "address": "people@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-5d 06:00"
+            },
+            "sentDateTime": {
+              "$rel": "-5d 06:00"
+            },
+            "subject": "Acme Europe all-hands",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEudf73a4ffb0553b7196eb1301%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "cursor": "https://graph.microsoft.com/v1.0/me/messages?$top=50&$skip=8&$filter=lastModifiedDateTime+ge+2025-10-29T00:00:00Z+and+isDraft+eq+false&$orderby=lastModifiedDateTime+asc"
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('dana%40acme.eu')/messages",
+        "value": [
+          {
+            "@odata.etag": "W/\"CQAAABYAAABdf90e0eac1\"",
+            "id": "AAMkADAcmeEuead7a4aea0f61d15b21d9b6c=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB652c5125ef",
+            "createdDateTime": {
+              "$rel": "-4d 13:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-4d 13:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana, before procurement signs off we need pricing per entity. Three entities, about 400 seats total.</p>"
+            },
+            "bodyPreview": "Dana, before procurement signs off we need pricing per entity. Three entities, about 400 seats total.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEu505ab43ddc467db2e622=",
+            "from": {
+              "emailAddress": {
+                "name": "Felix Wagner",
+                "address": "felix.wagner@umbrella.co"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-4d 13:00"
+            },
+            "sentDateTime": {
+              "$rel": "-4d 13:00"
+            },
+            "subject": "Umbrella EU expansion pricing",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEuead7a4aea0f61d15b21d9b6c%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB300b65bbdf\"",
+            "id": "AAMkADAcmeEu266e18a4d571e12b963da9ed=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB42e73d572c",
+            "createdDateTime": {
+              "$rel": "-3d 16:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 16:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Felix, pricing per entity is attached. Happy to walk through it on a call.</p>"
+            },
+            "bodyPreview": "Felix, pricing per entity is attached. Happy to walk through it on a call.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEu505ab43ddc467db2e622=",
+            "from": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuSentItemsAA==",
+            "receivedDateTime": {
+              "$rel": "-3d 16:00"
+            },
+            "sentDateTime": {
+              "$rel": "-3d 16:00"
+            },
+            "subject": "RE: Umbrella EU expansion pricing",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Felix Wagner",
+                  "address": "felix.wagner@umbrella.co"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu266e18a4d571e12b963da9ed%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABe15b8f1996\"",
+            "id": "AAMkADAcmeEu46d7df84632d192e24df547f=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB4ad3f485e5",
+            "createdDateTime": {
+              "$rel": "-2d 08:10"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 08:10"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana,</p><p>Attached is the final MSA redline with the liability cap we agreed. Priya's team is ready to sign once you confirm.</p><p>Marco</p>"
+            },
+            "bodyPreview": "Dana,  Attached is the final MSA redline with the liability cap we agreed. Priya's team is ready to sign once you confirm.  Marco",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Priya Shah",
+                  "address": "priya@globex.com"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEudbceba7633ba67d13438=",
+            "from": {
+              "emailAddress": {
+                "name": "Marco Bellini",
+                "address": "marco@globex.com"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-2d 08:10"
+            },
+            "sentDateTime": {
+              "$rel": "-2d 08:10"
+            },
+            "subject": "Globex legal redline, final",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu46d7df84632d192e24df547f%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAAB512000bf20\"",
+            "id": "AAMkADAcmeEuc504aceaa5888809f5dd48db=",
+            "categories": [],
+            "changeKey": "CQAAABYAAABb629df2b7e",
+            "createdDateTime": {
+              "$rel": "-2d 10:30"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 10:30"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Thanks Marco. Reviewing with our counsel today, expect a signed copy this week.</p>"
+            },
+            "bodyPreview": "Thanks Marco. Reviewing with our counsel today, expect a signed copy this week.",
+            "ccRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Priya Shah",
+                  "address": "priya@globex.com"
+                }
+              }
+            ],
+            "conversationId": "AAQkADAcmeEudbceba7633ba67d13438=",
+            "from": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": true,
+            "parentFolderId": "AQMkADAcmeEuSentItemsAA==",
+            "receivedDateTime": {
+              "$rel": "-2d 10:30"
+            },
+            "sentDateTime": {
+              "$rel": "-2d 10:30"
+            },
+            "subject": "RE: Globex legal redline, final",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Marco Bellini",
+                  "address": "marco@globex.com"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEuc504aceaa5888809f5dd48db%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABa489c1d1db\"",
+            "id": "AAMkADAcmeEu0010c7e16b2f282d74233b0c=",
+            "categories": [],
+            "changeKey": "CQAAABYAAAB67a805fe7c",
+            "createdDateTime": {
+              "$rel": "-1d 07:45"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 07:45"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana, can you send the completed questionnaire by Friday? Our committee meets Monday and needs your answers on data residency and SSO.</p>"
+            },
+            "bodyPreview": "Dana, can you send the completed questionnaire by Friday? Our committee meets Monday and needs your answers on data residency and SSO.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEuf78110a1aa17c7b65613=",
+            "from": {
+              "emailAddress": {
+                "name": "Hannah Cole",
+                "address": "hannah.cole@umbrella.co"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": false,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-1d 07:45"
+            },
+            "sentDateTime": {
+              "$rel": "-1d 07:45"
+            },
+            "subject": "RE: Procurement questionnaire",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu0010c7e16b2f282d74233b0c%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          },
+          {
+            "@odata.etag": "W/\"CQAAABYAAABd2886b500b\"",
+            "id": "AAMkADAcmeEu0b8403932ea39f1c646607b3=",
+            "categories": [],
+            "changeKey": "CQAAABYAAABec06bbe6c3",
+            "createdDateTime": {
+              "$rel": "-1d 12:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 12:00"
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana, for the go/no-go: EU customers need tax IDs on invoices before launch (LED-161). Flagging so sales can set expectations.</p>"
+            },
+            "bodyPreview": "Dana, for the go/no-go: EU customers need tax IDs on invoices before launch (LED-161). Flagging so sales can set expectations.",
+            "ccRecipients": [],
+            "conversationId": "AAQkADAcmeEu0745dce7151e4b239508=",
+            "from": {
+              "emailAddress": {
+                "name": "Lena Vogt",
+                "address": "lena@acme.eu"
+              }
+            },
+            "hasAttachments": false,
+            "isDraft": false,
+            "isRead": false,
+            "parentFolderId": "AQMkADAcmeEuInboxAAAA==",
+            "receivedDateTime": {
+              "$rel": "-1d 12:00"
+            },
+            "sentDateTime": {
+              "$rel": "-1d 12:00"
+            },
+            "subject": "Ledger 2.0 go/no-go prep",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                }
+              }
+            ],
+            "webLink": "https://outlook.office.com/owa/?ItemID=AAMkADAcmeEu0b8403932ea39f1c646607b3%3D&exvsurl=1&viewmodel=ReadMessageItem"
+          }
+        ]
+      }
+    }
+  ]
+}

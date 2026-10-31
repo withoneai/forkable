@@ -1,0 +1,29 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "attio.people": 8,
+    "attio.companies": 5,
+    "attio.deals": 3,
+    "attio.notes": 3
+  },
+  "kinds": {
+    "person": 8,
+    "company": 5,
+    "deal": 3,
+    "note": 3
+  },
+  "tombstoned": 0,
+  "items": 19,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "attio"
+      ]
+    },
+    "email:owen.price@northwind.vc": {
+      "sources": [
+        "attio"
+      ]
+    }
+  }
+}

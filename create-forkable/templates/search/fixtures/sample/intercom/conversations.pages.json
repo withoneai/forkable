@@ -1,0 +1,590 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4ph00Ee5o::WDltQcvIQ7ihlSIXbytpug Response and Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Search Conversations. pages.next is documented only as <starting_after_paging> with no structure; shaped as { page, starting_after } and the profile reads pages.next.starting_after. company, teammates, statistics left null or out (structure not provided).",
+  "actionId": "conn_mod_def::GJ4ph00Ee5o::WDltQcvIQ7ihlSIXbytpug",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "type": "conversation.list",
+        "pages": {
+          "type": "pages",
+          "page": 1,
+          "next": {
+            "page": 2,
+            "starting_after": "WzE3MzA0NjI0MDAwMDAsMjA0NCwyXQ=="
+          },
+          "per_page": 50,
+          "total_pages": 2
+        },
+        "total_count": 7,
+        "conversations": [
+          {
+            "type": "conversation",
+            "id": "2041",
+            "title": "Globex SSO rollout",
+            "created_at": {
+              "$relUnix": "-6d 09:10"
+            },
+            "updated_at": {
+              "$relUnix": "-1d 16:40"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "email",
+              "id": "40392041",
+              "delivered_as": "customer_initiated",
+              "subject": "SSO for the Globex rollout",
+              "body": "<p>Hi Acme team, we want SSO with Okta before the Globex rollout to 400 seats. Is SAML on our plan?</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c101",
+                "name": "Priya Shah",
+                "email": "priya@globex.com"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c101",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814201,
+            "team_assignee_id": null,
+            "open": true,
+            "state": "open",
+            "read": false,
+            "tags": {
+              "type": "tag.list",
+              "tags": [
+                {
+                  "type": "tag",
+                  "id": "9100",
+                  "name": "Enterprise",
+                  "applied_at": {
+                    "$relUnix": "-6d 09:10"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814201"
+                  }
+                },
+                {
+                  "type": "tag",
+                  "id": "9101",
+                  "name": "SSO",
+                  "applied_at": {
+                    "$relUnix": "-6d 09:10"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814201"
+                  }
+                }
+              ]
+            },
+            "priority": "priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          },
+          {
+            "type": "conversation",
+            "id": "2042",
+            "title": null,
+            "created_at": {
+              "$relUnix": "-9d 14:00"
+            },
+            "updated_at": {
+              "$relUnix": "-3d 10:15"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "conversation",
+              "id": "40392042",
+              "delivered_as": "customer_initiated",
+              "subject": "",
+              "body": "<p>Our CSV import fails on files over 50 MB. The pilot data is 80 MB.</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c102",
+                "name": "Ravi Menon",
+                "email": "ravi@initech.io"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c102",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814201,
+            "team_assignee_id": null,
+            "open": true,
+            "state": "open",
+            "read": false,
+            "tags": {
+              "type": "tag.list",
+              "tags": [
+                {
+                  "type": "tag",
+                  "id": "9100",
+                  "name": "Bug",
+                  "applied_at": {
+                    "$relUnix": "-9d 14:00"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814201"
+                  }
+                },
+                {
+                  "type": "tag",
+                  "id": "9101",
+                  "name": "Initech pilot",
+                  "applied_at": {
+                    "$relUnix": "-9d 14:00"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814201"
+                  }
+                }
+              ]
+            },
+            "priority": "priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          },
+          {
+            "type": "conversation",
+            "id": "2043",
+            "title": "Invoice in EUR for Umbrella",
+            "created_at": {
+              "$relUnix": "-12d 08:30"
+            },
+            "updated_at": {
+              "$relUnix": "-10d 15:00"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "email",
+              "id": "40392043",
+              "delivered_as": "customer_initiated",
+              "subject": "Invoice currency for the EU expansion",
+              "body": "<p>Hello, our procurement needs invoices in EUR with our VAT number for the EU expansion.</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c103",
+                "name": "Hannah Cole",
+                "email": "hannah.cole@umbrella.co"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c103",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814203,
+            "team_assignee_id": null,
+            "open": false,
+            "state": "closed",
+            "read": true,
+            "tags": {
+              "type": "tag.list",
+              "tags": [
+                {
+                  "type": "tag",
+                  "id": "9100",
+                  "name": "Billing",
+                  "applied_at": {
+                    "$relUnix": "-12d 08:30"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814203"
+                  }
+                }
+              ]
+            },
+            "priority": "not_priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          },
+          {
+            "type": "conversation",
+            "id": "2044",
+            "title": "Initech data export schedule",
+            "created_at": {
+              "$relUnix": "-4d 13:20"
+            },
+            "updated_at": {
+              "$relUnix": "-4d 17:05"
+            },
+            "waiting_since": null,
+            "snoozed_until": {
+              "$relUnix": "+2d 09:00"
+            },
+            "source": {
+              "type": "conversation",
+              "id": "40392044",
+              "delivered_as": "customer_initiated",
+              "subject": "",
+              "body": "<p>Can we schedule a nightly export of the pilot data to our warehouse?</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c104",
+                "name": "Anika Rao",
+                "email": "anika@initech.io"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c104",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814202,
+            "team_assignee_id": null,
+            "open": true,
+            "state": "snoozed",
+            "read": false,
+            "tags": {
+              "type": "tag.list",
+              "tags": [
+                {
+                  "type": "tag",
+                  "id": "9100",
+                  "name": "Feature request",
+                  "applied_at": {
+                    "$relUnix": "-4d 13:20"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814202"
+                  }
+                }
+              ]
+            },
+            "priority": "not_priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "cursor": "WzE3MzA0NjI0MDAwMDAsMjA0NCwyXQ=="
+      },
+      "response": {
+        "type": "conversation.list",
+        "pages": {
+          "type": "pages",
+          "page": 2,
+          "per_page": 50,
+          "total_pages": 2
+        },
+        "total_count": 7,
+        "conversations": [
+          {
+            "type": "conversation",
+            "id": "2045",
+            "title": "Hooli trial extension",
+            "created_at": {
+              "$relUnix": "-20d 11:00"
+            },
+            "updated_at": {
+              "$relUnix": "-19d 09:00"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "email",
+              "id": "40392045",
+              "delivered_as": "customer_initiated",
+              "subject": "Trial extension",
+              "body": "<p>Hi, could you extend our Hooli trial by two weeks? We need more time to evaluate.</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c105",
+                "name": "Jules Martin",
+                "email": "jules@hooli.dev"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c105",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814204,
+            "team_assignee_id": null,
+            "open": false,
+            "state": "closed",
+            "read": true,
+            "tags": {
+              "type": "tag.list",
+              "tags": [
+                {
+                  "type": "tag",
+                  "id": "9100",
+                  "name": "Trial",
+                  "applied_at": {
+                    "$relUnix": "-20d 11:00"
+                  },
+                  "applied_by": {
+                    "type": "admin",
+                    "id": "814204"
+                  }
+                }
+              ]
+            },
+            "priority": "not_priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          },
+          {
+            "type": "conversation",
+            "id": "2046",
+            "title": "Webhook retries for Initrode",
+            "created_at": {
+              "$relUnix": "-2d 22:10"
+            },
+            "updated_at": {
+              "$relUnix": "-2d 23:00"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "conversation",
+              "id": "40392046",
+              "delivered_as": "customer_initiated",
+              "subject": "",
+              "body": "<p>Do failed webhooks retry, and how often? We missed two events last night.</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c106",
+                "name": "Grace Liu",
+                "email": "grace.liu@initrode.com"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c106",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": 814201,
+            "team_assignee_id": null,
+            "open": true,
+            "state": "open",
+            "read": false,
+            "tags": {
+              "type": "tag.list",
+              "tags": []
+            },
+            "priority": "not_priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          },
+          {
+            "type": "conversation",
+            "id": "2047",
+            "title": "Test conversation",
+            "created_at": {
+              "$relUnix": "-1d 09:00"
+            },
+            "updated_at": {
+              "$relUnix": "-1d 09:01"
+            },
+            "waiting_since": null,
+            "snoozed_until": null,
+            "source": {
+              "type": "conversation",
+              "id": "40392047",
+              "delivered_as": "customer_initiated",
+              "subject": "",
+              "body": "<p>test</p>",
+              "author": {
+                "type": "user",
+                "id": "67a1c0de1bb69f9f2193c107",
+                "name": "Sam Okafor",
+                "email": "sam@acme.com"
+              },
+              "attachments": [],
+              "url": null,
+              "redacted": false
+            },
+            "contacts": {
+              "type": "contact.list",
+              "contacts": [
+                {
+                  "type": "contact",
+                  "id": "67a1c0de1bb69f9f2193c107",
+                  "external_id": null
+                }
+              ]
+            },
+            "first_contact_reply": null,
+            "admin_assignee_id": null,
+            "team_assignee_id": null,
+            "open": false,
+            "state": "closed",
+            "read": true,
+            "tags": {
+              "type": "tag.list",
+              "tags": []
+            },
+            "priority": "not_priority",
+            "sla_applied": null,
+            "statistics": null,
+            "conversation_rating": null,
+            "teammates": null,
+            "custom_attributes": {},
+            "topics": {},
+            "ticket": null,
+            "linked_objects": {
+              "type": "list",
+              "data": [],
+              "total_count": 0,
+              "has_more": false
+            },
+            "ai_agent": null,
+            "ai_agent_participated": false
+          }
+        ]
+      }
+    }
+  ]
+}

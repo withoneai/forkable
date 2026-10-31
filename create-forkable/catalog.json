@@ -57,6 +57,46 @@
       ]
     },
     {
+      "id": "search",
+      "name": "Search",
+      "status": "available",
+      "kind": "Personal search",
+      "tagline": "One search box for everything you connect.",
+      "description": "One search box over your CRM, mail, calendars, docs, issues, chat and meeting notes, with an AI that answers with citations. Built in for HubSpot, Attio, Gmail, Outlook, Google and Outlook Calendar, Notion, Linear, Slack, Teams and Granola. Add a profile for any other tool.",
+      "platforms": [
+        "hubspot",
+        "attio",
+        "gmail",
+        "outlook-mail",
+        "google-calendar",
+        "outlook-calendar",
+        "notion",
+        "linear",
+        "slack",
+        "teams",
+        "granola",
+        "intercom",
+        "openai",
+        "gemini",
+        "cohere",
+        "mistral-ai",
+        "anthropic",
+        "typesafe"
+      ],
+      "packageManager": "pnpm",
+      "create": "npm create forkable@latest my-search -- --template search",
+      "demo": "pnpm start",
+      "site": "https://search.forkable.dev",
+      "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/search",
+      "repo": "withoneai/forkable-search",
+      "envToGoLive": [
+        "ONE_CLIENT_ID",
+        "ONE_CLIENT_SECRET",
+        "ONE_CONNECT_KEY",
+        "ONE_PERMISSION_SET"
+      ]
+    },
+    {
       "id": "brief",
       "name": "Brief",
       "status": "coming-soon",

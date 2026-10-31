@@ -1,0 +1,1373 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7H9XYEBzI::FkfMtDsaTzKxb92jFEqxHg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 9",
+  "actionId": "conn_mod_def::GJ7H9XYEBzI::FkfMtDsaTzKxb92jFEqxHg",
+  "pages": [
+    {
+      "match": {
+        "partition": "C01DEALS",
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Globex is basically closed, waiting on signature. Priya's our champion.",
+            "ts": {
+              "$relSlackTs": "-6h"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "453d224e-68d7-58ef-b19f-7da4c4d01fca",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "2e109",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Globex is basically closed, waiting on signature. Priya's our champion."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "thread_ts": {
+              "$relSlackTs": "-6h"
+            },
+            "reply_count": 2,
+            "reply_users_count": 2,
+            "latest_reply": {
+              "$relSlackTs": "-290m"
+            },
+            "reply_users": [
+              "U01DANA",
+              "U04SAM"
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Deal stage changed: Globex renewal 2027 moved to Contract sent.",
+            "ts": {
+              "$relSlackTs": "-370m"
+            },
+            "subtype": "bot_message",
+            "bot_id": "B01HUBSPOT",
+            "username": "HubSpot"
+          },
+          {
+            "type": "message",
+            "text": "Adding Initrode starter at 18k. Grace is waiting on their ops review.",
+            "ts": {
+              "$relSlackTs": "-1d 16:30"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "43ca8190-8ce6-5d30-b03c-20bff8323d5e",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "c9224",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Adding Initrode starter at 18k. Grace is waiting on their ops review."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Pipeline sheet is updated for Thursday. Globex and Umbrella are 60% of the quarter.",
+            "ts": {
+              "$relSlackTs": "-1d 16:05"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "953ea443-5801-5778-aa25-dbf6257fce30",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "5145c",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Pipeline sheet is updated for Thursday. Globex and Umbrella are 60% of the quarter."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Hooli pinged me cold. Parking it, too early for us.",
+            "ts": {
+              "$relSlackTs": "-2d 11:00"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "ebf62552-4be6-5f88-8e9b-af1680767e31",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "5607a",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Hooli pinged me cold. Parking it, too early for us."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Deal stage changed: Umbrella EU expansion moved to Decision maker bought in.",
+            "ts": {
+              "$relSlackTs": "-2d 09:15"
+            },
+            "subtype": "bot_message",
+            "bot_id": "B01HUBSPOT",
+            "username": "HubSpot"
+          },
+          {
+            "type": "message",
+            "text": "Umbrella questionnaire is with Lena for the data residency part.",
+            "ts": {
+              "$relSlackTs": "-2d 09:10"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "373e62a9-2fdb-5401-87d7-e9da25d54225",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "d02a9",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Umbrella questionnaire is with Lena for the data residency part."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "On it. Two year at 8% off comes to 154,560 total.",
+            "ts": {
+              "$relSlackTs": "-3d 16:10"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "5e9749f0-01bb-5378-b8d0-f7df3ee1fd95",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "a3356",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "On it. Two year at 8% off comes to 154,560 total."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Priya asked for a two year quote on Globex. Sam, can you run the numbers at 8% off?",
+            "ts": {
+              "$relSlackTs": "-3d 15:30"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "c3b69628-b770-5462-affd-df7107983adb",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "e75f9",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Priya asked for a two year quote on Globex. Sam, can you run the numbers at 8% off?"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Reminder: forecast call moved to Thursday 1pm.",
+            "ts": {
+              "$relSlackTs": "-3d 10:00"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "bf7215a0-d346-595d-a8da-aab62ab2f25c",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "88b8a",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Reminder: forecast call moved to Thursday 1pm."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Will update both after the Umbrella call.",
+            "ts": {
+              "$relSlackTs": "-4d 11:20"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "8ecf0e92-bc1e-56d9-a01d-82b30945a476",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "af5f8",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Will update both after the Umbrella call."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Board deck needs the Globex and Umbrella status by Wednesday.",
+            "ts": {
+              "$relSlackTs": "-4d 11:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "05b8864e-7c86-5edd-ba6a-d18d381e3b66",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "a72fb",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Board deck needs the Globex and Umbrella status by Wednesday."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Initech pilot moved to weekly check-ins, Thursdays at 10.",
+            "ts": {
+              "$relSlackTs": "-5d 09:00"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "4b074251-4a6c-59d6-ba03-0905e179289f",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "5eac7",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Initech pilot moved to weekly check-ins, Thursdays at 10."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Kickoff notes from Initech are in Granola if anyone needs them.",
+            "ts": {
+              "$relSlackTs": "-6d 14:00"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "01793b6a-ff0f-5aa1-9010-4ac9e4ac50ed",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "bd40c",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Kickoff notes from Initech are in Granola if anyone needs them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Attio migration starts with contacts this week.",
+            "ts": {
+              "$relSlackTs": "-7d 10:00"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "d300aa57-5189-58fa-8ae4-972830c94df5",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "20085",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Attio migration starts with contacts this week."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "has_more": true,
+        "pin_count": 0,
+        "response_metadata": {
+          "next_cursor": "slk-C01DEALS-1"
+        }
+      }
+    },
+    {
+      "match": {
+        "partition": "C01DEALS",
+        "cursor": "slk-C01DEALS-1"
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Thanks Dana. Happy to take Umbrella from the EU side.",
+            "ts": {
+              "$relSlackTs": "-8d 09:05"
+            },
+            "user": "U06LENA",
+            "client_msg_id": "d1c40506-8495-54fd-952f-e5b7b8f2797c",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "57c81",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Thanks Dana. Happy to take Umbrella from the EU side."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Welcome Lena to the channel. She covers EU accounts.",
+            "ts": {
+              "$relSlackTs": "-8d 09:00"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "b4f7364c-2e84-54f4-ad5b-5f81d297b311",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "11a07",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Welcome Lena to the channel. She covers EU accounts."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Q4 targets are in the sales playbook.",
+            "ts": {
+              "$relSlackTs": "-9d 12:00"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "3bdbf8e6-1bd9-58ca-a676-522dcc3e3068",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "0c44f",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Q4 targets are in the sales playbook."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "has_more": false,
+        "pin_count": 0,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    },
+    {
+      "match": {
+        "partition": "C02ENG",
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "@Dana can you confirm the Initech import size? Ravi says 80 MB, the log says 120.",
+            "ts": {
+              "$relSlackTs": "-3h"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "cd4f65dd-a818-5b66-bb69-2ea54da3a484",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "3435b",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "@Dana can you confirm the Initech import size? Ravi says 80 MB, the log says 120."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "LED-158 invoice PDF is ready for review.",
+            "ts": {
+              "$relSlackTs": "-1d 14:05"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "168887ec-afa8-537e-b8a2-6e0f4578e293",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "5e231",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "LED-158 invoice PDF is ready for review."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Initech import keeps timing out on large files. Thread for the fix.",
+            "ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "357398e9-ae63-5c3d-8a08-a44727d232b2",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "658e8",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Initech import keeps timing out on large files. Thread for the fix."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "thread_ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "reply_count": 3,
+            "reply_users_count": 3,
+            "latest_reply": {
+              "$relSlackTs": "-1d 11:00"
+            },
+            "reply_users": [
+              "U01DANA",
+              "U02MIA",
+              "U03THEO"
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Metering is live in staging for LED-142.",
+            "ts": {
+              "$relSlackTs": "-2d 16:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "7a5f0cd8-3d2c-5ab6-8353-25ab4134b193",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "60c10",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Metering is live in staging for LED-142."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "SSO for Globex is configured against their IdP metadata.",
+            "ts": {
+              "$relSlackTs": "-2d 10:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "2f7a6af9-54b5-5582-a63f-651e1ad053bc",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "3051d",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "SSO for Globex is configured against their IdP metadata."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Sandbox for Initech is provisioned.",
+            "ts": {
+              "$relSlackTs": "-3d 11:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "8e243f4f-1be3-5c63-9f2d-b7f6c9cf8ebf",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "69722",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Sandbox for Initech is provisioned."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Proration bug filed as LED-160.",
+            "ts": {
+              "$relSlackTs": "-4d 15:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "cce4a0fc-5953-5758-b727-30b6ca34e464",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "021ea",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Proration bug filed as LED-160."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Audit log export is next after SSO.",
+            "ts": {
+              "$relSlackTs": "-5d 10:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "bef88ff2-9f40-5068-aee0-8cbf1d257a5a",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "c7b07",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Audit log export is next after SSO."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Retro notes are in Notion.",
+            "ts": {
+              "$relSlackTs": "-6d 12:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "c7758261-ab69-581a-bfb4-e3469953a848",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "d47ac",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Retro notes are in Notion."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Rate limit on bulk API shipped.",
+            "ts": {
+              "$relSlackTs": "-7d 09:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "2d0fc43a-7f99-50fc-8c2f-2ccaf2959562",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "69914",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Rate limit on bulk API shipped."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Ledger 2.0 go/no-go is with Lena next week.",
+            "ts": {
+              "$relSlackTs": "-8d 10:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "bcbf65f5-c950-58cb-8223-6422b93a52f1",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "c04ae",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Ledger 2.0 go/no-go is with Lena next week."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Flaky checkout e2e fixed.",
+            "ts": {
+              "$relSlackTs": "-9d 15:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "7f89aa91-b99a-568f-a731-d874d6e7aed4",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "d8fa5",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Flaky checkout e2e fixed."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Planning for next sprint starts Monday.",
+            "ts": {
+              "$relSlackTs": "-10d 10:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "de3f69c6-52e2-5967-a747-0b1473e8ca0a",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "faa88",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Planning for next sprint starts Monday."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Welcome to the new eng channel layout.",
+            "ts": {
+              "$relSlackTs": "-11d 11:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "58d113ce-7829-5322-b1f7-f253c297492f",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "6391e",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Welcome to the new eng channel layout."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "has_more": false,
+        "pin_count": 0,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    },
+    {
+      "match": {
+        "partition": "C03GLOBEX",
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Great news, thank you Priya. We'll countersign as soon as it lands.",
+            "ts": {
+              "$relSlackTs": "-1d 10:15"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "b7eeed9e-7a25-5823-8ad3-7d733e17aba8",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "a4d84",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Great news, thank you Priya. We'll countersign as soon as it lands."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Morning! Legal is done on our side. Marco will send the final redline today.",
+            "ts": {
+              "$relSlackTs": "-1d 10:00"
+            },
+            "user": "U05PRIYA",
+            "client_msg_id": "46c9dac1-866f-51fe-907b-bb2573ca8daa",
+            "team": "T02GLOBEX",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "83737",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Morning! Legal is done on our side. Marco will send the final redline today."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Yes. Config is tested against your IdP.",
+            "ts": {
+              "$relSlackTs": "-3d 12:30"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "62185072-83bd-5957-9a63-3b5afad6bd46",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "bd299",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Yes. Config is tested against your IdP."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Quick one: is SSO still planned for the week after signature?",
+            "ts": {
+              "$relSlackTs": "-3d 12:00"
+            },
+            "user": "U05PRIYA",
+            "client_msg_id": "6539cc2d-496f-56b9-8bd4-85c235fcd9b1",
+            "team": "T02GLOBEX",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "46448",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Quick one: is SSO still planned for the week after signature?"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Got it, answering this week.",
+            "ts": {
+              "$relSlackTs": "-5d 09:25"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "f499e5b0-87be-5aa4-b1c1-fbfe7783f42b",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "fafc9",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Got it, answering this week."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Our security team sent a questionnaire by email, mostly standard.",
+            "ts": {
+              "$relSlackTs": "-5d 09:05"
+            },
+            "user": "U05PRIYA",
+            "client_msg_id": "6494c8a6-f92a-5470-8d96-f6aa9bad258f",
+            "team": "T02GLOBEX",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "a3cf2",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Our security team sent a questionnaire by email, mostly standard."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Thanks Priya, Mia is on it.",
+            "ts": {
+              "$relSlackTs": "-12d 10:30"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "46e2e463-ae33-5cd3-83d2-255c9f5c010e",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "dd87f",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Thanks Priya, Mia is on it."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Filed the SSO request through your Linear asks. Thanks for the quick turnaround.",
+            "ts": {
+              "$relSlackTs": "-12d 10:00"
+            },
+            "user": "U05PRIYA",
+            "client_msg_id": "db115680-96ec-5162-bded-7e6337125a85",
+            "team": "T02GLOBEX",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "e1742",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Filed the SSO request through your Linear asks. Thanks for the quick turnaround."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Glad to have you here, Priya.",
+            "ts": {
+              "$relSlackTs": "-20d 09:30"
+            },
+            "user": "U04SAM",
+            "client_msg_id": "922af063-3d76-5367-b042-06edc9b977c1",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "68122",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Glad to have you here, Priya."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Welcome to the shared channel, everyone.",
+            "ts": {
+              "$relSlackTs": "-20d 09:00"
+            },
+            "user": "U05PRIYA",
+            "client_msg_id": "6cc93359-15e4-5926-9cee-8771a1ecd6a4",
+            "team": "T02GLOBEX",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "7c977",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Welcome to the shared channel, everyone."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "has_more": false,
+        "pin_count": 0,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    },
+    {
+      "match": {
+        "partition": "D01THEO",
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Can you send me the latest deck before Owen's call?",
+            "ts": {
+              "$relSlackTs": "-1d 14:00"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "a47cc679-4b80-5f8c-ba63-ae1d26925dcc",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "84930",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Can you send me the latest deck before Owen's call?"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Deck v3 is in your inbox.",
+            "ts": {
+              "$relSlackTs": "-1d 13:50"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "2f0cf3ec-e579-5c6c-8e24-beb26bdb6c81",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "3dcde",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Deck v3 is in your inbox."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Works for me.",
+            "ts": {
+              "$relSlackTs": "-2d 18:10"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "a66890d7-92d1-583e-b81d-236ab0d5c212",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "859cf",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Works for me."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Owen wants the board on November 18.",
+            "ts": {
+              "$relSlackTs": "-2d 18:00"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "62a5db42-864d-5d92-9ea7-61307ba99bdc",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "221e4",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Owen wants the board on November 18."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Thanks, reading now.",
+            "ts": {
+              "$relSlackTs": "-3d 09:30"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "9a52ec22-6fa7-57ca-b7e4-c68fa2c1d2d3",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "42b8e",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Thanks, reading now."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "text": "Q3 numbers draft is in Notion.",
+            "ts": {
+              "$relSlackTs": "-3d 09:00"
+            },
+            "user": "U03THEO",
+            "client_msg_id": "a37914f9-8c08-560f-9490-789bea5a2fbe",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "1c44f",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Q3 numbers draft is in Notion."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "has_more": false,
+        "pin_count": 0,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    }
+  ]
+}

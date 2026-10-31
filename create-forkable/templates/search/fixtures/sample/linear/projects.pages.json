@@ -1,0 +1,89 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4vMBSrKJo::YJPEPOfJQ76eTtZUfpjyUg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 8",
+  "actionId": "conn_mod_def::GJ4vMBSrKJo::YJPEPOfJQ76eTtZUfpjyUg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "data": {
+          "projects": {
+            "nodes": [
+              {
+                "id": "51ca8e02-a5ca-5aa6-932b-dc50debbe643",
+                "name": "Ledger 2.0",
+                "description": "Usage-based billing and the new invoice.",
+                "content": "## Goal\nBill on usage by end of quarter.\n\n## Milestones\n- Metering live\n- New invoice PDF\n- EU tax IDs",
+                "url": "https://linear.app/acme/project/ledger2-51ca8e02-a5c",
+                "state": "started",
+                "targetDate": null,
+                "startDate": null,
+                "createdAt": {
+                  "$rel": "-50d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 17:00"
+                },
+                "archivedAt": null,
+                "lead": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "members": {
+                  "nodes": [
+                    {
+                      "name": "Mia Park",
+                      "email": "mia@acme.com"
+                    },
+                    {
+                      "name": "Lena Vogt",
+                      "email": "lena@acme.eu"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "052b0889-edc4-5b9c-8524-483431d74542",
+                "name": "Enterprise readiness",
+                "description": "SSO, audit log and import reliability for enterprise customers.",
+                "content": "## Why\nGlobex, Initech and Umbrella all need it.\n\n## Scope\nSAML SSO, audit log export, imports over 50 MB.",
+                "url": "https://linear.app/acme/project/enterprise-052b0889-edc",
+                "state": "started",
+                "targetDate": null,
+                "startDate": null,
+                "createdAt": {
+                  "$rel": "-45d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 15:00"
+                },
+                "archivedAt": null,
+                "lead": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "members": {
+                  "nodes": [
+                    {
+                      "name": "Theo Lund",
+                      "email": "theo@acme.com"
+                    },
+                    {
+                      "name": "Dana Oyelaran",
+                      "email": "dana@acme.com"
+                    }
+                  ]
+                }
+              }
+            ],
+            "pageInfo": {
+              "endCursor": "lin-projects-cursor-2",
+              "hasNextPage": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}

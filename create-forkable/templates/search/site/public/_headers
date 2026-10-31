@@ -1,0 +1,35 @@
+# Where an agent that lands on the homepage finds the machine-readable side
+# of search.forkable.dev (RFC 8288 Link headers, the same relations
+# forkable.dev serves). The files are written by scripts/agent-files.mjs at
+# build time. Cloudflare joins the values of every rule that matches, so
+# rules that overlap ("/*" with the rest) never set the same header twice.
+/
+  Link: </llms.txt>; rel="describedby"; type="text/plain", </index.md>; rel="alternate"; type="text/markdown", </.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json", </.well-known/ai-catalog.json>; rel="ai-catalog"
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+/.well-known/*.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+/site.webmanifest
+  Content-Type: application/manifest+json
+
+/og.png
+  Cache-Control: public, max-age=3600

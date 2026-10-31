@@ -1,0 +1,413 @@
+{
+  "$shapedFrom": "conn_mod_def::GKbJ523eLeg::Qnq0sQ9eSQGAepuzo55Jsw Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get Note",
+  "actionId": "conn_mod_def::GKbJ523eLeg::Qnq0sQ9eSQGAepuzo55Jsw",
+  "byId": {
+    "not_8z8z42c24fd5f3": {
+      "id": "not_8z8z42c24fd5f3",
+      "object": "note",
+      "title": "Globex contract review",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-2d 14:00"
+      },
+      "updated_at": {
+        "$rel": "-2d 14:50"
+      },
+      "calendar_event": {
+        "event_title": "Globex contract review",
+        "invitees": [
+          {
+            "email": "dana@acme.com"
+          },
+          {
+            "email": "priya.shah@gmail.com"
+          },
+          {
+            "email": "sam@acme.com"
+          }
+        ],
+        "organiser": "dana@acme.com",
+        "calendar_event_id": "57719bcba03688bfe4d33b39d7",
+        "scheduled_start_time": {
+          "$rel": "-2d 14:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-2d 14:30"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.com"
+        },
+        {
+          "name": "Priya S.",
+          "email": "priya.shah@gmail.com"
+        },
+        {
+          "name": "Sam Okafor",
+          "email": "sam@acme.com"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_035eae60290f92",
+          "object": "folder",
+          "name": "Customers"
+        }
+      ],
+      "summary_text": "Globex contract review\n\nDecisions\nLegal has no further redlines; Marco sends the final MSA.\nRate for 2027 stays at 84,000.\n\nAsks\nPriya wants a multiyear discountquoted before she signs.\n\nNext steps\nSam sends the two year quote.\nDana countersigns once the redline lands.",
+      "summary_markdown": "## Globex contract review\n\n### Decisions\n- Legal has no further redlines; Marco sends the final MSA.\n- Rate for 2027 stays at 84,000.\n\n### Asks\n- Priya wants a **multi-year discount** quoted before she signs.\n\n### Next steps\n- Sam sends the two year quote.\n- Dana countersigns once the redline lands.",
+      "transcript": [
+        {
+          "speaker": {
+            "source": "microphone",
+            "attribution": "me"
+          },
+          "text": "Thanks for making time. Where did legal land on the redline?",
+          "start_time": {
+            "$rel": "-2d 14:00"
+          },
+          "end_time": {
+            "$rel": "-2d 14:00"
+          }
+        },
+        {
+          "speaker": {
+            "source": "speaker",
+            "attribution": "them"
+          },
+          "text": "We are happy with the terms.",
+          "start_time": {
+            "$rel": "-2d 14:01"
+          },
+          "end_time": {
+            "$rel": "-2d 14:01"
+          }
+        },
+        {
+          "speaker": {
+            "source": "speaker",
+            "attribution": "them"
+          },
+          "text": "Can you quote two years before we sign?",
+          "start_time": {
+            "$rel": "-2d 14:01"
+          },
+          "end_time": {
+            "$rel": "-2d 14:02"
+          }
+        },
+        {
+          "speaker": {
+            "source": "microphone",
+            "attribution": "me"
+          },
+          "text": "Yes, Sam will send it tomorrow.",
+          "start_time": {
+            "$rel": "-2d 14:02"
+          },
+          "end_time": {
+            "$rel": "-2d 14:03"
+          }
+        }
+      ]
+    },
+    "not_4eQb42zce95789": {
+      "id": "not_4eQb42zce95789",
+      "object": "note",
+      "title": "Initech pilot kickoff",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-8d 10:00"
+      },
+      "updated_at": {
+        "$rel": "-8d 11:20"
+      },
+      "calendar_event": {
+        "event_title": "Initech pilot kickoff",
+        "invitees": [
+          {
+            "email": "dana@acme.com"
+          },
+          {
+            "email": "ravi@initech.io"
+          },
+          {
+            "email": "anika@initech.io"
+          },
+          {
+            "email": "mia@acme.com"
+          }
+        ],
+        "organiser": "dana@acme.com",
+        "calendar_event_id": "8c6e7dc6ba76e57aa23523b5e1",
+        "scheduled_start_time": {
+          "$rel": "-8d 10:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-8d 11:00"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.com"
+        },
+        {
+          "name": "Ravi Menon",
+          "email": "ravi@initech.io"
+        },
+        {
+          "name": "Anika Rao",
+          "email": "anika@initech.io"
+        },
+        {
+          "name": "Mia Park",
+          "email": "mia@acme.com"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_035eae60290f92",
+          "object": "folder",
+          "name": "Customers"
+        }
+      ],
+      "summary_text": "Initech pilot kickoff\n\nScope\nTwo data sources, one team, eight weeks.\n\nSuccess criteria\nNightly CSV import under 10 minutes on the 80 MB export.\n\nOwners\nRavi: technical owner\nAnika: data access\nMia: Acme engineering",
+      "summary_markdown": "## Initech pilot kickoff\n\n### Scope\nTwo data sources, one team, eight weeks.\n\n### Success criteria\nNightly CSV import under 10 minutes on the 80 MB export.\n\n### Owners\n- Ravi: technical owner\n- Anika: data access\n- Mia: Acme engineering"
+    },
+    "not_3z3z4Q56z8b8cf": {
+      "id": "not_3z3z4Q56z8b8cf",
+      "object": "note",
+      "title": "Umbrella procurement call",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-3d 08:00"
+      },
+      "updated_at": {
+        "$rel": "-3d 09:05"
+      },
+      "calendar_event": {
+        "event_title": "Umbrella procurement call",
+        "invitees": [
+          {
+            "email": "dana@acme.eu"
+          },
+          {
+            "email": "hannah.cole@umbrella.co"
+          },
+          {
+            "email": "lena@acme.eu"
+          }
+        ],
+        "organiser": "hannah.cole@umbrella.co",
+        "calendar_event_id": null,
+        "scheduled_start_time": {
+          "$rel": "-3d 08:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-3d 08:45"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.eu"
+        },
+        {
+          "name": "Hannah Cole",
+          "email": "hannah.cole@umbrella.co"
+        },
+        {
+          "name": "Lena Vogt",
+          "email": "lena@acme.eu"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_035eae60290f92",
+          "object": "folder",
+          "name": "Customers"
+        }
+      ],
+      "summary_text": "Umbrella procurement call\n\nNotes\nCommittee meets Monday. Questionnaire due Friday. Hannah flagged data residency and SSO as the deciding sections.\n\nNext steps\nLena drafts residency answers.\nDana answers security and SSO.",
+      "summary_markdown": "## Umbrella procurement call\n\n### Notes\nCommittee meets Monday. Questionnaire due Friday. Hannah flagged data residency and SSO as the deciding sections.\n\n### Next steps\n- Lena drafts residency answers.\n- Dana answers security and SSO."
+    },
+    "not_Qda6ba6244ecz8": {
+      "id": "not_Qda6ba6244ecz8",
+      "object": "note",
+      "title": "Pipeline review",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-7d 11:00"
+      },
+      "updated_at": {
+        "$rel": "-7d 11:50"
+      },
+      "calendar_event": {
+        "event_title": "Pipeline review",
+        "invitees": [
+          {
+            "email": "dana@acme.com"
+          },
+          {
+            "email": "sam@acme.com"
+          }
+        ],
+        "organiser": "sam@acme.com",
+        "calendar_event_id": null,
+        "scheduled_start_time": {
+          "$rel": "-7d 11:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-7d 11:30"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.com"
+        },
+        {
+          "name": "Sam Okafor",
+          "email": "sam@acme.com"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_fc9225a1693f44",
+          "object": "folder",
+          "name": "Internal"
+        }
+      ],
+      "summary_text": "Pipeline review\n\nPipeline at 1.9M. Globex and Umbrella are 60% of the quarter. Initrode starter added at 18k.",
+      "summary_markdown": "## Pipeline review\n\nPipeline at 1.9M. Globex and Umbrella are 60% of the quarter. Initrode starter added at 18k."
+    },
+    "not_3429czbecb6a3Q": {
+      "id": "not_3429czbecb6a3Q",
+      "object": "note",
+      "title": "Dana / Theo 1:1",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-1d 15:00"
+      },
+      "updated_at": {
+        "$rel": "-1d 15:50"
+      },
+      "calendar_event": {
+        "event_title": "Dana / Theo 1:1",
+        "invitees": [
+          {
+            "email": "dana@acme.com"
+          },
+          {
+            "email": "theo@acme.com"
+          }
+        ],
+        "organiser": "dana@acme.com",
+        "calendar_event_id": null,
+        "scheduled_start_time": {
+          "$rel": "-1d 15:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-1d 15:30"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.com"
+        },
+        {
+          "name": "Theo Lund",
+          "email": "theo@acme.com"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_fc9225a1693f44",
+          "object": "folder",
+          "name": "Internal"
+        }
+      ],
+      "summary_text": "Dana / Theo 1:1\n\nBoard deck: sales slides due Wednesday night.\nPricing page copy: comments by Friday.",
+      "summary_markdown": "## Dana / Theo 1:1\n\n- Board deck: sales slides due Wednesday night.\n- Pricing page copy: comments by Friday."
+    },
+    "not_ec5b66Q95f5bd9": {
+      "id": "not_ec5b66Q95f5bd9",
+      "object": "note",
+      "title": "Initech security review",
+      "owner": {
+        "name": "Dana Oyelaran",
+        "email": "dana@acme.com"
+      },
+      "created_at": {
+        "$rel": "-60d 11:00"
+      },
+      "updated_at": {
+        "$rel": "-60d 12:05"
+      },
+      "calendar_event": {
+        "event_title": "Initech security review",
+        "invitees": [
+          {
+            "email": "dana@acme.com"
+          },
+          {
+            "email": "ravi.menon@protonmail.com"
+          },
+          {
+            "email": "anika@initech.io"
+          }
+        ],
+        "organiser": "dana@acme.com",
+        "calendar_event_id": null,
+        "scheduled_start_time": {
+          "$rel": "-60d 11:00"
+        },
+        "scheduled_end_time": {
+          "$rel": "-60d 11:45"
+        }
+      },
+      "attendees": [
+        {
+          "name": "Dana Oyelaran",
+          "email": "dana@acme.com"
+        },
+        {
+          "name": "Ravi M.",
+          "email": "ravi.menon@protonmail.com"
+        },
+        {
+          "name": "Anika Rao",
+          "email": "anika@initech.io"
+        }
+      ],
+      "folder_membership": [
+        {
+          "id": "fol_035eae60290f92",
+          "object": "folder",
+          "name": "Customers"
+        }
+      ],
+      "summary_text": "Initech security review\n\nRavi walked through their vendor checklist. No blockers. SOC report shared after the call.",
+      "summary_markdown": "## Initech security review\n\nRavi walked through their vendor checklist. No blockers. SOC report shared after the call."
+    }
+  }
+}

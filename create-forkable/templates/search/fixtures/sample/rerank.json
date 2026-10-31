@@ -1,0 +1,38 @@
+{
+  "$shapedFrom": "TypeSafe systemone score answers for Jev rerank (SPEC 9.2): rel_<n> on 4 levels (0 unrelated, 1 mentions it, 2 about it, 3 exactly what was asked). A query maps to either a list (best first, rel 3, 2, 1) or { rel: { ref: level } }; refs not listed score 0. Final = 0.5 * (1 - rrf_rank / 30) + 0.5 * rel / 3.",
+  "queries": {
+    "globex renewal": {
+      "rel": {
+        "hubspot:401": 3,
+        "gmail:08edfeefd7e3f863": 2,
+        "google-calendar:b2a11faf0b2dcb25b13c561ccf": 1,
+        "attio:cdbc4a0e-3a0f-59cf-91fc-1be08fd23d63": 1,
+        "outlook-mail:AAMkADAcmeEu46d7df84632d192e24df547f=": 3,
+        "hubspot:504": 2,
+        "notion:92a240c6-d852-5691-93dd-0b7d6fb05ff2": 2,
+        "google-calendar:57719bcba03688bfe4d33b39d7": 1
+      }
+    },
+    "globex renewal terms": [
+      "gmail:08edfeefd7e3f863",
+      "hubspot:401",
+      "outlook-mail:AAMkADAcmeEu46d7df84632d192e24df547f=",
+      "granola:not_8z8z42c24fd5f3",
+      "notion:92a240c6-d852-5691-93dd-0b7d6fb05ff2",
+      "attio:cdbc4a0e-3a0f-59cf-91fc-1be08fd23d63"
+    ],
+    "where are we with globex": [
+      "hubspot:401",
+      "notion:92a240c6-d852-5691-93dd-0b7d6fb05ff2",
+      "outlook-mail:AAMkADAcmeEu46d7df84632d192e24df547f=",
+      "granola:not_8z8z42c24fd5f3",
+      "gmail:08edfeefd7e3f863"
+    ],
+    "initech csv import problem": [
+      "linear:0aab917a-fdf0-50ef-aed4-109de0bcba99",
+      "gmail:edb64e4c7f8df755",
+      "linear:fec0ba1b-0661-5e73-bbc9-95a103463439",
+      "gmail:6e94e3aa03dcd8ed"
+    ]
+  }
+}

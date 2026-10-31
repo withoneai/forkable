@@ -1,0 +1,179 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Outlook Mail",
+  "platform": "outlook-mail",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "outlook-mail.messages",
+      "platform": "outlook-mail",
+      "model": "messages",
+      "kind": "email_thread",
+      "title": "Outlook messages",
+      "description": "One item per message, grouped into conversations by conversationId. Drafts skipped.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GMIYxNZ51eU::xY4rcCXiTTyrarjC9ac97w"
+        },
+        "vars": {
+          "email": "mail",
+          "upn": "userPrincipalName",
+          "name": "displayName"
+        },
+        "self": [
+          {
+            "kind": "email",
+            "var": "email"
+          },
+          {
+            "kind": "email",
+            "var": "upn"
+          }
+        ],
+        "optional": true
+      },
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GMIYwcOQ0W0::zXQUrHvhTy-rXQG3h50Paw",
+        "query": {
+          "$filter": "lastModifiedDateTime ge {{ run.since | iso }} and isDraft eq false",
+          "$orderby": "lastModifiedDateTime asc",
+          "$select": "id,subject,bodyPreview,body,from,toRecipients,ccRecipients,receivedDateTime,sentDateTime,createdDateTime,lastModifiedDateTime,conversationId,webLink,isRead,isDraft,hasAttachments,categories,parentFolderId"
+        },
+        "headers": {
+          "Prefer": "outlook.body-content-type=\"html\""
+        },
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        },
+        "pageSize": {
+          "param": "$top",
+          "value": 50,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.lastModifiedDateTime",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "{{ settings.backfill }}"
+      },
+      "deletes": {
+        "reconcile": "onFullPass",
+        "fullPassEvery": "14d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.subject",
+            {
+              "template": "(no subject)"
+            }
+          ]
+        },
+        "body": {
+          "path": "item.body",
+          "decode": "graph-body"
+        },
+        "snippet": "item.bodyPreview",
+        "occurredAt": {
+          "coalesce": [
+            {
+              "path": "item.receivedDateTime",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.createdDateTime",
+              "decode": "datetime"
+            }
+          ]
+        },
+        "updatedAt": {
+          "path": "item.lastModifiedDateTime",
+          "decode": "datetime"
+        },
+        "url": "{{ item.webLink }}",
+        "groupKey": "item.conversationId",
+        "labels": {
+          "path": "item.categories[]",
+          "pick": "all"
+        },
+        "facets": {
+          "messageCount": {
+            "path": "item.id",
+            "pick": "count"
+          },
+          "unread": {
+            "test": "item.isRead == false"
+          },
+          "hasAttachment": {
+            "test": "item.hasAttachments == true"
+          },
+          "lastFrom": {
+            "path": "item.from.emailAddress.address",
+            "decode": "email"
+          },
+          "folder": "item.parentFolderId"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "from",
+            "type": "person",
+            "email": {
+              "path": "item.from.emailAddress.address",
+              "decode": "email"
+            },
+            "name": "item.from.emailAddress.name"
+          },
+          {
+            "role": "to",
+            "type": "person",
+            "email": {
+              "path": "emailAddress.address",
+              "decode": "email"
+            },
+            "name": "emailAddress.name",
+            "each": "item.toRecipients[]"
+          },
+          {
+            "role": "cc",
+            "type": "person",
+            "email": {
+              "path": "emailAddress.address",
+              "decode": "email"
+            },
+            "name": "emailAddress.name",
+            "each": "item.ccRecipients[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "paragraph",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 120
+      },
+      "schedule": {
+        "every": "5m"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7H8UJsJpw::WIAkGZl2QGG-xp0x9a-c9w Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Test Authentication (auth.test), user token",
+  "actionId": "conn_mod_def::GJ7H8UJsJpw::WIAkGZl2QGG-xp0x9a-c9w",
+  "response": {
+    "ok": true,
+    "url": "https://acme-inc.slack.com/",
+    "team": "Acme Inc",
+    "user": "dana",
+    "team_id": "T01ACME",
+    "user_id": "U01DANA"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "hubspot.contacts": 8,
+    "hubspot.companies": 6,
+    "hubspot.deals": 4,
+    "hubspot.notes": 5
+  },
+  "kinds": {
+    "person": 8,
+    "company": 6,
+    "deal": 4,
+    "note": 5
+  },
+  "tombstoned": 0,
+  "items": 23,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "hubspot"
+      ]
+    }
+  }
+}

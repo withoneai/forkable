@@ -1,0 +1,320 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Microsoft Teams",
+  "platform": "teams",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "teams.chat-messages",
+      "platform": "teams",
+      "model": "chat-messages",
+      "kind": "message",
+      "title": "Teams chat messages",
+      "description": "Messages in your one-on-one, group and meeting chats.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        },
+        "maxChats": {
+          "type": "number",
+          "default": 50,
+          "min": 1,
+          "max": 500,
+          "label": "Chats to index"
+        }
+      },
+      "partitions": {
+        "actionId": "conn_mod_def::GJ7M0XFmgfA::ccNbrhTlTROYTSZtYigXCg",
+        "query": {
+          "$expand": "members"
+        },
+        "as": "partition",
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        },
+        "order": {
+          "by": "lastUpdatedDateTime",
+          "dir": "desc"
+        },
+        "max": "{{ settings.maxChats }}"
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ7M1v_ty1I::z6ijZ292SHKR9tz7c9nEOQ",
+        "pathVars": {
+          "chatId": "{{ partition.id }}"
+        },
+        "query": {
+          "$orderby": "lastModifiedDateTime desc",
+          "$filter": "lastModifiedDateTime gt {{ run.since | iso }}"
+        },
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        },
+        "pageSize": {
+          "param": "$top",
+          "value": 50,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.lastModifiedDateTime",
+        "order": "desc",
+        "overlap": "2m",
+        "initial": "{{ settings.backfill }}"
+      },
+      "deletes": {
+        "when": "item.deletedDateTime != null"
+      },
+      "keep": "item.messageType == 'message'",
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.subject",
+            {
+              "coalesce": [
+                "partition.topic",
+                {
+                  "template": "Chat"
+                }
+              ]
+            },
+            {
+              "template": "Teams message"
+            }
+          ]
+        },
+        "body": {
+          "path": "item.body",
+          "decode": "graph-body"
+        },
+        "occurredAt": {
+          "path": "item.createdDateTime",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.lastModifiedDateTime",
+          "decode": "datetime"
+        },
+        "url": "{{ item.webUrl }}",
+        "container": {
+          "coalesce": [
+            "partition.topic",
+            {
+              "template": "Chat"
+            }
+          ]
+        },
+        "groupKey": {
+          "coalesce": [
+            "item.replyToId",
+            "item.id"
+          ]
+        },
+        "facets": {
+          "sender": "item.from.user.displayName",
+          "threadId": "item.replyToId",
+          "isReply": {
+            "test": "item.replyToId != null"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "author",
+            "type": "person",
+            "name": "item.from.user.displayName",
+            "externalId": {
+              "template": "teams:{{ item.from.user.id }}"
+            }
+          },
+          {
+            "role": "mentioned",
+            "type": "person",
+            "name": "mentioned.user.displayName",
+            "each": "item.mentions[]"
+          },
+          {
+            "role": "to",
+            "type": "person",
+            "email": {
+              "path": "email",
+              "decode": "email"
+            },
+            "name": "displayName",
+            "each": "partition.members[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole",
+        "header": "{{ doc.container }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "teams.channel-messages",
+      "platform": "teams",
+      "model": "channel-messages",
+      "kind": "message",
+      "title": "Teams channel messages",
+      "description": "Messages in the channels of every team you joined. Off by default: most tenants need an admin to consent to ChannelMessage.Read.All.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": false,
+      "partitions": {
+        "actionId": "conn_mod_def::GJ7NUzqmPxU::KPH8i5-qTwG3rhZHepN3Fg",
+        "pathVars": {
+          "userId": "me"
+        },
+        "as": "partition",
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        },
+        "keep": "partition.isArchived != true",
+        "next": {
+          "actionId": "conn_mod_def::GJ7NFwMDWsI::zD6Vj-Z-SoKYto-H5m6G7A",
+          "pathVars": {
+            "teamId": "{{ partition.id }}"
+          },
+          "as": "partition",
+          "resultsPath": "value",
+          "idPath": "id",
+          "pagination": {
+            "type": "nextUrl",
+            "next": "[\"@odata.nextLink\"]"
+          },
+          "keep": "partition.isArchived != true"
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ7NFaW12yo::D62bOYGhSkK1cOoDf-KCWA",
+        "pathVars": {
+          "teamId": "{{ partition.parent.id }}",
+          "channelId": "{{ partition.id }}"
+        },
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        }
+      },
+      "incremental": {
+        "strategy": "delta",
+        "tokenPath": "[\"@odata.deltaLink\"]",
+        "tokenPassAs": "url",
+        "resetOn": [
+          410
+        ]
+      },
+      "deletes": {
+        "when": "item.deletedDateTime != null"
+      },
+      "keep": "item.messageType == 'message'",
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.subject",
+            {
+              "join": [
+                "partition.parent.displayName",
+                "partition.displayName"
+              ],
+              "sep": " / "
+            },
+            {
+              "template": "Teams message"
+            }
+          ]
+        },
+        "body": {
+          "path": "item.body",
+          "decode": "graph-body"
+        },
+        "occurredAt": {
+          "path": "item.createdDateTime",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.lastModifiedDateTime",
+          "decode": "datetime"
+        },
+        "url": "{{ item.webUrl }}",
+        "container": {
+          "join": [
+            "partition.parent.displayName",
+            "partition.displayName"
+          ],
+          "sep": " / "
+        },
+        "groupKey": {
+          "coalesce": [
+            "item.replyToId",
+            "item.id"
+          ]
+        },
+        "facets": {
+          "sender": "item.from.user.displayName",
+          "threadId": "item.replyToId",
+          "isReply": {
+            "test": "item.replyToId != null"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "author",
+            "type": "person",
+            "name": "item.from.user.displayName",
+            "externalId": {
+              "template": "teams:{{ item.from.user.id }}"
+            }
+          },
+          {
+            "role": "mentioned",
+            "type": "person",
+            "name": "mentioned.user.displayName",
+            "each": "item.mentions[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole",
+        "header": "{{ doc.container }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "30m"
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "$shapedFrom": "Anthropic Create a Message (conn_mod_def::GJfJ6hmtpYo::zy68VQHpRFmqayjAzxkjDA) answers for the sample chat, reduced to core's fixture shape; [n] is the n-th entry of cite",
+  "answers": [
+    {
+      "q": "where are we with globex?",
+      "text": "Priya Shah is your champion on the $84,000 renewal [1]. Globex legal sent the final redline two days ago [2], and on the contract review Priya asked for a multi-year discount before signing [3].",
+      "cite": [
+        "hubspot:401",
+        "outlook-mail:AAMkADAcmeEu46d7df84632d192e24df547f=",
+        "granola:not_8z8z42c24fd5f3"
+      ],
+      "proposal": {
+        "query": "globex with:globex.com after:14d",
+        "reason": "Narrow to the last two weeks of Globex activity."
+      },
+      "followups": [
+        "What did Priya ask for on the call?",
+        "Is the SSO rollout on track?",
+        "Draft the two year quote email"
+      ]
+    },
+    {
+      "q": "what did ravi ask about the pilot?",
+      "text": "Ravi reported that the nightly import fails on their 80 MB export and asked for a fix date before Friday's check-in [1]. Mia reproduced it and a chunked importer is in review [2].",
+      "cite": [
+        "gmail:edb64e4c7f8df755",
+        "linear:0aab917a-fdf0-50ef-aed4-109de0bcba99"
+      ],
+      "proposal": {
+        "query": "initech import after:7d",
+        "reason": "Everything about the import issue this week."
+      },
+      "followups": [
+        "When is the next Initech check-in?",
+        "Who owns ACME-298?"
+      ]
+    },
+    {
+      "q": "what is waiting on me?",
+      "text": "Six things need you. Mia needs a call on which customer gets SSO first [1], Ravi wants a fix date for the import [2], Hannah needs the questionnaire by Friday [3], Theo wants deck edits by Wednesday night [4], Lena needs your OK on Umbrella's 12% ask [5], and the Initech weekly check-in is still waiting for your reply [6].",
+      "cite": [
+        "gmail:7e81bd1f996564f3",
+        "gmail:edb64e4c7f8df755",
+        "outlook-mail:AAMkADAcmeEu0010c7e16b2f282d74233b0c=",
+        "gmail:9db4207b184a1faa",
+        "teams:1761000007331",
+        "google-calendar:aa23ddb9aa509ddb2d6eb835d2"
+      ],
+      "proposal": {
+        "query": "lane:needs-you after:7d",
+        "reason": "Only what arrived this week."
+      },
+      "followups": [
+        "Which of these are from customers?",
+        "What is due by Friday?"
+      ]
+    },
+    {
+      "q": "who is priya shah?",
+      "text": "Priya Shah is VP Partnerships at Globex [1] and your champion on the $84,000 Globex renewal [2]. You meet her next on the renewal signature call [3].",
+      "cite": [
+        "hubspot:201",
+        "hubspot:401",
+        "google-calendar:b2a11faf0b2dcb25b13c561ccf"
+      ],
+      "followups": [
+        "What did Priya ask for on the call?",
+        "When did I last email Priya?"
+      ]
+    }
+  ]
+}

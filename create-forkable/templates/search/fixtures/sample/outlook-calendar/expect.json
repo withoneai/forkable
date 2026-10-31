@@ -1,0 +1,15 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "outlook-calendar.events": 5
+  },
+  "kinds": {
+    "event": 5
+  },
+  "tombstoned": 1,
+  "fetched": 6,
+  "runs": 2,
+  "note": "6 after the first run; the second run's delta removes one",
+  "items": 5,
+  "entities": {}
+}

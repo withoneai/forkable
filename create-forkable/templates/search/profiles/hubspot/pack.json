@@ -1,0 +1,644 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "HubSpot",
+  "platform": "hubspot",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "hubspot.contacts",
+      "platform": "hubspot",
+      "model": "contacts",
+      "kind": "person",
+      "title": "HubSpot contacts",
+      "description": "Contacts with name, company, title, lifecycle stage and owner. Merged into people by email.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg"
+        },
+        "vars": {
+          "portalId": "portalId",
+          "uiDomain": "uiDomain"
+        },
+        "optional": true
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ3kSC2Sp7I::L6cYnwOfTUatg0cXeWjCBA",
+        "body": {
+          "filterGroups": [
+            {
+              "filters": [
+                {
+                  "propertyName": "lastmodifieddate",
+                  "operator": "GTE",
+                  "value": "{{ run.since | unixms }}"
+                }
+              ]
+            }
+          ],
+          "sorts": [
+            {
+              "propertyName": "lastmodifieddate",
+              "direction": "ASCENDING"
+            }
+          ],
+          "properties": [
+            "email",
+            "firstname",
+            "lastname",
+            "company",
+            "jobtitle",
+            "phone",
+            "lifecyclestage",
+            "hs_lead_status",
+            "lastmodifieddate",
+            "hubspot_owner_id",
+            "createdate",
+            "city",
+            "country"
+          ],
+          "after": "0"
+        },
+        "resultsPath": "results",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "paging.next.after",
+          "passAs": "body:after"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.properties.lastmodifieddate",
+        "order": "asc",
+        "overlap": "5m",
+        "restartOnCap": 10000,
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archived == true",
+        "reconcile": "onFullPass",
+        "fullPassEvery": "7d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            {
+              "join": [
+                "item.properties.firstname",
+                "item.properties.lastname"
+              ],
+              "sep": " "
+            },
+            "item.properties.email"
+          ]
+        },
+        "body": {
+          "join": [
+            {
+              "join": [
+                "item.properties.jobtitle",
+                "item.properties.company"
+              ],
+              "sep": " at "
+            },
+            {
+              "template": "Lifecycle {{ item.properties.lifecyclestage }}"
+            },
+            {
+              "template": "Lead status {{ item.properties.hs_lead_status }}"
+            },
+            {
+              "join": [
+                "item.properties.city",
+                "item.properties.country"
+              ],
+              "sep": ", "
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.properties.lastmodifieddate",
+          "decode": "datetime"
+        },
+        "url": "https://{{ account.uiDomain }}/contacts/{{ account.portalId }}/record/0-1/{{ item.id }}",
+        "status": "item.properties.lifecyclestage",
+        "facets": {
+          "email": {
+            "path": "item.properties.email",
+            "decode": "email"
+          },
+          "phone": "item.properties.phone",
+          "jobTitle": "item.properties.jobtitle",
+          "companyName": "item.properties.company",
+          "companyDomain": {
+            "path": "item.properties.email",
+            "decode": "domain"
+          },
+          "lifecycle": "item.properties.lifecyclestage",
+          "owner": "item.properties.hubspot_owner_id",
+          "location": {
+            "join": [
+              "item.properties.city",
+              "item.properties.country"
+            ],
+            "sep": ", "
+          }
+        }
+      },
+      "entities": {
+        "is": {
+          "type": "person",
+          "email": {
+            "path": "item.properties.email",
+            "decode": "email"
+          },
+          "name": {
+            "join": [
+              "item.properties.firstname",
+              "item.properties.lastname"
+            ],
+            "sep": " "
+          },
+          "externalId": {
+            "template": "hubspot:contact:{{ item.id }}"
+          },
+          "title": "item.properties.jobtitle",
+          "companyName": "item.properties.company"
+        },
+        "refs": [
+          {
+            "role": "about",
+            "type": "company",
+            "name": "item.properties.company",
+            "domain": {
+              "path": "item.properties.email",
+              "decode": "domain"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 100
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "hubspot.companies",
+      "platform": "hubspot",
+      "model": "companies",
+      "kind": "company",
+      "title": "HubSpot companies",
+      "description": "Companies with domain, industry, size and owner. Merged into companies by domain.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg"
+        },
+        "vars": {
+          "portalId": "portalId",
+          "uiDomain": "uiDomain"
+        },
+        "optional": true
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ3kQvNreBM::Zpab8Ig5TSivqCj1UhG37w",
+        "pathVars": {
+          "objectType": "companies"
+        },
+        "body": {
+          "filterGroups": [
+            {
+              "filters": [
+                {
+                  "propertyName": "hs_lastmodifieddate",
+                  "operator": "GTE",
+                  "value": "{{ run.since | unixms }}"
+                }
+              ]
+            }
+          ],
+          "sorts": [
+            {
+              "propertyName": "hs_lastmodifieddate",
+              "direction": "ASCENDING"
+            }
+          ],
+          "properties": [
+            "name",
+            "domain",
+            "industry",
+            "description",
+            "city",
+            "country",
+            "numberofemployees",
+            "hubspot_owner_id",
+            "lifecyclestage",
+            "hs_lastmodifieddate",
+            "createdate"
+          ],
+          "after": "0"
+        },
+        "resultsPath": "results",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "paging.next.after",
+          "passAs": "body:after"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.properties.hs_lastmodifieddate",
+        "order": "asc",
+        "overlap": "5m",
+        "restartOnCap": 10000,
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archived == true",
+        "reconcile": "onFullPass",
+        "fullPassEvery": "7d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.properties.name",
+            "item.properties.domain"
+          ]
+        },
+        "body": {
+          "join": [
+            "item.properties.description",
+            {
+              "template": "Industry {{ item.properties.industry }}"
+            },
+            {
+              "template": "{{ item.properties.numberofemployees }} employees"
+            },
+            {
+              "join": [
+                "item.properties.city",
+                "item.properties.country"
+              ],
+              "sep": ", "
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.properties.hs_lastmodifieddate",
+          "decode": "datetime"
+        },
+        "url": "https://{{ account.uiDomain }}/contacts/{{ account.portalId }}/record/0-2/{{ item.id }}",
+        "status": "item.properties.lifecyclestage",
+        "facets": {
+          "domain": {
+            "path": "item.properties.domain",
+            "decode": "domain"
+          },
+          "industry": "item.properties.industry",
+          "size": "item.properties.numberofemployees",
+          "owner": "item.properties.hubspot_owner_id",
+          "location": {
+            "join": [
+              "item.properties.city",
+              "item.properties.country"
+            ],
+            "sep": ", "
+          }
+        }
+      },
+      "entities": {
+        "is": {
+          "type": "company",
+          "domain": {
+            "path": "item.properties.domain",
+            "decode": "domain"
+          },
+          "name": "item.properties.name",
+          "externalId": {
+            "template": "hubspot:company:{{ item.id }}"
+          }
+        }
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 100
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "hubspot.deals",
+      "platform": "hubspot",
+      "model": "deals",
+      "kind": "deal",
+      "title": "HubSpot deals",
+      "description": "Deals with amount, stage, close date and pipeline.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg"
+        },
+        "vars": {
+          "portalId": "portalId",
+          "uiDomain": "uiDomain"
+        },
+        "optional": true
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ3kYWYoo38::XLCOkotzRHyXigkeSyVCKg",
+        "pathVars": {
+          "objectType": "deals"
+        },
+        "body": {
+          "filterGroups": [
+            {
+              "filters": [
+                {
+                  "propertyName": "hs_lastmodifieddate",
+                  "operator": "GTE",
+                  "value": "{{ run.since | unixms }}"
+                }
+              ]
+            }
+          ],
+          "sorts": [
+            {
+              "propertyName": "hs_lastmodifieddate",
+              "direction": "ASCENDING"
+            }
+          ],
+          "properties": [
+            "dealname",
+            "amount",
+            "deal_currency_code",
+            "dealstage",
+            "closedate",
+            "pipeline",
+            "description",
+            "hubspot_owner_id",
+            "hs_lastmodifieddate",
+            "createdate"
+          ],
+          "after": "0"
+        },
+        "resultsPath": "results",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "paging.next.after",
+          "passAs": "body:after"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.properties.hs_lastmodifieddate",
+        "order": "asc",
+        "overlap": "5m",
+        "restartOnCap": 10000,
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archived == true",
+        "reconcile": "onFullPass",
+        "fullPassEvery": "7d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.properties.dealname",
+            {
+              "template": "Deal {{ item.id }}"
+            }
+          ]
+        },
+        "body": {
+          "join": [
+            "item.properties.description",
+            {
+              "template": "Stage {{ item.properties.dealstage }}"
+            },
+            {
+              "join": [
+                "item.properties.amount",
+                "item.properties.deal_currency_code"
+              ],
+              "sep": " "
+            },
+            {
+              "template": "Closes {{ item.properties.closedate | date:\"yyyy-MM-dd\" }}"
+            }
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.properties.hs_lastmodifieddate",
+          "decode": "datetime"
+        },
+        "url": "https://{{ account.uiDomain }}/contacts/{{ account.portalId }}/record/0-3/{{ item.id }}",
+        "status": "item.properties.dealstage",
+        "facets": {
+          "amount": {
+            "path": "item.properties.amount",
+            "decode": "number"
+          },
+          "currency": "item.properties.deal_currency_code",
+          "stage": "item.properties.dealstage",
+          "closeDate": {
+            "path": "item.properties.closedate",
+            "decode": "datetime"
+          },
+          "pipeline": "item.properties.pipeline",
+          "owner": "item.properties.hubspot_owner_id"
+        }
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 100
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "hubspot.notes",
+      "platform": "hubspot",
+      "model": "notes",
+      "kind": "note",
+      "title": "HubSpot notes",
+      "description": "Notes logged on CRM records.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg"
+        },
+        "vars": {
+          "portalId": "portalId",
+          "uiDomain": "uiDomain"
+        },
+        "optional": true
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ3k1yj_vd8::B3vvaICzRKeqGbG66JUHDQ",
+        "pathVars": {
+          "objectType": "notes"
+        },
+        "body": {
+          "filterGroups": [
+            {
+              "filters": [
+                {
+                  "propertyName": "hs_lastmodifieddate",
+                  "operator": "GTE",
+                  "value": "{{ run.since | unixms }}"
+                }
+              ]
+            }
+          ],
+          "sorts": [
+            {
+              "propertyName": "hs_lastmodifieddate",
+              "direction": "ASCENDING"
+            }
+          ],
+          "properties": [
+            "hs_note_body",
+            "hs_timestamp",
+            "hubspot_owner_id",
+            "hs_lastmodifieddate",
+            "hs_createdate"
+          ],
+          "after": "0"
+        },
+        "resultsPath": "results",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "paging.next.after",
+          "passAs": "body:after"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.properties.hs_lastmodifieddate",
+        "order": "asc",
+        "overlap": "5m",
+        "restartOnCap": 10000,
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archived == true",
+        "reconcile": "onFullPass",
+        "fullPassEvery": "7d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            {
+              "template": "{{ item.properties.hs_note_body | striphtml | firstline | truncate:80 }}"
+            },
+            {
+              "template": "Note {{ item.id }}"
+            }
+          ]
+        },
+        "body": {
+          "path": "item.properties.hs_note_body",
+          "decode": "html"
+        },
+        "occurredAt": {
+          "coalesce": [
+            {
+              "path": "item.properties.hs_timestamp",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.createdAt",
+              "decode": "datetime"
+            }
+          ]
+        },
+        "updatedAt": {
+          "path": "item.properties.hs_lastmodifieddate",
+          "decode": "datetime"
+        },
+        "url": "https://{{ account.uiDomain }}/contacts/{{ account.portalId }}/objects/0-46/views/all/list",
+        "facets": {
+          "parentKind": {
+            "template": "person"
+          }
+        }
+      },
+      "chunk": {
+        "strategy": "paragraph",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 100
+      },
+      "schedule": {
+        "every": "30m"
+      }
+    }
+  ]
+}

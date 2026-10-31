@@ -1,0 +1,3012 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get a User's Thread, format=full",
+  "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+  "byId": {
+    "9db4207b184a1faa": {
+      "id": "9db4207b184a1faa",
+      "historyId": "5120131",
+      "messages": [
+        {
+          "id": "5804b31b0f24cf11",
+          "threadId": "9db4207b184a1faa",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Draft deck attached. Can you review the sales slides and send edits by Thursday?",
+          "historyId": "5120130",
+          "internalDate": {
+            "$relMsString": "-1d 13:00"
+          },
+          "sizeEstimate": 2128,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/mixed",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Theo Lund <theo@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Board deck draft"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 13:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<5804b31b0f24cf11@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 0
+                },
+                "parts": [
+                  {
+                    "partId": "0.0",
+                    "mimeType": "text/plain",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 80,
+                      "data": "RHJhZnQgZGVjayBhdHRhY2hlZC4gQ2FuIHlvdSByZXZpZXcgdGhlIHNhbGVzIHNsaWRlcyBhbmQgc2VuZCBlZGl0cyBieSBUaHVyc2RheT8"
+                    }
+                  },
+                  {
+                    "partId": "0.1",
+                    "mimeType": "text/html",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 101,
+                      "data": "PGRpdiBkaXI9Imx0ciI-RHJhZnQgZGVjayBhdHRhY2hlZC4gQ2FuIHlvdSByZXZpZXcgdGhlIHNhbGVzIHNsaWRlcyBhbmQgc2VuZCBlZGl0cyBieSBUaHVyc2RheT88L2Rpdj4"
+                    }
+                  }
+                ]
+              },
+              {
+                "partId": "1",
+                "mimeType": "application/pdf",
+                "filename": "Acme-Q3-board.pdf",
+                "headers": [],
+                "body": {
+                  "size": 2201554,
+                  "attachmentId": "ANGjdJbd67f3e0da458c28c4b8b860"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "26514b5fd6320c65",
+          "threadId": "9db4207b184a1faa",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Owen asked to see it Thursday morning, so edits by Wednesday night would help.",
+          "historyId": "5120131",
+          "internalDate": {
+            "$relMsString": "-4h"
+          },
+          "sizeEstimate": 2126,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Theo Lund <theo@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Board deck draft"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-4h"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<26514b5fd6320c65@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 78,
+                  "data": "T3dlbiBhc2tlZCB0byBzZWUgaXQgVGh1cnNkYXkgbW9ybmluZywgc28gZWRpdHMgYnkgV2VkbmVzZGF5IG5pZ2h0IHdvdWxkIGhlbHAu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 99,
+                  "data": "PGRpdiBkaXI9Imx0ciI-T3dlbiBhc2tlZCB0byBzZWUgaXQgVGh1cnNkYXkgbW9ybmluZywgc28gZWRpdHMgYnkgV2VkbmVzZGF5IG5pZ2h0IHdvdWxkIGhlbHAuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "08edfeefd7e3f863": {
+      "id": "08edfeefd7e3f863",
+      "historyId": "5120004",
+      "messages": [
+        {
+          "id": "00a1d7f930cb0985",
+          "threadId": "08edfeefd7e3f863",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Hi Priya,  Attached are the 2027 renewal terms we discussed. Same scope, 84,000 a year, rate locked for the term.  Dana",
+          "historyId": "5120000",
+          "internalDate": {
+            "$relMsString": "-4d 09:12"
+          },
+          "sizeEstimate": 2167,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Globex renewal terms"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-4d 09:12"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<00a1d7f930cb0985@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 119,
+                  "data": "SGkgUHJpeWEsCgpBdHRhY2hlZCBhcmUgdGhlIDIwMjcgcmVuZXdhbCB0ZXJtcyB3ZSBkaXNjdXNzZWQuIFNhbWUgc2NvcGUsIDg0LDAwMCBhIHllYXIsIHJhdGUgbG9ja2VkIGZvciB0aGUgdGVybS4KCkRhbmE"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 152,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SGkgUHJpeWEsPGJyPjxicj5BdHRhY2hlZCBhcmUgdGhlIDIwMjcgcmVuZXdhbCB0ZXJtcyB3ZSBkaXNjdXNzZWQuIFNhbWUgc2NvcGUsIDg0LDAwMCBhIHllYXIsIHJhdGUgbG9ja2VkIGZvciB0aGUgdGVybS48YnI-PGJyPkRhbmE8L2Rpdj4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "0e083a00a3e91260",
+          "threadId": "08edfeefd7e3f863",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Thanks Dana. Legal is reviewing the MSA now. Could you include the SSO rollout date in the order form?",
+          "historyId": "5120001",
+          "internalDate": {
+            "$relMsString": "-3d 16:40"
+          },
+          "sizeEstimate": 2150,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Globex renewal terms"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 16:40"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<0e083a00a3e91260@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 102,
+                  "data": "VGhhbmtzIERhbmEuIExlZ2FsIGlzIHJldmlld2luZyB0aGUgTVNBIG5vdy4gQ291bGQgeW91IGluY2x1ZGUgdGhlIFNTTyByb2xsb3V0IGRhdGUgaW4gdGhlIG9yZGVyIGZvcm0_"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 123,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzIERhbmEuIExlZ2FsIGlzIHJldmlld2luZyB0aGUgTVNBIG5vdy4gQ291bGQgeW91IGluY2x1ZGUgdGhlIFNTTyByb2xsb3V0IGRhdGUgaW4gdGhlIG9yZGVyIGZvcm0_PC9kaXY-"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "52789fad87c87992",
+          "threadId": "08edfeefd7e3f863",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Done. SSO is scheduled for the week after signature. Updated order form attached.",
+          "historyId": "5120002",
+          "internalDate": {
+            "$relMsString": "-3d 17:05"
+          },
+          "sizeEstimate": 2129,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Globex renewal terms"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 17:05"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<52789fad87c87992@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 81,
+                  "data": "RG9uZS4gU1NPIGlzIHNjaGVkdWxlZCBmb3IgdGhlIHdlZWsgYWZ0ZXIgc2lnbmF0dXJlLiBVcGRhdGVkIG9yZGVyIGZvcm0gYXR0YWNoZWQu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 102,
+                  "data": "PGRpdiBkaXI9Imx0ciI-RG9uZS4gU1NPIGlzIHNjaGVkdWxlZCBmb3IgdGhlIHdlZWsgYWZ0ZXIgc2lnbmF0dXJlLiBVcGRhdGVkIG9yZGVyIGZvcm0gYXR0YWNoZWQuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "65b57ee4dafbfa9a",
+          "threadId": "08edfeefd7e3f863",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Great. Marco will send the final redline. One more thing: can you quote a two year term as well?",
+          "historyId": "5120003",
+          "internalDate": {
+            "$relMsString": "-1d 10:22"
+          },
+          "sizeEstimate": 2144,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Globex renewal terms"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 10:22"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<65b57ee4dafbfa9a@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 96,
+                  "data": "R3JlYXQuIE1hcmNvIHdpbGwgc2VuZCB0aGUgZmluYWwgcmVkbGluZS4gT25lIG1vcmUgdGhpbmc6IGNhbiB5b3UgcXVvdGUgYSB0d28geWVhciB0ZXJtIGFzIHdlbGw_"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 117,
+                  "data": "PGRpdiBkaXI9Imx0ciI-R3JlYXQuIE1hcmNvIHdpbGwgc2VuZCB0aGUgZmluYWwgcmVkbGluZS4gT25lIG1vcmUgdGhpbmc6IGNhbiB5b3UgcXVvdGUgYSB0d28geWVhciB0ZXJtIGFzIHdlbGw_PC9kaXY-"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "5005acf8c34fd0a0",
+          "threadId": "08edfeefd7e3f863",
+          "labelIds": [
+            "UNREAD",
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Happy to lock the annual rate if we can get the MSA signed by Friday. Let me know on the multi-year quote.",
+          "historyId": "5120004",
+          "internalDate": {
+            "$relMsString": "-6h"
+          },
+          "sizeEstimate": 2154,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Globex renewal terms"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-6h"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<5005acf8c34fd0a0@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 106,
+                  "data": "SGFwcHkgdG8gbG9jayB0aGUgYW5udWFsIHJhdGUgaWYgd2UgY2FuIGdldCB0aGUgTVNBIHNpZ25lZCBieSBGcmlkYXkuIExldCBtZSBrbm93IG9uIHRoZSBtdWx0aS15ZWFyIHF1b3RlLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 127,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SGFwcHkgdG8gbG9jayB0aGUgYW5udWFsIHJhdGUgaWYgd2UgY2FuIGdldCB0aGUgTVNBIHNpZ25lZCBieSBGcmlkYXkuIExldCBtZSBrbm93IG9uIHRoZSBtdWx0aS15ZWFyIHF1b3RlLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "1861589cc3b3fe0b": {
+      "id": "1861589cc3b3fe0b",
+      "historyId": "5120080",
+      "messages": [
+        {
+          "id": "34b22d23536788ac",
+          "threadId": "1861589cc3b3fe0b",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Hi Dana, I'm the founder of Hooli (cc my cofounder Mia). We help sales teams turn call notes into CRM updates. Worth 15 ",
+          "historyId": "5120080",
+          "internalDate": {
+            "$relMsString": "-1d 08:20"
+          },
+          "sizeEstimate": 2176,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Jules Martin <jules@hooli.dev>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>, Mia Park <mia.park@hooli.dev>"
+              },
+              {
+                "name": "Subject",
+                "value": "Quick idea for Acme's sales team"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 08:20"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<34b22d23536788ac@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 128,
+                  "data": "SGkgRGFuYSwgSSdtIHRoZSBmb3VuZGVyIG9mIEhvb2xpIChjYyBteSBjb2ZvdW5kZXIgTWlhKS4gV2UgaGVscCBzYWxlcyB0ZWFtcyB0dXJuIGNhbGwgbm90ZXMgaW50byBDUk0gdXBkYXRlcy4gV29ydGggMTUgbWludXRlcz8"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 149,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SGkgRGFuYSwgSSdtIHRoZSBmb3VuZGVyIG9mIEhvb2xpIChjYyBteSBjb2ZvdW5kZXIgTWlhKS4gV2UgaGVscCBzYWxlcyB0ZWFtcyB0dXJuIGNhbGwgbm90ZXMgaW50byBDUk0gdXBkYXRlcy4gV29ydGggMTUgbWludXRlcz88L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "abcc4869f3df1787": {
+      "id": "abcc4869f3df1787",
+      "historyId": "5120091",
+      "messages": [
+        {
+          "id": "646904037320ed5a",
+          "threadId": "abcc4869f3df1787",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Pipeline is at 1.9M. Globex and Umbrella are 60% of the quarter. Sheet attached.",
+          "historyId": "5120090",
+          "internalDate": {
+            "$relMsString": "-1d 16:00"
+          },
+          "sizeEstimate": 2128,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/mixed",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Sam Okafor <sam@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Pipeline review numbers for Thursday"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 16:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<646904037320ed5a@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 0
+                },
+                "parts": [
+                  {
+                    "partId": "0.0",
+                    "mimeType": "text/plain",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 80,
+                      "data": "UGlwZWxpbmUgaXMgYXQgMS45TS4gR2xvYmV4IGFuZCBVbWJyZWxsYSBhcmUgNjAlIG9mIHRoZSBxdWFydGVyLiBTaGVldCBhdHRhY2hlZC4"
+                    }
+                  },
+                  {
+                    "partId": "0.1",
+                    "mimeType": "text/html",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 101,
+                      "data": "PGRpdiBkaXI9Imx0ciI-UGlwZWxpbmUgaXMgYXQgMS45TS4gR2xvYmV4IGFuZCBVbWJyZWxsYSBhcmUgNjAlIG9mIHRoZSBxdWFydGVyLiBTaGVldCBhdHRhY2hlZC48L2Rpdj4"
+                    }
+                  }
+                ]
+              },
+              {
+                "partId": "1",
+                "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "filename": "pipeline-q4.xlsx",
+                "headers": [],
+                "body": {
+                  "size": 30455,
+                  "attachmentId": "ANGjdJbfd5d6cbb5d14fb4a3a98256"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "6c9716610dcc234c",
+          "threadId": "abcc4869f3df1787",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Thanks. Add the Initrode starter deal at 18k.",
+          "historyId": "5120091",
+          "internalDate": {
+            "$relMsString": "-1d 17:30"
+          },
+          "sizeEstimate": 2093,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Sam Okafor <sam@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Pipeline review numbers for Thursday"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 17:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<6c9716610dcc234c@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 45,
+                  "data": "VGhhbmtzLiBBZGQgdGhlIEluaXRyb2RlIHN0YXJ0ZXIgZGVhbCBhdCAxOGsu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 66,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzLiBBZGQgdGhlIEluaXRyb2RlIHN0YXJ0ZXIgZGVhbCBhdCAxOGsuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "7e81bd1f996564f3": {
+      "id": "7e81bd1f996564f3",
+      "historyId": "5120111",
+      "messages": [
+        {
+          "id": "1d5b4e6369109835",
+          "threadId": "7e81bd1f996564f3",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Dana, Globex and Initech both asked for SSO. We can ship one this sprint. Which customer goes first?",
+          "historyId": "5120110",
+          "internalDate": {
+            "$relMsString": "-2d 10:00"
+          },
+          "sizeEstimate": 2148,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Mia Park <mia@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Need sales input on SSO priority"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-2d 10:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<1d5b4e6369109835@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "RGFuYSwgR2xvYmV4IGFuZCBJbml0ZWNoIGJvdGggYXNrZWQgZm9yIFNTTy4gV2UgY2FuIHNoaXAgb25lIHRoaXMgc3ByaW50LiBXaGljaCBjdXN0b21lciBnb2VzIGZpcnN0Pw"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 121,
+                  "data": "PGRpdiBkaXI9Imx0ciI-RGFuYSwgR2xvYmV4IGFuZCBJbml0ZWNoIGJvdGggYXNrZWQgZm9yIFNTTy4gV2UgY2FuIHNoaXAgb25lIHRoaXMgc3ByaW50LiBXaGljaCBjdXN0b21lciBnb2VzIGZpcnN0PzwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b7b55a9cac95439b",
+          "threadId": "7e81bd1f996564f3",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Bumping this. I need an answer by tomorrow to plan the sprint.",
+          "historyId": "5120111",
+          "internalDate": {
+            "$relMsString": "-1d 09:30"
+          },
+          "sizeEstimate": 2110,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Mia Park <mia@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Need sales input on SSO priority"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 09:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<b7b55a9cac95439b@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 62,
+                  "data": "QnVtcGluZyB0aGlzLiBJIG5lZWQgYW4gYW5zd2VyIGJ5IHRvbW9ycm93IHRvIHBsYW4gdGhlIHNwcmludC4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 83,
+                  "data": "PGRpdiBkaXI9Imx0ciI-QnVtcGluZyB0aGlzLiBJIG5lZWQgYW4gYW5zd2VyIGJ5IHRvbW9ycm93IHRvIHBsYW4gdGhlIHNwcmludC48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "c972a61b16d56875": {
+      "id": "c972a61b16d56875",
+      "historyId": "5120160",
+      "messages": [
+        {
+          "id": "7fd93eb65a508726",
+          "threadId": "c972a61b16d56875",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PROMOTIONS"
+          ],
+          "snippet": "This week: forecasting in a slow quarter, plus five templates for pipeline reviews.",
+          "historyId": "5120160",
+          "internalDate": {
+            "$relMsString": "-1d 06:00"
+          },
+          "sizeEstimate": 2131,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Revenue Weekly <news@revenueweekly.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Revenue Weekly: forecasting in a slow quarter"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 06:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<7fd93eb65a508726@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 83,
+                  "data": "VGhpcyB3ZWVrOiBmb3JlY2FzdGluZyBpbiBhIHNsb3cgcXVhcnRlciwgcGx1cyBmaXZlIHRlbXBsYXRlcyBmb3IgcGlwZWxpbmUgcmV2aWV3cy4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 104,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhpcyB3ZWVrOiBmb3JlY2FzdGluZyBpbiBhIHNsb3cgcXVhcnRlciwgcGx1cyBmaXZlIHRlbXBsYXRlcyBmb3IgcGlwZWxpbmUgcmV2aWV3cy48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "edb64e4c7f8df755": {
+      "id": "edb64e4c7f8df755",
+      "historyId": "5120042",
+      "messages": [
+        {
+          "id": "49df279ab36ec2de",
+          "threadId": "edb64e4c7f8df755",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Dana, the nightly import failed again on our 80 MB export. Anika attached the log. Can your team look before Friday's ch",
+          "historyId": "5120040",
+          "internalDate": {
+            "$relMsString": "-3d 08:15"
+          },
+          "sizeEstimate": 2175,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/mixed",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Ravi Menon <ravi@initech.io>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Pilot data import"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 08:15"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<49df279ab36ec2de@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 0
+                },
+                "parts": [
+                  {
+                    "partId": "0.0",
+                    "mimeType": "text/plain",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 127,
+                      "data": "RGFuYSwgdGhlIG5pZ2h0bHkgaW1wb3J0IGZhaWxlZCBhZ2FpbiBvbiBvdXIgODAgTUIgZXhwb3J0LiBBbmlrYSBhdHRhY2hlZCB0aGUgbG9nLiBDYW4geW91ciB0ZWFtIGxvb2sgYmVmb3JlIEZyaWRheSdzIGNoZWNrLWluPw"
+                    }
+                  },
+                  {
+                    "partId": "0.1",
+                    "mimeType": "text/html",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 148,
+                      "data": "PGRpdiBkaXI9Imx0ciI-RGFuYSwgdGhlIG5pZ2h0bHkgaW1wb3J0IGZhaWxlZCBhZ2FpbiBvbiBvdXIgODAgTUIgZXhwb3J0LiBBbmlrYSBhdHRhY2hlZCB0aGUgbG9nLiBDYW4geW91ciB0ZWFtIGxvb2sgYmVmb3JlIEZyaWRheSdzIGNoZWNrLWluPzwvZGl2Pg"
+                    }
+                  }
+                ]
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/plain",
+                "filename": "import-log.txt",
+                "headers": [],
+                "body": {
+                  "size": 12004,
+                  "attachmentId": "ANGjdJb6f0bc64f9e0966c173cd0bd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "a38fabeae0dcc678",
+          "threadId": "edb64e4c7f8df755",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Thanks Ravi. Looping in Mia, who owns imports. We will get back to you today.",
+          "historyId": "5120041",
+          "internalDate": {
+            "$relMsString": "-3d 09:40"
+          },
+          "sizeEstimate": 2125,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Ravi Menon <ravi@initech.io>, Mia Park <mia@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Pilot data import"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 09:40"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<a38fabeae0dcc678@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 77,
+                  "data": "VGhhbmtzIFJhdmkuIExvb3BpbmcgaW4gTWlhLCB3aG8gb3ducyBpbXBvcnRzLiBXZSB3aWxsIGdldCBiYWNrIHRvIHlvdSB0b2RheS4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 98,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzIFJhdmkuIExvb3BpbmcgaW4gTWlhLCB3aG8gb3ducyBpbXBvcnRzLiBXZSB3aWxsIGdldCBiYWNrIHRvIHlvdSB0b2RheS48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "a64d6ca6498a077f",
+          "threadId": "edb64e4c7f8df755",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Any update? Our CFO is asking whether the pilot is on track. Can you confirm the fix date?",
+          "historyId": "5120042",
+          "internalDate": {
+            "$relMsString": "-2d 18:05"
+          },
+          "sizeEstimate": 2138,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Ravi Menon <ravi@initech.io>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Pilot data import"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-2d 18:05"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<a64d6ca6498a077f@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 90,
+                  "data": "QW55IHVwZGF0ZT8gT3VyIENGTyBpcyBhc2tpbmcgd2hldGhlciB0aGUgcGlsb3QgaXMgb24gdHJhY2suIENhbiB5b3UgY29uZmlybSB0aGUgZml4IGRhdGU_"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 111,
+                  "data": "PGRpdiBkaXI9Imx0ciI-QW55IHVwZGF0ZT8gT3VyIENGTyBpcyBhc2tpbmcgd2hldGhlciB0aGUgcGlsb3QgaXMgb24gdHJhY2suIENhbiB5b3UgY29uZmlybSB0aGUgZml4IGRhdGU_PC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "a6fdaf1e067ec868": {
+      "id": "a6fdaf1e067ec868",
+      "historyId": "5120062",
+      "messages": [
+        {
+          "id": "8194ed9406b176c9",
+          "threadId": "a6fdaf1e067ec868",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Dana, can you send the Q3 numbers before we lock the board date? The partners meet Monday.",
+          "historyId": "5120060",
+          "internalDate": {
+            "$relMsString": "-4d 07:30"
+          },
+          "sizeEstimate": 2138,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Owen Price <owen@northwind.vc>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Q3 update and board date"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-4d 07:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<8194ed9406b176c9@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 90,
+                  "data": "RGFuYSwgY2FuIHlvdSBzZW5kIHRoZSBRMyBudW1iZXJzIGJlZm9yZSB3ZSBsb2NrIHRoZSBib2FyZCBkYXRlPyBUaGUgcGFydG5lcnMgbWVldCBNb25kYXku"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 111,
+                  "data": "PGRpdiBkaXI9Imx0ciI-RGFuYSwgY2FuIHlvdSBzZW5kIHRoZSBRMyBudW1iZXJzIGJlZm9yZSB3ZSBsb2NrIHRoZSBib2FyZCBkYXRlPyBUaGUgcGFydG5lcnMgbWVldCBNb25kYXkuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "8f6563c876bb1a73",
+          "threadId": "a6fdaf1e067ec868",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Theo is finishing the deck. Numbers by Thursday. Board date proposals attached.",
+          "historyId": "5120061",
+          "internalDate": {
+            "$relMsString": "-3d 12:00"
+          },
+          "sizeEstimate": 2127,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Owen Price <owen@northwind.vc>, Theo Lund <theo@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Q3 update and board date"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 12:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<8f6563c876bb1a73@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 79,
+                  "data": "VGhlbyBpcyBmaW5pc2hpbmcgdGhlIGRlY2suIE51bWJlcnMgYnkgVGh1cnNkYXkuIEJvYXJkIGRhdGUgcHJvcG9zYWxzIGF0dGFjaGVkLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhlbyBpcyBmaW5pc2hpbmcgdGhlIGRlY2suIE51bWJlcnMgYnkgVGh1cnNkYXkuIEJvYXJkIGRhdGUgcHJvcG9zYWxzIGF0dGFjaGVkLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "e9386416dc7f9c94",
+          "threadId": "a6fdaf1e067ec868",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Thursday works. Let's hold November 18 for the board.",
+          "historyId": "5120062",
+          "internalDate": {
+            "$relMsString": "-2d 08:45"
+          },
+          "sizeEstimate": 2101,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Owen Price <owen@northwind.vc>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Q3 update and board date"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-2d 08:45"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<e9386416dc7f9c94@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 53,
+                  "data": "VGh1cnNkYXkgd29ya3MuIExldCdzIGhvbGQgTm92ZW1iZXIgMTggZm9yIHRoZSBib2FyZC4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 74,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGh1cnNkYXkgd29ya3MuIExldCdzIGhvbGQgTm92ZW1iZXIgMTggZm9yIHRoZSBib2FyZC48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "7db9ec1ecd545c7c": {
+      "id": "7db9ec1ecd545c7c",
+      "historyId": "5120190",
+      "messages": [
+        {
+          "id": "e8c0347e02c2bff7",
+          "threadId": "7db9ec1ecd545c7c",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_UPDATES"
+          ],
+          "snippet": "Receipt for October. Total 249.00 USD. Thank you for your business.",
+          "historyId": "5120190",
+          "internalDate": {
+            "$relMsString": "-2d 03:00"
+          },
+          "sizeEstimate": 2115,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Cloudhost Billing <receipts@cloudhost.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Your receipt from Cloudhost"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-2d 03:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<e8c0347e02c2bff7@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 67,
+                  "data": "UmVjZWlwdCBmb3IgT2N0b2Jlci4gVG90YWwgMjQ5LjAwIFVTRC4gVGhhbmsgeW91IGZvciB5b3VyIGJ1c2luZXNzLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 88,
+                  "data": "PGRpdiBkaXI9Imx0ciI-UmVjZWlwdCBmb3IgT2N0b2Jlci4gVG90YWwgMjQ5LjAwIFVTRC4gVGhhbmsgeW91IGZvciB5b3VyIGJ1c2luZXNzLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "84344d908e74300d": {
+      "id": "84344d908e74300d",
+      "historyId": "5120230",
+      "messages": [
+        {
+          "id": "39fcd1f785ea597f",
+          "threadId": "84344d908e74300d",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_UPDATES"
+          ],
+          "snippet": "Your Acme password expires in 5 days. Change it from the account portal.",
+          "historyId": "5120230",
+          "internalDate": {
+            "$relMsString": "-2d 07:00"
+          },
+          "sizeEstimate": 2120,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Acme IT <it@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Your password expires in 5 days"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-2d 07:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<39fcd1f785ea597f@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 72,
+                  "data": "WW91ciBBY21lIHBhc3N3b3JkIGV4cGlyZXMgaW4gNSBkYXlzLiBDaGFuZ2UgaXQgZnJvbSB0aGUgYWNjb3VudCBwb3J0YWwu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 93,
+                  "data": "PGRpdiBkaXI9Imx0ciI-WW91ciBBY21lIHBhc3N3b3JkIGV4cGlyZXMgaW4gNSBkYXlzLiBDaGFuZ2UgaXQgZnJvbSB0aGUgYWNjb3VudCBwb3J0YWwuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "0471a56d88a437b7": {
+      "id": "0471a56d88a437b7",
+      "historyId": "5120120",
+      "messages": [
+        {
+          "id": "3bc8a5870e3b8536",
+          "threadId": "0471a56d88a437b7",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "New pricing page copy is in the doc. Mostly FYI, comments welcome until Friday.",
+          "historyId": "5120120",
+          "internalDate": {
+            "$relMsString": "-3d 14:00"
+          },
+          "sizeEstimate": 2127,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Theo Lund <theo@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Pricing page copy review"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 14:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<3bc8a5870e3b8536@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 79,
+                  "data": "TmV3IHByaWNpbmcgcGFnZSBjb3B5IGlzIGluIHRoZSBkb2MuIE1vc3RseSBGWUksIGNvbW1lbnRzIHdlbGNvbWUgdW50aWwgRnJpZGF5Lg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "PGRpdiBkaXI9Imx0ciI-TmV3IHByaWNpbmcgcGFnZSBjb3B5IGlzIGluIHRoZSBkb2MuIE1vc3RseSBGWUksIGNvbW1lbnRzIHdlbGNvbWUgdW50aWwgRnJpZGF5LjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "6f5925fd3fee5d2e": {
+      "id": "6f5925fd3fee5d2e",
+      "historyId": "5120170",
+      "messages": [
+        {
+          "id": "9be969fa4acd7ed8",
+          "threadId": "6f5925fd3fee5d2e",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PROMOTIONS"
+          ],
+          "snippet": "Ten stories from sales leaders this week.",
+          "historyId": "5120170",
+          "internalDate": {
+            "$relMsString": "-3d 06:00"
+          },
+          "sizeEstimate": 2089,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Field Notes <digest@fieldnotes.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "The Field Notes digest"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 06:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<9be969fa4acd7ed8@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 41,
+                  "data": "VGVuIHN0b3JpZXMgZnJvbSBzYWxlcyBsZWFkZXJzIHRoaXMgd2Vlay4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 62,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGVuIHN0b3JpZXMgZnJvbSBzYWxlcyBsZWFkZXJzIHRoaXMgd2Vlay48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "11d9cab2b1fe3eca": {
+      "id": "11d9cab2b1fe3eca",
+      "historyId": "5120011",
+      "messages": [
+        {
+          "id": "412e0e9225b3ece2",
+          "threadId": "11d9cab2b1fe3eca",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Dana, our security team sent the attached questionnaire. Mostly standard, plus two questions on SSO.",
+          "historyId": "5120010",
+          "internalDate": {
+            "$relMsString": "-5d 11:30"
+          },
+          "sizeEstimate": 2148,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/mixed",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Globex security questionnaire"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-5d 11:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<412e0e9225b3ece2@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 0
+                },
+                "parts": [
+                  {
+                    "partId": "0.0",
+                    "mimeType": "text/plain",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 100,
+                      "data": "RGFuYSwgb3VyIHNlY3VyaXR5IHRlYW0gc2VudCB0aGUgYXR0YWNoZWQgcXVlc3Rpb25uYWlyZS4gTW9zdGx5IHN0YW5kYXJkLCBwbHVzIHR3byBxdWVzdGlvbnMgb24gU1NPLg"
+                    }
+                  },
+                  {
+                    "partId": "0.1",
+                    "mimeType": "text/html",
+                    "filename": "",
+                    "headers": [],
+                    "body": {
+                      "size": 121,
+                      "data": "PGRpdiBkaXI9Imx0ciI-RGFuYSwgb3VyIHNlY3VyaXR5IHRlYW0gc2VudCB0aGUgYXR0YWNoZWQgcXVlc3Rpb25uYWlyZS4gTW9zdGx5IHN0YW5kYXJkLCBwbHVzIHR3byBxdWVzdGlvbnMgb24gU1NPLjwvZGl2Pg"
+                    }
+                  }
+                ]
+              },
+              {
+                "partId": "1",
+                "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "filename": "Globex-security-2026.xlsx",
+                "headers": [],
+                "body": {
+                  "size": 48211,
+                  "attachmentId": "ANGjdJ69f9bf41335d93917a1cc579"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "630cb292496df836",
+          "threadId": "11d9cab2b1fe3eca",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Answered and attached. Mia confirmed the SSO answers.",
+          "historyId": "5120011",
+          "internalDate": {
+            "$relMsString": "-4d 15:10"
+          },
+          "sizeEstimate": 2101,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Globex security questionnaire"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-4d 15:10"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<630cb292496df836@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 53,
+                  "data": "QW5zd2VyZWQgYW5kIGF0dGFjaGVkLiBNaWEgY29uZmlybWVkIHRoZSBTU08gYW5zd2Vycy4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 74,
+                  "data": "PGRpdiBkaXI9Imx0ciI-QW5zd2VyZWQgYW5kIGF0dGFjaGVkLiBNaWEgY29uZmlybWVkIHRoZSBTU08gYW5zd2Vycy48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "6e94e3aa03dcd8ed": {
+      "id": "6e94e3aa03dcd8ed",
+      "historyId": "5120140",
+      "messages": [
+        {
+          "id": "5ff9645f312aabf7",
+          "threadId": "6e94e3aa03dcd8ed",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Sharing a sanitized sample of our export so Mia can reproduce the import issue.",
+          "historyId": "5120140",
+          "internalDate": {
+            "$relMsString": "-4d 12:00"
+          },
+          "sizeEstimate": 2127,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Anika Rao <anika@initech.io>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>, Mia Park <mia@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "CSV export sample for the pilot"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-4d 12:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<5ff9645f312aabf7@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 79,
+                  "data": "U2hhcmluZyBhIHNhbml0aXplZCBzYW1wbGUgb2Ygb3VyIGV4cG9ydCBzbyBNaWEgY2FuIHJlcHJvZHVjZSB0aGUgaW1wb3J0IGlzc3VlLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "PGRpdiBkaXI9Imx0ciI-U2hhcmluZyBhIHNhbml0aXplZCBzYW1wbGUgb2Ygb3VyIGV4cG9ydCBzbyBNaWEgY2FuIHJlcHJvZHVjZSB0aGUgaW1wb3J0IGlzc3VlLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "6c6ab8ff010f8ca4": {
+      "id": "6c6ab8ff010f8ca4",
+      "historyId": "5120100",
+      "messages": [
+        {
+          "id": "a8136e50ece083e4",
+          "threadId": "6c6ab8ff010f8ca4",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Checklist for moving the pipeline from HubSpot to Attio. Contacts and companies first, deals once Globex closes.",
+          "historyId": "5120100",
+          "internalDate": {
+            "$relMsString": "-6d 11:00"
+          },
+          "sizeEstimate": 2160,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Sam Okafor <sam@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "HubSpot to Attio migration checklist"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-6d 11:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<a8136e50ece083e4@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 112,
+                  "data": "Q2hlY2tsaXN0IGZvciBtb3ZpbmcgdGhlIHBpcGVsaW5lIGZyb20gSHViU3BvdCB0byBBdHRpby4gQ29udGFjdHMgYW5kIGNvbXBhbmllcyBmaXJzdCwgZGVhbHMgb25jZSBHbG9iZXggY2xvc2VzLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 133,
+                  "data": "PGRpdiBkaXI9Imx0ciI-Q2hlY2tsaXN0IGZvciBtb3ZpbmcgdGhlIHBpcGVsaW5lIGZyb20gSHViU3BvdCB0byBBdHRpby4gQ29udGFjdHMgYW5kIGNvbXBhbmllcyBmaXJzdCwgZGVhbHMgb25jZSBHbG9iZXggY2xvc2VzLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "2ba2c9c3776a1619": {
+      "id": "2ba2c9c3776a1619",
+      "historyId": "5120151",
+      "messages": [
+        {
+          "id": "373efdd8dd89c967",
+          "threadId": "2ba2c9c3776a1619",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Does the starter plan include the API? We have 40 people in operations.",
+          "historyId": "5120150",
+          "internalDate": {
+            "$relMsString": "-8d 09:00"
+          },
+          "sizeEstimate": 2119,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Grace Liu <grace.liu@initrode.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Starter plan questions"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-8d 09:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<373efdd8dd89c967@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 71,
+                  "data": "RG9lcyB0aGUgc3RhcnRlciBwbGFuIGluY2x1ZGUgdGhlIEFQST8gV2UgaGF2ZSA0MCBwZW9wbGUgaW4gb3BlcmF0aW9ucy4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 92,
+                  "data": "PGRpdiBkaXI9Imx0ciI-RG9lcyB0aGUgc3RhcnRlciBwbGFuIGluY2x1ZGUgdGhlIEFQST8gV2UgaGF2ZSA0MCBwZW9wbGUgaW4gb3BlcmF0aW9ucy48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "182d164a7e08a213",
+          "threadId": "2ba2c9c3776a1619",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "It does. I can send a quote for 40 seats once your ops review is done. When is it?",
+          "historyId": "5120151",
+          "internalDate": {
+            "$relMsString": "-7d 14:00"
+          },
+          "sizeEstimate": 2130,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Grace Liu <grace.liu@initrode.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Starter plan questions"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-7d 14:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<182d164a7e08a213@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 82,
+                  "data": "SXQgZG9lcy4gSSBjYW4gc2VuZCBhIHF1b3RlIGZvciA0MCBzZWF0cyBvbmNlIHlvdXIgb3BzIHJldmlldyBpcyBkb25lLiBXaGVuIGlzIGl0Pw"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 103,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SXQgZG9lcy4gSSBjYW4gc2VuZCBhIHF1b3RlIGZvciA0MCBzZWF0cyBvbmNlIHlvdXIgb3BzIHJldmlldyBpcyBkb25lLiBXaGVuIGlzIGl0PzwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "5932e8077f4c1db0": {
+      "id": "5932e8077f4c1db0",
+      "historyId": "5120180",
+      "messages": [
+        {
+          "id": "1ed0a1312d73d84d",
+          "threadId": "5932e8077f4c1db0",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PROMOTIONS"
+          ],
+          "snippet": "Join us Thursday to learn how EU procurement teams evaluate software.",
+          "historyId": "5120180",
+          "internalDate": {
+            "$relMsString": "-8d 06:30"
+          },
+          "sizeEstimate": 2117,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Procurement Today <events@procurementtoday.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Webinar: running EU procurement"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-8d 06:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<1ed0a1312d73d84d@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 69,
+                  "data": "Sm9pbiB1cyBUaHVyc2RheSB0byBsZWFybiBob3cgRVUgcHJvY3VyZW1lbnQgdGVhbXMgZXZhbHVhdGUgc29mdHdhcmUu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 90,
+                  "data": "PGRpdiBkaXI9Imx0ciI-Sm9pbiB1cyBUaHVyc2RheSB0byBsZWFybiBob3cgRVUgcHJvY3VyZW1lbnQgdGVhbXMgZXZhbHVhdGUgc29mdHdhcmUuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "b57d659c68004a1d": {
+      "id": "b57d659c68004a1d",
+      "historyId": "5120020",
+      "messages": [
+        {
+          "id": "817398bf289afff5",
+          "threadId": "b57d659c68004a1d",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Dana, meet Marco, our counsel. He will run the MSA redline from our side. Marco, Dana leads the renewal at Acme.",
+          "historyId": "5120020",
+          "internalDate": {
+            "$relMsString": "-9d 13:00"
+          },
+          "sizeEstimate": 2160,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>, Marco Bellini <marco@globex.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Intro: Marco from Globex legal"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-9d 13:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<817398bf289afff5@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 112,
+                  "data": "RGFuYSwgbWVldCBNYXJjbywgb3VyIGNvdW5zZWwuIEhlIHdpbGwgcnVuIHRoZSBNU0EgcmVkbGluZSBmcm9tIG91ciBzaWRlLiBNYXJjbywgRGFuYSBsZWFkcyB0aGUgcmVuZXdhbCBhdCBBY21lLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 133,
+                  "data": "PGRpdiBkaXI9Imx0ciI-RGFuYSwgbWVldCBNYXJjbywgb3VyIGNvdW5zZWwuIEhlIHdpbGwgcnVuIHRoZSBNU0EgcmVkbGluZSBmcm9tIG91ciBzaWRlLiBNYXJjbywgRGFuYSBsZWFkcyB0aGUgcmVuZXdhbCBhdCBBY21lLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "87b09348091b5c18": {
+      "id": "87b09348091b5c18",
+      "historyId": "5120051",
+      "messages": [
+        {
+          "id": "907765db0b4c8b6e",
+          "threadId": "87b09348091b5c18",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Agenda for tomorrow: scope, success criteria, data access, check-in cadence.",
+          "historyId": "5120050",
+          "internalDate": {
+            "$relMsString": "-9d 16:00"
+          },
+          "sizeEstimate": 2124,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Ravi Menon <ravi@initech.io>, Anika Rao <anika@initech.io>"
+              },
+              {
+                "name": "Subject",
+                "value": "Initech pilot kickoff agenda"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-9d 16:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<907765db0b4c8b6e@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 76,
+                  "data": "QWdlbmRhIGZvciB0b21vcnJvdzogc2NvcGUsIHN1Y2Nlc3MgY3JpdGVyaWEsIGRhdGEgYWNjZXNzLCBjaGVjay1pbiBjYWRlbmNlLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 97,
+                  "data": "PGRpdiBkaXI9Imx0ciI-QWdlbmRhIGZvciB0b21vcnJvdzogc2NvcGUsIHN1Y2Nlc3MgY3JpdGVyaWEsIGRhdGEgYWNjZXNzLCBjaGVjay1pbiBjYWRlbmNlLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "99d9364c10952d32",
+          "threadId": "87b09348091b5c18",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Looks good. Anika will join for the data part.",
+          "historyId": "5120051",
+          "internalDate": {
+            "$relMsString": "-9d 17:20"
+          },
+          "sizeEstimate": 2094,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Ravi Menon <ravi@initech.io>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Initech pilot kickoff agenda"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-9d 17:20"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<99d9364c10952d32@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 46,
+                  "data": "TG9va3MgZ29vZC4gQW5pa2Egd2lsbCBqb2luIGZvciB0aGUgZGF0YSBwYXJ0Lg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 67,
+                  "data": "PGRpdiBkaXI9Imx0ciI-TG9va3MgZ29vZC4gQW5pa2Egd2lsbCBqb2luIGZvciB0aGUgZGF0YSBwYXJ0LjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "5ac62ce1aa9e9fab": {
+      "id": "5ac62ce1aa9e9fab",
+      "historyId": "5120200",
+      "messages": [
+        {
+          "id": "17e31e552aad4494",
+          "threadId": "5ac62ce1aa9e9fab",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_UPDATES"
+          ],
+          "snippet": "Your trip to Chicago is confirmed. Departs November 12, 8:05 AM.",
+          "historyId": "5120200",
+          "internalDate": {
+            "$relMsString": "-12d 19:00"
+          },
+          "sizeEstimate": 2112,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Skyway Travel <trips@skyway.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Trip confirmation: SFO to ORD"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-12d 19:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<17e31e552aad4494@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 64,
+                  "data": "WW91ciB0cmlwIHRvIENoaWNhZ28gaXMgY29uZmlybWVkLiBEZXBhcnRzIE5vdmVtYmVyIDEyLCA4OjA1IEFNLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 85,
+                  "data": "PGRpdiBkaXI9Imx0ciI-WW91ciB0cmlwIHRvIENoaWNhZ28gaXMgY29uZmlybWVkLiBEZXBhcnRzIE5vdmVtYmVyIDEyLCA4OjA1IEFNLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "dbe07e2544aebb76": {
+      "id": "dbe07e2544aebb76",
+      "historyId": "5120070",
+      "messages": [
+        {
+          "id": "7c38df8964ad5c27",
+          "threadId": "dbe07e2544aebb76",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Intro to a CFO in our portfolio who is shopping for exactly what Acme sells. Want me to connect you?",
+          "historyId": "5120070",
+          "internalDate": {
+            "$relMsString": "-20d 10:00"
+          },
+          "sizeEstimate": 2148,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Owen Price <owen@northwind.vc>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Northwind portfolio CFO intro"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-20d 10:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<7c38df8964ad5c27@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "SW50cm8gdG8gYSBDRk8gaW4gb3VyIHBvcnRmb2xpbyB3aG8gaXMgc2hvcHBpbmcgZm9yIGV4YWN0bHkgd2hhdCBBY21lIHNlbGxzLiBXYW50IG1lIHRvIGNvbm5lY3QgeW91Pw"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 121,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SW50cm8gdG8gYSBDRk8gaW4gb3VyIHBvcnRmb2xpbyB3aG8gaXMgc2hvcHBpbmcgZm9yIGV4YWN0bHkgd2hhdCBBY21lIHNlbGxzLiBXYW50IG1lIHRvIGNvbm5lY3QgeW91PzwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "e1603a9300f38387": {
+      "id": "e1603a9300f38387",
+      "historyId": "5120031",
+      "messages": [
+        {
+          "id": "0a1003278b37a511",
+          "threadId": "e1603a9300f38387",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Great to meet you at the conference. Let's find 20 minutes next week to walk through the renewal.",
+          "historyId": "5120030",
+          "internalDate": {
+            "$relMsString": "-42d 09:00"
+          },
+          "sizeEstimate": 2145,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Welcome to Acme Inc, Priya"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-42d 09:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<0a1003278b37a511@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 97,
+                  "data": "R3JlYXQgdG8gbWVldCB5b3UgYXQgdGhlIGNvbmZlcmVuY2UuIExldCdzIGZpbmQgMjAgbWludXRlcyBuZXh0IHdlZWsgdG8gd2FsayB0aHJvdWdoIHRoZSByZW5ld2FsLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 118,
+                  "data": "PGRpdiBkaXI9Imx0ciI-R3JlYXQgdG8gbWVldCB5b3UgYXQgdGhlIGNvbmZlcmVuY2UuIExldCdzIGZpbmQgMjAgbWludXRlcyBuZXh0IHdlZWsgdG8gd2FsayB0aHJvdWdoIHRoZSByZW5ld2FsLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "0712939a8a4e2617",
+          "threadId": "e1603a9300f38387",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Thanks Dana, Tuesday works.",
+          "historyId": "5120031",
+          "internalDate": {
+            "$relMsString": "-41d 14:30"
+          },
+          "sizeEstimate": 2075,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Priya Shah <priya@globex.com>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Welcome to Acme Inc, Priya"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-41d 14:30"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<0712939a8a4e2617@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 27,
+                  "data": "VGhhbmtzIERhbmEsIFR1ZXNkYXkgd29ya3Mu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 48,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzIERhbmEsIFR1ZXNkYXkgd29ya3MuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "4d540ab15d1fe41b": {
+      "id": "4d540ab15d1fe41b",
+      "historyId": "5120211",
+      "messages": [
+        {
+          "id": "9ce9c70d8445f890",
+          "threadId": "4d540ab15d1fe41b",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "Following up on the security review. All good on our side.",
+          "historyId": "5120210",
+          "internalDate": {
+            "$relMsString": "-60d 10:00"
+          },
+          "sizeEstimate": 2106,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Ravi Menon <ravi@initech.io>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Initech security review follow-up"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-60d 10:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<9ce9c70d8445f890@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 58,
+                  "data": "Rm9sbG93aW5nIHVwIG9uIHRoZSBzZWN1cml0eSByZXZpZXcuIEFsbCBnb29kIG9uIG91ciBzaWRlLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 79,
+                  "data": "PGRpdiBkaXI9Imx0ciI-Rm9sbG93aW5nIHVwIG9uIHRoZSBzZWN1cml0eSByZXZpZXcuIEFsbCBnb29kIG9uIG91ciBzaWRlLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "eca78b675c8c08bb",
+          "threadId": "4d540ab15d1fe41b",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Thanks Ravi, sharing the SOC report link separately.",
+          "historyId": "5120211",
+          "internalDate": {
+            "$relMsString": "-60d 12:00"
+          },
+          "sizeEstimate": 2100,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Ravi Menon <ravi@initech.io>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Initech security review follow-up"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-60d 12:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<eca78b675c8c08bb@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 52,
+                  "data": "VGhhbmtzIFJhdmksIHNoYXJpbmcgdGhlIFNPQyByZXBvcnQgbGluayBzZXBhcmF0ZWx5Lg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 73,
+                  "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzIFJhdmksIHNoYXJpbmcgdGhlIFNPQyByZXBvcnQgbGluayBzZXBhcmF0ZWx5LjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "2156c0f67c246c9a": {
+      "id": "2156c0f67c246c9a",
+      "historyId": "5120221",
+      "messages": [
+        {
+          "id": "bfe7bca4344ab6b5",
+          "threadId": "2156c0f67c246c9a",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "In the city next week, coffee?",
+          "historyId": "5120220",
+          "internalDate": {
+            "$relMsString": "-100d 09:00"
+          },
+          "sizeEstimate": 2078,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Owen Price <owen@northwind.vc>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "Subject",
+                "value": "Coffee next week?"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-100d 09:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<bfe7bca4344ab6b5@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 30,
+                  "data": "SW4gdGhlIGNpdHkgbmV4dCB3ZWVrLCBjb2ZmZWU_"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 51,
+                  "data": "PGRpdiBkaXI9Imx0ciI-SW4gdGhlIGNpdHkgbmV4dCB3ZWVrLCBjb2ZmZWU_PC9kaXY-"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "315f432e5bc066f9",
+          "threadId": "2156c0f67c246c9a",
+          "labelIds": [
+            "SENT"
+          ],
+          "snippet": "Yes, Wednesday at 9.",
+          "historyId": "5120221",
+          "internalDate": {
+            "$relMsString": "-100d 10:00"
+          },
+          "sizeEstimate": 2068,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Dana Oyelaran <dana@acme.com>"
+              },
+              {
+                "name": "To",
+                "value": "Owen Price <owen@northwind.vc>"
+              },
+              {
+                "name": "Subject",
+                "value": "Re: Coffee next week?"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-100d 10:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<315f432e5bc066f9@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 20,
+                  "data": "WWVzLCBXZWRuZXNkYXkgYXQgOS4"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 41,
+                  "data": "PGRpdiBkaXI9Imx0ciI-WWVzLCBXZWRuZXNkYXkgYXQgOS48L2Rpdj4"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

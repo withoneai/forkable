@@ -1,0 +1,111 @@
+{
+  "$shapedFrom": "@withone/connect PlatformAction (listActions), titles, methods and paths copied from the real Zendesk catalog entries named in `mirrors`",
+  "platform": "zendesk",
+  "actions": [
+    {
+      "_id": "sample::zendesk::incremental-tickets-cursor",
+      "title": "Incremental Ticket Export (Cursor-based)",
+      "method": "GET",
+      "path": "/api/v2/incremental/tickets/cursor",
+      "tags": [
+        "zendesk"
+      ],
+      "mirrors": "conn_mod_def::GJ8Yg-wzuPs::ona0Gzt-S_6lBP1I8V8y7g"
+    },
+    {
+      "_id": "sample::zendesk::incremental-tickets-time",
+      "title": "Incremental Ticket Export (Time-Based)",
+      "method": "GET",
+      "path": "/api/v2/incremental/tickets",
+      "tags": [
+        "zendesk"
+      ],
+      "mirrors": "conn_mod_def::GJ8Yg-NVdgo::eilHTHLdTV2SKwKT8ARILQ"
+    },
+    {
+      "_id": "sample::zendesk::list-tickets",
+      "title": "List Tickets",
+      "method": "GET",
+      "path": "/api/v2/tickets",
+      "tags": [
+        "zendesk"
+      ],
+      "mirrors": "conn_mod_def::GJ8YsEOuyzs::i5cu44u4T7qWhAQJ_mTu1A"
+    },
+    {
+      "_id": "sample::zendesk::list-recent-tickets",
+      "title": "List Recent Tickets",
+      "method": "GET",
+      "path": "/api/v2/tickets/recent",
+      "tags": [
+        "zendesk"
+      ],
+      "mirrors": "conn_mod_def::GJ8YsAbgwZU::v8t-TFnTR2e_ZcUlSsv1AA"
+    },
+    {
+      "_id": "sample::zendesk::incremental-users",
+      "title": "Incremental User Export (Time-Based)",
+      "method": "GET",
+      "path": "/api/v2/incremental/users",
+      "tags": [
+        "zendesk"
+      ],
+      "mirrors": "conn_mod_def::GJ8YhInbdoI::eFkpkJgMSwmXwTj9Sx7ktA"
+    },
+    {
+      "_id": "sample::zendesk::update-ticket",
+      "title": "Update a Ticket",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ticketId}}",
+      "tags": [
+        "zendesk",
+        "write"
+      ],
+      "mirrors": "conn_mod_def::GJ8YsdGrlPg::9_SIvAvVRP-KfnX2oA6qCA"
+    },
+    {
+      "_id": "sample::zendesk::update-many-tickets",
+      "title": "Update Many Tickets",
+      "method": "PUT",
+      "path": "/api/v2/tickets/update_many",
+      "tags": [
+        "zendesk",
+        "write"
+      ],
+      "mirrors": "conn_mod_def::GJ8YsdFUeJc::hNqGJNhuRJqQvvkMpUWndg"
+    },
+    {
+      "_id": "sample::zendesk::delete-ticket",
+      "title": "Delete a Ticket",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{{ticketId}}",
+      "tags": [
+        "zendesk",
+        "write"
+      ],
+      "mirrors": "conn_mod_def::GJ8Yrw4PQuI::byy7QYe_T7-XMQZg2X7DuQ"
+    },
+    {
+      "_id": "sample::zendesk::bulk-delete-tickets",
+      "title": "Bulk Delete Tickets",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/destroy_many",
+      "tags": [
+        "zendesk",
+        "write"
+      ],
+      "mirrors": "conn_mod_def::GJ8YrqJCSV8::09pAokjpQNSkj5MbQX49mA"
+    },
+    {
+      "_id": "sample::zendesk::update-organization",
+      "title": "Update an Organization",
+      "method": "PUT",
+      "path": "/api/v2/organizations/{{organizationId}}",
+      "tags": [
+        "zendesk",
+        "write"
+      ],
+      "mirrors": "conn_mod_def::GJ8Ylnmr_iE::attZfS8cTVKJ9wl6bmkorw"
+    }
+  ]
+}

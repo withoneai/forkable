@@ -1,0 +1,23 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "slack.users": 6,
+    "slack.messages": 48
+  },
+  "kinds": {
+    "person": 6,
+    "message": 48
+  },
+  "tombstoned": 0,
+  "partitions": 4,
+  "threadsWithReplies": 2,
+  "note": "slack.users is a directory profile",
+  "items": 54,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "slack"
+      ]
+    }
+  }
+}

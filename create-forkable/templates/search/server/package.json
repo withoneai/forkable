@@ -1,0 +1,40 @@
+{
+  "name": "@search/server",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "dev": "SEARCH_UI_URL=${SEARCH_UI_URL:-http://localhost:5680} tsx watch --clear-screen=false --ignore '../ui/**' src/node.ts",
+    "start": "tsx src/node.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx scripts/smoke-api.ts",
+    "smoke:whoami": "tsx scripts/smoke-whoami.ts",
+    "smoke:oauth": "tsx scripts/smoke-oauth.ts",
+    "smoke:mcp": "tsx scripts/smoke-mcp.ts",
+    "smoke:scheduler": "tsx scripts/smoke-scheduler.ts",
+    "smoke:connect": "tsx scripts/smoke-connect-env.ts"
+  },
+  "dependencies": {
+    "@hono/mcp": "^0.3.5",
+    "@hono/node-server": "^2.1.0",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@search/core": "workspace:*",
+    "@withone/connect": "^0.19.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.0",
+    "pg": "^8.16.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}

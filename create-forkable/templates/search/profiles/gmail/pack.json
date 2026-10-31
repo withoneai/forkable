@@ -1,0 +1,198 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Gmail",
+  "platform": "gmail",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "gmail.threads",
+      "platform": "gmail",
+      "model": "threads",
+      "kind": "email_thread",
+      "title": "Gmail threads",
+      "description": "Every thread outside spam, trash, drafts and chats, with decoded bodies. Native Gmail reads: list threads, then get each changed thread.",
+      "author": "builtin",
+      "revision": 2,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3oa8bJZNA::ZS9kXmE_Rzi4utfESor_ng",
+          "pathVars": {
+            "userId": "me"
+          }
+        },
+        "vars": {
+          "email": "emailAddress"
+        },
+        "self": [
+          {
+            "kind": "email",
+            "var": "email"
+          }
+        ]
+      },
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        },
+        "query": {
+          "type": "string",
+          "default": "-in:chats -in:spam -in:trash -in:drafts",
+          "label": "Gmail filter"
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ",
+        "pathVars": {
+          "userId": "me"
+        },
+        "query": {
+          "q": "after:{{ run.since | unix }} {{ settings.query }}"
+        },
+        "resultsPath": "threads",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "nextPageToken",
+          "passAs": "query:pageToken"
+        },
+        "pageSize": {
+          "param": "maxResults",
+          "value": 50,
+          "in": "query"
+        }
+      },
+      "hydrate": {
+        "request": {
+          "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+          "pathVars": {
+            "userId": "me",
+            "id": "{{ item.id }}"
+          },
+          "query": {
+            "format": "full"
+          }
+        },
+        "fingerprint": "{{ item.historyId }}",
+        "concurrency": 4,
+        "notFoundIsDelete": true
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "detail.messages[-1].internalDate",
+        "order": "asc",
+        "overlap": "1h",
+        "initial": "{{ settings.backfill }}"
+      },
+      "deletes": {
+        "reconcile": "onFullPass",
+        "fullPassEvery": "14d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "detail.messages[0].payload.headers[name=Subject].value",
+            {
+              "template": "(no subject)"
+            }
+          ]
+        },
+        "body": {
+          "path": "detail.messages[].payload",
+          "pick": "join",
+          "sep": "\n\n",
+          "decode": "mime-body"
+        },
+        "snippet": {
+          "coalesce": [
+            "detail.messages[-1].snippet",
+            "item.snippet"
+          ]
+        },
+        "occurredAt": {
+          "path": "detail.messages[0].internalDate",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "detail.messages[-1].internalDate",
+          "decode": "datetime"
+        },
+        "url": "https://mail.google.com/mail/u/?authuser={{ account.email | urlencode }}#all/{{ item.id }}",
+        "groupKey": "item.id",
+        "labels": {
+          "path": "detail.messages[].labelIds[]",
+          "pick": "all"
+        },
+        "facets": {
+          "messageCount": {
+            "path": "detail.messages",
+            "pick": "count"
+          },
+          "unread": {
+            "test": "contains(detail.messages[].labelIds[], 'UNREAD')"
+          },
+          "hasAttachment": {
+            "test": "len(detail.messages[].payload.parts[].body.attachmentId) > 0"
+          },
+          "lastFrom": {
+            "path": "detail.messages[-1].payload.headers[name=From].value",
+            "decode": "email"
+          },
+          "participants": {
+            "path": "detail.messages[].payload.headers[name=From].value",
+            "pick": "all",
+            "decode": "email"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "from",
+            "type": "person",
+            "address": {
+              "path": "detail.messages[].payload.headers[name=From].value",
+              "pick": "all"
+            }
+          },
+          {
+            "role": "to",
+            "type": "person",
+            "address": {
+              "path": "detail.messages[].payload.headers[name=To].value",
+              "pick": "all"
+            }
+          },
+          {
+            "role": "cc",
+            "type": "person",
+            "address": {
+              "path": "detail.messages[].payload.headers[name=Cc].value",
+              "pick": "all"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "message",
+        "unit": "detail.messages[]",
+        "unitBody": {
+          "path": "payload",
+          "decode": "mime-body"
+        },
+        "header": "{{ doc.title }} | {{ unit.payload.headers[name=From].value }} | {{ unit.internalDate | date:\"yyyy-MM-dd\" }}",
+        "maxTokens": 400,
+        "overlapTokens": 40
+      },
+      "limits": {
+        "requestsPerMinute": 120
+      },
+      "schedule": {
+        "every": "5m"
+      }
+    }
+  ]
+}

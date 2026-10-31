@@ -1,0 +1,130 @@
+{
+  "$shapedFrom": "conn_mod_def::GKbJ53hO4Ng::02BNDFnhQ-CVKjaPxMIMrg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 11",
+  "actionId": "conn_mod_def::GKbJ53hO4Ng::02BNDFnhQ-CVKjaPxMIMrg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "notes": [
+          {
+            "id": "not_ec5b66Q95f5bd9",
+            "object": "note",
+            "title": "Initech security review",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-60d 11:00"
+            },
+            "updated_at": {
+              "$rel": "-60d 12:05"
+            }
+          },
+          {
+            "id": "not_4eQb42zce95789",
+            "object": "note",
+            "title": "Initech pilot kickoff",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-8d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-8d 11:20"
+            }
+          },
+          {
+            "id": "not_Qda6ba6244ecz8",
+            "object": "note",
+            "title": "Pipeline review",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-7d 11:00"
+            },
+            "updated_at": {
+              "$rel": "-7d 11:50"
+            }
+          },
+          {
+            "id": "not_3z3z4Q56z8b8cf",
+            "object": "note",
+            "title": "Umbrella procurement call",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-3d 08:00"
+            },
+            "updated_at": {
+              "$rel": "-3d 09:05"
+            }
+          }
+        ],
+        "hasMore": true,
+        "cursor": "eyJncmFub2xhIjoicGFnZTIifQ=="
+      }
+    },
+    {
+      "match": {
+        "cursor": "eyJncmFub2xhIjoicGFnZTIifQ=="
+      },
+      "response": {
+        "notes": [
+          {
+            "id": "not_8z8z42c24fd5f3",
+            "object": "note",
+            "title": "Globex contract review",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-2d 14:00"
+            },
+            "updated_at": {
+              "$rel": "-2d 14:50"
+            }
+          },
+          {
+            "id": "not_3429czbecb6a3Q",
+            "object": "note",
+            "title": "Dana / Theo 1:1",
+            "owner": {
+              "id": "usr_acmeDana0000001",
+              "object": "user",
+              "name": "Dana Oyelaran",
+              "email": "dana@acme.com"
+            },
+            "created_at": {
+              "$rel": "-1d 15:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 15:50"
+            }
+          }
+        ],
+        "hasMore": false,
+        "cursor": null
+      }
+    }
+  ]
+}

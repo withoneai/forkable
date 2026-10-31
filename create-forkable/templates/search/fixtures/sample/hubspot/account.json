@@ -1,0 +1,17 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get HubSpot Account Details",
+  "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg",
+  "response": {
+    "additionalCurrencies": [
+      "EUR"
+    ],
+    "utcOffset": "-07:00",
+    "companyCurrency": "USD",
+    "portalId": 48213907,
+    "accountType": "STANDARD",
+    "uiDomain": "app.hubspot.com",
+    "timeZone": "America/Los_Angeles",
+    "dataHostingLocation": "NA",
+    "utcOffsetMilliseconds": -25200000
+  }
+}

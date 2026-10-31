@@ -1,0 +1,255 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3kSC2Sp7I::L6cYnwOfTUatg0cXeWjCBA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 1",
+  "actionId": "conn_mod_def::GJ3kSC2Sp7I::L6cYnwOfTUatg0cXeWjCBA",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "total": 8,
+        "results": [
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-220d 10:00"
+            },
+            "id": "201",
+            "properties": {
+              "email": "priya@globex.com",
+              "firstname": "Priya",
+              "lastname": "Shah",
+              "company": "Globex",
+              "jobtitle": "VP Partnerships",
+              "lifecyclestage": "customer",
+              "hubspot_owner_id": "71001",
+              "city": "Chicago",
+              "country": "United States",
+              "hs_lead_status": "OPEN_DEAL",
+              "phone": "+1 312 555 0142",
+              "lastmodifieddate": {
+                "$rel": "-2d 16:20"
+              },
+              "createdate": {
+                "$rel": "-220d 10:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-2d 16:20"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-60d 09:00"
+            },
+            "id": "202",
+            "properties": {
+              "email": "marco@globex.com",
+              "firstname": "Marco",
+              "lastname": "Bellini",
+              "company": "Globex",
+              "jobtitle": "Legal Counsel",
+              "lifecyclestage": "customer",
+              "hubspot_owner_id": "71001",
+              "city": "Chicago",
+              "country": "United States",
+              "lastmodifieddate": {
+                "$rel": "-3d 11:00"
+              },
+              "createdate": {
+                "$rel": "-60d 09:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 11:00"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-75d 08:30"
+            },
+            "id": "203",
+            "properties": {
+              "email": "hannah.cole@umbrella.co",
+              "firstname": "Hannah",
+              "lastname": "Cole",
+              "company": "Umbrella",
+              "jobtitle": "Procurement Lead",
+              "lifecyclestage": "opportunity",
+              "hubspot_owner_id": "71002",
+              "city": "Berlin",
+              "country": "Germany",
+              "hs_lead_status": "IN_PROGRESS",
+              "phone": "+49 30 5550 1188",
+              "lastmodifieddate": {
+                "$rel": "-3d 09:10"
+              },
+              "createdate": {
+                "$rel": "-75d 08:30"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 09:10"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-75d 08:40"
+            },
+            "id": "204",
+            "properties": {
+              "email": "felix.wagner@umbrella.co",
+              "firstname": "Felix",
+              "lastname": "Wagner",
+              "company": "Umbrella",
+              "jobtitle": "CFO",
+              "lifecyclestage": "opportunity",
+              "hubspot_owner_id": "71002",
+              "city": "Berlin",
+              "country": "Germany",
+              "lastmodifieddate": {
+                "$rel": "-6d 14:00"
+              },
+              "createdate": {
+                "$rel": "-75d 08:40"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-6d 14:00"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-120d 13:00"
+            },
+            "id": "205",
+            "properties": {
+              "email": "ravi@initech.io",
+              "firstname": "Ravi",
+              "lastname": "Menon",
+              "company": "Initech",
+              "jobtitle": "CTO",
+              "lifecyclestage": "salesqualifiedlead",
+              "hubspot_owner_id": "71002",
+              "city": "Austin",
+              "country": "United States",
+              "hs_lead_status": "IN_PROGRESS",
+              "lastmodifieddate": {
+                "$rel": "-3d 17:30"
+              },
+              "createdate": {
+                "$rel": "-120d 13:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 17:30"
+            }
+          }
+        ],
+        "paging": {
+          "next": {
+            "after": "hs-contacts-after-5",
+            "link": "https://api.hubapi.com/crm/v3/objects/contacts/search?after=hs-contacts-after-5"
+          }
+        }
+      }
+    },
+    {
+      "match": {
+        "cursor": "hs-contacts-after-5"
+      },
+      "response": {
+        "total": 8,
+        "results": [
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-400d 12:00"
+            },
+            "id": "206",
+            "properties": {
+              "email": "owen@northwind.vc",
+              "firstname": "Owen",
+              "lastname": "Price",
+              "company": "Northwind Ventures",
+              "jobtitle": "Partner",
+              "lifecyclestage": "other",
+              "hubspot_owner_id": "71002",
+              "city": "San Francisco",
+              "country": "United States",
+              "lastmodifieddate": {
+                "$rel": "-2d 09:00"
+              },
+              "createdate": {
+                "$rel": "-400d 12:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-2d 09:00"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-1d 08:30"
+            },
+            "id": "207",
+            "properties": {
+              "email": "jules@hooli.dev",
+              "firstname": "Jules",
+              "lastname": "Martin",
+              "company": "Hooli",
+              "jobtitle": "Founder",
+              "lifecyclestage": "lead",
+              "hubspot_owner_id": "71001",
+              "city": "Austin",
+              "country": "United States",
+              "hs_lead_status": "NEW",
+              "lastmodifieddate": {
+                "$rel": "-1d 08:30"
+              },
+              "createdate": {
+                "$rel": "-1d 08:30"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-1d 08:30"
+            }
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-14d 10:00"
+            },
+            "id": "208",
+            "properties": {
+              "email": "grace.liu@initrode.com",
+              "firstname": "Grace",
+              "lastname": "Liu",
+              "company": "Initrode",
+              "jobtitle": "Head of Operations",
+              "lifecyclestage": "lead",
+              "hubspot_owner_id": "71001",
+              "city": "Denver",
+              "country": "United States",
+              "hs_lead_status": "ATTEMPTED_TO_CONTACT",
+              "lastmodifieddate": {
+                "$rel": "-7d 15:00"
+              },
+              "createdate": {
+                "$rel": "-14d 10:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-7d 15:00"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

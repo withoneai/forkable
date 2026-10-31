@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search, one search box for everything you connect</title>
+    <meta
+      name="description"
+      content="A free, open source personal search engine over HubSpot, Attio, Gmail, Outlook, both calendars, Notion, Linear, Slack, Teams and Granola, plus any other tool in One. Hybrid keyword and semantic search on Postgres, with an AI that reasons over your results and cites them. CLI, API and MCP included. A Forkable business you can fork and run."
+    />
+    <link rel="canonical" href="https://search.forkable.dev/" />
+    <link rel="alternate" type="text/markdown" href="https://search.forkable.dev/index.md" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="One" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfdfc" media="(prefers-color-scheme: light)" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Search" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Search" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://search.forkable.dev/" />
+    <meta property="og:title" content="Search, one search box for everything you connect" />
+    <meta
+      property="og:description"
+      content="A free, open source personal search engine over HubSpot, Attio, Gmail, Outlook, both calendars, Notion, Linear, Slack, Teams and Granola, plus any other tool in One. Hybrid keyword and semantic search with an AI that cites its results. CLI, API and MCP included."
+    />
+    <meta property="og:image" content="https://search.forkable.dev/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Search, the S mark in lime on deep green, beside the line: One search box for everything you connect" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@withoneai" />
+    <meta name="twitter:creator" content="@withoneai" />
+    <meta name="twitter:title" content="Search, one search box for everything you connect" />
+    <meta
+      name="twitter:description"
+      content="A free, open source personal search engine over HubSpot, Attio, Gmail, Outlook, both calendars, Notion, Linear, Slack, Teams and Granola, plus any other tool in One. Hybrid keyword and semantic search with an AI that cites its results."
+    />
+    <meta name="twitter:image" content="https://search.forkable.dev/og.png" />
+    <meta name="twitter:image:alt" content="Search, the S mark in lime on deep green, beside the line: One search box for everything you connect" />
+
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Search",
+          "alternateName": "Search, one search box for everything you connect",
+          "url": "https://search.forkable.dev/",
+          "image": "https://search.forkable.dev/og.png",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "macOS, Linux, Windows, Web",
+          "description": "Search is a free, open source personal search engine. It indexes anything you connect through One, HubSpot, Attio, Gmail, Outlook, Google and Outlook Calendar, Notion, Linear, Slack, Teams and Granola built in, with any other integration addable from Settings. Hybrid keyword and semantic search runs on Postgres, local or Supabase, and an AI on the right reasons over results and cites them. It ships a web app, a CLI, a REST API and an MCP server, all behind Sign in with One.",
+          "isAccessibleForFree": true,
+          "codeRepository": "https://github.com/withoneai/forkable-search",
+          "license": "https://opensource.org/licenses/MIT",
+          "isPartOf": { "@type": "WebSite", "name": "Forkable", "url": "https://forkable.dev/" },
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "creator": { "@type": "Organization", "name": "One", "legalName": "One Systems, Inc.", "url": "https://www.withone.ai" }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Search",
+          "url": "https://search.forkable.dev/",
+          "publisher": {
+            "@type": "Organization",
+            "name": "One",
+            "legalName": "One Systems, Inc.",
+            "url": "https://www.withone.ai",
+            "logo": "https://www.withone.ai/icons/favicon.svg",
+            "sameAs": ["https://github.com/withoneai", "https://x.com/withoneai"]
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What does Search actually index?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Whatever you connect: HubSpot, Attio, Gmail, Outlook Mail, Google Calendar, Outlook Calendar, Notion, Linear, Slack, Teams and Granola ship as built-in profiles. Settings can turn any other tool in One into a profile too." }
+            },
+            {
+              "@type": "Question",
+              "name": "Does it read my data, or just index it?",
+              "acceptedAnswer": { "@type": "Answer", "text": "It stores a hybrid-searchable copy of what each profile is told to index, scoped to your own Connect grant. Nothing is sent anywhere outside the Postgres you point it at." }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I use Supabase instead of a local database?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes. Search runs on an embedded local Postgres by default, or any Postgres connection string, Supabase included. Same schema either way." }
+            },
+            {
+              "@type": "Question",
+              "name": "What if a tool I use isn't in the list?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Add it from Settings. Pick the platform from One's catalog, Search proposes a mapping profile, you confirm the fields and schedule, and indexing starts as soon as you save." }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the AI panel avoid making things up?",
+              "acceptedAnswer": { "@type": "Answer", "text": "It only reasons over the rows your search actually returned, and every answer cites which of those rows it used. Narrowing the question narrows the search behind it." }
+            }
+          ]
+        }
+      ]
+    </script>
+    <script>
+      (function () {
+        var saved = localStorage.getItem("search-site-theme");
+        var dark = saved ? saved === "dark" : true;
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <h1>Search, one search box for everything you connect</h1>
+      <p>
+        Search indexes HubSpot, Attio, Gmail, Outlook, Google and Outlook Calendar, Notion, Linear, Slack,
+        Teams and Granola, plus any other tool in One you add from Settings. Hybrid keyword and semantic
+        search on Postgres, local or Supabase, with an AI that reasons over your results and cites them.
+        Ships a web app, a CLI, a REST API and an MCP server. It is a Forkable business, free and open
+        source, part of <a href="https://forkable.dev">Forkable</a>. Start it with
+        <code>npm create forkable@latest my-search -- --template search</code>. Source on <a href="https://github.com/withoneai/forkable-search">GitHub</a>. Read it as <a href="/index.md">markdown</a>.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

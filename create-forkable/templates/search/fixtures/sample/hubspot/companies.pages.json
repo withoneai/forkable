@@ -1,0 +1,184 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3kQvNreBM::Zpab8Ig5TSivqCj1UhG37w Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 1",
+  "actionId": "conn_mod_def::GJ3kQvNreBM::Zpab8Ig5TSivqCj1UhG37w",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "total": 6,
+        "results": [
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-400d 10:00"
+            },
+            "id": "301",
+            "properties": {
+              "name": "Globex",
+              "domain": "globex.com",
+              "industry": "COMPUTER_SOFTWARE",
+              "description": "Global logistics software. Acme customer since 2024.",
+              "city": "Chicago",
+              "country": "United States",
+              "numberofemployees": "1200",
+              "lifecyclestage": "customer",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-2d 16:25"
+              },
+              "createdate": {
+                "$rel": "-400d 10:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-2d 16:25"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/301"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-90d 09:00"
+            },
+            "id": "302",
+            "properties": {
+              "name": "Umbrella",
+              "domain": "umbrella.co",
+              "industry": "PHARMACEUTICALS",
+              "description": "Expanding Acme to its EU entities.",
+              "city": "Berlin",
+              "country": "Germany",
+              "numberofemployees": "5400",
+              "lifecyclestage": "opportunity",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-3d 09:15"
+              },
+              "createdate": {
+                "$rel": "-90d 09:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 09:15"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/302"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-130d 12:00"
+            },
+            "id": "303",
+            "properties": {
+              "name": "Initech",
+              "domain": "initech.io",
+              "industry": "INFORMATION_TECHNOLOGY_AND_SERVICES",
+              "description": "Data platform. Running a paid pilot.",
+              "city": "Austin",
+              "country": "United States",
+              "numberofemployees": "300",
+              "lifecyclestage": "salesqualifiedlead",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-3d 17:35"
+              },
+              "createdate": {
+                "$rel": "-130d 12:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 17:35"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/303"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-500d 12:00"
+            },
+            "id": "304",
+            "properties": {
+              "name": "Northwind Ventures",
+              "domain": "northwind.vc",
+              "industry": "VENTURE_CAPITAL_PRIVATE_EQUITY",
+              "description": "Lead investor in Acme's Series A.",
+              "city": "San Francisco",
+              "country": "United States",
+              "numberofemployees": "25",
+              "lifecyclestage": "other",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-20d 10:00"
+              },
+              "createdate": {
+                "$rel": "-500d 12:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-20d 10:00"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/304"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-1d 08:31"
+            },
+            "id": "305",
+            "properties": {
+              "name": "Hooli",
+              "domain": "hooli.dev",
+              "industry": "COMPUTER_SOFTWARE",
+              "description": "Early stage developer tools startup.",
+              "city": "Austin",
+              "country": "United States",
+              "numberofemployees": "12",
+              "lifecyclestage": "lead",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-1d 08:31"
+              },
+              "createdate": {
+                "$rel": "-1d 08:31"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-1d 08:31"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/305"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-14d 10:05"
+            },
+            "id": "306",
+            "properties": {
+              "name": "Initrode",
+              "domain": "initrode.com",
+              "industry": "LOGISTICS_AND_SUPPLY_CHAIN",
+              "description": "Regional freight company, evaluating the starter plan.",
+              "city": "Denver",
+              "country": "United States",
+              "numberofemployees": "850",
+              "lifecyclestage": "lead",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-7d 15:05"
+              },
+              "createdate": {
+                "$rel": "-14d 10:05"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-7d 15:05"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-2/306"
+          }
+        ]
+      }
+    }
+  ]
+}

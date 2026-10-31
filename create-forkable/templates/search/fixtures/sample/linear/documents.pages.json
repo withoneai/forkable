@@ -1,0 +1,98 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4vFe4bH3Q::NcSFstL6Q9WSd4TqlvvyHg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 8",
+  "actionId": "conn_mod_def::GJ4vFe4bH3Q::NcSFstL6Q9WSd4TqlvvyHg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "data": {
+          "documents": {
+            "nodes": [
+              {
+                "id": "f5aab558-7c85-51ec-824e-3694d6c86a40",
+                "title": "Ledger 2.0 PRD",
+                "content": "# Ledger 2.0 PRD\n\n## Problem\nCustomers on usage plans get invoices that do not show usage.\n\n## Requirements\n1. Meter every billable event.\n2. Show usage per line on the invoice.\n3. Carry the customer's tax ID for EU entities.",
+                "url": "https://linear.app/acme/document/prd-f5aab558-7c8",
+                "slugId": "f5aab558-7c8",
+                "createdAt": {
+                  "$rel": "-48d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-6d 10:00"
+                },
+                "archivedAt": null,
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "updatedBy": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                }
+              },
+              {
+                "id": "fec0ba1b-0661-5e73-bbc9-95a103463439",
+                "title": "Initech pilot import runbook",
+                "content": "# Initech import runbook\n\n## Nightly import\nRuns at 02:00 UTC. Files over 50 MB time out today (ACME-298).\n\n## When it fails\nCheck the worker log, rerun with the chunked importer, tell Ravi in the pilot channel.",
+                "url": "https://linear.app/acme/document/import_runbook-fec0ba1b-066",
+                "slugId": "fec0ba1b-066",
+                "createdAt": {
+                  "$rel": "-6d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-2d 10:00"
+                },
+                "archivedAt": null,
+                "creator": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "updatedBy": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                }
+              },
+              {
+                "id": "908ef7bd-48d3-565d-a0d7-c0b74904b752",
+                "title": "SSO rollout plan",
+                "content": "# SSO rollout plan\n\n## Globex first\nGlobex signs, then SSO goes live within a week (ACME-311).\n\n## Then\nInitech after the pilot, Umbrella with the EU launch.",
+                "url": "https://linear.app/acme/document/sso_plan-908ef7bd-48d",
+                "slugId": "908ef7bd-48d",
+                "createdAt": {
+                  "$rel": "-11d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 16:00"
+                },
+                "archivedAt": null,
+                "creator": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "updatedBy": {
+                  "name": "Dana Oyelaran",
+                  "email": "dana@acme.com"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                }
+              }
+            ],
+            "pageInfo": {
+              "endCursor": "lin-docs-cursor-3",
+              "hasNextPage": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}

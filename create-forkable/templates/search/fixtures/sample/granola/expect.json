@@ -1,0 +1,19 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "granola.notes": 6
+  },
+  "kinds": {
+    "meeting_note": 6
+  },
+  "tombstoned": 0,
+  "hydrated": 6,
+  "items": 6,
+  "entities": {
+    "email:priya.shah@gmail.com": {
+      "sources": [
+        "granola"
+      ]
+    }
+  }
+}

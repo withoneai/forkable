@@ -1,0 +1,200 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Granola",
+  "platform": "granola",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "granola.notes",
+      "platform": "granola",
+      "model": "notes",
+      "kind": "meeting_note",
+      "title": "Granola meeting notes",
+      "description": "Meeting notes with the summary, the full transcript and attendees.",
+      "author": "builtin",
+      "revision": 2,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        },
+        "include": {
+          "type": "choice",
+          "default": "transcript",
+          "label": "Transcripts",
+          "options": [
+            {
+              "value": "",
+              "label": "Summary only"
+            },
+            {
+              "value": "transcript",
+              "label": "Summary and transcript"
+            }
+          ],
+          "help": "Transcripts make meetings searchable word for word. Summary only uses less space."
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GKbJ53hO4Ng::02BNDFnhQ-CVKjaPxMIMrg",
+        "query": {
+          "updated_after": "{{ run.since | iso }}"
+        },
+        "resultsPath": "notes",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "cursor",
+          "passAs": "query:cursor",
+          "hasMore": "hasMore"
+        },
+        "pageSize": {
+          "param": "page_size",
+          "value": 30,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updated_at",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "{{ settings.backfill }}"
+      },
+      "hydrate": {
+        "request": {
+          "actionId": "conn_mod_def::GKbJ523eLeg::Qnq0sQ9eSQGAepuzo55Jsw",
+          "pathVars": {
+            "noteId": "{{ item.id }}"
+          },
+          "query": {
+            "include": "{{ settings.include }}"
+          }
+        },
+        "fingerprint": "{{ item.updated_at }}",
+        "concurrency": 2,
+        "notFoundIsDelete": true
+      },
+      "deletes": {
+        "reconcile": "onFullPass",
+        "fullPassEvery": "14d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "detail.title",
+            "item.title",
+            "detail.calendar_event.event_title",
+            {
+              "template": "Untitled meeting"
+            }
+          ]
+        },
+        "body": {
+          "join": [
+            {
+              "coalesce": [
+                {
+                  "path": "detail.summary_markdown",
+                  "decode": "markdown"
+                },
+                "detail.summary_text"
+              ]
+            },
+            {
+              "path": "detail.transcript",
+              "decode": "transcript"
+            }
+          ],
+          "sep": "\n\n"
+        },
+        "occurredAt": {
+          "coalesce": [
+            {
+              "path": "detail.calendar_event.scheduled_start_time",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.created_at",
+              "decode": "datetime"
+            }
+          ]
+        },
+        "updatedAt": {
+          "path": "item.updated_at",
+          "decode": "datetime"
+        },
+        "url": "https://notes.granola.ai/d/{{ item.id }}",
+        "container": "detail.folder_membership[0].name",
+        "labels": {
+          "path": "detail.folder_membership[].name",
+          "pick": "all"
+        },
+        "facets": {
+          "start": {
+            "path": "detail.calendar_event.scheduled_start_time",
+            "decode": "datetime"
+          },
+          "end": {
+            "path": "detail.calendar_event.scheduled_end_time",
+            "decode": "datetime"
+          },
+          "attendees": {
+            "path": "detail.attendees[]",
+            "pick": "all"
+          },
+          "hasTranscript": {
+            "test": "len(detail.transcript) > 0"
+          },
+          "eventId": "detail.calendar_event.calendar_event_id"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "owner",
+            "type": "person",
+            "email": {
+              "path": "detail.owner.email",
+              "decode": "email"
+            },
+            "name": "detail.owner.name"
+          },
+          {
+            "role": "attendee",
+            "type": "person",
+            "email": {
+              "path": "email",
+              "decode": "email"
+            },
+            "name": "name",
+            "each": "detail.attendees[]"
+          },
+          {
+            "role": "organizer",
+            "type": "person",
+            "email": {
+              "path": "detail.calendar_event.organiser",
+              "decode": "email"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "heading",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400,
+        "overlapTokens": 40
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "30m"
+      }
+    }
+  ]
+}

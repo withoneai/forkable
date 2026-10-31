@@ -1,0 +1,1244 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 5",
+  "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+  "pages": [
+    {
+      "match": {
+        "partition": "dana@acme.com",
+        "cursor": null,
+        "delta": null
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acme1a61cf30\"",
+        "summary": "dana@acme.com",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "owner",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 10
+          }
+        ],
+        "items": [
+          {
+            "kind": "calendar#event",
+            "etag": "\"01ab0aeb01dbc502\"",
+            "id": "57719bcba03688bfe4d33b39d7",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=9e5adada48cee3e02ad1282c74500d03",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Globex x Acme contract review",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-2d 14:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-2d 14:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "57719bcba03688bfe4d33b39d7@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "priya@globex.com",
+                "displayName": "Priya Shah",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "description": "<p>Walk through the final MSA redline and the renewal order form.</p>",
+            "hangoutLink": "https://meet.google.com/db6-43d2-621",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/db6-43d2-621",
+                  "label": "meet.google.com/db6-43d2-621"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "db6-43d2-621"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"b4376d7177b2f6ca\"",
+            "id": "8c6e7dc6ba76e57aa23523b5e1",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=d9f18cf2780a1cdc898528d195533612",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-8d 10:00"
+            },
+            "summary": "Initech pilot kickoff",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-8d 10:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-8d 11:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "8c6e7dc6ba76e57aa23523b5e1@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "ravi@initech.io",
+                "displayName": "Ravi Menon",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "anika@initech.io",
+                "displayName": "Anika Rao",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "mia@acme.com",
+                "displayName": "Mia Park",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "description": "<p>Scope, success criteria, data access, check-in cadence.</p>",
+            "hangoutLink": "https://meet.google.com/bdf-56b5-6c2",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/bdf-56b5-6c2",
+                  "label": "meet.google.com/bdf-56b5-6c2"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "bdf-56b5-6c2"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"65b177d7db55cf5c\"",
+            "id": "cc3ef76ff8ac770d1962e7f7ae",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=914a1d3b86f949a67c9265a47da09126",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Northwind board prep",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+2d 09:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+2d 09:45"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "cc3ef76ff8ac770d1962e7f7ae@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "owen@northwind.vc",
+                "displayName": "Owen Price",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "theo@acme.com",
+                "displayName": "Theo Lund",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "description": "<p>Review the Q3 deck before the board date.</p>",
+            "hangoutLink": "https://meet.google.com/47c-5ff0-e64",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/47c-5ff0-e64",
+                  "label": "meet.google.com/47c-5ff0-e64"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "47c-5ff0-e64"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"a8a4e6f42d9cf724\"",
+            "id": "7bd75e1ce8437a2461d4a42394",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=9fc1dc11affeee20870974103672f4b4",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Pipeline review",
+            "creator": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "organizer": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+1d 11:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+1d 11:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "7bd75e1ce8437a2461d4a42394@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted",
+                "organizer": true
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/7cc-1600-ca9",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/7cc-1600-ca9",
+                  "label": "meet.google.com/7cc-1600-ca9"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "7cc-1600-ca9"
+            },
+            "recurringEventId": "e5dc094a6746166deff53d01af",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "+1d 11:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"9e8236ba94408380\"",
+            "id": "c7a4ec3e73af5e942260800e97",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=6ab6144d6e7fe85440e6c71675eb2611",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Dana / Theo 1:1",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-1d 15:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-1d 15:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "c7a4ec3e73af5e942260800e97@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "theo@acme.com",
+                "displayName": "Theo Lund",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "recurringEventId": "d0b0dbc4b822c1190b947c596b",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "-1d 15:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"840438aabb7c49ba\"",
+            "id": "aa23ddb9aa509ddb2d6eb835d2",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=caeb2aae16c70b71cb01656185364087",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Initech pilot weekly check-in",
+            "creator": {
+              "email": "ravi@initech.io",
+              "displayName": "Ravi Menon",
+              "self": false
+            },
+            "organizer": {
+              "email": "ravi@initech.io",
+              "displayName": "Ravi Menon",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+3d 10:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+3d 10:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "aa23ddb9aa509ddb2d6eb835d2@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "needsAction",
+                "self": true
+              },
+              {
+                "email": "ravi@initech.io",
+                "displayName": "Ravi Menon",
+                "responseStatus": "accepted",
+                "organizer": true
+              },
+              {
+                "email": "mia@acme.com",
+                "displayName": "Mia Park",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/2f9-92b8-ffe",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/2f9-92b8-ffe",
+                  "label": "meet.google.com/2f9-92b8-ffe"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "2f9-92b8-ffe"
+            },
+            "recurringEventId": "3552eaf8472e0aa1f4aa35355b",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "+3d 10:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"4fbbeb52ca341df6\"",
+            "id": "b2a11faf0b2dcb25b13c561ccf",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=b9195bedcd3311f44469c8d3121746fb",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Globex renewal signature call",
+            "creator": {
+              "email": "priya@globex.com",
+              "displayName": "Priya Shah",
+              "self": false
+            },
+            "organizer": {
+              "email": "priya@globex.com",
+              "displayName": "Priya Shah",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+5d 09:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+5d 09:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "b2a11faf0b2dcb25b13c561ccf@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "tentative",
+                "self": true
+              },
+              {
+                "email": "priya@globex.com",
+                "displayName": "Priya Shah",
+                "responseStatus": "accepted",
+                "organizer": true
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/4f3-188c-00e",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/4f3-188c-00e",
+                  "label": "meet.google.com/4f3-188c-00e"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "4f3-188c-00e"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"15dc5cef3a5e7a12\"",
+            "id": "5d8f79b1f62470c9e0805b78d5",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=f238954f0da30452680ba682a8d6790e",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-15d 12:30"
+            },
+            "summary": "Lunch w/ Owen",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-15d 12:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-15d 13:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "5d8f79b1f62470c9e0805b78d5@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "owen@northwind.vc",
+                "displayName": "Owen Price",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "location": "Tartine, 600 Guerrero St, San Francisco"
+          }
+        ],
+        "nextPageToken": "gcal-primary-page-2"
+      }
+    },
+    {
+      "match": {
+        "partition": "dana@acme.com",
+        "cursor": "gcal-primary-page-2",
+        "delta": null
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acme1a61cf30\"",
+        "summary": "dana@acme.com",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "owner",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 10
+          }
+        ],
+        "items": [
+          {
+            "kind": "calendar#event",
+            "etag": "\"18aca767e0b8ff90\"",
+            "id": "9c9187213902fa5be657e01d02",
+            "status": "cancelled",
+            "updated": {
+              "$rel": "-1d 09:00"
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+4d 16:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+4d 16:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "summary": "Hooli intro call",
+            "organizer": {
+              "email": "jules@hooli.dev",
+              "displayName": "Jules Martin",
+              "self": false
+            },
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true
+              },
+              {
+                "email": "jules@hooli.dev",
+                "displayName": "Jules Martin",
+                "responseStatus": "accepted",
+                "organizer": true
+              }
+            ],
+            "htmlLink": "https://www.google.com/calendar/event?eid=a56824584444bcf9d9ed13072e368e3a",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "iCalUID": "9c9187213902fa5be657e01d02@google.com"
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"67c45958a856744c\"",
+            "id": "742f8b457d6515fab19dfc2c0a",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=8dca82f4005659d477d4527d74b9cd07",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Eng / sales sync",
+            "creator": {
+              "email": "mia@acme.com",
+              "displayName": "Mia Park",
+              "self": false
+            },
+            "organizer": {
+              "email": "mia@acme.com",
+              "displayName": "Mia Park",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "0d 16:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "0d 16:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "742f8b457d6515fab19dfc2c0a@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true
+              },
+              {
+                "email": "mia@acme.com",
+                "displayName": "Mia Park",
+                "responseStatus": "accepted",
+                "organizer": true
+              },
+              {
+                "email": "theo@acme.com",
+                "displayName": "Theo Lund",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/e50-f74f-010",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/e50-f74f-010",
+                  "label": "meet.google.com/e50-f74f-010"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "e50-f74f-010"
+            },
+            "recurringEventId": "84c0e98104c24eaeb3d20dfe28",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "0d 16:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"770fc56af7b4b89d\"",
+            "id": "d2e15500859b507e5b5c40dcd7",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=1e57b2f409b14dc51cf46cdecbfbb696",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Q4 planning offsite",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "date": {
+                "$relDate": "+7d"
+              }
+            },
+            "end": {
+              "date": {
+                "$relDate": "+8d"
+              }
+            },
+            "iCalUID": "d2e15500859b507e5b5c40dcd7@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "theo@acme.com",
+                "displayName": "Theo Lund",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "mia@acme.com",
+                "displayName": "Mia Park",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "location": "Acme HQ, San Francisco"
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"c98a6f8278320b18\"",
+            "id": "7cbb624fbec85e7fcd1970c10b",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=bd396d9fd4cda9ca3251f47652b727cf",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Dentist",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-5d 08:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-5d 09:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "7cbb624fbec85e7fcd1970c10b@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              }
+            ],
+            "eventType": "default"
+          }
+        ],
+        "nextSyncToken": "gcal-primary-sync-1"
+      }
+    },
+    {
+      "match": {
+        "partition": "c_acme.sales.team@group.calendar.google.com",
+        "cursor": null,
+        "delta": null
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acme1a924c8a\"",
+        "summary": "Acme Sales",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "writer",
+        "defaultReminders": [],
+        "items": [
+          {
+            "kind": "calendar#event",
+            "etag": "\"8146e1788abcddb5\"",
+            "id": "716899b1528712084d4f9c72e5",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=fc4e70ceb171310eff8fbdca86c5b1d6",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Sales team standup",
+            "creator": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "organizer": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-1d 09:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-1d 09:15"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "716899b1528712084d4f9c72e5@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted",
+                "organizer": true
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/4f2-4b7f-fd0",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/4f2-4b7f-fd0",
+                  "label": "meet.google.com/4f2-4b7f-fd0"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "4f2-4b7f-fd0"
+            },
+            "recurringEventId": "2be67725409fc159d8bea46195",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "-1d 09:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"441bf9ab18d5e9a1\"",
+            "id": "80ff908ca2171ee6eda521940c",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=a0f57c5357200296341ad7c0d1bdb6ea",
+            "created": {
+              "$rel": "-30d 09:00"
+            },
+            "updated": {
+              "$rel": "-6d 12:00"
+            },
+            "summary": "Q4 forecast call",
+            "creator": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "organizer": {
+              "email": "sam@acme.com",
+              "displayName": "Sam Okafor",
+              "self": false
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+2d 13:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+2d 13:45"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "80ff908ca2171ee6eda521940c@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted",
+                "organizer": true
+              },
+              {
+                "email": "theo@acme.com",
+                "displayName": "Theo Lund",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/ada-5b77-453",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/ada-5b77-453",
+                  "label": "meet.google.com/ada-5b77-453"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "ada-5b77-453"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"011ba94ab44ae96d\"",
+            "id": "a44220d2f189a99d07fd6bed60",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=7b56a4567881de6c00ec33c571d91d6d",
+            "created": {
+              "$rel": "-30d 10:00"
+            },
+            "updated": {
+              "$rel": "-30d 10:00"
+            },
+            "summary": "Globex QBR",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-30d 10:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-30d 11:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "a44220d2f189a99d07fd6bed60@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "priya@globex.com",
+                "displayName": "Priya Shah",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "sam@acme.com",
+                "displayName": "Sam Okafor",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default",
+            "hangoutLink": "https://meet.google.com/542-4554-7dd",
+            "conferenceData": {
+              "entryPoints": [
+                {
+                  "entryPointType": "video",
+                  "uri": "https://meet.google.com/542-4554-7dd",
+                  "label": "meet.google.com/542-4554-7dd"
+                }
+              ],
+              "conferenceSolution": {
+                "name": "Google Meet",
+                "key": {
+                  "type": "hangoutsMeet"
+                }
+              },
+              "conferenceId": "542-4554-7dd"
+            }
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"0ee928e889f4f9ca\"",
+            "id": "c488eb10a038890dbcbc56f374",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=c0685a91161a70bfe31fe8d770fcc2d5",
+            "created": {
+              "$rel": "-60d 11:00"
+            },
+            "updated": {
+              "$rel": "-60d 11:00"
+            },
+            "summary": "Initech security review",
+            "creator": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.com",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-60d 11:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-60d 11:45"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "c488eb10a038890dbcbc56f374@google.com",
+            "sequence": 0,
+            "attendees": [
+              {
+                "email": "dana@acme.com",
+                "displayName": "Dana Oyelaran",
+                "responseStatus": "accepted",
+                "self": true,
+                "organizer": true
+              },
+              {
+                "email": "ravi@initech.io",
+                "displayName": "Ravi Menon",
+                "responseStatus": "accepted"
+              },
+              {
+                "email": "anika@initech.io",
+                "displayName": "Anika Rao",
+                "responseStatus": "accepted"
+              }
+            ],
+            "eventType": "default"
+          }
+        ],
+        "nextSyncToken": "gcal-sales-sync-1"
+      }
+    },
+    {
+      "match": {
+        "partition": "dana@acme.com",
+        "cursor": null,
+        "delta": "gcal-primary-sync-1"
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acme1a61cf30\"",
+        "summary": "dana@acme.com",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "owner",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 10
+          }
+        ],
+        "items": [],
+        "nextSyncToken": "gcal-primary-sync-2"
+      }
+    },
+    {
+      "match": {
+        "partition": "c_acme.sales.team@group.calendar.google.com",
+        "cursor": null,
+        "delta": "gcal-sales-sync-1"
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acme1a924c8a\"",
+        "summary": "Acme Sales",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "writer",
+        "defaultReminders": [],
+        "items": [],
+        "nextSyncToken": "gcal-sales-sync-2"
+      }
+    },
+    {
+      "match": {
+        "partition": "dana@acme.com",
+        "cursor": null,
+        "delta": "gcal-expired-sync"
+      },
+      "status": 410,
+      "response": {
+        "error": {
+          "code": 410,
+          "message": "Sync token is no longer valid, a full sync is required.",
+          "errors": [
+            {
+              "domain": "global",
+              "reason": "fullSyncRequired",
+              "message": "Sync token is no longer valid, a full sync is required."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

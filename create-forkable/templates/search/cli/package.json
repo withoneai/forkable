@@ -1,0 +1,30 @@
+{
+  "name": "@withone/search",
+  "version": "0.1.0",
+  "description": "Search, one search box for everything you connect.",
+  "license": "MIT",
+  "author": "One Systems, Inc.",
+  "type": "module",
+  "bin": {
+    "search": "./bin/search.mjs"
+  },
+  "scripts": {
+    "demo": "tsx src/index.ts demo",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/index.ts start",
+    "smoke": "tsx scripts/smoke-cli.ts"
+  },
+  "dependencies": {
+    "@search/core": "workspace:*",
+    "@search/pgvector": "workspace:*",
+    "embedded-postgres": "18.4.0-beta.17",
+    "pg": "^8.16.0",
+    "tsx": "^4.20.0",
+    "@search/server": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.0",
+    "typescript": "^5.9.3"
+  }
+}

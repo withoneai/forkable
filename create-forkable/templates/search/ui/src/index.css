@@ -1,0 +1,181 @@
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Rill's @theme, on the Forkable palette (SPEC D35, AGENTS.md brand).
+   Light: #fbfdfc with green-tinted ink, #809d08 as the free-standing green.
+   Dark: near black #0a0a0a, cards #161616, #ededed type, #a1a1a1 secondary.
+   Lime #CCED73 is a fill only (primary buttons, the logo tile, the selected
+   citation), always with black ink on top, never as text on white. */
+:root {
+  --background: #fbfdfc;
+  --foreground: #0f1f18;
+  --card: #ffffff;
+  --card-hover: color-mix(in oklch, #fbfdfc 94%, #002215 6%);
+  --muted: color-mix(in oklch, #fbfdfc 92%, #002215 8%);
+  --muted-foreground: #5b7268;
+  --faint: color-mix(in oklch, #fbfdfc 97%, #002215 3%);
+  --border: color-mix(in oklch, #fbfdfc 88%, #002215 12%);
+  --border-strong: color-mix(in oklch, #fbfdfc 76%, #002215 24%);
+  --accent: #809d08;
+  --accent-foreground: #0a0a0a;
+  --primary: #ccED73;
+  --primary-hover: #b3d258;
+  --primary-pressed: #9ab83b;
+  --primary-foreground: #0a0a0a;
+  --highlight: color-mix(in oklch, #ccED73 55%, transparent);
+  --warning-text: oklch(0.56 0.13 70);
+  --destructive-text: oklch(0.52 0.19 27);
+  --success-text: oklch(0.50 0.13 150);
+  --ring: #809d08;
+  --shadow-color: 0 34 21;
+  color-scheme: light;
+  --ui-scale: 1;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --card: #161616;
+  --card-hover: #1f1f1f;
+  --muted: #232323;
+  --muted-foreground: #a1a1a1;
+  --faint: #0f0f0f;
+  --border: rgb(255 255 255 / 0.1);
+  --border-strong: rgb(255 255 255 / 0.18);
+  --accent: #ccED73;
+  --accent-foreground: #0a0a0a;
+  --primary: #ccED73;
+  --primary-hover: #d8f28f;
+  --primary-pressed: #b3d258;
+  --primary-foreground: #0a0a0a;
+  --highlight: color-mix(in oklch, #ccED73 42%, transparent);
+  --warning-text: oklch(0.80 0.12 75);
+  --destructive-text: oklch(0.74 0.16 27);
+  --success-text: oklch(0.78 0.13 145);
+  --ring: #ccED73;
+  --shadow-color: 0 0 0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-highlight: var(--highlight);
+  --color-warning-text: var(--warning-text);
+  --color-destructive-text: var(--destructive-text);
+  --color-success-text: var(--success-text);
+  --color-ring: var(--ring);
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  /* The type ladder (design/SPACING.md). Named for the px size at the default
+     scale, defined in rem so the Size setting reaches everything. 12, 14 and
+     20 are Tailwind's own text-xs, text-sm and text-xl. */
+  --text-8: 0.5rem;
+  --text-8--line-height: 0.75rem;
+  --text-9: 0.5625rem;
+  --text-9--line-height: 0.75rem;
+  --text-10: 0.625rem;
+  --text-10--line-height: 0.875rem;
+  --text-11: 0.6875rem;
+  --text-11--line-height: 1rem;
+  --text-13: 0.8125rem;
+  --text-13--line-height: 1.25rem;
+  --text-15: 0.9375rem;
+  --text-15--line-height: 1.375rem;
+  --text-28: 1.75rem;
+  --text-28--line-height: 2.125rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.625rem;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --shadow-pop: 0 1px 2px rgb(var(--shadow-color) / 0.06), 0 8px 24px -8px rgb(var(--shadow-color) / 0.18);
+  --shadow-float: 0 1px 1px rgb(var(--shadow-color) / 0.04), 0 16px 40px -12px rgb(var(--shadow-color) / 0.25);
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  html { font-size: calc(100% * var(--ui-scale, 1)); }
+  body {
+    @apply bg-background text-foreground font-sans text-13 antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-tap-highlight-color: transparent;
+  }
+  * { border-color: var(--border); }
+  ::selection { background: var(--highlight); }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  button { cursor: default; }
+  a { cursor: default; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; border-radius: var(--radius-sm); }
+  input[type="checkbox"], input[type="radio"] { accent-color: var(--foreground); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--muted-foreground) 30%, transparent); border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--muted-foreground) 50%, transparent); border: 3px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  kbd { font-feature-settings: "cv11", "ss01", "tnum"; }
+  mark { background: var(--highlight); color: inherit; border-radius: 2px; padding: 0 1px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+  }
+}
+
+@layer utilities {
+  .tnum { font-variant-numeric: tabular-nums; }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .fade-in { animation: fade-in 120ms var(--ease-out-quart) both; }
+  .slide-up { animation: slide-up 140ms var(--ease-out-quart) both; }
+  .slide-in-right { animation: slide-in-right 140ms var(--ease-out-quart) both; }
+  .pop-in { animation: pop-in 120ms var(--ease-out-quart) both; }
+  @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+  @keyframes slide-in-right { from { opacity: 0; transform: translateX(6px) } to { opacity: 1; transform: none } }
+  @keyframes pop-in { from { opacity: 0; transform: scale(0.985) } to { opacity: 1; transform: none } }
+  @keyframes shimmer { from { background-position: 200% 0 } to { background-position: -200% 0 } }
+  .shimmer {
+    background: linear-gradient(90deg, var(--muted) 25%, var(--card-hover) 50%, var(--muted) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
+  .pulse-dot { animation: pulse-dot 1.2s ease-in-out infinite; }
+  .shadow-pop { box-shadow: var(--shadow-pop); }
+  .shadow-float { box-shadow: var(--shadow-float); }
+  .hairline-b { box-shadow: inset 0 -1px 0 var(--border); }
+  .hairline-t { box-shadow: inset 0 1px 0 var(--border); }
+  .label-caps { font-size: var(--text-11); line-height: var(--text-11--line-height); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-foreground); }
+  .squircle { border-radius: 28%; }
+  @supports (corner-shape: squircle) { .squircle { corner-shape: squircle; border-radius: 50%; } }
+}
+
+.one-connect::part(button) {
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  border-radius: var(--radius-md);
+}
+
+/* JetBrains Mono's ligatures turn >= into one glyph; operators must read as typed. */
+.font-mono, code, kbd, pre { font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }

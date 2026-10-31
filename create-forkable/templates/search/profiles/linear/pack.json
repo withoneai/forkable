@@ -1,0 +1,456 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Linear",
+  "platform": "linear",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "linear.issues",
+      "platform": "linear",
+      "model": "issues",
+      "kind": "task",
+      "title": "Linear issues",
+      "description": "Issues with state, assignee, project, labels and the customers who asked for them.",
+      "author": "builtin",
+      "revision": 2,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ4vJTdCQPY::f4IhKVnuTv6Us2d-GwWvCw",
+        "body": {
+          "query": "query issues($first: Int, $after: String, $filter: IssueFilter, $orderBy: PaginationOrderBy, $includeArchived: Boolean) { issues(first: $first, after: $after, filter: $filter, orderBy: $orderBy, includeArchived: $includeArchived) { nodes { id identifier title description url priority createdAt updatedAt archivedAt completedAt canceledAt dueDate state { name type } assignee { name email } creator { name email } externalUserCreator { name email } team { key name } project { name } labels { nodes { name } } needs { nodes { customer { name domains } } } } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "filter": {
+              "updatedAt": {
+                "gt": "{{ run.since | iso }}"
+              }
+            },
+            "orderBy": "updatedAt",
+            "includeArchived": true
+          }
+        },
+        "resultsPath": "data.issues.nodes",
+        "idPath": "id",
+        "pagination": {
+          "type": "relay",
+          "endCursor": "data.issues.pageInfo.endCursor",
+          "hasNextPage": "data.issues.pageInfo.hasNextPage",
+          "passAs": "body:variables.after"
+        },
+        "pageSize": {
+          "param": "variables.first",
+          "value": 50,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updatedAt",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archivedAt != null"
+      },
+      "fields": {
+        "title": {
+          "join": [
+            "item.identifier",
+            "item.title"
+          ],
+          "sep": " "
+        },
+        "body": {
+          "path": "item.description",
+          "decode": "markdown"
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updatedAt",
+          "decode": "datetime"
+        },
+        "url": "{{ item.url }}",
+        "container": "item.team.name",
+        "status": "item.state.name",
+        "labels": {
+          "path": "item.labels.nodes[].name",
+          "pick": "all"
+        },
+        "facets": {
+          "key": "item.identifier",
+          "state": "item.state.name",
+          "stateType": "item.state.type",
+          "assignee": "item.assignee.name",
+          "priority": "item.priority",
+          "due": {
+            "path": "item.dueDate",
+            "decode": "datetime"
+          },
+          "project": "item.project.name",
+          "team": "item.team.key"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "assignee",
+            "type": "person",
+            "email": {
+              "path": "item.assignee.email",
+              "decode": "email"
+            },
+            "name": "item.assignee.name"
+          },
+          {
+            "role": "author",
+            "type": "person",
+            "email": {
+              "path": "item.creator.email",
+              "decode": "email"
+            },
+            "name": "item.creator.name"
+          },
+          {
+            "role": "author",
+            "type": "person",
+            "email": {
+              "path": "item.externalUserCreator.email",
+              "decode": "email"
+            },
+            "name": "item.externalUserCreator.name"
+          },
+          {
+            "role": "about",
+            "type": "company",
+            "name": "customer.name",
+            "domain": "customer.domains[0]",
+            "each": "item.needs.nodes[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "paragraph",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "10m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "linear.projects",
+      "platform": "linear",
+      "model": "projects",
+      "kind": "doc",
+      "title": "Linear projects",
+      "description": "Projects with their description, content and lead.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ4vMBSrKJo::YJPEPOfJQ76eTtZUfpjyUg",
+        "body": {
+          "query": "query projects($first: Int, $after: String, $filter: ProjectFilter, $orderBy: PaginationOrderBy, $includeArchived: Boolean) { projects(first: $first, after: $after, filter: $filter, orderBy: $orderBy, includeArchived: $includeArchived) { nodes { id name description content url state targetDate startDate createdAt updatedAt archivedAt lead { name email } members { nodes { name email } } } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "filter": {
+              "updatedAt": {
+                "gt": "{{ run.since | iso }}"
+              }
+            },
+            "orderBy": "updatedAt",
+            "includeArchived": true
+          }
+        },
+        "resultsPath": "data.projects.nodes",
+        "idPath": "id",
+        "pagination": {
+          "type": "relay",
+          "endCursor": "data.projects.pageInfo.endCursor",
+          "hasNextPage": "data.projects.pageInfo.hasNextPage",
+          "passAs": "body:variables.after"
+        },
+        "pageSize": {
+          "param": "variables.first",
+          "value": 50,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updatedAt",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archivedAt != null"
+      },
+      "fields": {
+        "title": "item.name",
+        "body": {
+          "join": [
+            "item.description",
+            {
+              "path": "item.content",
+              "decode": "markdown"
+            }
+          ],
+          "sep": "\n\n"
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updatedAt",
+          "decode": "datetime"
+        },
+        "url": "{{ item.url }}",
+        "status": "item.state",
+        "facets": {
+          "editedBy": "item.lead.name"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "owner",
+            "type": "person",
+            "email": {
+              "path": "item.lead.email",
+              "decode": "email"
+            },
+            "name": "item.lead.name"
+          },
+          {
+            "role": "mentioned",
+            "type": "person",
+            "email": {
+              "path": "email",
+              "decode": "email"
+            },
+            "name": "name",
+            "each": "item.members.nodes[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "heading",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "linear.documents",
+      "platform": "linear",
+      "model": "documents",
+      "kind": "doc",
+      "title": "Linear documents",
+      "description": "Documents written in Linear, as Markdown.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ4vFe4bH3Q::NcSFstL6Q9WSd4TqlvvyHg",
+        "body": {
+          "query": "query documents($first: Int, $after: String, $filter: DocumentFilter, $orderBy: PaginationOrderBy, $includeArchived: Boolean) { documents(first: $first, after: $after, filter: $filter, orderBy: $orderBy, includeArchived: $includeArchived) { nodes { id title content url slugId createdAt updatedAt archivedAt creator { name email } updatedBy { name email } project { name } } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "filter": {
+              "updatedAt": {
+                "gt": "{{ run.since | iso }}"
+              }
+            },
+            "orderBy": "updatedAt",
+            "includeArchived": true
+          }
+        },
+        "resultsPath": "data.documents.nodes",
+        "idPath": "id",
+        "pagination": {
+          "type": "relay",
+          "endCursor": "data.documents.pageInfo.endCursor",
+          "hasNextPage": "data.documents.pageInfo.hasNextPage",
+          "passAs": "body:variables.after"
+        },
+        "pageSize": {
+          "param": "variables.first",
+          "value": 50,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updatedAt",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archivedAt != null"
+      },
+      "fields": {
+        "title": "item.title",
+        "body": {
+          "path": "item.content",
+          "decode": "markdown"
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updatedAt",
+          "decode": "datetime"
+        },
+        "url": "{{ item.url }}",
+        "container": "item.project.name",
+        "facets": {
+          "parentTitle": "item.project.name",
+          "editedBy": "item.updatedBy.name"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "author",
+            "type": "person",
+            "email": {
+              "path": "item.creator.email",
+              "decode": "email"
+            },
+            "name": "item.creator.name"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "heading",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "60m"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "linear.comments",
+      "platform": "linear",
+      "model": "comments",
+      "kind": "message",
+      "title": "Linear comments",
+      "description": "Comments on issues. Off by default; turn on when discussion matters as much as the issue.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": false,
+      "list": {
+        "actionId": "conn_mod_def::GJ4vCs496v0::aGBcU2zYSISOg7tZZzSSfQ",
+        "body": {
+          "query": "query comments($first: Int, $after: String, $filter: CommentFilter, $orderBy: PaginationOrderBy, $includeArchived: Boolean) { comments(first: $first, after: $after, filter: $filter, orderBy: $orderBy, includeArchived: $includeArchived) { nodes { id body url createdAt updatedAt archivedAt user { name email } issue { identifier title } } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "filter": {
+              "updatedAt": {
+                "gt": "{{ run.since | iso }}"
+              }
+            },
+            "orderBy": "updatedAt",
+            "includeArchived": true
+          }
+        },
+        "resultsPath": "data.comments.nodes",
+        "idPath": "id",
+        "pagination": {
+          "type": "relay",
+          "endCursor": "data.comments.pageInfo.endCursor",
+          "hasNextPage": "data.comments.pageInfo.hasNextPage",
+          "passAs": "body:variables.after"
+        },
+        "pageSize": {
+          "param": "variables.first",
+          "value": 50,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updatedAt",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "all"
+      },
+      "deletes": {
+        "when": "item.archivedAt != null"
+      },
+      "fields": {
+        "title": {
+          "template": "Comment on {{ item.issue.identifier }} {{ item.issue.title }}"
+        },
+        "body": {
+          "path": "item.body",
+          "decode": "markdown"
+        },
+        "occurredAt": {
+          "path": "item.createdAt",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updatedAt",
+          "decode": "datetime"
+        },
+        "url": "{{ item.url }}",
+        "container": "item.issue.identifier",
+        "groupKey": "item.issue.identifier",
+        "facets": {
+          "channel": "item.issue.identifier",
+          "sender": "item.user.name",
+          "threadId": "item.issue.identifier",
+          "isReply": {
+            "test": "item.issue.identifier != null"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "author",
+            "type": "person",
+            "email": {
+              "path": "item.user.email",
+              "decode": "email"
+            },
+            "name": "item.user.name"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "30m"
+      }
+    }
+  ]
+}

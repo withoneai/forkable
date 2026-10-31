@@ -1,0 +1,162 @@
+{
+  "$comment": "Numbers the keyless demo must print (SPEC 18) that come from the fixtures alone. Chunk and vector counts depend on the chunker and are not pinned here.",
+  "items": 205,
+  "bySource": {
+    "hubspot": 23,
+    "attio": 19,
+    "gmail": 27,
+    "outlook-mail": 14,
+    "google-calendar": 18,
+    "outlook-calendar": 5,
+    "notion": 8,
+    "linear": 19,
+    "slack": 48,
+    "teams": 18,
+    "granola": 6
+  },
+  "queries": {
+    "from:priya after:30d type:mail": 3,
+    "lane:needs-you": 6
+  },
+  "sources": {
+    "hubspot": {
+      "contacts": 8,
+      "companies": 6,
+      "deals": 4,
+      "notes": 5,
+      "items": 23
+    },
+    "attio": {
+      "people": 8,
+      "companies": 5,
+      "deals": 3,
+      "notes": 3,
+      "items": 19
+    },
+    "gmail": {
+      "threads": 24,
+      "personalThreads": 3,
+      "items": 27,
+      "accounts": 2
+    },
+    "outlook-mail": {
+      "messages": 14,
+      "conversations": 8,
+      "items": 14
+    },
+    "google-calendar": {
+      "events": 20,
+      "cancelled": 1,
+      "items": 18,
+      "personalEvents": 4,
+      "farFuture": 1,
+      "accounts": 2
+    },
+    "outlook-calendar": {
+      "events": 6,
+      "removedOnDelta": 1,
+      "items": 5
+    },
+    "notion": {
+      "pages": 8,
+      "items": 8
+    },
+    "linear": {
+      "issues": 14,
+      "projects": 2,
+      "documents": 3,
+      "items": 19
+    },
+    "slack": {
+      "messages": 48,
+      "threads": 2,
+      "items": 48
+    },
+    "teams": {
+      "chatMessages": 18,
+      "items": 18
+    },
+    "granola": {
+      "notes": 6,
+      "items": 6
+    }
+  },
+  "entities": {
+    "email:priya@globex.com": {
+      "name": "Priya Shah",
+      "sources": [
+        "hubspot",
+        "attio",
+        "gmail",
+        "google-calendar",
+        "granola",
+        "slack",
+        "outlook-mail",
+        "notion",
+        "linear"
+      ],
+      "via": {
+        "granola": "Jev match of Priya S. (priya.shah@gmail.com), 0.93",
+        "slack": "ext:slack:U05PRIYA from slack.users email",
+        "outlook-mail": "cc on Globex legal redline, final",
+        "notion": "Champion email property on Globex account plan",
+        "linear": "externalUserCreator on ACME-311"
+      }
+    },
+    "domain:globex.com": {
+      "name": "Globex",
+      "type": "company"
+    },
+    "self": {
+      "name": "Dana Oyelaran",
+      "emails": [
+        "dana@acme.com",
+        "dana@acme.eu"
+      ],
+      "ext": [
+        "slack:U01DANA"
+      ]
+    }
+  },
+  "matches": {
+    "merged": 1,
+    "pending": 1,
+    "rejected": 1
+  },
+  "lanes": {
+    "fyi": 134,
+    "vip": 38,
+    "low": 26,
+    "needs_you": 6,
+    "waiting": 6
+  },
+  "queryDetails": {
+    "from:priya after:30d type:mail": {
+      "titles": [
+        "Globex renewal terms",
+        "Globex security questionnaire",
+        "Intro: Marco from Globex legal"
+      ]
+    },
+    "lane:needs-you": {
+      "note": "6 judged items, no two in one group"
+    },
+    "globex renewal": {
+      "top": [
+        "Globex renewal 2027",
+        "Globex renewal terms",
+        "Globex renewal signature call",
+        "Globex renewal 2027",
+        "Globex legal redline, final"
+      ],
+      "note": "after Jev rerank (rerank.json); the HubSpot deal is first, RRF alone puts the signature call first"
+    }
+  },
+  "ask": {
+    "question": "Where are we with Globex?",
+    "citations": 3,
+    "proposalResults": null
+  },
+  "access": "Gmail · delete   declined, 403",
+  "$lanes": "Totals of each lane: search (grouped results), Phase 4. judgments.json's per-item lane notes sum differently: 10 judged refs are not indexed items (one removed Outlook event, 6 Linear and 3 Teams ids the packs do not index), 21 items are older or records and get rules lanes, VIPs also count a VIP named in the text, and one Outlook reply Dana sent last is waiting by SPEC 9.1."
+}

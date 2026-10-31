@@ -1,0 +1,38 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 5; a second Google account (dana@acme.dev) like gmail-personal",
+  "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "connection": "sample:google-calendar:personal"
+      },
+      "response": {
+        "kind": "calendar#calendarList",
+        "etag": "\"p33acmecal0100\"",
+        "items": [
+          {
+            "kind": "calendar#calendarListEntry",
+            "etag": "\"1761700000000100\"",
+            "id": "dana@acme.dev",
+            "summary": "dana@acme.dev",
+            "timeZone": "America/Los_Angeles",
+            "colorId": "2",
+            "backgroundColor": "#d06b64",
+            "foregroundColor": "#000000",
+            "selected": true,
+            "primary": true,
+            "accessRole": "owner",
+            "defaultReminders": [
+              {
+                "method": "popup",
+                "minutes": 30
+              }
+            ]
+          }
+        ],
+        "nextSyncToken": "gcal-personal-callist-1"
+      }
+    }
+  ]
+}

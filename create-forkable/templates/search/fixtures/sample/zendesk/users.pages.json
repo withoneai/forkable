@@ -1,0 +1,117 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ8YhInbdoI::eFkpkJgMSwmXwTj9Sx7ktA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Incremental User Export (Time-Based); dry-run page only",
+  "actionId": "sample::zendesk::incremental-users",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "users": [
+          {
+            "id": 9001,
+            "url": "https://acme.zendesk.com/api/v2/users/9001.json",
+            "name": "Priya Shah",
+            "email": "priya@globex.com",
+            "role": "end-user",
+            "organization_id": 7001,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          },
+          {
+            "id": 9002,
+            "url": "https://acme.zendesk.com/api/v2/users/9002.json",
+            "name": "Ravi Menon",
+            "email": "ravi@initech.io",
+            "role": "end-user",
+            "organization_id": 7002,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          },
+          {
+            "id": 9003,
+            "url": "https://acme.zendesk.com/api/v2/users/9003.json",
+            "name": "Anika Rao",
+            "email": "anika@initech.io",
+            "role": "end-user",
+            "organization_id": 7003,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          },
+          {
+            "id": 9004,
+            "url": "https://acme.zendesk.com/api/v2/users/9004.json",
+            "name": "Hannah Cole",
+            "email": "hannah.cole@umbrella.co",
+            "role": "end-user",
+            "organization_id": 7004,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          },
+          {
+            "id": 9005,
+            "url": "https://acme.zendesk.com/api/v2/users/9005.json",
+            "name": "Grace Liu",
+            "email": "grace.liu@initrode.com",
+            "role": "end-user",
+            "organization_id": 7005,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          },
+          {
+            "id": 9006,
+            "url": "https://acme.zendesk.com/api/v2/users/9006.json",
+            "name": "Mia Park",
+            "email": "mia@acme.com",
+            "role": "agent",
+            "organization_id": 7006,
+            "created_at": {
+              "$rel": "-200d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-10d 10:00"
+            },
+            "active": true,
+            "time_zone": "Pacific Time (US & Canada)"
+          }
+        ],
+        "next_page": null,
+        "count": 6,
+        "end_of_stream": true,
+        "end_time": {
+          "$relUnix": "-1h"
+        }
+      }
+    }
+  ]
+}

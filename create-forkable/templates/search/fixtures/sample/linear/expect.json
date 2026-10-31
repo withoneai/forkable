@@ -1,0 +1,28 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "linear.issues": 14,
+    "linear.projects": 2,
+    "linear.documents": 3,
+    "linear.comments": 6
+  },
+  "kinds": {
+    "task": 14,
+    "doc": 5,
+    "message": 6
+  },
+  "tombstoned": 0,
+  "enabledByDefault": {
+    "linear.issues": 14,
+    "linear.projects": 2,
+    "linear.documents": 3
+  },
+  "items": 25,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "linear"
+      ]
+    }
+  }
+}

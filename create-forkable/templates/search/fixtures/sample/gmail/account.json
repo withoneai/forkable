@@ -1,0 +1,10 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3oa8bJZNA::ZS9kXmE_Rzi4utfESor_ng Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get a User's Gmail Profile",
+  "actionId": "conn_mod_def::GJ3oa8bJZNA::ZS9kXmE_Rzi4utfESor_ng",
+  "response": {
+    "emailAddress": "dana@acme.com",
+    "messagesTotal": 18342,
+    "threadsTotal": 6120,
+    "historyId": "5121480"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4vCs496v0::aGBcU2zYSISOg7tZZzSSfQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 8",
+  "actionId": "conn_mod_def::GJ4vCs496v0::aGBcU2zYSISOg7tZZzSSfQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "data": {
+          "comments": {
+            "nodes": [
+              {
+                "id": "393ad0b4-6db9-522c-bd7d-2228c0f12720",
+                "body": "Reproduced with Anika's 80 MB sample. The worker hits the 60 s timeout on parse.",
+                "url": "https://linear.app/acme/issue/acme-298#comment-393ad0b4",
+                "createdAt": {
+                  "$rel": "-2d 11:00"
+                },
+                "updatedAt": {
+                  "$rel": "-2d 11:00"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "issue": {
+                  "identifier": "ACME-298",
+                  "title": "CSV import fails over 50 MB"
+                }
+              },
+              {
+                "id": "c67f1f6e-c5b4-5c3d-8cf6-e35304b830d7",
+                "body": "Chunked importer in review. Should land before Friday's check-in.",
+                "url": "https://linear.app/acme/issue/acme-298#comment-c67f1f6e",
+                "createdAt": {
+                  "$rel": "-3h"
+                },
+                "updatedAt": {
+                  "$rel": "-3h"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "issue": {
+                  "identifier": "ACME-298",
+                  "title": "CSV import fails over 50 MB"
+                }
+              },
+              {
+                "id": "5762c5a4-0b10-5034-a8e9-6c142f43833e",
+                "body": "SAML config tested against Globex's IdP metadata.",
+                "url": "https://linear.app/acme/issue/acme-311#comment-5762c5a4",
+                "createdAt": {
+                  "$rel": "-1d 15:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 15:00"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "issue": {
+                  "identifier": "ACME-311",
+                  "title": "SSO for Globex rollout"
+                }
+              },
+              {
+                "id": "0123a01e-6baa-5207-9d05-0127a6a119cd",
+                "body": "Globex wants this live the week after signature. Priority stays high.",
+                "url": "https://linear.app/acme/issue/acme-311#comment-0123a01e",
+                "createdAt": {
+                  "$rel": "-3d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-3d 10:00"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Dana Oyelaran",
+                  "email": "dana@acme.com"
+                },
+                "issue": {
+                  "identifier": "ACME-311",
+                  "title": "SSO for Globex rollout"
+                }
+              },
+              {
+                "id": "ee1d54e4-404c-58c7-900f-d0234313df33",
+                "body": "Metering is live in staging.",
+                "url": "https://linear.app/acme/issue/led-142#comment-ee1d54e4",
+                "createdAt": {
+                  "$rel": "-2d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-2d 10:00"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "issue": {
+                  "identifier": "LED-142",
+                  "title": "Ship usage-based billing"
+                }
+              },
+              {
+                "id": "de806ea1-8b1b-5cf8-a748-97f434d3982a",
+                "body": "Sandbox provisioned, sharing credentials with Anika through the pilot channel.",
+                "url": "https://linear.app/acme/issue/acme-315#comment-de806ea1",
+                "createdAt": {
+                  "$rel": "-1d 11:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 11:00"
+                },
+                "archivedAt": null,
+                "user": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "issue": {
+                  "identifier": "ACME-315",
+                  "title": "Pilot data sandbox for Initech"
+                }
+              }
+            ],
+            "pageInfo": {
+              "endCursor": "lin-comments-cursor-6",
+              "hasNextPage": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "outlook-mail.messages": 14
+  },
+  "kinds": {
+    "email_thread": 14
+  },
+  "tombstoned": 0,
+  "groups": 8,
+  "items": 14,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "outlook-mail"
+      ]
+    }
+  }
+}

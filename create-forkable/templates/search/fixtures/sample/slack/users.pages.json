@@ -1,0 +1,238 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7IBQjys4M::0ZFuc5nOQAuLPd7qBVmGZA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 9",
+  "actionId": "conn_mod_def::GJ7IBQjys4M::0ZFuc5nOQAuLPd7qBVmGZA",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "members": [
+          {
+            "id": "U01DANA",
+            "team_id": "T01ACME",
+            "name": "dana",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Dana Oyelaran",
+            "tz": "America/Los_Angeles",
+            "tz_label": "Pacific Daylight Time",
+            "tz_offset": -25200,
+            "profile": {
+              "avatar_hash": "d23e12bdf666",
+              "real_name": "Dana Oyelaran",
+              "display_name": "dana",
+              "real_name_normalized": "Dana Oyelaran",
+              "display_name_normalized": "dana",
+              "first_name": "Dana",
+              "last_name": "Oyelaran",
+              "title": "Head of Sales",
+              "phone": "",
+              "email": "dana@acme.com",
+              "team": "T01ACME",
+              "image_48": "https://avatars.slack-edge.example/U01DANA_48.png"
+            },
+            "is_admin": true,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          },
+          {
+            "id": "U02MIA",
+            "team_id": "T01ACME",
+            "name": "mia",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Mia Park",
+            "tz": "America/Los_Angeles",
+            "tz_label": "Pacific Daylight Time",
+            "tz_offset": -25200,
+            "profile": {
+              "avatar_hash": "213964a4d685",
+              "real_name": "Mia Park",
+              "display_name": "mia",
+              "real_name_normalized": "Mia Park",
+              "display_name_normalized": "mia",
+              "first_name": "Mia",
+              "last_name": "Park",
+              "title": "Engineering Lead",
+              "phone": "",
+              "email": "mia@acme.com",
+              "team": "T01ACME",
+              "image_48": "https://avatars.slack-edge.example/U02MIA_48.png"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          },
+          {
+            "id": "U03THEO",
+            "team_id": "T01ACME",
+            "name": "theo",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Theo Lund",
+            "tz": "America/Los_Angeles",
+            "tz_label": "Pacific Daylight Time",
+            "tz_offset": -25200,
+            "profile": {
+              "avatar_hash": "9316e971c497",
+              "real_name": "Theo Lund",
+              "display_name": "theo",
+              "real_name_normalized": "Theo Lund",
+              "display_name_normalized": "theo",
+              "first_name": "Theo",
+              "last_name": "Lund",
+              "title": "Product Manager",
+              "phone": "",
+              "email": "theo@acme.com",
+              "team": "T01ACME",
+              "image_48": "https://avatars.slack-edge.example/U03THEO_48.png"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          },
+          {
+            "id": "U04SAM",
+            "team_id": "T01ACME",
+            "name": "sam",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Sam Okafor",
+            "tz": "America/Los_Angeles",
+            "tz_label": "Pacific Daylight Time",
+            "tz_offset": -25200,
+            "profile": {
+              "avatar_hash": "1c910ddf73a0",
+              "real_name": "Sam Okafor",
+              "display_name": "sam",
+              "real_name_normalized": "Sam Okafor",
+              "display_name_normalized": "sam",
+              "first_name": "Sam",
+              "last_name": "Okafor",
+              "title": "Sales Ops",
+              "phone": "",
+              "email": "sam@acme.com",
+              "team": "T01ACME",
+              "image_48": "https://avatars.slack-edge.example/U04SAM_48.png"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          },
+          {
+            "id": "U05PRIYA",
+            "team_id": "T02GLOBEX",
+            "name": "priya",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Priya Shah",
+            "tz": "America/Chicago",
+            "tz_label": "Central Daylight Time",
+            "tz_offset": -18000,
+            "profile": {
+              "avatar_hash": "819ea6525fe4",
+              "real_name": "Priya Shah",
+              "display_name": "priya",
+              "real_name_normalized": "Priya Shah",
+              "display_name_normalized": "priya",
+              "first_name": "Priya",
+              "last_name": "Shah",
+              "title": "VP Partnerships, Globex",
+              "phone": "",
+              "email": "priya@globex.com",
+              "team": "T02GLOBEX",
+              "image_48": "https://avatars.slack-edge.example/U05PRIYA_48.png"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": true,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          },
+          {
+            "id": "U06LENA",
+            "team_id": "T01ACME",
+            "name": "lena",
+            "deleted": false,
+            "color": "9f69e7",
+            "real_name": "Lena Vogt",
+            "tz": "Europe/Amsterdam",
+            "tz_label": "Central European Summer Time",
+            "tz_offset": 7200,
+            "profile": {
+              "avatar_hash": "bf7b3985561c",
+              "real_name": "Lena Vogt",
+              "display_name": "lena",
+              "real_name_normalized": "Lena Vogt",
+              "display_name_normalized": "lena",
+              "first_name": "Lena",
+              "last_name": "Vogt",
+              "title": "EU Account Manager",
+              "phone": "",
+              "email": "lena@acme.eu",
+              "team": "T01ACME",
+              "image_48": "https://avatars.slack-edge.example/U06LENA_48.png"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "updated": {
+              "$relUnix": "-30d 10:00"
+            },
+            "is_app_user": false,
+            "has_2fa": true
+          }
+        ],
+        "cache_ts": {
+          "$relUnix": "-1h"
+        },
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    }
+  ]
+}

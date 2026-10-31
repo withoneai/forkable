@@ -1,0 +1,36 @@
+{
+  "$shapedFrom": "conn_mod_def::GMIY1FxtnJw::naghBU_mSTKsg0Lv46gF1w Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 6",
+  "actionId": "conn_mod_def::GMIY1FxtnJw::naghBU_mSTKsg0Lv46gF1w",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "value": [
+          {
+            "id": "AAMkADAcmeEuCalendarDefault0000AAA=",
+            "allowedOnlineMeetingProviders": [
+              "teamsForBusiness"
+            ],
+            "canEdit": true,
+            "canShare": true,
+            "canViewPrivateItems": true,
+            "changeKey": "NEXywgsVrkeNsFsyVyRrtAAAAcme==",
+            "color": "auto",
+            "defaultOnlineMeetingProvider": "teamsForBusiness",
+            "hexColor": "#4f6bed",
+            "isDefaultCalendar": true,
+            "isRemovable": false,
+            "isTallyingResponses": true,
+            "name": "Calendar",
+            "owner": {
+              "name": "Dana Oyelaran",
+              "address": "dana@acme.eu"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

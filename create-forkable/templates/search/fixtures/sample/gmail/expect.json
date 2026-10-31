@@ -1,0 +1,18 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "gmail.threads": 24
+  },
+  "kinds": {
+    "email_thread": 24
+  },
+  "tombstoned": 0,
+  "items": 24,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "gmail"
+      ]
+    }
+  }
+}

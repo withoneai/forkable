@@ -1,0 +1,30 @@
+{
+  "$shapedFrom": "TypeSafe systemone noul answers for the entity match check (SPEC 8.2)",
+  "keyedBy": "the entity key of each side (email:..., name:...)",
+  "pairs": [
+    {
+      "a": "email:priya@globex.com",
+      "b": "email:priya.shah@gmail.com",
+      "same": 0.93,
+      "reason": "name_only",
+      "expect": "merged",
+      "why": "Priya S. attended the Globex contract review that Priya Shah was invited to."
+    },
+    {
+      "a": "email:ravi@initech.io",
+      "b": "email:ravi.menon@protonmail.com",
+      "same": 0.72,
+      "reason": "name_only",
+      "expect": "pending",
+      "why": "Ravi M. attended an Initech meeting from a personal address. Likely, not certain."
+    },
+    {
+      "a": "email:mia@acme.com",
+      "b": "email:mia.park@hooli.dev",
+      "same": 0.08,
+      "reason": "name_only",
+      "expect": "rejected",
+      "why": "Same name, different companies: Acme's engineering lead and Hooli's cofounder."
+    }
+  ]
+}

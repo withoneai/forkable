@@ -20,7 +20,7 @@ export function TemplateGallery({
         <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <SectionHead index="02" label="Templates" title="Start from something that already works" align="left">
             Each business is a working app, its agent team, coding-agent instructions and a
-            go-to-market kit. Its integrations come with it. Start with Rill. Brief is coming soon.
+            go-to-market kit. Its integrations come with it. Start with Rill or Search. Brief is coming soon.
           </SectionHead>
           <p className="shrink-0 font-mono text-11 uppercase tracking-wide text-muted-foreground">
             A new official business every 10 days

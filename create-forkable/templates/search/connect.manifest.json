@@ -1,0 +1,401 @@
+{
+  "$schema": "https://forkable.dev/schema/connect.manifest.v1.json",
+  "app": "search",
+  "actions": [
+    {
+      "platform": "attio",
+      "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+      "access": "read",
+      "usedBy": "profiles/attio/pack.json",
+      "reason": "Index Attio people for search",
+      "method": "POST",
+      "path": "/objects/{{object}}/records/query"
+    },
+    {
+      "platform": "attio",
+      "actionId": "conn_mod_def::GJ0CZucANAI::qH4Oc4NvS1GWLSVnKugSCA",
+      "access": "read",
+      "usedBy": "profiles/attio/pack.json",
+      "reason": "Index Attio notes for search",
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3oa8bJZNA::ZS9kXmE_Rzi4utfESor_ng",
+      "access": "read",
+      "usedBy": "profiles/gmail/pack.json",
+      "reason": "Index Gmail threads for search",
+      "method": "GET",
+      "path": "/gmail/v1/users/{{userId}}/profile"
+    },
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ",
+      "access": "read",
+      "usedBy": "profiles/gmail/pack.json",
+      "reason": "Index Gmail threads for search",
+      "method": "GET",
+      "path": "/gmail/v1/users/{{userId}}/threads"
+    },
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+      "access": "read",
+      "usedBy": "profiles/gmail/pack.json",
+      "reason": "Index Gmail threads for search",
+      "method": "GET",
+      "path": "/gmail/v1/users/{{userId}}/threads/{{id}}"
+    },
+    {
+      "platform": "google-calendar",
+      "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+      "access": "read",
+      "usedBy": "profiles/google-calendar/pack.json",
+      "reason": "Index Google Calendar events for search",
+      "method": "GET",
+      "path": "/calendars/{{calendarId}}/events"
+    },
+    {
+      "platform": "google-calendar",
+      "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ",
+      "access": "read",
+      "usedBy": "profiles/google-calendar/pack.json",
+      "reason": "Index Google Calendar events for search",
+      "method": "GET",
+      "path": "/users/me/calendarList"
+    },
+    {
+      "platform": "granola",
+      "actionId": "conn_mod_def::GKbJ53hO4Ng::02BNDFnhQ-CVKjaPxMIMrg",
+      "access": "read",
+      "usedBy": "profiles/granola/pack.json",
+      "reason": "Index Granola meeting notes for search",
+      "method": "GET",
+      "path": "/v1/notes"
+    },
+    {
+      "platform": "granola",
+      "actionId": "conn_mod_def::GKbJ523eLeg::Qnq0sQ9eSQGAepuzo55Jsw",
+      "access": "read",
+      "usedBy": "profiles/granola/pack.json",
+      "reason": "Index Granola meeting notes for search",
+      "method": "GET",
+      "path": "/v1/notes/{{noteId}}"
+    },
+    {
+      "platform": "hubspot",
+      "actionId": "conn_mod_def::GJ3jRLECRkM::lBDjqllWStu_7SjZb1LvSg",
+      "access": "read",
+      "usedBy": "profiles/hubspot/pack.json",
+      "reason": "Index HubSpot contacts for search",
+      "method": "GET",
+      "path": "/account-info/v3/details"
+    },
+    {
+      "platform": "hubspot",
+      "actionId": "conn_mod_def::GJ3kSC2Sp7I::L6cYnwOfTUatg0cXeWjCBA",
+      "access": "read",
+      "usedBy": "profiles/hubspot/pack.json",
+      "reason": "Index HubSpot contacts for search",
+      "method": "POST",
+      "path": "/crm/v3/objects/contacts/search"
+    },
+    {
+      "platform": "hubspot",
+      "actionId": "conn_mod_def::GJ3kQvNreBM::Zpab8Ig5TSivqCj1UhG37w",
+      "access": "read",
+      "usedBy": "profiles/hubspot/pack.json",
+      "reason": "Index HubSpot companies for search",
+      "method": "POST",
+      "path": "/crm/objects/2026-03/{{objectType}}/search"
+    },
+    {
+      "platform": "hubspot",
+      "actionId": "conn_mod_def::GJ3kYWYoo38::XLCOkotzRHyXigkeSyVCKg",
+      "access": "read",
+      "usedBy": "profiles/hubspot/pack.json",
+      "reason": "Index HubSpot deals for search",
+      "method": "POST",
+      "path": "/crm/objects/2026-03/{{objectType}}/search"
+    },
+    {
+      "platform": "hubspot",
+      "actionId": "conn_mod_def::GJ3k1yj_vd8::B3vvaICzRKeqGbG66JUHDQ",
+      "access": "read",
+      "usedBy": "profiles/hubspot/pack.json",
+      "reason": "Index HubSpot notes for search",
+      "method": "POST",
+      "path": "/crm/objects/2026-03/{{objectType}}/search"
+    },
+    {
+      "platform": "intercom",
+      "actionId": "conn_mod_def::GJ4ph00Ee5o::WDltQcvIQ7ihlSIXbytpug",
+      "access": "read",
+      "usedBy": "profiles/intercom/pack.json",
+      "reason": "Index Intercom conversations for search",
+      "method": "POST",
+      "path": "/conversations/search"
+    },
+    {
+      "platform": "intercom",
+      "actionId": "conn_mod_def::GJ4piENYNso::YLibV_rIQoCTcede_c3Hsw",
+      "access": "read",
+      "usedBy": "profiles/intercom/pack.json",
+      "reason": "Index Intercom conversations for search",
+      "method": "GET",
+      "path": "/conversations/{{conversationId}}"
+    },
+    {
+      "platform": "linear",
+      "actionId": "conn_mod_def::GJ4vJTdCQPY::f4IhKVnuTv6Us2d-GwWvCw",
+      "access": "read",
+      "usedBy": "profiles/linear/pack.json",
+      "reason": "Index Linear issues for search",
+      "method": "POST",
+      "path": "/graphql"
+    },
+    {
+      "platform": "linear",
+      "actionId": "conn_mod_def::GJ4vMBSrKJo::YJPEPOfJQ76eTtZUfpjyUg",
+      "access": "read",
+      "usedBy": "profiles/linear/pack.json",
+      "reason": "Index Linear projects for search",
+      "method": "POST",
+      "path": "/graphql"
+    },
+    {
+      "platform": "linear",
+      "actionId": "conn_mod_def::GJ4vFe4bH3Q::NcSFstL6Q9WSd4TqlvvyHg",
+      "access": "read",
+      "usedBy": "profiles/linear/pack.json",
+      "reason": "Index Linear documents for search",
+      "method": "POST",
+      "path": "/graphql"
+    },
+    {
+      "platform": "linear",
+      "actionId": "conn_mod_def::GJ4vCs496v0::aGBcU2zYSISOg7tZZzSSfQ",
+      "access": "read",
+      "usedBy": "profiles/linear/pack.json",
+      "reason": "Index Linear comments for search",
+      "method": "POST",
+      "path": "/graphql"
+    },
+    {
+      "platform": "notion",
+      "actionId": "conn_mod_def::GJ5En67fz04::-CJAS419SVWm7L2l6brp6A",
+      "access": "read",
+      "usedBy": "profiles/notion/pack.json",
+      "reason": "Index Notion pages for search",
+      "method": "POST",
+      "path": "/search"
+    },
+    {
+      "platform": "notion",
+      "actionId": "conn_mod_def::GJ5EntqNvy0::-VzfhSExTEGGnlXLUMqFcA",
+      "access": "read",
+      "usedBy": "profiles/notion/pack.json",
+      "reason": "Index Notion pages for search",
+      "method": "GET",
+      "path": "/pages/{{pageId}}/markdown"
+    },
+    {
+      "platform": "outlook-calendar",
+      "actionId": "conn_mod_def::GMIY39C_Zus::f0YqbOZ_Tzi_jt6FfhYKHA",
+      "access": "read",
+      "usedBy": "profiles/outlook-calendar/pack.json",
+      "reason": "Index Outlook Calendar events for search",
+      "method": "GET",
+      "path": "/v1.0/me/calendars/{{calendarId}}/events/microsoft.graph.delta()"
+    },
+    {
+      "platform": "outlook-calendar",
+      "actionId": "conn_mod_def::GMIY1FxtnJw::naghBU_mSTKsg0Lv46gF1w",
+      "access": "read",
+      "usedBy": "profiles/outlook-calendar/pack.json",
+      "reason": "Index Outlook Calendar events for search",
+      "method": "GET",
+      "path": "/v1.0/me/calendars"
+    },
+    {
+      "platform": "outlook-mail",
+      "actionId": "conn_mod_def::GMIYxNZ51eU::xY4rcCXiTTyrarjC9ac97w",
+      "access": "read",
+      "usedBy": "profiles/outlook-mail/pack.json",
+      "reason": "Index Outlook messages for search",
+      "method": "GET",
+      "path": "/v1.0/me"
+    },
+    {
+      "platform": "outlook-mail",
+      "actionId": "conn_mod_def::GMIYwcOQ0W0::zXQUrHvhTy-rXQG3h50Paw",
+      "access": "read",
+      "usedBy": "profiles/outlook-mail/pack.json",
+      "reason": "Index Outlook messages for search",
+      "method": "GET",
+      "path": "/v1.0/me/messages"
+    },
+    {
+      "platform": "slack",
+      "actionId": "conn_mod_def::GJ7H8UJsJpw::WIAkGZl2QGG-xp0x9a-c9w",
+      "access": "read",
+      "usedBy": "profiles/slack/pack.json",
+      "reason": "Index Slack people for search",
+      "method": "POST",
+      "path": "/auth.test"
+    },
+    {
+      "platform": "slack",
+      "actionId": "conn_mod_def::GJ7IBQjys4M::0ZFuc5nOQAuLPd7qBVmGZA",
+      "access": "read",
+      "usedBy": "profiles/slack/pack.json",
+      "reason": "Index Slack people for search",
+      "method": "GET",
+      "path": "/users.list"
+    },
+    {
+      "platform": "slack",
+      "actionId": "conn_mod_def::GJ7H9XYEBzI::FkfMtDsaTzKxb92jFEqxHg",
+      "access": "read",
+      "usedBy": "profiles/slack/pack.json",
+      "reason": "Index Slack messages for search",
+      "method": "GET",
+      "path": "/conversations.history"
+    },
+    {
+      "platform": "slack",
+      "actionId": "conn_mod_def::GJ7H99BNZZY::YUA8ceLYSMmIEPSjoukdNg",
+      "access": "read",
+      "usedBy": "profiles/slack/pack.json",
+      "reason": "Index Slack messages for search",
+      "method": "GET",
+      "path": "/conversations.replies"
+    },
+    {
+      "platform": "slack",
+      "actionId": "conn_mod_def::GJ7IBJH4uK8::Q4MUFQEYRxucJ3uvw2Ibdw",
+      "access": "read",
+      "usedBy": "profiles/slack/pack.json",
+      "reason": "Index Slack messages for search",
+      "method": "GET",
+      "path": "/users.conversations"
+    },
+    {
+      "platform": "teams",
+      "actionId": "conn_mod_def::GJ7M1v_ty1I::z6ijZ292SHKR9tz7c9nEOQ",
+      "access": "read",
+      "usedBy": "profiles/teams/pack.json",
+      "reason": "Index Teams chat messages for search",
+      "method": "GET",
+      "path": "/chats/{{chatId}}/messages"
+    },
+    {
+      "platform": "teams",
+      "actionId": "conn_mod_def::GJ7M0XFmgfA::ccNbrhTlTROYTSZtYigXCg",
+      "access": "read",
+      "usedBy": "profiles/teams/pack.json",
+      "reason": "Index Teams chat messages for search",
+      "method": "GET",
+      "path": "/chats"
+    },
+    {
+      "platform": "teams",
+      "actionId": "conn_mod_def::GJ7NFaW12yo::D62bOYGhSkK1cOoDf-KCWA",
+      "access": "read",
+      "usedBy": "profiles/teams/pack.json",
+      "reason": "Index Teams channel messages for search",
+      "method": "GET",
+      "path": "/teams/{{teamId}}/channels/{{channelId}}/messages/microsoft.graph.delta()"
+    },
+    {
+      "platform": "teams",
+      "actionId": "conn_mod_def::GJ7NUzqmPxU::KPH8i5-qTwG3rhZHepN3Fg",
+      "access": "read",
+      "usedBy": "profiles/teams/pack.json",
+      "reason": "Index Teams channel messages for search",
+      "method": "GET",
+      "path": "/users/{{userId}}/joinedTeams"
+    },
+    {
+      "platform": "teams",
+      "actionId": "conn_mod_def::GJ7NFwMDWsI::zD6Vj-Z-SoKYto-H5m6G7A",
+      "access": "read",
+      "usedBy": "profiles/teams/pack.json",
+      "reason": "Index Teams channel messages for search",
+      "method": "GET",
+      "path": "/teams/{{teamId}}/channels"
+    },
+    {
+      "platform": "openai",
+      "actionId": "conn_mod_def::GJ564JtA2kg::RZSxROt_TaGPn5dj1cERcg",
+      "access": "read",
+      "usedBy": "packages/core/src/embed/providers.ts",
+      "reason": "Embed your text for semantic search",
+      "method": "POST",
+      "path": "/embeddings"
+    },
+    {
+      "platform": "gemini",
+      "actionId": "conn_mod_def::GKYsLheH12Q::Tpg2bcnfSjenI3U6jlwKzQ",
+      "access": "read",
+      "usedBy": "packages/core/src/embed/providers.ts",
+      "reason": "Embed your text for semantic search",
+      "method": "POST",
+      "path": "/v1beta/models/{{model}}:batchEmbedContents"
+    },
+    {
+      "platform": "cohere",
+      "actionId": "conn_mod_def::GOBI50QrjAs::W77uZN_sRAq12F_k0a3kEg",
+      "access": "read",
+      "usedBy": "packages/core/src/embed/providers.ts",
+      "reason": "Embed your text for semantic search",
+      "method": "POST",
+      "path": "/v2/embed"
+    },
+    {
+      "platform": "mistral-ai",
+      "actionId": "conn_mod_def::GMZh4j5K2IA::ZZRIBQWMS0-Kn1uey0EP4A",
+      "access": "read",
+      "usedBy": "packages/core/src/embed/providers.ts",
+      "reason": "Embed your text for semantic search",
+      "method": "POST",
+      "path": "/v1/embeddings"
+    },
+    {
+      "platform": "anthropic",
+      "actionId": "conn_mod_def::GJfJ6hmtpYo::zy68VQHpRFmqayjAzxkjDA",
+      "access": "read",
+      "usedBy": "packages/core/src/chat/run.ts",
+      "reason": "Answer questions from your search results, with citations",
+      "method": "POST",
+      "path": "/messages"
+    },
+    {
+      "platform": "typesafe",
+      "actionId": "conn_mod_def::GNh4bXcHPaU::V2ndvy5CQJmYHvkElwVM_w",
+      "access": "read",
+      "usedBy": "packages/core/src/classify/jev.ts",
+      "reason": "Sort results into lanes and match people across tools",
+      "method": "POST",
+      "path": "/v1/systemone"
+    },
+    {
+      "platform": "one",
+      "actionId": "user:profile:read",
+      "access": "read",
+      "usedBy": "server",
+      "reason": "Know who signed in"
+    },
+    {
+      "platform": "gmail",
+      "actionId": "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA",
+      "access": "write",
+      "usedBy": "packages/core/src/one.ts",
+      "reason": "Never granted: the Access screen shows One declining it",
+      "grant": false,
+      "method": "DELETE",
+      "path": "/gmail/v1/users/{{userId}}/messages/{{id}}"
+    }
+  ]
+}

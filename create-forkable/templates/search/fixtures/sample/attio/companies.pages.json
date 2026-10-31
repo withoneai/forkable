@@ -1,0 +1,820 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List an Object's Records, object=companies",
+  "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "request": {
+          "pathParams": {
+            "object": "companies"
+          }
+        }
+      },
+      "response": {
+        "data": [
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "1b543718-fb63-534d-a358-d09ddd1766dc",
+              "record_id": "70f838bb-7524-5a9d-aa69-3fd72421419d"
+            },
+            "created_at": {
+              "$rel": "-150d 09:00"
+            },
+            "web_url": "https://app.attio.com/acme/company/70f838bb-7524-5a9d-aa69-3fd72421419d",
+            "values": {
+              "name": [
+                {
+                  "value": "Globex",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "domains": [
+                {
+                  "domain": "globex.com",
+                  "root_domain": "globex.com",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "domain"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Global logistics software.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "employee_range": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "c1052bc7-090c-5f52-aaeb-469602ef8aae"
+                    },
+                    "title": "1K-5K",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "categories": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "d3d45391-9e75-52b7-8ae9-0253d5b4ce68"
+                    },
+                    "title": "B2B",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                },
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "dcc432cf-0a9f-5dbb-8f34-13fea5204b4c"
+                    },
+                    "title": "SaaS",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                },
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "07a225d7-d81b-5bfc-9d7f-5a3e64e7af36"
+                    },
+                    "title": "Logistics",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "primary_location": [
+                {
+                  "line_1": null,
+                  "line_2": null,
+                  "line_3": null,
+                  "line_4": null,
+                  "locality": "Chicago",
+                  "region": "IL",
+                  "postcode": null,
+                  "country_code": "US",
+                  "latitude": null,
+                  "longitude": null,
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "location"
+                }
+              ],
+              "team": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "2f95711c-de90-5c49-8ea2-774f6b6cd2f8",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                },
+                {
+                  "target_object": "people",
+                  "target_record_id": "0a5b910f-d4dd-5dd1-9dbf-75432316d62f",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "1b543718-fb63-534d-a358-d09ddd1766dc",
+              "record_id": "0016aced-37df-5930-8331-4139cf2d3f96"
+            },
+            "created_at": {
+              "$rel": "-150d 09:00"
+            },
+            "web_url": "https://app.attio.com/acme/company/0016aced-37df-5930-8331-4139cf2d3f96",
+            "values": {
+              "name": [
+                {
+                  "value": "Initech",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "domains": [
+                {
+                  "domain": "initech.io",
+                  "root_domain": "initech.io",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "domain"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Data platform for mid-market finance teams.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "employee_range": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "c0fb75e4-6932-52c7-93ec-7533ccf86961"
+                    },
+                    "title": "251-1K",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "categories": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "d3d45391-9e75-52b7-8ae9-0253d5b4ce68"
+                    },
+                    "title": "B2B",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                },
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "4373c5e4-bc3d-5fa8-a065-e1f665147979"
+                    },
+                    "title": "Data",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "primary_location": [
+                {
+                  "line_1": null,
+                  "line_2": null,
+                  "line_3": null,
+                  "line_4": null,
+                  "locality": "Austin",
+                  "region": "TX",
+                  "postcode": null,
+                  "country_code": "US",
+                  "latitude": null,
+                  "longitude": null,
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "location"
+                }
+              ],
+              "team": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "0e7093cd-49f5-5063-a901-5229a7645759",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                },
+                {
+                  "target_object": "people",
+                  "target_record_id": "82b3f763-792d-59e8-ba76-a213488c5818",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "1b543718-fb63-534d-a358-d09ddd1766dc",
+              "record_id": "adb833d6-47a1-5a4d-b0b2-980565bc4e13"
+            },
+            "created_at": {
+              "$rel": "-150d 09:00"
+            },
+            "web_url": "https://app.attio.com/acme/company/adb833d6-47a1-5a4d-b0b2-980565bc4e13",
+            "values": {
+              "name": [
+                {
+                  "value": "Hooli",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "domains": [
+                {
+                  "domain": "hooli.dev",
+                  "root_domain": "hooli.dev",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "domain"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Developer tools for API teams.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "employee_range": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "d5041b06-a025-5f22-b4bb-9421f435d638"
+                    },
+                    "title": "11-50",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "categories": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "d3d45391-9e75-52b7-8ae9-0253d5b4ce68"
+                    },
+                    "title": "B2B",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                },
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "71a46bb6-27e7-5328-886a-8585692f1873"
+                    },
+                    "title": "Developer tools",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "primary_location": [
+                {
+                  "line_1": null,
+                  "line_2": null,
+                  "line_3": null,
+                  "line_4": null,
+                  "locality": "Austin",
+                  "region": "TX",
+                  "postcode": null,
+                  "country_code": "US",
+                  "latitude": null,
+                  "longitude": null,
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "location"
+                }
+              ],
+              "team": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "7dcb5291-2a53-5acf-8dde-a0b8f30aa220",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                },
+                {
+                  "target_object": "people",
+                  "target_record_id": "8ccbe6ea-5cd5-5410-8c95-14e0d8e32cda",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "1b543718-fb63-534d-a358-d09ddd1766dc",
+              "record_id": "c76c65f1-8c3f-54d4-aab5-d100e16a36c4"
+            },
+            "created_at": {
+              "$rel": "-150d 09:00"
+            },
+            "web_url": "https://app.attio.com/acme/company/c76c65f1-8c3f-54d4-aab5-d100e16a36c4",
+            "values": {
+              "name": [
+                {
+                  "value": "Northwind Ventures",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "domains": [
+                {
+                  "domain": "northwind.vc",
+                  "root_domain": "northwind.vc",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "domain"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Seed and Series A fund.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "employee_range": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "d5041b06-a025-5f22-b4bb-9421f435d638"
+                    },
+                    "title": "11-50",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "categories": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "27f4ec92-0fb1-5dde-95b3-1f419e826068"
+                    },
+                    "title": "Investor",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "primary_location": [
+                {
+                  "line_1": null,
+                  "line_2": null,
+                  "line_3": null,
+                  "line_4": null,
+                  "locality": "San Francisco",
+                  "region": "CA",
+                  "postcode": null,
+                  "country_code": "US",
+                  "latitude": null,
+                  "longitude": null,
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "location"
+                }
+              ],
+              "team": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "19e26f18-bac0-598c-90d0-a1cbbcb7739a",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "1b543718-fb63-534d-a358-d09ddd1766dc",
+              "record_id": "c9ead425-54ca-5c7e-af00-8a0a5561f4f6"
+            },
+            "created_at": {
+              "$rel": "-150d 09:00"
+            },
+            "web_url": "https://app.attio.com/acme/company/c9ead425-54ca-5c7e-af00-8a0a5561f4f6",
+            "values": {
+              "name": [
+                {
+                  "value": "Umbrella",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "domains": [
+                {
+                  "domain": "umbrella.co",
+                  "root_domain": "umbrella.co",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "domain"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Pharmaceutical group with EU entities.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "employee_range": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "9c412808-6441-5bc1-bde2-ca2867ff4dcb"
+                    },
+                    "title": "5K-10K",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "categories": [
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "e5a4dd68-e5bc-5272-8a8b-bd413cbdb836"
+                    },
+                    "title": "Enterprise",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                },
+                {
+                  "option": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "option_id": "a3ac53c2-bffc-514e-b606-b78c59ea8f94"
+                    },
+                    "title": "Pharma",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "select"
+                }
+              ],
+              "primary_location": [
+                {
+                  "line_1": null,
+                  "line_2": null,
+                  "line_3": null,
+                  "line_4": null,
+                  "locality": "Berlin",
+                  "region": null,
+                  "postcode": null,
+                  "country_code": "DE",
+                  "latitude": null,
+                  "longitude": null,
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "location"
+                }
+              ],
+              "team": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

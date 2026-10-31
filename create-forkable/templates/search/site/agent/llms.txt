@@ -1,0 +1,37 @@
+# Search
+
+> Search is a free, open source personal search engine. It indexes anything you connect through One and makes it one search box, with an AI that reasons over the results and cites them.
+> HubSpot, Attio, Gmail, Outlook Mail, Google Calendar, Outlook Calendar, Notion, Linear, Slack, Teams and Granola ship as built-in profiles; Settings can turn any other tool in One into one too.
+
+## Start
+
+npm create forkable@latest my-search -- --template search
+
+Runs on the keyless Acme Inc sample first. No account or keys needed.
+
+## If you are an agent
+
+1. Fork it: `npm create forkable@latest my-search -- --template search`. Add `--for "<who>" --in "<where>"` after the template flag if the human said who it is for and where.
+2. `cd my-search`, then read AGENTS.md in the fork before you change anything.
+3. Run the demo (`pnpm start`). Success means it exits 0.
+4. Stop and ask the human before any secret, git push, deploy or publish. Going live needs one Connect app: `pnpm connect` prints an approval link the human confirms in One, then the human pastes the two secrets on the app's /setup/connect screen.
+
+Full detail: https://search.forkable.dev/index.md
+
+## Surfaces once it is running
+
+- Web app: the search box and the AI panel
+- CLI: `search "<query>"`, `search ask "<question>"`
+- REST API behind OAuth
+- MCP server with OAuth, Sign in with One behind it
+
+## Agent skill
+
+- [search skill](https://search.forkable.dev/.well-known/agent-skills/search/SKILL.md): how to fork and run it. Index with digest at https://search.forkable.dev/.well-known/agent-skills/index.json
+
+## Source
+
+- [GitHub, standalone repo](https://github.com/withoneai/forkable-search): the Search template on its own, MIT
+- [GitHub, in Forkable](https://github.com/withoneai/forkable/tree/main/create-forkable/templates/search): the same template inside the Forkable monorepo
+- [Forkable](https://forkable.dev/llms.txt): fork a whole business, not a blank page
+- [One](https://withone.ai/llms.txt): the sign-in and integrations Search is built on

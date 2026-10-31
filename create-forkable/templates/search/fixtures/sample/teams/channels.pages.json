@@ -1,0 +1,29 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7NFwMDWsI::zD6Vj-Z-SoKYto-H5m6G7A Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 10",
+  "actionId": "conn_mod_def::GJ7NFwMDWsI::zD6Vj-Z-SoKYto-H5m6G7A",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "partition": "5c3a9e10-acme-4eu0-b0b0-000000000042"
+      },
+      "response": {
+        "value": [
+          {
+            "id": "19:general-8cb3c5af29d43c1b@thread.tacv2",
+            "createdDateTime": {
+              "$rel": "-400d 09:00"
+            },
+            "description": "Acme Europe general",
+            "displayName": "General",
+            "isArchived": false,
+            "isFavoriteByDefault": true,
+            "membershipType": "standard",
+            "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "webUrl": "https://teams.microsoft.com/l/channel/19%3Ageneral-8cb3c5af29d43c1b%40thread.tacv2/General?groupId=5c3a9e10-acme-4eu0-b0b0-000000000042&tenantId=6f1c0a2e-acme-4eu0-9a11-000000000001"
+          }
+        ]
+      }
+    }
+  ]
+}

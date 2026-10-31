@@ -1,0 +1,359 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Slack",
+  "platform": "slack",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "slack.users",
+      "platform": "slack",
+      "model": "users",
+      "kind": "person",
+      "title": "Slack people",
+      "description": "The workspace directory. Resolves user ids in messages to people; shown as results only when they have an email.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ7H8UJsJpw::WIAkGZl2QGG-xp0x9a-c9w"
+        },
+        "vars": {
+          "url": "url",
+          "team": "team",
+          "teamId": "team_id",
+          "userId": "user_id"
+        },
+        "self": [
+          {
+            "kind": "ext",
+            "var": "userId"
+          }
+        ],
+        "optional": true
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ7IBQjys4M::0ZFuc5nOQAuLPd7qBVmGZA",
+        "resultsPath": "members",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "response_metadata.next_cursor",
+          "passAs": "query:cursor"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 200,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "full"
+      },
+      "deletes": {
+        "when": "item.deleted == true",
+        "reconcile": "onFullPass"
+      },
+      "keep": "item.is_bot != true && item.id != 'USLACKBOT'",
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.profile.real_name",
+            "item.real_name",
+            "item.name"
+          ]
+        },
+        "body": {
+          "join": [
+            "item.profile.title",
+            "item.profile.email",
+            "item.tz_label"
+          ],
+          "sep": ". "
+        },
+        "occurredAt": {
+          "path": "item.updated",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updated",
+          "decode": "datetime"
+        },
+        "url": "{{ account.url }}team/{{ item.id }}",
+        "facets": {
+          "email": {
+            "path": "item.profile.email",
+            "decode": "email"
+          },
+          "jobTitle": "item.profile.title",
+          "phone": "item.profile.phone",
+          "location": "item.tz"
+        }
+      },
+      "entities": {
+        "directory": true,
+        "is": {
+          "type": "person",
+          "email": {
+            "path": "item.profile.email",
+            "decode": "email"
+          },
+          "name": {
+            "coalesce": [
+              "item.profile.real_name",
+              "item.real_name"
+            ]
+          },
+          "externalId": {
+            "template": "slack:{{ item.id }}"
+          },
+          "title": "item.profile.title"
+        }
+      },
+      "chunk": {
+        "strategy": "whole"
+      },
+      "limits": {
+        "requestsPerMinute": 20
+      },
+      "schedule": {
+        "every": "24h"
+      }
+    },
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "slack.messages",
+      "platform": "slack",
+      "model": "messages",
+      "kind": "message",
+      "title": "Slack messages",
+      "description": "Messages in the conversations you are in, most active first, with thread replies. Slack limits apps outside its Marketplace to one history call a minute, so this indexes slowly by default.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ7H8UJsJpw::WIAkGZl2QGG-xp0x9a-c9w"
+        },
+        "vars": {
+          "url": "url",
+          "team": "team",
+          "teamId": "team_id",
+          "userId": "user_id"
+        },
+        "self": [
+          {
+            "kind": "ext",
+            "var": "userId"
+          }
+        ],
+        "optional": true
+      },
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "30d",
+          "label": "How far back",
+          "help": "30 days at Slack's limited rate; one year when the app is Marketplace-listed."
+        },
+        "maxChannels": {
+          "type": "number",
+          "default": 20,
+          "min": 1,
+          "max": 500,
+          "label": "Conversations to index",
+          "help": "The most recently active ones first. 200 when the app is Marketplace-listed."
+        }
+      },
+      "partitions": {
+        "actionId": "conn_mod_def::GJ7IBJH4uK8::Q4MUFQEYRxucJ3uvw2Ibdw",
+        "query": {
+          "types": "public_channel,private_channel,mpim,im",
+          "exclude_archived": "true"
+        },
+        "as": "partition",
+        "resultsPath": "channels",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "response_metadata.next_cursor",
+          "passAs": "query:cursor"
+        },
+        "keep": "partition.is_archived != true",
+        "order": {
+          "by": "updated",
+          "dir": "desc"
+        },
+        "max": "{{ settings.maxChannels }}"
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ7H9XYEBzI::FkfMtDsaTzKxb92jFEqxHg",
+        "query": {
+          "channel": "{{ partition.id }}",
+          "oldest": "{{ run.since | unix }}"
+        },
+        "resultsPath": "messages",
+        "idPath": "ts",
+        "pagination": {
+          "type": "cursor",
+          "next": "response_metadata.next_cursor",
+          "passAs": "query:cursor",
+          "hasMore": "has_more"
+        },
+        "pageSize": {
+          "param": "limit",
+          "value": 15,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.ts",
+        "order": "asc",
+        "overlap": "1m",
+        "initial": "{{ settings.backfill }}"
+      },
+      "hydrate": {
+        "request": {
+          "actionId": "conn_mod_def::GJ7H99BNZZY::YUA8ceLYSMmIEPSjoukdNg",
+          "query": {
+            "channel": "{{ partition.id }}",
+            "ts": "{{ item.ts }}"
+          }
+        },
+        "fingerprint": "{{ item.latest_reply }}",
+        "concurrency": 1,
+        "notFoundIsDelete": false,
+        "when": "item.reply_count > 0"
+      },
+      "deletes": {
+        "when": "item.subtype == 'message_deleted' || item.subtype == 'tombstone'",
+        "reconcile": "never"
+      },
+      "keep": "item.subtype != 'channel_join' && item.subtype != 'channel_leave' && item.subtype != 'channel_topic'",
+      "fields": {
+        "title": {
+          "coalesce": [
+            {
+              "template": "#{{ partition.name }}"
+            },
+            {
+              "template": "Direct message"
+            }
+          ]
+        },
+        "body": {
+          "coalesce": [
+            {
+              "path": "detail.messages[].text",
+              "pick": "join",
+              "sep": "\n",
+              "decode": "slack-mrkdwn"
+            },
+            {
+              "path": "item.text",
+              "decode": "slack-mrkdwn"
+            }
+          ]
+        },
+        "snippet": {
+          "path": "item.text",
+          "decode": "slack-mrkdwn"
+        },
+        "occurredAt": {
+          "path": "item.ts",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "coalesce": [
+            {
+              "path": "item.latest_reply",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.edited.ts",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.ts",
+              "decode": "datetime"
+            }
+          ]
+        },
+        "url": "{{ account.url }}archives/{{ partition.id }}/{{ item.ts | slackts }}",
+        "container": {
+          "coalesce": [
+            {
+              "template": "#{{ partition.name }}"
+            },
+            {
+              "template": "Direct message"
+            }
+          ]
+        },
+        "groupKey": {
+          "coalesce": [
+            "item.thread_ts",
+            "item.ts"
+          ]
+        },
+        "facets": {
+          "channel": "partition.name",
+          "sender": {
+            "coalesce": [
+              "item.user",
+              "item.username",
+              "item.bot_id"
+            ]
+          },
+          "threadId": "item.thread_ts",
+          "replyCount": "item.reply_count",
+          "isReply": {
+            "test": "item.parent_user_id != null"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "author",
+            "type": "person",
+            "externalId": {
+              "template": "slack:{{ item.user }}"
+            }
+          },
+          {
+            "role": "to",
+            "type": "person",
+            "externalId": {
+              "template": "slack:{{ partition.user }}"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole",
+        "header": "{{ doc.container }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 50,
+        "perAction": {
+          "conn_mod_def::GJ7H9XYEBzI::FkfMtDsaTzKxb92jFEqxHg": {
+            "requestsPerMinute": 1,
+            "pageSize": 15
+          },
+          "conn_mod_def::GJ7H99BNZZY::YUA8ceLYSMmIEPSjoukdNg": {
+            "requestsPerMinute": 1,
+            "pageSize": 15
+          }
+        }
+      },
+      "schedule": {
+        "every": "30m"
+      }
+    }
+  ]
+}

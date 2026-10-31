@@ -1,0 +1,178 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Outlook Calendar",
+  "platform": "outlook-calendar",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "outlook-calendar.events",
+      "platform": "outlook-calendar",
+      "model": "events",
+      "kind": "event",
+      "title": "Outlook Calendar events",
+      "description": "Events in a window around today on every calendar, kept current with Graph's delta link.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        },
+        "lookahead": {
+          "type": "duration",
+          "default": "180d",
+          "label": "How far ahead",
+          "help": "Future events inside this window are indexed."
+        }
+      },
+      "partitions": {
+        "actionId": "conn_mod_def::GMIY1FxtnJw::naghBU_mSTKsg0Lv46gF1w",
+        "as": "partition",
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GMIY39C_Zus::f0YqbOZ_Tzi_jt6FfhYKHA",
+        "pathVars": {
+          "calendarId": "{{ partition.id }}"
+        },
+        "query": {
+          "startDateTime": "{{ run.since | iso }}",
+          "endDateTime": "{{ run.until | iso }}"
+        },
+        "headers": {
+          "Prefer": "outlook.timezone=\"UTC\""
+        },
+        "resultsPath": "value",
+        "idPath": "id",
+        "pagination": {
+          "type": "nextUrl",
+          "next": "[\"@odata.nextLink\"]"
+        }
+      },
+      "incremental": {
+        "strategy": "delta",
+        "tokenPath": "[\"@odata.deltaLink\"]",
+        "tokenPassAs": "url",
+        "resetOn": [
+          410
+        ],
+        "initial": "{{ settings.backfill }}"
+      },
+      "deletes": {
+        "when": "item.@removed != null || item.isCancelled == true"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.subject",
+            {
+              "template": "(no title)"
+            }
+          ]
+        },
+        "body": {
+          "join": [
+            {
+              "path": "item.body",
+              "decode": "graph-body"
+            },
+            "item.location.displayName",
+            {
+              "template": "With {{ item.attendees[].emailAddress.name | join:\", \" }}"
+            }
+          ],
+          "sep": "\n\n"
+        },
+        "snippet": "item.bodyPreview",
+        "occurredAt": {
+          "path": "item.start.dateTime",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.lastModifiedDateTime",
+          "decode": "datetime"
+        },
+        "url": "{{ item.webLink }}",
+        "container": "partition.name",
+        "status": "item.showAs",
+        "facets": {
+          "start": {
+            "path": "item.start.dateTime",
+            "decode": "datetime"
+          },
+          "end": {
+            "path": "item.end.dateTime",
+            "decode": "datetime"
+          },
+          "allDay": {
+            "test": "item.isAllDay == true"
+          },
+          "timeZone": "item.start.timeZone",
+          "location": "item.location.displayName",
+          "joinUrl": {
+            "coalesce": [
+              "item.onlineMeeting.joinUrl",
+              "item.onlineMeetingUrl"
+            ]
+          },
+          "organizerEmail": {
+            "path": "item.organizer.emailAddress.address",
+            "decode": "email"
+          },
+          "attendees": {
+            "path": "item.attendees[]",
+            "pick": "all"
+          },
+          "selfResponse": "item.responseStatus.response",
+          "recurring": {
+            "test": "item.type == 'occurrence' || item.type == 'seriesMaster'"
+          },
+          "calendar": "partition.name",
+          "calendarColor": "partition.hexColor"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "organizer",
+            "type": "person",
+            "email": {
+              "path": "item.organizer.emailAddress.address",
+              "decode": "email"
+            },
+            "name": "item.organizer.emailAddress.name"
+          },
+          {
+            "role": "attendee",
+            "type": "person",
+            "email": {
+              "path": "emailAddress.address",
+              "decode": "email"
+            },
+            "name": "emailAddress.name",
+            "response": "status.response",
+            "each": "item.attendees[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole",
+        "header": "{{ doc.title }} | {{ item.start.dateTime }}"
+      },
+      "limits": {
+        "requestsPerMinute": 120
+      },
+      "schedule": {
+        "every": "10m"
+      }
+    }
+  ]
+}

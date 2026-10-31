@@ -1,0 +1,39 @@
+{
+  "name": "search",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Search, one search box for everything you connect. Every user connects through One Connect.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n server,ui -c yellow,magenta --kill-others-on-fail 'SEARCH_UI_URL=http://localhost:5680 pnpm --filter @search/server dev' 'wait-on -t 60000 http-get://127.0.0.1:52289/api/health && pnpm --filter @search/ui dev'",
+    "dev:server": "pnpm --filter @search/server dev",
+    "dev:ui": "pnpm --filter @search/ui dev",
+    "start": "pnpm --filter @withone/search demo",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "db:generate": "pnpm --filter @search/core generate",
+    "connect": "node scripts/connect.mjs",
+    "welcome": "node forkable/welcome.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.9.3",
+    "wait-on": "^8.0.1",
+    "@withone/connect": "^0.19.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "packageManager": "pnpm@10.4.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@embedded-postgres/darwin-arm64",
+      "@embedded-postgres/darwin-x64",
+      "@embedded-postgres/linux-x64",
+      "@embedded-postgres/linux-arm64",
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7NFaW12yo::D62bOYGhSkK1cOoDf-KCWA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 10",
+  "actionId": "conn_mod_def::GJ7NFaW12yo::D62bOYGhSkK1cOoDf-KCWA",
+  "pages": [
+    {
+      "match": {
+        "partition": "5c3a9e10-acme-4eu0-b0b0-000000000042/19:general-8cb3c5af29d43c1b@thread.tacv2",
+        "cursor": null,
+        "delta": null
+      },
+      "response": {
+        "value": [
+          {
+            "id": "1760900000000",
+            "replyToId": null,
+            "etag": "1760900000000",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-2d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 09:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": null,
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:general-8cb3c5af29d43c1b@thread.tacv2/1760900000000",
+            "channelIdentity": {
+              "teamId": "5c3a9e10-acme-4eu0-b0b0-000000000042",
+              "channelId": "19:general-8cb3c5af29d43c1b@thread.tacv2"
+            },
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>EU pipeline review moved to Tuesday.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": [],
+            "hostedContents": [],
+            "replies": []
+          },
+          {
+            "id": "1760900001111",
+            "replyToId": null,
+            "etag": "1760900001111",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-3d 10:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 10:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": null,
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:general-8cb3c5af29d43c1b@thread.tacv2/1760900001111",
+            "channelIdentity": {
+              "teamId": "5c3a9e10-acme-4eu0-b0b0-000000000042",
+              "channelId": "19:general-8cb3c5af29d43c1b@thread.tacv2"
+            },
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Umbrella procurement call went well, questionnaire due Friday.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": [],
+            "hostedContents": [],
+            "replies": []
+          },
+          {
+            "id": "1760900002222",
+            "replyToId": null,
+            "etag": "1760900002222",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-6d 08:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-6d 08:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": null,
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:general-8cb3c5af29d43c1b@thread.tacv2/1760900002222",
+            "channelIdentity": {
+              "teamId": "5c3a9e10-acme-4eu0-b0b0-000000000042",
+              "channelId": "19:general-8cb3c5af29d43c1b@thread.tacv2"
+            },
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Welcome to the Acme Europe team space.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": [],
+            "hostedContents": [],
+            "replies": []
+          }
+        ],
+        "@odata.deltaLink": "https://graph.microsoft.com/v1.0/teams/5c3a9e10-acme-4eu0-b0b0-000000000042/channels/19:general-8cb3c5af29d43c1b@thread.tacv2/messages/microsoft.graph.delta()?$deltatoken=tch-delta-1"
+      }
+    },
+    {
+      "match": {
+        "partition": "5c3a9e10-acme-4eu0-b0b0-000000000042/19:general-8cb3c5af29d43c1b@thread.tacv2",
+        "cursor": null,
+        "delta": "https://graph.microsoft.com/v1.0/teams/5c3a9e10-acme-4eu0-b0b0-000000000042/channels/19:general-8cb3c5af29d43c1b@thread.tacv2/messages/microsoft.graph.delta()?$deltatoken=tch-delta-1"
+      },
+      "response": {
+        "value": [],
+        "@odata.deltaLink": "https://graph.microsoft.com/v1.0/teams/5c3a9e10-acme-4eu0-b0b0-000000000042/channels/19:general-8cb3c5af29d43c1b@thread.tacv2/messages/microsoft.graph.delta()?$deltatoken=tch-delta-1"
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ name: forkable
 description: |
   Start a business from a Forkable template (forkable.dev). Forks a whole working business with its app, agents, integrations and go-to-market kit, runs its keyless demo, then keeps building on it.
 
-  TRIGGER when the human asks to start, fork or scaffold a business, app or template "with Forkable", "from forkable.dev", or names a Forkable template (Rill, forkable-starter).
+  TRIGGER when the human asks to start, fork or scaffold a business, app or template "with Forkable", "from forkable.dev", or names a Forkable template (Rill, Search, forkable-starter).
 ---
 
 # Start a business from a Forkable template

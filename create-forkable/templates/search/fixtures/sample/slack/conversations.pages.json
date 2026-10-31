@@ -1,0 +1,147 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7IBJH4uK8::Q4MUFQEYRxucJ3uvw2Ibdw Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 9; `updated` (ms) per Slack's conversation object (I)",
+  "actionId": "conn_mod_def::GJ7IBJH4uK8::Q4MUFQEYRxucJ3uvw2Ibdw",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "ok": true,
+        "channels": [
+          {
+            "id": "C01DEALS",
+            "name": "deals",
+            "is_channel": false,
+            "is_group": true,
+            "is_im": false,
+            "created": {
+              "$relUnix": "-300d 10:00"
+            },
+            "creator": "U01DANA",
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "deals",
+            "is_shared": false,
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "pending_shared": [],
+            "is_pending_ext_shared": false,
+            "is_private": true,
+            "is_mpim": false,
+            "updated": {
+              "$relMs": "-6h"
+            },
+            "topic": {
+              "value": "",
+              "creator": "",
+              "last_set": 0
+            },
+            "purpose": {
+              "value": "Deal updates and asks for the sales team",
+              "creator": "U01DANA",
+              "last_set": {
+                "$relUnix": "-300d 10:00"
+              }
+            },
+            "previous_names": []
+          },
+          {
+            "id": "C02ENG",
+            "name": "eng",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": {
+              "$relUnix": "-300d 10:00"
+            },
+            "creator": "U01DANA",
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "eng",
+            "is_shared": false,
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "pending_shared": [],
+            "is_pending_ext_shared": false,
+            "is_private": false,
+            "is_mpim": false,
+            "updated": {
+              "$relMs": "-3h"
+            },
+            "topic": {
+              "value": "",
+              "creator": "",
+              "last_set": 0
+            },
+            "purpose": {
+              "value": "Engineering, including customer escalations",
+              "creator": "U01DANA",
+              "last_set": {
+                "$relUnix": "-300d 10:00"
+              }
+            },
+            "previous_names": []
+          },
+          {
+            "id": "C03GLOBEX",
+            "name": "acme-globex",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": {
+              "$relUnix": "-300d 10:00"
+            },
+            "creator": "U01DANA",
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "acme-globex",
+            "is_shared": true,
+            "is_ext_shared": true,
+            "is_org_shared": false,
+            "pending_shared": [],
+            "is_pending_ext_shared": false,
+            "is_private": false,
+            "is_mpim": false,
+            "updated": {
+              "$relMs": "-1d 10:00"
+            },
+            "topic": {
+              "value": "",
+              "creator": "",
+              "last_set": 0
+            },
+            "purpose": {
+              "value": "Shared channel with Globex",
+              "creator": "U01DANA",
+              "last_set": {
+                "$relUnix": "-300d 10:00"
+              }
+            },
+            "previous_names": []
+          },
+          {
+            "id": "D01THEO",
+            "created": {
+              "$relUnix": "-280d 10:00"
+            },
+            "is_im": true,
+            "is_org_shared": false,
+            "user": "U03THEO",
+            "is_user_deleted": false,
+            "priority": 0,
+            "updated": {
+              "$relMs": "-1d 14:00"
+            }
+          }
+        ],
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    }
+  ]
+}

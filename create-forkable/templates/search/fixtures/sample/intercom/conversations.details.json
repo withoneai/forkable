@@ -1,0 +1,823 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4piENYNso::YLibV_rIQoCTcede_c3Hsw Response and Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Retrieve a Conversation. Conversation 2047 has no entry on purpose: it is listed, then answers 404 (deleted), so it is never indexed (a 404 on a conversation that was never stored leaves no tombstone).",
+  "actionId": "conn_mod_def::GJ4piENYNso::YLibV_rIQoCTcede_c3Hsw",
+  "byId": {
+    "2041": {
+      "type": "conversation",
+      "id": "2041",
+      "title": "Globex SSO rollout",
+      "created_at": {
+        "$relUnix": "-6d 09:10"
+      },
+      "updated_at": {
+        "$relUnix": "-1d 16:40"
+      },
+      "waiting_since": null,
+      "snoozed_until": null,
+      "source": {
+        "type": "email",
+        "id": "40392041",
+        "delivered_as": "customer_initiated",
+        "subject": "SSO for the Globex rollout",
+        "body": "<p>Hi Acme team, we want SSO with Okta before the Globex rollout to 400 seats. Is SAML on our plan?</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c101",
+          "name": "Priya Shah",
+          "email": "priya@globex.com"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c101",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814201,
+      "team_assignee_id": null,
+      "open": true,
+      "state": "open",
+      "read": false,
+      "tags": {
+        "type": "tag.list",
+        "tags": [
+          {
+            "type": "tag",
+            "id": "9100",
+            "name": "Enterprise",
+            "applied_at": {
+              "$relUnix": "-6d 09:10"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814201"
+            }
+          },
+          {
+            "type": "tag",
+            "id": "9101",
+            "name": "SSO",
+            "applied_at": {
+              "$relUnix": "-6d 09:10"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814201"
+            }
+          }
+        ]
+      },
+      "priority": "priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Hi Priya, SAML SSO is included on Enterprise. I opened ACME-311 to track the Okta setup for Globex.</p>",
+            "created_at": {
+              "$relUnix": "-6d 11:00"
+            },
+            "updated_at": {
+              "$relUnix": "-6d 11:00"
+            },
+            "notified_at": {
+              "$relUnix": "-6d 11:00"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814201",
+              "name": "Mia Park",
+              "email": "mia@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          },
+          {
+            "type": "conversation_part",
+            "id": 2,
+            "part_type": "note",
+            "body": "<p>Internal: Globex renewal depends on this, keep Dana in the loop.</p>",
+            "created_at": {
+              "$relUnix": "-5d 09:30"
+            },
+            "updated_at": {
+              "$relUnix": "-5d 09:30"
+            },
+            "notified_at": {
+              "$relUnix": "-5d 09:30"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814202",
+              "name": "Theo Lund",
+              "email": "theo@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          },
+          {
+            "type": "conversation_part",
+            "id": 3,
+            "part_type": "comment",
+            "body": "<p>Thanks Mia. Can we test it on the sandbox before the renewal signature call?</p>",
+            "created_at": {
+              "$relUnix": "-1d 16:40"
+            },
+            "updated_at": {
+              "$relUnix": "-1d 16:40"
+            },
+            "notified_at": {
+              "$relUnix": "-1d 16:40"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "user",
+              "id": "67a1c0de1bb69f9f2193c101",
+              "name": "Priya Shah",
+              "email": "priya@globex.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 3
+      }
+    },
+    "2042": {
+      "type": "conversation",
+      "id": "2042",
+      "title": null,
+      "created_at": {
+        "$relUnix": "-9d 14:00"
+      },
+      "updated_at": {
+        "$relUnix": "-3d 10:15"
+      },
+      "waiting_since": null,
+      "snoozed_until": null,
+      "source": {
+        "type": "conversation",
+        "id": "40392042",
+        "delivered_as": "customer_initiated",
+        "subject": "",
+        "body": "<p>Our CSV import fails on files over 50 MB. The pilot data is 80 MB.</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c102",
+          "name": "Ravi Menon",
+          "email": "ravi@initech.io"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c102",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814201,
+      "team_assignee_id": null,
+      "open": true,
+      "state": "open",
+      "read": false,
+      "tags": {
+        "type": "tag.list",
+        "tags": [
+          {
+            "type": "tag",
+            "id": "9100",
+            "name": "Bug",
+            "applied_at": {
+              "$relUnix": "-9d 14:00"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814201"
+            }
+          },
+          {
+            "type": "tag",
+            "id": "9101",
+            "name": "Initech pilot",
+            "applied_at": {
+              "$relUnix": "-9d 14:00"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814201"
+            }
+          }
+        ]
+      },
+      "priority": "priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Thanks Ravi, we reproduced it. The fix is in review and should ship this week.</p>",
+            "created_at": {
+              "$relUnix": "-8d 10:00"
+            },
+            "updated_at": {
+              "$relUnix": "-8d 10:00"
+            },
+            "notified_at": {
+              "$relUnix": "-8d 10:00"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814201",
+              "name": "Mia Park",
+              "email": "mia@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          },
+          {
+            "type": "conversation_part",
+            "id": 2,
+            "part_type": "note",
+            "body": "<p>Linked to ACME-298, CSV import fails over 50 MB.</p>",
+            "created_at": {
+              "$relUnix": "-8d 10:05"
+            },
+            "updated_at": {
+              "$relUnix": "-8d 10:05"
+            },
+            "notified_at": {
+              "$relUnix": "-8d 10:05"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814201",
+              "name": "Mia Park",
+              "email": "mia@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          },
+          {
+            "type": "conversation_part",
+            "id": 3,
+            "part_type": "comment",
+            "body": "<p>Great, can you give us a fix date for the Initech pilot plan?</p>",
+            "created_at": {
+              "$relUnix": "-3d 10:15"
+            },
+            "updated_at": {
+              "$relUnix": "-3d 10:15"
+            },
+            "notified_at": {
+              "$relUnix": "-3d 10:15"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "user",
+              "id": "67a1c0de1bb69f9f2193c102",
+              "name": "Ravi Menon",
+              "email": "ravi@initech.io"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 3
+      }
+    },
+    "2043": {
+      "type": "conversation",
+      "id": "2043",
+      "title": "Invoice in EUR for Umbrella",
+      "created_at": {
+        "$relUnix": "-12d 08:30"
+      },
+      "updated_at": {
+        "$relUnix": "-10d 15:00"
+      },
+      "waiting_since": null,
+      "snoozed_until": null,
+      "source": {
+        "type": "email",
+        "id": "40392043",
+        "delivered_as": "customer_initiated",
+        "subject": "Invoice currency for the EU expansion",
+        "body": "<p>Hello, our procurement needs invoices in EUR with our VAT number for the EU expansion.</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c103",
+          "name": "Hannah Cole",
+          "email": "hannah.cole@umbrella.co"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c103",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814203,
+      "team_assignee_id": null,
+      "open": false,
+      "state": "closed",
+      "read": true,
+      "tags": {
+        "type": "tag.list",
+        "tags": [
+          {
+            "type": "tag",
+            "id": "9100",
+            "name": "Billing",
+            "applied_at": {
+              "$relUnix": "-12d 08:30"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814203"
+            }
+          }
+        ]
+      },
+      "priority": "not_priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Hi Hannah, done. Your next invoice will be in EUR and show the Umbrella VAT ID.</p>",
+            "created_at": {
+              "$relUnix": "-10d 15:00"
+            },
+            "updated_at": {
+              "$relUnix": "-10d 15:00"
+            },
+            "notified_at": {
+              "$relUnix": "-10d 15:00"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814203",
+              "name": "Lena Vogt",
+              "email": "lena@acme.eu"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "closed",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 1
+      }
+    },
+    "2044": {
+      "type": "conversation",
+      "id": "2044",
+      "title": "Initech data export schedule",
+      "created_at": {
+        "$relUnix": "-4d 13:20"
+      },
+      "updated_at": {
+        "$relUnix": "-4d 17:05"
+      },
+      "waiting_since": null,
+      "snoozed_until": {
+        "$relUnix": "+2d 09:00"
+      },
+      "source": {
+        "type": "conversation",
+        "id": "40392044",
+        "delivered_as": "customer_initiated",
+        "subject": "",
+        "body": "<p>Can we schedule a nightly export of the pilot data to our warehouse?</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c104",
+          "name": "Anika Rao",
+          "email": "anika@initech.io"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c104",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814202,
+      "team_assignee_id": null,
+      "open": true,
+      "state": "snoozed",
+      "read": false,
+      "tags": {
+        "type": "tag.list",
+        "tags": [
+          {
+            "type": "tag",
+            "id": "9100",
+            "name": "Feature request",
+            "applied_at": {
+              "$relUnix": "-4d 13:20"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814202"
+            }
+          }
+        ]
+      },
+      "priority": "not_priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Hi Anika, nightly exports are on the roadmap. I will write back when the beta opens.</p>",
+            "created_at": {
+              "$relUnix": "-4d 17:05"
+            },
+            "updated_at": {
+              "$relUnix": "-4d 17:05"
+            },
+            "notified_at": {
+              "$relUnix": "-4d 17:05"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814202",
+              "name": "Theo Lund",
+              "email": "theo@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "snoozed",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 1
+      }
+    },
+    "2045": {
+      "type": "conversation",
+      "id": "2045",
+      "title": "Hooli trial extension",
+      "created_at": {
+        "$relUnix": "-20d 11:00"
+      },
+      "updated_at": {
+        "$relUnix": "-19d 09:00"
+      },
+      "waiting_since": null,
+      "snoozed_until": null,
+      "source": {
+        "type": "email",
+        "id": "40392045",
+        "delivered_as": "customer_initiated",
+        "subject": "Trial extension",
+        "body": "<p>Hi, could you extend our Hooli trial by two weeks? We need more time to evaluate.</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c105",
+          "name": "Jules Martin",
+          "email": "jules@hooli.dev"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c105",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814204,
+      "team_assignee_id": null,
+      "open": false,
+      "state": "closed",
+      "read": true,
+      "tags": {
+        "type": "tag.list",
+        "tags": [
+          {
+            "type": "tag",
+            "id": "9100",
+            "name": "Trial",
+            "applied_at": {
+              "$relUnix": "-20d 11:00"
+            },
+            "applied_by": {
+              "type": "admin",
+              "id": "814204"
+            }
+          }
+        ]
+      },
+      "priority": "not_priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Hi Jules, extended to the end of the month. Let me know if you want a walkthrough.</p>",
+            "created_at": {
+              "$relUnix": "-19d 09:00"
+            },
+            "updated_at": {
+              "$relUnix": "-19d 09:00"
+            },
+            "notified_at": {
+              "$relUnix": "-19d 09:00"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814204",
+              "name": "Sam Okafor",
+              "email": "sam@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "closed",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 1
+      }
+    },
+    "2046": {
+      "type": "conversation",
+      "id": "2046",
+      "title": "Webhook retries for Initrode",
+      "created_at": {
+        "$relUnix": "-2d 22:10"
+      },
+      "updated_at": {
+        "$relUnix": "-2d 23:00"
+      },
+      "waiting_since": null,
+      "snoozed_until": null,
+      "source": {
+        "type": "conversation",
+        "id": "40392046",
+        "delivered_as": "customer_initiated",
+        "subject": "",
+        "body": "<p>Do failed webhooks retry, and how often? We missed two events last night.</p>",
+        "author": {
+          "type": "user",
+          "id": "67a1c0de1bb69f9f2193c106",
+          "name": "Grace Liu",
+          "email": "grace.liu@initrode.com"
+        },
+        "attachments": [],
+        "url": null,
+        "redacted": false
+      },
+      "contacts": {
+        "type": "contact.list",
+        "contacts": [
+          {
+            "type": "contact",
+            "id": "67a1c0de1bb69f9f2193c106",
+            "external_id": null
+          }
+        ]
+      },
+      "first_contact_reply": null,
+      "admin_assignee_id": 814201,
+      "team_assignee_id": null,
+      "open": true,
+      "state": "open",
+      "read": false,
+      "tags": {
+        "type": "tag.list",
+        "tags": []
+      },
+      "priority": "not_priority",
+      "sla_applied": null,
+      "statistics": null,
+      "conversation_rating": null,
+      "teammates": null,
+      "custom_attributes": {},
+      "topics": {},
+      "ticket": null,
+      "linked_objects": {
+        "type": "list",
+        "data": [],
+        "total_count": 0,
+        "has_more": false
+      },
+      "ai_agent": null,
+      "ai_agent_participated": false,
+      "conversation_parts": {
+        "type": "conversation_part.list",
+        "conversation_parts": [
+          {
+            "type": "conversation_part",
+            "id": 1,
+            "part_type": "comment",
+            "body": "<p>Hi Grace, failed webhooks retry 5 times over 24 hours with backoff. I am checking the two you missed.</p>",
+            "created_at": {
+              "$relUnix": "-2d 23:00"
+            },
+            "updated_at": {
+              "$relUnix": "-2d 23:00"
+            },
+            "notified_at": {
+              "$relUnix": "-2d 23:00"
+            },
+            "assigned_to": null,
+            "author": {
+              "type": "admin",
+              "id": "814201",
+              "name": "Mia Park",
+              "email": "mia@acme.com"
+            },
+            "attachments": [],
+            "external_id": null,
+            "redacted": false,
+            "email_message_metadata": null,
+            "state": "open",
+            "tags": [],
+            "event_details": null,
+            "app_package_code": null
+          }
+        ],
+        "total_count": 1
+      }
+    }
+  }
+}

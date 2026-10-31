@@ -1,0 +1,370 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List an Object's Records, object=deals",
+  "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "request": {
+          "pathParams": {
+            "object": "deals"
+          }
+        }
+      },
+      "response": {
+        "data": [
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "d7d40dc6-6564-5a47-98ad-46cac60622c4",
+              "record_id": "12438b41-be3c-5a65-8385-332dc243f7d6"
+            },
+            "created_at": {
+              "$rel": "-40d 11:10"
+            },
+            "web_url": "https://app.attio.com/acme/deal/12438b41-be3c-5a65-8385-332dc243f7d6",
+            "values": {
+              "name": [
+                {
+                  "value": "Initech pilot",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "stage": [
+                {
+                  "status": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "status_id": "d53fca7c-30b3-54dd-bba3-bef581586682"
+                    },
+                    "title": "Discovery",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "status"
+                }
+              ],
+              "value": [
+                {
+                  "currency_value": 36000,
+                  "currency_code": "USD",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "currency"
+                }
+              ],
+              "owner": [
+                {
+                  "referenced_actor_type": "workspace-member",
+                  "referenced_actor_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "actor-reference"
+                }
+              ],
+              "associated_company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "0016aced-37df-5930-8331-4139cf2d3f96",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "associated_people": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "0e7093cd-49f5-5063-a901-5229a7645759",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                },
+                {
+                  "target_object": "people",
+                  "target_record_id": "82b3f763-792d-59e8-ba76-a213488c5818",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "d7d40dc6-6564-5a47-98ad-46cac60622c4",
+              "record_id": "cdbc4a0e-3a0f-59cf-91fc-1be08fd23d63"
+            },
+            "created_at": {
+              "$rel": "-30d 10:10"
+            },
+            "web_url": "https://app.attio.com/acme/deal/cdbc4a0e-3a0f-59cf-91fc-1be08fd23d63",
+            "values": {
+              "name": [
+                {
+                  "value": "Globex renewal 2027",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "stage": [
+                {
+                  "status": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "status_id": "e386d26e-e4c1-5f94-984c-9868c3b1bec3"
+                    },
+                    "title": "Contract sent",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "status"
+                }
+              ],
+              "value": [
+                {
+                  "currency_value": 84000,
+                  "currency_code": "USD",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "currency"
+                }
+              ],
+              "owner": [
+                {
+                  "referenced_actor_type": "workspace-member",
+                  "referenced_actor_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "actor-reference"
+                }
+              ],
+              "associated_company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "70f838bb-7524-5a9d-aa69-3fd72421419d",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "associated_people": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "2f95711c-de90-5c49-8ea2-774f6b6cd2f8",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                },
+                {
+                  "target_object": "people",
+                  "target_record_id": "0a5b910f-d4dd-5dd1-9dbf-75432316d62f",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "d7d40dc6-6564-5a47-98ad-46cac60622c4",
+              "record_id": "d55ae406-79bc-5a20-a6d6-e55e7a4f3692"
+            },
+            "created_at": {
+              "$rel": "-1d 08:40"
+            },
+            "web_url": "https://app.attio.com/acme/deal/d55ae406-79bc-5a20-a6d6-e55e7a4f3692",
+            "values": {
+              "name": [
+                {
+                  "value": "Hooli design partner",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "stage": [
+                {
+                  "status": {
+                    "id": {
+                      "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+                      "status_id": "e3ca4a4f-7219-527e-9df5-af56e7cde19d"
+                    },
+                    "title": "Lead",
+                    "is_archived": false
+                  },
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "status"
+                }
+              ],
+              "value": [
+                {
+                  "currency_value": 15000,
+                  "currency_code": "USD",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "currency"
+                }
+              ],
+              "owner": [
+                {
+                  "referenced_actor_type": "workspace-member",
+                  "referenced_actor_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "actor-reference"
+                }
+              ],
+              "associated_company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "adb833d6-47a1-5a4d-b0b2-980565bc4e13",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "associated_people": [
+                {
+                  "target_object": "people",
+                  "target_record_id": "7dcb5291-2a53-5acf-8dde-a0b8f30aa220",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

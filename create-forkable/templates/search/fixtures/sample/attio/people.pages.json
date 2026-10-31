@@ -1,0 +1,795 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List an Object's Records, object=people",
+  "actionId": "conn_mod_def::GJ0CbN-LPiU::A6h6M9QkS0Cs2Lt9CdPH7Q",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "request": {
+          "pathParams": {
+            "object": "people"
+          }
+        }
+      },
+      "response": {
+        "data": [
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "2f95711c-de90-5c49-8ea2-774f6b6cd2f8"
+            },
+            "created_at": {
+              "$rel": "-30d 10:00"
+            },
+            "web_url": "https://app.attio.com/acme/person/2f95711c-de90-5c49-8ea2-774f6b6cd2f8",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Priya",
+                  "last_name": "Shah",
+                  "full_name": "Priya Shah",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "priya@globex.com",
+                  "email_address": "priya@globex.com",
+                  "email_domain": "globex.com",
+                  "email_root_domain": "globex.com",
+                  "email_local_specifier": "priya",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "VP Partnerships",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Champion on the Globex renewal.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "70f838bb-7524-5a9d-aa69-3fd72421419d",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": [
+                {
+                  "original_phone_number": "+1 312 555 0142",
+                  "phone_number": "+13125550142",
+                  "country_code": "US",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "phone-number"
+                }
+              ]
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "0e7093cd-49f5-5063-a901-5229a7645759"
+            },
+            "created_at": {
+              "$rel": "-40d 11:00"
+            },
+            "web_url": "https://app.attio.com/acme/person/0e7093cd-49f5-5063-a901-5229a7645759",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Ravi",
+                  "last_name": "Menon",
+                  "full_name": "Ravi Menon",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "ravi@initech.io",
+                  "email_address": "ravi@initech.io",
+                  "email_domain": "initech.io",
+                  "email_root_domain": "initech.io",
+                  "email_local_specifier": "ravi",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "CTO",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Technical owner of the Initech pilot.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "0016aced-37df-5930-8331-4139cf2d3f96",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "82b3f763-792d-59e8-ba76-a213488c5818"
+            },
+            "created_at": {
+              "$rel": "-40d 11:05"
+            },
+            "web_url": "https://app.attio.com/acme/person/82b3f763-792d-59e8-ba76-a213488c5818",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Anika",
+                  "last_name": "Rao",
+                  "full_name": "Anika Rao",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "anika@initech.io",
+                  "email_address": "anika@initech.io",
+                  "email_domain": "initech.io",
+                  "email_root_domain": "initech.io",
+                  "email_local_specifier": "anika",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "Head of Data",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Runs the pilot's data import on the Initech side.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "0016aced-37df-5930-8331-4139cf2d3f96",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "7dcb5291-2a53-5acf-8dde-a0b8f30aa220"
+            },
+            "created_at": {
+              "$rel": "-1d 08:35"
+            },
+            "web_url": "https://app.attio.com/acme/person/7dcb5291-2a53-5acf-8dde-a0b8f30aa220",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Jules",
+                  "last_name": "Martin",
+                  "full_name": "Jules Martin",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "jules@hooli.dev",
+                  "email_address": "jules@hooli.dev",
+                  "email_domain": "hooli.dev",
+                  "email_root_domain": "hooli.dev",
+                  "email_local_specifier": "jules",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "Founder",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Inbound cold pitch. Wants a design partnership.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "adb833d6-47a1-5a4d-b0b2-980565bc4e13",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "8ccbe6ea-5cd5-5410-8c95-14e0d8e32cda"
+            },
+            "created_at": {
+              "$rel": "-1d 08:36"
+            },
+            "web_url": "https://app.attio.com/acme/person/8ccbe6ea-5cd5-5410-8c95-14e0d8e32cda",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Tom",
+                  "last_name": "Reyes",
+                  "full_name": "Tom Reyes",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "tom@hooli.dev",
+                  "email_address": "tom@hooli.dev",
+                  "email_domain": "hooli.dev",
+                  "email_root_domain": "hooli.dev",
+                  "email_local_specifier": "tom",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "CTO",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Cofounder at Hooli.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "adb833d6-47a1-5a4d-b0b2-980565bc4e13",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "19e26f18-bac0-598c-90d0-a1cbbcb7739a"
+            },
+            "created_at": {
+              "$rel": "-60d 12:00"
+            },
+            "web_url": "https://app.attio.com/acme/person/19e26f18-bac0-598c-90d0-a1cbbcb7739a",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Owen",
+                  "last_name": "Price",
+                  "full_name": "Owen Price",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "owen@northwind.vc",
+                  "email_address": "owen@northwind.vc",
+                  "email_domain": "northwind.vc",
+                  "email_root_domain": "northwind.vc",
+                  "email_local_specifier": "owen",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                },
+                {
+                  "original_email_address": "owen.price@northwind.vc",
+                  "email_address": "owen.price@northwind.vc",
+                  "email_domain": "northwind.vc",
+                  "email_root_domain": "northwind.vc",
+                  "email_local_specifier": "owen.price",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "Partner",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Board member. Wants the Q3 update before the board date.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "c76c65f1-8c3f-54d4-aab5-d100e16a36c4",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "0a5b910f-d4dd-5dd1-9dbf-75432316d62f"
+            },
+            "created_at": {
+              "$rel": "-30d 10:05"
+            },
+            "web_url": "https://app.attio.com/acme/person/0a5b910f-d4dd-5dd1-9dbf-75432316d62f",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Marco",
+                  "last_name": "Bellini",
+                  "full_name": "Marco Bellini",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "marco@globex.com",
+                  "email_address": "marco@globex.com",
+                  "email_domain": "globex.com",
+                  "email_root_domain": "globex.com",
+                  "email_local_specifier": "marco",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "Legal Counsel",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Owns the Globex MSA redline.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "70f838bb-7524-5a9d-aa69-3fd72421419d",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "object_id": "bcbbd2aa-e920-59a9-b35c-cf897a9bcf53",
+              "record_id": "5be0c2a4-6f3e-5d7a-9e1b-2c4d8a7f0b13"
+            },
+            "created_at": {
+              "$rel": "-20d 16:00"
+            },
+            "web_url": "https://app.attio.com/acme/person/5be0c2a4-6f3e-5d7a-9e1b-2c4d8a7f0b13",
+            "values": {
+              "name": [
+                {
+                  "first_name": "Owen",
+                  "last_name": "Price",
+                  "full_name": "Owen Price",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "personal-name"
+                }
+              ],
+              "email_addresses": [
+                {
+                  "original_email_address": "owen.price@northwind.vc",
+                  "email_address": "owen.price@northwind.vc",
+                  "email_domain": "northwind.vc",
+                  "email_root_domain": "northwind.vc",
+                  "email_local_specifier": "owen.price",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                },
+                {
+                  "original_email_address": "owen@northwind.vc",
+                  "email_address": "owen@northwind.vc",
+                  "email_domain": "northwind.vc",
+                  "email_root_domain": "northwind.vc",
+                  "email_local_specifier": "owen",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "email-address"
+                }
+              ],
+              "job_title": [
+                {
+                  "value": "Partner",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "description": [
+                {
+                  "value": "Added from a conference list. Same Owen as the board member.",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "text"
+                }
+              ],
+              "company": [
+                {
+                  "target_object": "companies",
+                  "target_record_id": "c76c65f1-8c3f-54d4-aab5-d100e16a36c4",
+                  "active_from": {
+                    "$rel": "-150d 09:00"
+                  },
+                  "active_until": null,
+                  "created_by_actor": {
+                    "type": "workspace-member",
+                    "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+                  },
+                  "attribute_type": "record-reference"
+                }
+              ],
+              "phone_numbers": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

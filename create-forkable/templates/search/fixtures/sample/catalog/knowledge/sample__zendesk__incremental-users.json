@@ -1,0 +1,41 @@
+{
+  "$shapedFrom": "@withone/connect ActionKnowledge (getActionKnowledge); knowledge is the real Markdown of conn_mod_def::GJ8YhInbdoI::eFkpkJgMSwmXwTj9Sx7ktA loaded with the One CLI on 2026-10-29; ioSchema is a fixture shape (I)",
+  "actionId": "sample::zendesk::incremental-users",
+  "title": "Incremental User Export (Time-Based)",
+  "method": "GET",
+  "path": "/api/v2/incremental/users",
+  "tags": [
+    "zendesk"
+  ],
+  "platform": "zendesk",
+  "knowledge": "# Incremental User Export (Time-Based)\n\n## Prerequisites\n\n- Allowed for **Admins**\n\n## Method\n\n`GET`\n\n## URL\n\n`https://{{OAUTH_REQUEST_PAYLOAD.formData.ZENDESK_SUBDOMAIN}}.zendesk.com/api/v2/incremental/users`\n\n## Description\n\nExports users incrementally based on a starting timestamp. Use this to sync user records by retrieving users updated since a given `start_time`, with pagination support.\n\n## Enforcement Rules\n\n- When executing, send **Query Parameters** in the URL as query parameters, **not** in the body.\n- `start_time` is **required** and must be an integer Unix timestamp.\n- `start_time` **must be at least one minute in the past**; data is not provided for the most recent minute.\n\n### Valid Examples\n\n```http\n/api/v2/incremental/users?start_time=1332034771\n/api/v2/incremental/users?start_time=1332034771&per_page=100\n```\n\n### Invalid Examples\n\n```http\n/api/v2/incremental/users\n/api/v2/incremental/users?per_page=100\n```\n\n## Required Query Parameters\n\n| Parameter    | Type    | Description |\n|-------------|---------|-------------|\n| `start_time` | integer | The time to start the incremental export from (Unix timestamp). Must be **at least one minute in the past**. Data isn't provided for the most recent minute. Example: `1332034771`. |\n\n## Optional Query Parameters\n\n| Parameter   | Type    | Description |\n|------------|---------|-------------|\n| `per_page` | integer | The number of records to return per page. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"count\": 123,\n  \"end_of_stream\": false,\n  \"end_time\": 1332034771,\n  \"next_page\": \"https://example.zendesk.com/api/v2/incremental/users?start_time=1332034771\",\n  \"users\": []\n}\n```\n\n## Response Fields\n\n| Field           | Type     | Description |\n|----------------|----------|-------------|\n| `count`         | integer  | Total number of records returned/available for this response context. |\n| `end_of_stream` | boolean  | Whether the incremental export has reached the end of the stream. |\n| `end_time`      | integer  | The end time (Unix timestamp) for the current result set/window. |\n| `next_page`     | string   | URL to retrieve the next page of results. |\n| `users`         | array    | Array of user objects (`UserForAdmin` or `UserForEndUser`). |\n\n## Sample Request\n\n```bash\ncurl -i --request GET \\\n  --url 'https://{{OAUTH_REQUEST_PAYLOAD.formData.ZENDESK_SUBDOMAIN}}.zendesk.com/api/v2/incremental/users?start_time=1332034771&per_page=100' \\\n  --header 'Accept: application/json'\n```\n\n## Notes\n\n- **Sideloading** is supported for this endpoint. See: [Users sideloads](/documentation/ticketing/using-the-zendesk-api/side_loading/#supported-endpoints).\n- Response `users` items may be either `<UserForAdmin>` or `<UserForEndUser>` (schemas not provided in the scraped content).",
+  "ioSchema": {
+    "input": {
+      "query": {
+        "type": "object",
+        "properties": {
+          "start_time": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "start_time"
+        ]
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array"
+        },
+        "next_page": {
+          "type": "string"
+        },
+        "end_of_stream": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

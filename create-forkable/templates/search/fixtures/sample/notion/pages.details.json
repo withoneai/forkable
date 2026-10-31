@@ -1,0 +1,63 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ5EntqNvy0::-VzfhSExTEGGnlXLUMqFcA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Retrieve a Page as Markdown",
+  "actionId": "conn_mod_def::GJ5EntqNvy0::-VzfhSExTEGGnlXLUMqFcA",
+  "idFrom": "path:pageId",
+  "byId": {
+    "92a240c6-d852-5691-93dd-0b7d6fb05ff2": {
+      "object": "page_markdown",
+      "id": "92a240c6-d852-5691-93dd-0b7d6fb05ff2",
+      "markdown": "# Globex account plan\n\n## Status\nRenewal for 2027 at 84,000 a year, contract sent. Champion: Priya Shah (VP Partnerships). Legal: Marco Bellini.\n\n## Risks\n- Multi-year discount ask could slip signature past November 14.\n- SSO rollout (ACME-311) must land the week after signature.\n\n## Next steps\n1. Send the two year quote.\n2. Countersign the MSA once the redline is final.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "cf9925ad-49e9-5f10-843f-35f947899599": {
+      "object": "page_markdown",
+      "id": "cf9925ad-49e9-5f10-843f-35f947899599",
+      "markdown": "# Initech account plan\n\n## Pilot\nPaid pilot, 36,000. Technical owner Ravi Menon (CTO), data owner Anika Rao.\n\n## Success criteria\nNightly CSV import under 10 minutes on their 80 MB export. Blocked on ACME-298.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "e61c036d-a75a-5abd-ba2d-30e59cf29930": {
+      "object": "page_markdown",
+      "id": "e61c036d-a75a-5abd-ba2d-30e59cf29930",
+      "markdown": "# Umbrella EU expansion\n\nThree EU entities, about 400 seats, EUR 120,000. Procurement lead Hannah Cole, CFO Felix Wagner. Lena Vogt runs the EU side.\n\n## Open\n- Supplier questionnaire due Friday.\n- Tax IDs on invoices (LED-161) before launch.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "cac10fb4-e531-5945-b27d-638214cff75d": {
+      "object": "page_markdown",
+      "id": "cac10fb4-e531-5945-b27d-638214cff75d",
+      "markdown": "# Pilot playbook\n\n## Before kickoff\n- Agree success criteria in writing.\n- Get a sample export in week one.\n\n## During\nWeekly check-in with the customer's technical owner. Escalate import failures within a day.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "5f859f5f-3e36-5ee6-8707-8fdaf452c479": {
+      "object": "page_markdown",
+      "id": "5f859f5f-3e36-5ee6-8707-8fdaf452c479",
+      "markdown": "# Q3 investor update\n\n## Highlights\n- ARR up 31% quarter over quarter.\n- Globex renewal in contract, Umbrella EU expansion in negotiation.\n\n## Asks\nIntros to CFOs in logistics and pharma. Owen Price offered two.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "49fb051f-06be-523d-9447-00be6e41c0d0": {
+      "object": "page_markdown",
+      "id": "49fb051f-06be-523d-9447-00be6e41c0d0",
+      "markdown": "# Ledger 2.0 launch plan\n\n## Scope\nUsage-based billing (LED-142), invoice PDF redesign (LED-158), tax IDs on invoices (LED-161).\n\n## Go/no-go\nLena runs the EU go/no-go. Launch only when EU invoices carry tax IDs.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "9489a915-a163-5603-9a76-63ee5cdf3310": {
+      "object": "page_markdown",
+      "id": "9489a915-a163-5603-9a76-63ee5cdf3310",
+      "markdown": "# Sales playbook 2026\n\n## Stages\nDiscovery, pilot, contract sent, closed. Every deal over 50,000 gets an account plan in the Accounts database.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    },
+    "7b5eb3c3-60ce-5614-b10d-435df026f8b1": {
+      "object": "page_markdown",
+      "id": "7b5eb3c3-60ce-5614-b10d-435df026f8b1",
+      "markdown": "# Pricing and discount policy\n\n## Multi-year\nTwo year terms can take up to 8% off. Three year terms need Theo's approval.\n\n## EU\nPrices in EUR for EU entities, invoiced by Acme Europe B.V.\n",
+      "truncated": false,
+      "unknown_block_ids": []
+    }
+  }
+}

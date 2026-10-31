@@ -1,0 +1,603 @@
+{
+  "$shapedFrom": "conn_mod_def::GMIY39C_Zus::f0YqbOZ_Tzi_jt6FfhYKHA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 6; @removed entries per Graph delta semantics (I)",
+  "actionId": "conn_mod_def::GMIY39C_Zus::f0YqbOZ_Tzi_jt6FfhYKHA",
+  "pages": [
+    {
+      "match": {
+        "partition": "AAMkADAcmeEuCalendarDefault0000AAA=",
+        "cursor": null,
+        "delta": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(event)",
+        "@odata.nextLink": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$skiptoken=ocal-skip-2",
+        "value": [
+          {
+            "@odata.etag": "W/\"DwAAABYAAABeb222232\"",
+            "id": "AAMkADAcmeEuEvent3a34f24ef333444ae026=",
+            "categories": [],
+            "changeKey": "DwAAABYAAABa9a5a7fe",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 08:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              },
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Walk through the supplier questionnaire and timeline.</p></body></html>"
+            },
+            "bodyPreview": "Walk through the supplier questionnaire and timeline.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "-3d 08:45",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E008947B202769C8BE00FC55BC44",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": true,
+            "isOrganizer": false,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Microsoft Teams Meeting",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Hannah Cole",
+                "address": "hannah.cole@umbrella.co"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "accepted",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "-3d 08:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "Umbrella procurement call",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEvent3a34f24ef333444ae026%3D&exvsurl=1&path=/calendar/item",
+            "onlineMeetingProvider": "teamsForBusiness",
+            "onlineMeeting": {
+              "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_4d6be7c539b8967310b55f66%40thread.v2/0"
+            }
+          },
+          {
+            "@odata.etag": "W/\"DwAAABYAAABdfadc02f\"",
+            "id": "AAMkADAcmeEuEvent0cc0e5fa86c07aef37ce=",
+            "categories": [],
+            "changeKey": "DwAAABYAAABf85effc8",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 09:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              },
+              {
+                "emailAddress": {
+                  "name": "Mia Park",
+                  "address": "mia@acme.com"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Decide on the Ledger 2.0 launch. Open items: LED-158, LED-161.</p></body></html>"
+            },
+            "bodyPreview": "Decide on the Ledger 2.0 launch. Open items: LED-158, LED-161.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "+1d 08:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E0087F9B928A4D6946FA6C59F135",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": true,
+            "isOrganizer": false,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Microsoft Teams Meeting",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Lena Vogt",
+                "address": "lena@acme.eu"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "accepted",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "+1d 07:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "Ledger 2.0 go/no-go",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEvent0cc0e5fa86c07aef37ce%3D&exvsurl=1&path=/calendar/item",
+            "onlineMeetingProvider": "teamsForBusiness",
+            "onlineMeeting": {
+              "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ca9c67a6006e7f12be9018c0%40thread.v2/0"
+            }
+          },
+          {
+            "@odata.etag": "W/\"DwAAABYAAAB532e6a83\"",
+            "id": "AAMkADAcmeEuEventf4201a980fa837780b78=",
+            "categories": [],
+            "changeKey": "DwAAABYAAABfdd1e588",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 09:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Quarterly all-hands, Amsterdam.</p></body></html>"
+            },
+            "bodyPreview": "Quarterly all-hands, Amsterdam.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "+6d 09:30",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E008CDA99B0C40ED9D0CB163A3D2",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": false,
+            "isOrganizer": false,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Amsterdam office",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Lena Vogt",
+                "address": "lena@acme.eu"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "tentativelyAccepted",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "+6d 08:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "Acme Europe all-hands",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEventf4201a980fa837780b78%3D&exvsurl=1&path=/calendar/item"
+          },
+          {
+            "@odata.etag": "W/\"DwAAABYAAABbeb58ba5\"",
+            "id": "AAMkADAcmeEuEvent3b6bb04e57ff1e09c990=",
+            "categories": [],
+            "changeKey": "DwAAABYAAAB222cc798",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 09:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              },
+              {
+                "emailAddress": {
+                  "name": "Felix Wagner",
+                  "address": "felix.wagner@umbrella.co"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Per-entity pricing for Umbrella's three EU entities.</p></body></html>"
+            },
+            "bodyPreview": "Per-entity pricing for Umbrella's three EU entities.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "-1d 07:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E0085458EE2090D53FDFB038D1EE",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": true,
+            "isOrganizer": true,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Microsoft Teams Meeting",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "organizer",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "-1d 06:30",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "Umbrella pricing review",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEvent3b6bb04e57ff1e09c990%3D&exvsurl=1&path=/calendar/item",
+            "onlineMeetingProvider": "teamsForBusiness",
+            "onlineMeeting": {
+              "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_315d6d852b95061a4a592f03%40thread.v2/0"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "partition": "AAMkADAcmeEuCalendarDefault0000AAA=",
+        "cursor": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$skiptoken=ocal-skip-2",
+        "delta": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(event)",
+        "@odata.deltaLink": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$deltatoken=ocal-delta-1",
+        "value": [
+          {
+            "@odata.etag": "W/\"DwAAABYAAABd3413971\"",
+            "id": "AAMkADAcmeEuEvent790a4727f0acb5a4de5e=",
+            "categories": [],
+            "changeKey": "DwAAABYAAAB37c4d70e",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-4d 07:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Dana Oyelaran",
+                  "address": "dana@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Review the Globex DPA.</p></body></html>"
+            },
+            "bodyPreview": "Review the Globex DPA.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "-4d 07:30",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E0080026E777A3F88EC459BA90FE",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": true,
+            "isOrganizer": false,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Microsoft Teams Meeting",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Marco Bellini",
+                "address": "marco@globex.com"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "accepted",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "-4d 07:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "Globex DPA review",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEvent790a4727f0acb5a4de5e%3D&exvsurl=1&path=/calendar/item",
+            "onlineMeetingProvider": "teamsForBusiness",
+            "onlineMeeting": {
+              "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_2f12e19c5487412c9e994131%40thread.v2/0"
+            }
+          },
+          {
+            "@odata.etag": "W/\"DwAAABYAAAB5cd02106\"",
+            "id": "AAMkADAcmeEuEvent0b104ab5d363ea5f6035=",
+            "categories": [],
+            "changeKey": "DwAAABYAAAB0754cab7",
+            "createdDateTime": {
+              "$rel": "-20d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 09:00"
+            },
+            "allowNewTimeProposals": true,
+            "attendees": [
+              {
+                "emailAddress": {
+                  "name": "Lena Vogt",
+                  "address": "lena@acme.eu"
+                },
+                "type": "required",
+                "status": {
+                  "response": "accepted",
+                  "time": {
+                    "$rel": "-10d 09:00"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "contentType": "html",
+              "content": "<html><body><p>Weekly EU pipeline sync.</p></body></html>"
+            },
+            "bodyPreview": "Weekly EU pipeline sync.",
+            "end": {
+              "dateTime": {
+                "$relLocal": "+2d 08:00",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "hasAttachments": false,
+            "hideAttendees": false,
+            "iCalUId": "040000008200E00074C5B7101A82E008E5114D2005CC8381660E6824",
+            "importance": "normal",
+            "isAllDay": false,
+            "isCancelled": false,
+            "isDraft": false,
+            "isOnlineMeeting": true,
+            "isOrganizer": true,
+            "isReminderOn": true,
+            "location": {
+              "displayName": "Microsoft Teams Meeting",
+              "locationType": "default",
+              "uniqueIdType": "unknown"
+            },
+            "organizer": {
+              "emailAddress": {
+                "name": "Dana Oyelaran",
+                "address": "dana@acme.eu"
+              }
+            },
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "responseRequested": true,
+            "responseStatus": {
+              "response": "organizer",
+              "time": "0001-01-01T00:00:00Z"
+            },
+            "sensitivity": "normal",
+            "showAs": "busy",
+            "start": {
+              "dateTime": {
+                "$relLocal": "+2d 07:30",
+                "$tz": "UTC"
+              },
+              "timeZone": "UTC"
+            },
+            "subject": "EU pipeline sync",
+            "type": "singleInstance",
+            "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADAcmeEuEvent0b104ab5d363ea5f6035%3D&exvsurl=1&path=/calendar/item",
+            "onlineMeetingProvider": "teamsForBusiness",
+            "onlineMeeting": {
+              "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_926ca24743860959017ccbab%40thread.v2/0"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "partition": "AAMkADAcmeEuCalendarDefault0000AAA=",
+        "cursor": null,
+        "delta": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$deltatoken=ocal-delta-1"
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(event)",
+        "@odata.deltaLink": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$deltatoken=ocal-delta-2",
+        "value": [
+          {
+            "@odata.type": "#microsoft.graph.event",
+            "id": "AAMkADAcmeEuEvent0b104ab5d363ea5f6035=",
+            "@removed": {
+              "reason": "deleted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "partition": "AAMkADAcmeEuCalendarDefault0000AAA=",
+        "cursor": null,
+        "delta": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$deltatoken=ocal-delta-2"
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(event)",
+        "@odata.deltaLink": "https://graph.microsoft.com/v1.0/me/calendars/AAMkADAcmeEuCalendarDefault0000AAA=/events/microsoft.graph.delta()?$deltatoken=ocal-delta-2",
+        "value": []
+      }
+    }
+  ]
+}

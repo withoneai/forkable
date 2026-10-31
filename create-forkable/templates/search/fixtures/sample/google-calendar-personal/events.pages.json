@@ -1,0 +1,231 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 5; a second Google account (dana@acme.dev) like gmail-personal",
+  "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+  "pages": [
+    {
+      "match": {
+        "partition": "dana@acme.dev",
+        "cursor": null,
+        "delta": null,
+        "connection": "sample:google-calendar:personal"
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acmedev1\"",
+        "summary": "dana@acme.dev",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "owner",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 30
+          }
+        ],
+        "items": [
+          {
+            "kind": "calendar#event",
+            "etag": "\"b1f0c1a7e2d9b84c3a5e6d7f8091_20261101T020000Zacmedev\"",
+            "id": "f0c1a7e2d9b84c3a5e6d7f8091_20261101T020000Z",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=f0c1a7e2d9b84c3a5e6d7f8091_20261101T020000Z",
+            "created": {
+              "$rel": "-40d 09:00"
+            },
+            "updated": {
+              "$rel": "-3d 08:00"
+            },
+            "summary": "Climbing, Thursday session",
+            "creator": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+2d 19:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+2d 21:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "f0c1a7e2d9b84c3a5e6d7f8091_20261101T020000Z@google.com",
+            "sequence": 0,
+            "eventType": "default",
+            "recurringEventId": "f0c1a7e2d9b84c3a5e6d7f8091",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "+2d 19:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "location": "Granite Gym"
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"b1a3d9e1b7c5f24a6e8d0c2b4f61acmedev\"",
+            "id": "a3d9e1b7c5f24a6e8d0c2b4f61",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=a3d9e1b7c5f24a6e8d0c2b4f61",
+            "created": {
+              "$rel": "-40d 09:00"
+            },
+            "updated": {
+              "$rel": "-3d 08:00"
+            },
+            "summary": "Dentist cleaning",
+            "creator": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "-10d 08:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "-10d 09:30"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "a3d9e1b7c5f24a6e8d0c2b4f61@google.com",
+            "sequence": 0,
+            "eventType": "default",
+            "location": "Bay Dental"
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"b1c7e2b9a4d1f06e3c8b5a2d9f47acmedev\"",
+            "id": "c7e2b9a4d1f06e3c8b5a2d9f47",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=c7e2b9a4d1f06e3c8b5a2d9f47",
+            "created": {
+              "$rel": "-40d 09:00"
+            },
+            "updated": {
+              "$rel": "-3d 08:00"
+            },
+            "summary": "Flight to Lisbon",
+            "creator": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "date": {
+                "$relDate": "+20d"
+              }
+            },
+            "end": {
+              "date": {
+                "$relDate": "+21d"
+              }
+            },
+            "iCalUID": "c7e2b9a4d1f06e3c8b5a2d9f47@google.com",
+            "sequence": 0,
+            "eventType": "default",
+            "description": "TAP 236, seat 14A."
+          },
+          {
+            "kind": "calendar#event",
+            "etag": "\"b1f0c1a7e2d9b84c3a5e6d7f8091_20290418T020000Zacmedev\"",
+            "id": "f0c1a7e2d9b84c3a5e6d7f8091_20290418T020000Z",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=f0c1a7e2d9b84c3a5e6d7f8091_20290418T020000Z",
+            "created": {
+              "$rel": "-40d 09:00"
+            },
+            "updated": {
+              "$rel": "-3d 08:00"
+            },
+            "summary": "Climbing, Thursday session",
+            "creator": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "organizer": {
+              "email": "dana@acme.dev",
+              "displayName": "Dana Oyelaran",
+              "self": true
+            },
+            "start": {
+              "dateTime": {
+                "$rel": "+900d 19:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "end": {
+              "dateTime": {
+                "$rel": "+900d 21:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "iCalUID": "f0c1a7e2d9b84c3a5e6d7f8091_20290418T020000Z@google.com",
+            "sequence": 0,
+            "eventType": "default",
+            "recurringEventId": "f0c1a7e2d9b84c3a5e6d7f8091",
+            "originalStartTime": {
+              "dateTime": {
+                "$rel": "+900d 19:00"
+              },
+              "timeZone": "America/Los_Angeles"
+            },
+            "location": "Granite Gym"
+          }
+        ],
+        "nextSyncToken": "gcal-personal-sync-1"
+      }
+    },
+    {
+      "match": {
+        "partition": "dana@acme.dev",
+        "cursor": null,
+        "delta": "gcal-personal-sync-1",
+        "connection": "sample:google-calendar:personal"
+      },
+      "response": {
+        "kind": "calendar#events",
+        "etag": "\"p32acmedev1\"",
+        "summary": "dana@acme.dev",
+        "updated": {
+          "$rel": "-1d 09:00"
+        },
+        "timeZone": "America/Los_Angeles",
+        "accessRole": "owner",
+        "defaultReminders": [
+          {
+            "method": "popup",
+            "minutes": 30
+          }
+        ],
+        "nextSyncToken": "gcal-personal-sync-1",
+        "items": []
+      }
+    }
+  ]
+}

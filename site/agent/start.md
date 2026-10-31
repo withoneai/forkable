@@ -4,8 +4,8 @@ You were asked to start a business with Forkable. This page is the whole job, in
 
 ## What you need
 
-- Node 20 or newer, and git.
-- pnpm for templates whose `packageManager` is `pnpm` (Rill). If `pnpm` is missing, run `corepack enable` first. If that fails too, ask the human to install pnpm.
+- Node 20 or newer, and git. Search needs Node 22.12 or newer.
+- pnpm for templates whose `packageManager` is `pnpm` (Rill, Search). If `pnpm` is missing, run `corepack enable` first. If that fails too, ask the human to install pnpm.
 - No account and no keys. Every template starts on a keyless Acme Inc sample.
 
 ## 1. Pick a template
@@ -80,8 +80,9 @@ If npm asks `Ok to proceed?` before it downloads create-forkable, answer `y`.
 
 - forkable-starter (`npm start`): the Acme Inc sample inbox with three messages, then a receipt line showing a call outside the grant declined with a 403.
 - Rill (`pnpm start`): the Acme Inc inbox sorted into lanes, the morning brief and the receipt.
+- Search (`pnpm start`): indexes the Acme Inc sample across 11 tools, runs a few searches, then asks one question and prints the answer with its citations.
 
-Both exit 0 with no `.env` and no account. Exit 0 is the success test, not the exact text.
+All exit 0 with no `.env` and no account. Exit 0 is the success test, not the exact text.
 
 ## 4. Read the rules
 
@@ -99,15 +100,15 @@ Then read, in this order:
 ## 5. Keep building
 
 - `npm start` or `pnpm start` reruns the demo. Run it after each change. It must still exit 0.
-- `npm run dev` or `pnpm dev` starts the app on the sample. Rill's UI is at http://127.0.0.1:5180.
+- `npm run dev` or `pnpm dev` starts the app on the sample. Rill's UI is at http://127.0.0.1:5180, Search's at http://localhost:5680 (click Try the Acme sample).
 - To add a tool, follow the fork's add-integration skill (`.claude/skills/` in the starter). It finds the action with the One CLI, adds it to `connect.manifest.json` with the narrowest access, and calls it on the user's grant.
 
 ## Stop and ask the human
 
 Stop before any of these and ask first. Say what you want to do and why.
 
-- Any secret. Never ask for one in chat, and never write one into `.env`, a file, a commit or a log. When a value is needed, the human enters it. Rill takes it at http://localhost:5180/setup/connect, which stores it write-only.
-- Making the Connect app. Going live needs one Connect app, which the human makes in the One dashboard (Developers, Connect, New app). There is no command for it yet.
+- Any secret. Never ask for one in chat, and never write one into `.env`, a file, a commit or a log. When a value is needed, the human enters it. Rill takes it at http://localhost:5180/setup/connect and Search at http://localhost:5680/setup/connect, both write-only.
+- Making the Connect app. Going live needs one Connect app, which the human makes in the One dashboard (Developers, Connect, New app). Search can create it with `pnpm connect`, but the human runs it and approves it in the browser.
 - `git push`, creating a GitHub repo, or opening a pull request.
 - Deploying anywhere, or publishing to npm or a registry.
 - Anything that writes to a real account: sending mail, posting, charging.
@@ -118,6 +119,7 @@ This needs the human. They make one Connect app in the One dashboard, then:
 
 - forkable-starter: they set `ONE_CLIENT_ID`, `ONE_CLIENT_SECRET`, `ONE_CONNECT_KEY` and `ONE_REDIRECT_URI` in the environment, and `npm run dev` starts with Sign in with One live.
 - Rill: they register `http://localhost:51789/api/one/callback` on the app, then paste the client ID, client secret, Connect key and permission set at http://localhost:5180/setup/connect. Sign-in turns on without a restart.
+- Search: they run `pnpm connect`, approve the Connect app in the browser (its ids go into `.env`, its redirect is `http://localhost:52289/api/one/callback`), then paste the client secret and Connect key at http://localhost:5680/setup/connect. Sign-in turns on without a restart.
 
 Secured by One. Each user connects their own accounts and can revoke them any time.
 

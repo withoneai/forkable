@@ -1,0 +1,136 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3k1yj_vd8::B3vvaICzRKeqGbG66JUHDQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 1",
+  "actionId": "conn_mod_def::GJ3k1yj_vd8::B3vvaICzRKeqGbG66JUHDQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "total": 5,
+        "results": [
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-3d 15:00"
+            },
+            "id": "501",
+            "properties": {
+              "hs_note_body": "<p>Call with Priya. Globex wants the 2027 rate locked and asked about a <strong>multi-year discount</strong>. Legal (Marco) owns the MSA redline.</p>",
+              "hs_timestamp": {
+                "$rel": "-3d 15:00"
+              },
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-3d 15:05"
+              },
+              "hs_createdate": {
+                "$rel": "-3d 15:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 15:05"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-46/501"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-4d 10:00"
+            },
+            "id": "502",
+            "properties": {
+              "hs_note_body": "<p>Hannah sent Umbrella's procurement questionnaire. 42 questions, security section is the long one. Lena can answer the EU data residency part.</p>",
+              "hs_timestamp": {
+                "$rel": "-4d 10:00"
+              },
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-4d 10:02"
+              },
+              "hs_createdate": {
+                "$rel": "-4d 10:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-4d 10:02"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-46/502"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-7d 15:00"
+            },
+            "id": "503",
+            "properties": {
+              "hs_note_body": "<p>Grace at Initrode wants a quote for 40 seats on the starter plan. Follow up after their ops review.</p>",
+              "hs_timestamp": {
+                "$rel": "-7d 15:00"
+              },
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-7d 15:00"
+              },
+              "hs_createdate": {
+                "$rel": "-7d 15:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-7d 15:00"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-46/503"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-6d 11:00"
+            },
+            "id": "504",
+            "properties": {
+              "hs_note_body": "<p>Globex legal confirmed the liability cap. Marco will send the final redline this week.</p>",
+              "hs_timestamp": {
+                "$rel": "-6d 11:00"
+              },
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-6d 11:00"
+              },
+              "hs_createdate": {
+                "$rel": "-6d 11:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-6d 11:00"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-46/504"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-9d 09:30"
+            },
+            "id": "505",
+            "properties": {
+              "hs_note_body": "<p>Owen asked for Q3 numbers before the board date. Theo is drafting the deck.</p>",
+              "hs_timestamp": {
+                "$rel": "-9d 09:30"
+              },
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-9d 09:30"
+              },
+              "hs_createdate": {
+                "$rel": "-9d 09:30"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-9d 09:30"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-46/505"
+          }
+        ]
+      }
+    }
+  ]
+}

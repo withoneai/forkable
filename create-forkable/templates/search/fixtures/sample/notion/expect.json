@@ -1,0 +1,19 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "notion.pages": 8
+  },
+  "kinds": {
+    "doc": 8
+  },
+  "tombstoned": 0,
+  "hydrated": 8,
+  "items": 8,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "notion"
+      ]
+    }
+  }
+}

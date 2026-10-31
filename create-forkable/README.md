@@ -24,7 +24,7 @@ Options:
   --for <who>         Who this fork is for, e.g. "real estate agents".
   --in <where>        Where, e.g. "Los Angeles". Written into local/profile.md.
   --template <id>     Template to copy. Default: forkable-starter.
-                      A name that matches a template id (rill) picks it.
+                      A name that matches a template id (rill, search) picks it.
   --list              Print the template catalog and exit.
   --json              Machine output: one JSON object on stdout.
   --no-json           Force human output.
@@ -35,9 +35,12 @@ Options:
   -h, --help          Show this help.
 ```
 
-Two templates ship in this package: `forkable-starter` (the default, a
-small single-package app), and `rill` (`--template rill`), a full AI
-email client with its own pnpm workspace, database and UI. A template
+Three templates ship in this package: `forkable-starter` (the default, a
+small single-package app), `rill` (`--template rill`), a full AI email
+client, and `search` (`--template search`), one search box over
+everything a user connects, with an AI that answers with citations. Rill
+and Search each have their own pnpm workspace, database and UI (Search
+needs Node 22.12 or newer). A template
 that ships a `pnpm-workspace.yaml` installs and runs with pnpm instead of
 npm; everything else needs nothing beyond Node. More official and
 community templates are coming; see [forkable.dev](https://forkable.dev).
@@ -93,7 +96,7 @@ JSON mode also turns on by itself when stdin is not a TTY and either `CI`
 is set or stdout is not a TTY. A person piping the output to a log still
 has a TTY on stdin and keeps the human output. `--no-json` forces it off.
 
-A template with a `pnpm-workspace.yaml` (Rill) needs pnpm. When pnpm is
+A template with a `pnpm-workspace.yaml` (Rill, Search) needs pnpm. When pnpm is
 not on PATH, create-forkable tries `corepack pnpm` and stops with
 `PNPM_MISSING` only if that fails too.
 
@@ -104,11 +107,22 @@ changing code.
 
 MIT licensed.
 
+## Syncing templates
+
+The official templates are built in their own repos and copied in here by
+`npm run sync-template` (also run as `prepack`). `node
+scripts/sync-template.mjs --only search` copies one template and leaves the
+rest alone, so syncing Search never re-copies Rill from whatever branch
+its repo has checked out. Search is exported from git (`git archive` of its
+`public-ready` branch, `--ref <ref>` to pick another), never from its
+working tree, so private or uncommitted files there never ship.
+
 ## Template mirrors
 
 Replit and Bolt import whole repos, and `gh repo create --template` needs a
 repo marked as a template, so each template here also has a standalone
-mirror (`withoneai/forkable-rill`, `withoneai/forkable-starter`).
+mirror (`withoneai/forkable-rill`, `withoneai/forkable-search`,
+`withoneai/forkable-starter`).
 `npm run mirror-templates` writes them to `~/projects/forkable-mirrors/<repo>`
 (`--out` to change it), one commit per sync that names the source commit,
 and only when the content changed. `npm run mirror-templates:check` fails

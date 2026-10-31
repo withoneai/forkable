@@ -1,0 +1,829 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7M1v_ty1I::z6ijZ292SHKR9tz7c9nEOQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 10",
+  "actionId": "conn_mod_def::GJ7M1v_ty1I::z6ijZ292SHKR9tz7c9nEOQ",
+  "pages": [
+    {
+      "match": {
+        "partition": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+        "cursor": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#chats('19:umbrella-pricing-c4700199ff4416eb@thread.v2')/messages",
+        "@odata.count": 6,
+        "value": [
+          {
+            "id": "1761000007331",
+            "replyToId": null,
+            "etag": "1761000007331",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-2h"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2h"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000007331?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Dana, Felix is asking for 12% off across all three entities. I need your OK before I reply today.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000014662",
+            "replyToId": null,
+            "etag": "1761000014662",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-3h"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3h"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000014662?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Hannah confirmed the committee meets Monday.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000021993",
+            "replyToId": null,
+            "etag": "1761000021993",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-1d 07:30"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 07:30"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000021993?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Let's hold at 8% unless they sign a two year term.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000029324",
+            "replyToId": null,
+            "etag": "1761000029324",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-1d 07:20"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 07:20"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000029324?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Felix wants per-entity pricing before the procurement call.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000036655",
+            "replyToId": null,
+            "etag": "1761000036655",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-2d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 09:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000036655?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>I sent the per-entity sheet to Felix.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000051317",
+            "replyToId": null,
+            "etag": "1761000051317",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-3d 10:30"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 10:30"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000051317?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Thanks Lena, reviewing tonight.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          }
+        ],
+        "@odata.nextLink": "https://graph.microsoft.com/v1.0/chats/19:umbrella-pricing-c4700199ff4416eb@thread.v2/messages?$top=50&$skiptoken=tm-d2e71b-2"
+      }
+    },
+    {
+      "match": {
+        "partition": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+        "cursor": "https://graph.microsoft.com/v1.0/chats/19:umbrella-pricing-c4700199ff4416eb@thread.v2/messages?$top=50&$skiptoken=tm-d2e71b-2"
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#chats('19:umbrella-pricing-c4700199ff4416eb@thread.v2')/messages",
+        "@odata.count": 4,
+        "value": [
+          {
+            "id": "1761000043986",
+            "replyToId": null,
+            "etag": "1761000043986",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-3d 10:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-3d 10:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000043986?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Umbrella's data residency answers are drafted, sending to you for review.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000065979",
+            "replyToId": null,
+            "etag": "1761000065979",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-5d 08:30"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-5d 08:30"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000065979?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>I'll take security and SSO, you take residency.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000058648",
+            "replyToId": null,
+            "etag": "1761000058648",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-5d 08:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-5d 08:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000058648?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Hannah sent the questionnaire, 42 questions.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000073310",
+            "replyToId": null,
+            "etag": "1761000073310",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-6d 09:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:umbrella-pricing-c4700199ff4416eb@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:umbrella-pricing-c4700199ff4416eb@thread.v2/1761000073310?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Started a chat for Umbrella pricing.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "partition": "19:eng-sync-b475d1964d660696@thread.v2",
+        "cursor": null
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#chats('19:eng-sync-b475d1964d660696@thread.v2')/messages",
+        "@odata.count": 6,
+        "value": [
+          {
+            "id": "1761000080641",
+            "replyToId": null,
+            "etag": "1761000080641",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-1d 08:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 08:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000080641?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                "displayName": "Mia Park",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Ranking of open issues for the go/no-go: LED-158 is in review, LED-161 still todo.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000087972",
+            "replyToId": null,
+            "etag": "1761000087972",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-1d 07:50"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-1d 07:50"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000087972?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>For EU we cannot launch without tax IDs on invoices.</p>"
+            },
+            "attachments": [],
+            "mentions": [
+              {
+                "id": 0,
+                "mentionText": "Mia Park",
+                "mentioned": {
+                  "application": null,
+                  "device": null,
+                  "conversation": null,
+                  "user": {
+                    "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                    "id": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                    "displayName": "Mia Park",
+                    "userIdentityType": "aadUser",
+                    "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+                  }
+                }
+              }
+            ],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000102634",
+            "replyToId": null,
+            "etag": "1761000102634",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-2d 08:20"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 08:20"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000102634?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                "displayName": "Mia Park",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Noted. Theo is planning it for next sprint.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000095303",
+            "replyToId": null,
+            "etag": "1761000095303",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-2d 08:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-2d 08:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000095303?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Umbrella needs LED-161 before their rollout too.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000109965",
+            "replyToId": null,
+            "etag": "1761000109965",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-4d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-4d 09:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000109965?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "8a4d3b21-6f2c-4e1b-8d88-acme0eu0lena",
+                "displayName": "Lena Vogt",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Go/no-go is booked for Thursday morning.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000117296",
+            "replyToId": null,
+            "etag": "1761000117296",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-5d 09:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-5d 09:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000117296?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                "displayName": "Mia Park",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Invoice PDF redesign is close.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          }
+        ],
+        "@odata.nextLink": "https://graph.microsoft.com/v1.0/chats/19:eng-sync-b475d1964d660696@thread.v2/messages?$top=50&$skiptoken=tm-8d727b-2"
+      }
+    },
+    {
+      "match": {
+        "partition": "19:eng-sync-b475d1964d660696@thread.v2",
+        "cursor": "https://graph.microsoft.com/v1.0/chats/19:eng-sync-b475d1964d660696@thread.v2/messages?$top=50&$skiptoken=tm-8d727b-2"
+      },
+      "response": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#chats('19:eng-sync-b475d1964d660696@thread.v2')/messages",
+        "@odata.count": 2,
+        "value": [
+          {
+            "id": "1761000124627",
+            "replyToId": null,
+            "etag": "1761000124627",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-6d 10:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-6d 10:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000124627?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+                "displayName": "Dana Oyelaran",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Thanks both.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          },
+          {
+            "id": "1761000131958",
+            "replyToId": null,
+            "etag": "1761000131958",
+            "messageType": "message",
+            "createdDateTime": {
+              "$rel": "-7d 10:00"
+            },
+            "lastModifiedDateTime": {
+              "$rel": "-7d 10:00"
+            },
+            "lastEditedDateTime": null,
+            "deletedDateTime": null,
+            "subject": null,
+            "summary": null,
+            "chatId": "19:eng-sync-b475d1964d660696@thread.v2",
+            "importance": "normal",
+            "locale": "en-us",
+            "webUrl": "https://teams.microsoft.com/l/message/19:eng-sync-b475d1964d660696@thread.v2/1761000131958?context=%7B%22contextType%22%3A%22chat%22%7D",
+            "channelIdentity": null,
+            "policyViolation": null,
+            "eventDetail": null,
+            "from": {
+              "application": null,
+              "device": null,
+              "user": {
+                "@odata.type": "#microsoft.graph.teamworkUserIdentity",
+                "id": "9b5e4c32-7a3d-4f2c-9e99-acme0guestmia",
+                "displayName": "Mia Park",
+                "userIdentityType": "aadUser",
+                "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001"
+              }
+            },
+            "body": {
+              "contentType": "html",
+              "content": "<p>Created this chat for the Ledger 2.0 EU launch.</p>"
+            },
+            "attachments": [],
+            "mentions": [],
+            "reactions": [],
+            "messageHistory": []
+          }
+        ]
+      }
+    }
+  ]
+}

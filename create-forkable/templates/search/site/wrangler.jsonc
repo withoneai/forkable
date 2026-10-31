@@ -1,0 +1,11 @@
+{
+  // search.forkable.dev: the Search landing page, served as Workers Static
+  // Assets. `pnpm build` first, then `npx wrangler deploy` from site/.
+  // Not deployed yet; the owner approves before this ever runs.
+  "name": "search-site",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" },
+  "routes": [
+    { "pattern": "search.forkable.dev", "custom_domain": true }
+  ]
+}

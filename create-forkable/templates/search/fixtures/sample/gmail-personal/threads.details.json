@@ -1,0 +1,231 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get a User's Thread, format=full",
+  "actionId": "conn_mod_def::GJ3ok0Eq0R8::AAzgZVLqTg2iBuITKpJLZg",
+  "byId": {
+    "49b3ec1e490fad98": {
+      "id": "49b3ec1e490fad98",
+      "snippet": "Your monthly membership renews on November 15. Nothing to do if you want to keep climbing.",
+      "historyId": "5120240",
+      "messages": [
+        {
+          "id": "c6133feac9dc8a80",
+          "threadId": "49b3ec1e490fad98",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_UPDATES"
+          ],
+          "snippet": "Your monthly membership renews on November 15. Nothing to do if you want to keep climbing.",
+          "historyId": "5120240",
+          "internalDate": {
+            "$relMsString": "-1d 08:00"
+          },
+          "sizeEstimate": 2138,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Boulder Hall <hello@boulderhall.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.dev>"
+              },
+              {
+                "name": "Subject",
+                "value": "Your climbing gym membership renews Nov 15"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-1d 08:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<c6133feac9dc8a80@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 90,
+                  "data": "WW91ciBtb250aGx5IG1lbWJlcnNoaXAgcmVuZXdzIG9uIE5vdmVtYmVyIDE1LiBOb3RoaW5nIHRvIGRvIGlmIHlvdSB3YW50IHRvIGtlZXAgY2xpbWJpbmcu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 111,
+                  "data": "PGRpdiBkaXI9Imx0ciI-WW91ciBtb250aGx5IG1lbWJlcnNoaXAgcmVuZXdzIG9uIE5vdmVtYmVyIDE1LiBOb3RoaW5nIHRvIGRvIGlmIHlvdSB3YW50IHRvIGtlZXAgY2xpbWJpbmcuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "3182d15b95fcec81": {
+      "id": "3182d15b95fcec81",
+      "snippet": "We picked the lighthouse novel for November. Meeting at mine on the 21st, 7 PM.",
+      "historyId": "5120240",
+      "messages": [
+        {
+          "id": "0c12099a61191072",
+          "threadId": "3182d15b95fcec81",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ],
+          "snippet": "We picked the lighthouse novel for November. Meeting at mine on the 21st, 7 PM.",
+          "historyId": "5120240",
+          "internalDate": {
+            "$relMsString": "-3d 20:00"
+          },
+          "sizeEstimate": 2127,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Mara Quinn <mara.quinn@acme.dev>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.dev>"
+              },
+              {
+                "name": "Subject",
+                "value": "Book club, the November pick"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-3d 20:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<0c12099a61191072@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 79,
+                  "data": "V2UgcGlja2VkIHRoZSBsaWdodGhvdXNlIG5vdmVsIGZvciBOb3ZlbWJlci4gTWVldGluZyBhdCBtaW5lIG9uIHRoZSAyMXN0LCA3IFBNLg"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 100,
+                  "data": "PGRpdiBkaXI9Imx0ciI-V2UgcGlja2VkIHRoZSBsaWdodGhvdXNlIG5vdmVsIGZvciBOb3ZlbWJlci4gTWVldGluZyBhdCBtaW5lIG9uIHRoZSAyMXN0LCA3IFBNLjwvZGl2Pg"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "1d9c784be9cbfa3d": {
+      "id": "1d9c784be9cbfa3d",
+      "snippet": "Your flight to Lisbon is confirmed. Departs December 18, 7:40 AM. Seat 14C.",
+      "historyId": "5120240",
+      "messages": [
+        {
+          "id": "d4f95db5b35f17b9",
+          "threadId": "1d9c784be9cbfa3d",
+          "labelIds": [
+            "INBOX",
+            "CATEGORY_UPDATES"
+          ],
+          "snippet": "Your flight to Lisbon is confirmed. Departs December 18, 7:40 AM. Seat 14C.",
+          "historyId": "5120240",
+          "internalDate": {
+            "$relMsString": "-5d 18:00"
+          },
+          "sizeEstimate": 2123,
+          "payload": {
+            "partId": "",
+            "mimeType": "multipart/alternative",
+            "filename": "",
+            "headers": [
+              {
+                "name": "From",
+                "value": "Skyway Travel <trips@skyway.example>"
+              },
+              {
+                "name": "To",
+                "value": "Dana Oyelaran <dana@acme.dev>"
+              },
+              {
+                "name": "Subject",
+                "value": "Your Lisbon trip is confirmed"
+              },
+              {
+                "name": "Date",
+                "value": {
+                  "$relRfc2822": "-5d 18:00"
+                }
+              },
+              {
+                "name": "Message-ID",
+                "value": "<d4f95db5b35f17b9@mail.acme.example>"
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 75,
+                  "data": "WW91ciBmbGlnaHQgdG8gTGlzYm9uIGlzIGNvbmZpcm1lZC4gRGVwYXJ0cyBEZWNlbWJlciAxOCwgNzo0MCBBTS4gU2VhdCAxNEMu"
+                }
+              },
+              {
+                "partId": "1",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [],
+                "body": {
+                  "size": 96,
+                  "data": "PGRpdiBkaXI9Imx0ciI-WW91ciBmbGlnaHQgdG8gTGlzYm9uIGlzIGNvbmZpcm1lZC4gRGVwYXJ0cyBEZWNlbWJlciAxOCwgNzo0MCBBTS4gU2VhdCAxNEMuPC9kaXY-"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

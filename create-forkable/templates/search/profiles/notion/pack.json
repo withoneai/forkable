@@ -1,0 +1,144 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Notion",
+  "platform": "notion",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "notion.pages",
+      "platform": "notion",
+      "model": "pages",
+      "kind": "doc",
+      "title": "Notion pages",
+      "description": "Every page the integration can see, as Markdown. Newest edits first; paging stops at the watermark.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "list": {
+        "actionId": "conn_mod_def::GJ5En67fz04::-CJAS419SVWm7L2l6brp6A",
+        "headers": {
+          "Notion-Version": "2026-03-11"
+        },
+        "body": {
+          "filter": {
+            "property": "object",
+            "value": "page"
+          },
+          "sort": {
+            "timestamp": "last_edited_time",
+            "direction": "descending"
+          }
+        },
+        "resultsPath": "results",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "next_cursor",
+          "passAs": "body:start_cursor",
+          "hasMore": "has_more"
+        },
+        "pageSize": {
+          "param": "page_size",
+          "value": 100,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.last_edited_time",
+        "order": "desc",
+        "overlap": "2m",
+        "initial": "all"
+      },
+      "hydrate": {
+        "request": {
+          "actionId": "conn_mod_def::GJ5EntqNvy0::-VzfhSExTEGGnlXLUMqFcA",
+          "pathVars": {
+            "pageId": "{{ item.id }}"
+          },
+          "headers": {
+            "Notion-Version": "2026-03-11"
+          }
+        },
+        "fingerprint": "{{ item.last_edited_time }}",
+        "concurrency": 3,
+        "notFoundIsDelete": true
+      },
+      "deletes": {
+        "when": "item.in_trash == true || item.archived == true",
+        "reconcile": "onFullPass",
+        "fullPassEvery": "7d"
+      },
+      "keep": "item.object == 'page'",
+      "fields": {
+        "title": {
+          "coalesce": [
+            {
+              "path": "item.properties",
+              "decode": "notion-title"
+            },
+            {
+              "template": "Untitled"
+            }
+          ]
+        },
+        "body": {
+          "path": "detail.markdown",
+          "decode": "markdown"
+        },
+        "occurredAt": {
+          "path": "item.created_time",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.last_edited_time",
+          "decode": "datetime"
+        },
+        "url": "{{ item.url }}",
+        "status": "item.properties[type=status].status.name",
+        "facets": {
+          "editedBy": "item.last_edited_by.id"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "mentioned",
+            "type": "person",
+            "email": {
+              "path": "item.properties[type=email].email",
+              "pick": "all",
+              "decode": "email"
+            }
+          },
+          {
+            "role": "mentioned",
+            "type": "person",
+            "email": {
+              "path": "item.properties[type=people].people[].person.email",
+              "pick": "all",
+              "decode": "email"
+            },
+            "name": {
+              "path": "item.properties[type=people].people[].name",
+              "pick": "all"
+            }
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "heading",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400,
+        "overlapTokens": 40
+      },
+      "limits": {
+        "requestsPerMinute": 150
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    }
+  ]
+}

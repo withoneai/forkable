@@ -1,0 +1,422 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ8Yg-wzuPs::ona0Gzt-S_6lBP1I8V8y7g Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Incremental Ticket Export (Cursor-based); fixture action id sample::zendesk::incremental-tickets-cursor",
+  "actionId": "sample::zendesk::incremental-tickets-cursor",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "after_cursor": "zd-after-8",
+        "after_url": "https://acme.zendesk.com/api/v2/incremental/tickets/cursor?cursor=zd-after-8",
+        "before_cursor": null,
+        "before_url": null,
+        "end_of_stream": false,
+        "tickets": [
+          {
+            "id": 1009,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1009.json",
+            "subject": "Two factor reset",
+            "description": "One of our admins lost their phone.",
+            "status": "closed",
+            "priority": "normal",
+            "requester_id": 9001,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-30d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-28d 09:00"
+            },
+            "tags": [
+              "account"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-28d 09:00"
+            }
+          },
+          {
+            "id": 1010,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1010.json",
+            "subject": "Webhook retries",
+            "description": "Do failed webhooks retry, and how often?",
+            "status": "solved",
+            "priority": "low",
+            "requester_id": 9003,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-15d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-14d 10:00"
+            },
+            "tags": [
+              "api"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-14d 10:00"
+            }
+          },
+          {
+            "id": 1012,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1012.json",
+            "subject": "Bulk API rate limit hit",
+            "description": "We hit 429s on the bulk endpoint during migration.",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9005,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-20d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-14d 10:00"
+            },
+            "tags": [
+              "api"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-14d 10:00"
+            }
+          },
+          {
+            "id": 1003,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1003.json",
+            "subject": "Need a sample export format",
+            "description": "Can you share the expected CSV header order?",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9003,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-9d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-8d 12:00"
+            },
+            "tags": [
+              "import"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-8d 12:00"
+            }
+          },
+          {
+            "id": 1005,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1005.json",
+            "subject": "Starter plan API limits",
+            "description": "What are the API limits on the starter plan?",
+            "status": "solved",
+            "priority": "low",
+            "requester_id": 9005,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-8d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-7d 14:00"
+            },
+            "tags": [
+              "pricing"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-7d 14:00"
+            }
+          },
+          {
+            "id": 1008,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1008.json",
+            "subject": "Invoice PDF shows wrong currency",
+            "description": "EUR invoices show a USD symbol.",
+            "status": "hold",
+            "priority": "normal",
+            "requester_id": 9004,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-12d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-4d 10:00"
+            },
+            "tags": [
+              "billing"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-4d 10:00"
+            }
+          },
+          {
+            "id": 1006,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1006.json",
+            "subject": "Audit log export request",
+            "description": "Our auditors need a CSV of admin actions.",
+            "status": "new",
+            "priority": "normal",
+            "requester_id": 9001,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-2d 11:00"
+            },
+            "updated_at": {
+              "$rel": "-2d 11:00"
+            },
+            "tags": [
+              "feature-request"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-2d 11:00"
+            }
+          },
+          {
+            "id": 1011,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1011.json",
+            "subject": "Data residency question",
+            "description": "Is EU customer data stored in the EU?",
+            "status": "pending",
+            "priority": "high",
+            "requester_id": 9004,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-6d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-2d 09:00"
+            },
+            "tags": [
+              "eu",
+              "security"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-2d 09:00"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "cursor": "zd-after-8"
+      },
+      "response": {
+        "after_cursor": "zd-after-12",
+        "after_url": "https://acme.zendesk.com/api/v2/incremental/tickets/cursor?cursor=zd-after-12",
+        "before_cursor": "zd-after-8",
+        "before_url": null,
+        "end_of_stream": true,
+        "tickets": [
+          {
+            "id": 1001,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1001.json",
+            "subject": "SSO login loops back to the sign-in page",
+            "description": "After enabling SAML our test user is sent back to the login page.",
+            "status": "open",
+            "priority": "high",
+            "requester_id": 9001,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-6d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 15:00"
+            },
+            "tags": [
+              "sso",
+              "globex"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 15:00"
+            }
+          },
+          {
+            "id": 1004,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1004.json",
+            "subject": "VAT ID missing on invoice",
+            "description": "Our German entity needs its VAT ID on the invoice.",
+            "status": "open",
+            "priority": "high",
+            "requester_id": 9004,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-5d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 12:00"
+            },
+            "tags": [
+              "billing",
+              "eu"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 12:00"
+            }
+          },
+          {
+            "id": 1007,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1007.json",
+            "subject": "Import sandbox credentials",
+            "description": "Please send the sandbox credentials to Anika.",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9002,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-4d 12:00"
+            },
+            "updated_at": {
+              "$rel": "-1d 11:00"
+            },
+            "tags": [
+              "pilot"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-1d 11:00"
+            }
+          },
+          {
+            "id": 1002,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1002.json",
+            "subject": "Nightly CSV import timed out",
+            "description": "The 02:00 import failed with a timeout on our 80 MB file.",
+            "status": "pending",
+            "priority": "urgent",
+            "requester_id": 9002,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-3d 08:00"
+            },
+            "updated_at": {
+              "$rel": "-3h"
+            },
+            "tags": [
+              "import",
+              "pilot"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-3h"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

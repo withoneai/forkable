@@ -1,0 +1,187 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7H99BNZZY::YUA8ceLYSMmIEPSjoukdNg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Retrieve a Conversation Thread's Replies; a thread with no replies gets the empty shape",
+  "actionId": "conn_mod_def::GJ7H99BNZZY::YUA8ceLYSMmIEPSjoukdNg",
+  "pages": [
+    {
+      "match": {
+        "request": {
+          "query": {
+            "channel": "C01DEALS",
+            "ts": {
+              "$relSlackTs": "-6h"
+            }
+          }
+        }
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Globex is basically closed, waiting on signature. Priya's our champion.",
+            "ts": {
+              "$relSlackTs": "-6h"
+            },
+            "user": "U01DANA",
+            "client_msg_id": "453d224e-68d7-58ef-b19f-7da4c4d01fca",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "2e109",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Globex is basically closed, waiting on signature. Priya's our champion."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "thread_ts": {
+              "$relSlackTs": "-6h"
+            },
+            "reply_count": 2,
+            "reply_users_count": 2,
+            "latest_reply": {
+              "$relSlackTs": "-290m"
+            },
+            "reply_users": [
+              "U01DANA",
+              "U04SAM"
+            ]
+          },
+          {
+            "type": "message",
+            "user": "U04SAM",
+            "text": "Nice. Do we book it this quarter if they sign Friday?",
+            "thread_ts": {
+              "$relSlackTs": "-6h"
+            },
+            "parent_user_id": "U01DANA",
+            "ts": {
+              "$relSlackTs": "-5h"
+            }
+          },
+          {
+            "type": "message",
+            "user": "U01DANA",
+            "text": "Yes, if the MSA is countersigned by Friday.",
+            "thread_ts": {
+              "$relSlackTs": "-6h"
+            },
+            "parent_user_id": "U01DANA",
+            "ts": {
+              "$relSlackTs": "-290m"
+            }
+          }
+        ],
+        "has_more": false,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    },
+    {
+      "match": {
+        "request": {
+          "query": {
+            "channel": "C02ENG",
+            "ts": {
+              "$relSlackTs": "-1d 09:00"
+            }
+          }
+        }
+      },
+      "response": {
+        "ok": true,
+        "messages": [
+          {
+            "type": "message",
+            "text": "Initech import keeps timing out on large files. Thread for the fix.",
+            "ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "user": "U02MIA",
+            "client_msg_id": "357398e9-ae63-5c3d-8a08-a44727d232b2",
+            "team": "T01ACME",
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "658e8",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Initech import keeps timing out on large files. Thread for the fix."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "thread_ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "reply_count": 3,
+            "reply_users_count": 3,
+            "latest_reply": {
+              "$relSlackTs": "-1d 11:00"
+            },
+            "reply_users": [
+              "U01DANA",
+              "U02MIA",
+              "U03THEO"
+            ]
+          },
+          {
+            "type": "message",
+            "user": "U03THEO",
+            "text": "Chunked importer should fix it. I'll review today.",
+            "thread_ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "parent_user_id": "U02MIA",
+            "ts": {
+              "$relSlackTs": "-1d 09:20"
+            }
+          },
+          {
+            "type": "message",
+            "user": "U02MIA",
+            "text": "PR is up for ACME-298.",
+            "thread_ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "parent_user_id": "U02MIA",
+            "ts": {
+              "$relSlackTs": "-1d 10:05"
+            }
+          },
+          {
+            "type": "message",
+            "user": "U01DANA",
+            "text": "Thanks both. I'll tell Ravi we expect a fix this week.",
+            "thread_ts": {
+              "$relSlackTs": "-1d 09:00"
+            },
+            "parent_user_id": "U02MIA",
+            "ts": {
+              "$relSlackTs": "-1d 11:00"
+            }
+          }
+        ],
+        "has_more": false,
+        "response_metadata": {
+          "next_cursor": ""
+        }
+      }
+    }
+  ]
+}

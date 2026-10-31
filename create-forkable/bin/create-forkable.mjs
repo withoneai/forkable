@@ -150,7 +150,7 @@ Options:
   --for <who>         Who this fork is for, e.g. "real estate agents".
   --in <where>        Where, e.g. "Los Angeles". Written into local/profile.md.
   --template <id>     Template to copy. Default: forkable-starter.
-                      A name that matches a template id (rill) picks it.
+                      A name that matches a template id (rill, search) picks it.
   --list              Print the template catalog and exit.
   --json              Machine output: one JSON object on stdout, all other
                       output on stderr. Errors are JSON too (ok: false, code).

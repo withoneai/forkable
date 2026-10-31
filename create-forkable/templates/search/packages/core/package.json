@@ -1,0 +1,33 @@
+{
+  "name": "@search/core",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --import ./src/test-guard.ts --test --test-concurrency=1 'test/**/*.test.ts'",
+    "test:profiles": "node --import tsx --import ./src/test-guard.ts --test test/profiles.test.ts",
+    "gen:schema": "tsx scripts/gen-schema.ts",
+    "generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "@withone/connect": "^0.19.0",
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.16.0",
+    "zod": "^4.0.0",
+    "@search/pgvector": "workspace:*",
+    "embedded-postgres": "18.4.0-beta.17"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.0",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}

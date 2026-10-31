@@ -1,0 +1,27 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ7NUzqmPxU::KPH8i5-qTwG3rhZHepN3Fg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 10",
+  "actionId": "conn_mod_def::GJ7NUzqmPxU::KPH8i5-qTwG3rhZHepN3Fg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "value": [
+          {
+            "id": "5c3a9e10-acme-4eu0-b0b0-000000000042",
+            "createdDateTime": {
+              "$rel": "-400d 09:00"
+            },
+            "description": "Acme Europe",
+            "displayName": "Acme Europe",
+            "isArchived": false,
+            "tenantId": "6f1c0a2e-acme-4eu0-9a11-000000000001",
+            "visibility": "private",
+            "webUrl": "https://teams.microsoft.com/l/team/19%3Ageneral%40thread.tacv2/conversations?groupId=5c3a9e10-acme-4eu0-b0b0-000000000042&tenantId=6f1c0a2e-acme-4eu0-9a11-000000000001"
+          }
+        ]
+      }
+    }
+  ]
+}

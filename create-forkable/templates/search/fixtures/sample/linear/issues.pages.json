@@ -1,0 +1,759 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ4vJTdCQPY::f4IhKVnuTv6Us2d-GwWvCw Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 8; node fields are the profile's GraphQL selection (I)",
+  "actionId": "conn_mod_def::GJ4vJTdCQPY::f4IhKVnuTv6Us2d-GwWvCw",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "data": {
+          "issues": {
+            "nodes": [
+              {
+                "id": "f7173c5f-ba39-5089-9574-decf49a2cae3",
+                "identifier": "LED-150",
+                "title": "Dunning emails",
+                "description": "Automated reminders for failed payments.",
+                "url": "https://linear.app/acme/issue/led-150/dunning-emails",
+                "priority": 4,
+                "createdAt": {
+                  "$rel": "-60d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-45d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": {
+                  "$rel": "-45d 10:00"
+                },
+                "dueDate": null,
+                "state": {
+                  "name": "Canceled",
+                  "type": "canceled"
+                },
+                "assignee": null,
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "2446245c-2aad-5a4b-9fed-0df61a86aae2",
+                "identifier": "ACME-280",
+                "title": "Flaky e2e on checkout",
+                "description": "Checkout e2e fails one run in ten.",
+                "url": "https://linear.app/acme/issue/acme-280/flaky-e2e-on-checkout",
+                "priority": 3,
+                "createdAt": {
+                  "$rel": "-30d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-25d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": {
+                  "$rel": "-25d 10:00"
+                },
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Done",
+                  "type": "completed"
+                },
+                "assignee": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "creator": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": null,
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "bug"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "4655655c-4bf6-550d-a400-2c781a1205dc",
+                "identifier": "ACME-290",
+                "title": "Rate limit on bulk API",
+                "description": "Bulk endpoints need a per-tenant limit.",
+                "url": "https://linear.app/acme/issue/acme-290/rate-limit-on-bulk-api",
+                "priority": 2,
+                "createdAt": {
+                  "$rel": "-40d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-14d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": {
+                  "$rel": "-14d 10:00"
+                },
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Done",
+                  "type": "completed"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": null,
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "api"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "abf822d8-af3f-554c-8518-ce79ccab49d0",
+                "identifier": "ACME-312",
+                "title": "Refresh SAML metadata automatically",
+                "description": "Pull IdP metadata nightly so certificate rotations do not break SSO.",
+                "url": "https://linear.app/acme/issue/acme-312/refresh-saml-metadata-automatically",
+                "priority": 3,
+                "createdAt": {
+                  "$rel": "-10d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-10d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Backlog",
+                  "type": "backlog"
+                },
+                "assignee": null,
+                "creator": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "sso"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "c3d61b24-c690-5d49-97c0-21eb0e41b371",
+                "identifier": "ACME-301",
+                "title": "Slack alerts for failed imports",
+                "description": "Post to #eng when an import fails twice.",
+                "url": "https://linear.app/acme/issue/acme-301/slack-alerts-for-failed-imports",
+                "priority": 3,
+                "createdAt": {
+                  "$rel": "-7d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-7d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Todo",
+                  "type": "unstarted"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": null,
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "feature"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "392796b7-bccd-53cf-80e6-49ca220f0aef",
+                "identifier": "ACME-305",
+                "title": "Audit log export",
+                "description": "Admins can export the audit log as CSV.",
+                "url": "https://linear.app/acme/issue/acme-305/audit-log-export",
+                "priority": 2,
+                "createdAt": {
+                  "$rel": "-20d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-6d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Todo",
+                  "type": "unstarted"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "feature"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "81784d8f-53e5-55a1-803d-3afd9640f2d8",
+                "identifier": "LED-163",
+                "title": "Usage dashboard for admins",
+                "description": "Show metered usage to customer admins.",
+                "url": "https://linear.app/acme/issue/led-163/usage-dashboard-for-admins",
+                "priority": 3,
+                "createdAt": {
+                  "$rel": "-6d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-6d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Backlog",
+                  "type": "backlog"
+                },
+                "assignee": null,
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "da41e081-ab6e-5cf2-89e5-24144d1f998e",
+                "identifier": "LED-160",
+                "title": "Proration edge cases",
+                "description": "Mid-cycle seat changes prorate wrong when the plan also changes.",
+                "url": "https://linear.app/acme/issue/led-160/proration-edge-cases",
+                "priority": 2,
+                "createdAt": {
+                  "$rel": "-9d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-5d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Todo",
+                  "type": "unstarted"
+                },
+                "assignee": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    },
+                    {
+                      "name": "bug"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              }
+            ],
+            "pageInfo": {
+              "endCursor": "lin-issues-cursor-8",
+              "hasNextPage": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "match": {
+        "cursor": "lin-issues-cursor-8"
+      },
+      "response": {
+        "data": {
+          "issues": {
+            "nodes": [
+              {
+                "id": "732e6cd1-3b8b-5d03-8c60-e6d81e9ccabf",
+                "identifier": "LED-142",
+                "title": "Ship usage-based billing",
+                "description": "Meter events, aggregate per billing period, invoice on the usage line.",
+                "url": "https://linear.app/acme/issue/led-142/ship-usage-based-billing",
+                "priority": 1,
+                "createdAt": {
+                  "$rel": "-35d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-2d 10:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "In Progress",
+                  "type": "started"
+                },
+                "assignee": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "24c87eaa-bdc8-52f2-81b7-4ed9b238d1af",
+                "identifier": "ACME-311",
+                "title": "SSO for Globex rollout",
+                "description": "Globex needs SAML SSO live the week after the renewal is signed. Requested by Priya in the shared channel.",
+                "url": "https://linear.app/acme/issue/acme-311/sso-for-globex-rollout",
+                "priority": 1,
+                "createdAt": {
+                  "$rel": "-12d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 15:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": {
+                  "$relDate": "+20d"
+                },
+                "state": {
+                  "name": "In Progress",
+                  "type": "started"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Dana Oyelaran",
+                  "email": "dana@acme.com"
+                },
+                "externalUserCreator": {
+                  "name": "Priya Shah",
+                  "email": "priya@globex.com"
+                },
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "customer"
+                    },
+                    {
+                      "name": "sso"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": [
+                    {
+                      "customer": {
+                        "name": "Globex",
+                        "domains": [
+                          "globex.com"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "aa80b5ac-1136-5f56-9930-a1b067e466bb",
+                "identifier": "ACME-315",
+                "title": "Pilot data sandbox for Initech",
+                "description": "Separate sandbox so Initech can test imports without touching production.",
+                "url": "https://linear.app/acme/issue/acme-315/pilot-data-sandbox-for-initech",
+                "priority": 2,
+                "createdAt": {
+                  "$rel": "-4d 11:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 11:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "In Progress",
+                  "type": "started"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Dana Oyelaran",
+                  "email": "dana@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "customer"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": [
+                    {
+                      "customer": {
+                        "name": "Initech",
+                        "domains": [
+                          "initech.io"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "4ccd1b0d-ba99-58b5-a60a-665a968fa1d8",
+                "identifier": "LED-158",
+                "title": "Invoice PDF redesign",
+                "description": "New invoice layout with usage breakdown.",
+                "url": "https://linear.app/acme/issue/led-158/invoice-pdf-redesign",
+                "priority": 2,
+                "createdAt": {
+                  "$rel": "-20d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 17:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "In Review",
+                  "type": "started"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    },
+                    {
+                      "name": "design"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": []
+                }
+              },
+              {
+                "id": "d4c402cd-c22d-59f5-86aa-0e75b6e9dea0",
+                "identifier": "LED-161",
+                "title": "Tax IDs on invoices",
+                "description": "EU customers need their VAT ID on every invoice. Blocks the Umbrella EU rollout.",
+                "url": "https://linear.app/acme/issue/led-161/tax-ids-on-invoices",
+                "priority": 1,
+                "createdAt": {
+                  "$rel": "-8d 10:00"
+                },
+                "updatedAt": {
+                  "$rel": "-1d 12:00"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "Todo",
+                  "type": "unstarted"
+                },
+                "assignee": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "creator": {
+                  "name": "Dana Oyelaran",
+                  "email": "dana@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "LED",
+                  "name": "Ledger"
+                },
+                "project": {
+                  "name": "Ledger 2.0"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "billing"
+                    },
+                    {
+                      "name": "eu"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": [
+                    {
+                      "customer": {
+                        "name": "Umbrella",
+                        "domains": [
+                          "umbrella.co"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "0aab917a-fdf0-50ef-aed4-109de0bcba99",
+                "identifier": "ACME-298",
+                "title": "CSV import fails over 50 MB",
+                "description": "Initech's nightly export (80 MB) times out in the import worker. Repro with the sample Anika shared.",
+                "url": "https://linear.app/acme/issue/acme-298/csv-import-fails-over-50-mb",
+                "priority": 1,
+                "createdAt": {
+                  "$rel": "-5d 09:00"
+                },
+                "updatedAt": {
+                  "$rel": "-3h"
+                },
+                "archivedAt": null,
+                "completedAt": null,
+                "canceledAt": null,
+                "dueDate": null,
+                "state": {
+                  "name": "In Review",
+                  "type": "started"
+                },
+                "assignee": {
+                  "name": "Mia Park",
+                  "email": "mia@acme.com"
+                },
+                "creator": {
+                  "name": "Theo Lund",
+                  "email": "theo@acme.com"
+                },
+                "externalUserCreator": null,
+                "team": {
+                  "key": "ACME",
+                  "name": "Platform"
+                },
+                "project": {
+                  "name": "Enterprise readiness"
+                },
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "bug"
+                    },
+                    {
+                      "name": "customer"
+                    }
+                  ]
+                },
+                "needs": {
+                  "nodes": [
+                    {
+                      "customer": {
+                        "name": "Initech",
+                        "domains": [
+                          "initech.io"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "pageInfo": {
+              "endCursor": "lin-issues-cursor-14",
+              "hasNextPage": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}

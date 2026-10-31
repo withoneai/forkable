@@ -1,0 +1,27 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "intercom.conversations": 6
+  },
+  "kinds": {
+    "message": 6
+  },
+  "tombstoned": 0,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "intercom"
+      ]
+    },
+    "email:ravi@initech.io": {
+      "sources": [
+        "intercom"
+      ]
+    },
+    "email:mia@acme.com": {
+      "sources": [
+        "intercom"
+      ]
+    }
+  }
+}

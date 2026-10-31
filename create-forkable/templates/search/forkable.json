@@ -1,0 +1,8 @@
+{
+  "starter": "0.1.1",
+  "forkedFrom": null,
+  "name": "search",
+  "tagline": "One search box for everything you connect",
+  "sample": "Acme Inc",
+  "welcome": "forkable/welcome.mjs"
+}

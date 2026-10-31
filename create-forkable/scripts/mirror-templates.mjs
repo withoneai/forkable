@@ -9,8 +9,8 @@
 //   node scripts/mirror-templates.mjs --out <dir>      where the mirrors live (default ~/projects/forkable-mirrors)
 //   node scripts/mirror-templates.mjs --source <sha>   source commit named in the commit message (default: git HEAD)
 //
-// Each mirror is <out>/<repo> (forkable-rill, forkable-starter), its own
-// git repo. The files are what `npm create forkable` would hand a fork
+// Each mirror is <out>/<repo> (forkable-rill, forkable-search,
+// forkable-starter), its own git repo. The files are what `npm create forkable` would hand a fork
 // (package.json and forkable.json renamed and given lineage,
 // local/profile.md with {{FOR}} and {{IN}} left as placeholders), plus a
 // mirror note at the top of the README, a .gitignore, an MIT LICENSE and
@@ -35,7 +35,7 @@ const MIRROR_OWNER = "withoneai";
 // Same skip list as sync-template.mjs, so a mirror never carries more than
 // the npm tarball does.
 const SKIP = new Set(["node_modules", "package-lock.json", ".git", "dist", "tsconfig.tsbuildinfo", ".env", ".DS_Store"]);
-const SKIP_PATHS = ["docs/qa"];
+const SKIP_PATHS = ["docs/qa", "site/docs/qa"];
 
 const DEFAULT_GITIGNORE = ["node_modules", "dist", ".env", ".env.*", "!.env.example", "*.log", ".DS_Store", "tsconfig.tsbuildinfo"];
 
@@ -124,6 +124,43 @@ externalPort = 80
   pinned to localhost).
 - **Bolt** runs in a browser sandbox that cannot start Postgres or open a
   raw database connection, so Rill does not run there today.
+- **Lovable** builds from a prompt, not a repo import. Point the prompt at
+  this repo.`,
+  },
+  search: {
+    repo: "forkable-search",
+    title: "Search",
+    pm: "pnpm",
+    // Same shape as Rill: pnpm pinned through npx, Replit hosts allowed for
+    // Vite. Search wants Node 22.12 or newer, hence nodejs-22.
+    replit: `# Replit config for the Search mirror.
+# Import: https://replit.com/github.com/${MIRROR_OWNER}/forkable-search
+# The run button installs with pnpm and starts \`pnpm dev\`: the API on
+# 127.0.0.1:52289 (internal only) and the Vite UI on 0.0.0.0:5680, mapped
+# to 80. Click "Try the Acme sample" for the full app on sample data. No
+# keys needed.
+# Database: embedded Postgres with pgvector by default (native binaries in
+# node_modules, data in ~/.search). If it will not start here, add
+# Replit's PostgreSQL database and set SEARCH_DATABASE_URL to its URL.
+# Sign in with One needs a Connect app whose redirect URI matches this
+# Repl's URL, which Search does not support yet (it pins
+# http://localhost:52289/api/one/callback), so on Replit it runs on the
+# sample only.
+modules = ["nodejs-22"]
+run = "export __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.replit.dev && npx --yes pnpm@10.4.0 install && npx --yes pnpm@10.4.0 dev"
+
+[[ports]]
+localPort = 5680
+externalPort = 80
+`,
+    builders: `- **Replit**: the \`.replit\` here installs with pnpm and starts \`pnpm dev\`,
+  the UI on port 5680 (mapped to 80). Click Try the Acme sample. If the
+  embedded Postgres will not start, add Replit's PostgreSQL database and
+  set \`SEARCH_DATABASE_URL\` (it needs the pgvector extension for
+  semantic search; without it Search runs keyword-only). Sign in with One
+  does not work there yet (the callback is pinned to localhost).
+- **Bolt** runs in a browser sandbox that cannot start Postgres or open a
+  raw database connection, so Search does not run there today.
 - **Lovable** builds from a prompt, not a repo import. Point the prompt at
   this repo.`,
   },

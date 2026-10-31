@@ -1,0 +1,11 @@
+{
+  "$shapedFrom": "conn_mod_def::GMIYxNZ51eU::xY4rcCXiTTyrarjC9ac97w Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Get the Signed-in User Profile",
+  "actionId": "conn_mod_def::GMIYxNZ51eU::xY4rcCXiTTyrarjC9ac97w",
+  "response": {
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
+    "id": "7f3c2a10-5e1b-4d0a-9c77-acme0eu0dana",
+    "displayName": "Dana Oyelaran",
+    "userPrincipalName": "dana@acme.eu",
+    "mail": "dana@acme.eu"
+  }
+}

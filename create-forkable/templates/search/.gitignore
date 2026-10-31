@@ -1,0 +1,13 @@
+node_modules
+.env
+.env.local
+.env.*
+!.env.example
+dist
+*.log
+.DS_Store
+.vite
+ui/dist
+gtm/out
+packages/pgvector/.build
+*.tsbuildinfo

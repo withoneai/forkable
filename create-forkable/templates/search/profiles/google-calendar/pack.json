@@ -1,0 +1,245 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Google Calendar",
+  "platform": "google-calendar",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "google-calendar.events",
+      "platform": "google-calendar",
+      "model": "events",
+      "kind": "event",
+      "title": "Google Calendar events",
+      "description": "Events on every calendar you can read, recurring ones expanded up to a year ahead (an endless series stops there). Changes come from Google's sync token.",
+      "author": "builtin",
+      "revision": 3,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        }
+      },
+      "account": {
+        "request": {
+          "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ",
+          "query": {
+            "minAccessRole": "owner"
+          }
+        },
+        "vars": {
+          "email": "items[primary=true].id"
+        },
+        "self": [
+          {
+            "kind": "email",
+            "var": "email"
+          }
+        ],
+        "optional": true
+      },
+      "partitions": {
+        "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ",
+        "as": "partition",
+        "resultsPath": "items",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "nextPageToken",
+          "passAs": "query:pageToken"
+        },
+        "keep": "partition.accessRole != 'freeBusyReader' && partition.deleted != true"
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+        "pathVars": {
+          "calendarId": "{{ partition.id }}"
+        },
+        "query": {
+          "singleEvents": "true",
+          "showDeleted": "true"
+        },
+        "resultsPath": "items",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "nextPageToken",
+          "passAs": "query:pageToken"
+        },
+        "pageSize": {
+          "param": "maxResults",
+          "value": 250,
+          "in": "query"
+        }
+      },
+      "incremental": {
+        "strategy": "delta",
+        "tokenPath": "nextSyncToken",
+        "tokenPassAs": "query:syncToken",
+        "bootstrap": {
+          "actionId": "conn_mod_def::GJ6RlnIYK20::YzuWSmaVQgurletRDNJavA",
+          "pathVars": {
+            "calendarId": "{{ partition.id }}"
+          },
+          "query": {
+            "singleEvents": "true",
+            "showDeleted": "true",
+            "timeMin": "{{ run.since | iso }}",
+            "timeMax": "{{ run.now | plus:365d | iso }}"
+          }
+        },
+        "resetOn": [
+          410
+        ],
+        "initial": "{{ settings.backfill }}"
+      },
+      "deletes": {
+        "when": "item.status == 'cancelled'"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "item.summary",
+            {
+              "template": "(no title)"
+            }
+          ]
+        },
+        "body": {
+          "join": [
+            {
+              "path": "item.description",
+              "decode": "html"
+            },
+            "item.location",
+            {
+              "template": "With {{ item.attendees[].displayName | join:\", \" }}"
+            }
+          ],
+          "sep": "\n\n"
+        },
+        "occurredAt": {
+          "coalesce": [
+            {
+              "path": "item.start.dateTime",
+              "decode": "datetime"
+            },
+            {
+              "path": "item.start.date",
+              "decode": "datetime"
+            }
+          ]
+        },
+        "updatedAt": {
+          "path": "item.updated",
+          "decode": "datetime"
+        },
+        "url": "{{ item.htmlLink }}",
+        "container": {
+          "coalesce": [
+            "partition.summaryOverride",
+            "partition.summary"
+          ]
+        },
+        "status": "item.status",
+        "facets": {
+          "start": {
+            "coalesce": [
+              {
+                "path": "item.start.dateTime",
+                "decode": "datetime"
+              },
+              {
+                "path": "item.start.date",
+                "decode": "datetime"
+              }
+            ]
+          },
+          "end": {
+            "coalesce": [
+              {
+                "path": "item.end.dateTime",
+                "decode": "datetime"
+              },
+              {
+                "path": "item.end.date",
+                "decode": "datetime"
+              }
+            ]
+          },
+          "allDay": {
+            "test": "item.start.date != null"
+          },
+          "timeZone": {
+            "coalesce": [
+              "item.start.timeZone",
+              "partition.timeZone"
+            ]
+          },
+          "location": "item.location",
+          "joinUrl": {
+            "coalesce": [
+              "item.hangoutLink",
+              "item.conferenceData.entryPoints[entryPointType=video].uri"
+            ]
+          },
+          "organizerEmail": {
+            "path": "item.organizer.email",
+            "decode": "email"
+          },
+          "attendees": {
+            "path": "item.attendees[]",
+            "pick": "all"
+          },
+          "selfResponse": "item.attendees[self=true].responseStatus",
+          "recurring": {
+            "test": "item.recurringEventId != null"
+          },
+          "calendar": {
+            "coalesce": [
+              "partition.summaryOverride",
+              "partition.summary"
+            ]
+          },
+          "calendarColor": "partition.backgroundColor"
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "organizer",
+            "type": "person",
+            "email": {
+              "path": "item.organizer.email",
+              "decode": "email"
+            },
+            "name": "item.organizer.displayName"
+          },
+          {
+            "role": "attendee",
+            "type": "person",
+            "email": {
+              "path": "email",
+              "decode": "email"
+            },
+            "name": "displayName",
+            "response": "responseStatus",
+            "each": "item.attendees[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "whole",
+        "header": "{{ doc.title }} | {{ item.start.dateTime }}{{ item.start.date }}"
+      },
+      "limits": {
+        "requestsPerMinute": 120
+      },
+      "schedule": {
+        "every": "10m"
+      }
+    }
+  ]
+}

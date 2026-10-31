@@ -1,0 +1,21 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "google-calendar.events": 15
+  },
+  "kinds": {
+    "event": 15
+  },
+  "tombstoned": 0,
+  "fetched": 16,
+  "cancelledNeverIndexed": 1,
+  "partitions": 2,
+  "items": 15,
+  "entities": {
+    "email:priya@globex.com": {
+      "sources": [
+        "google-calendar"
+      ]
+    }
+  }
+}

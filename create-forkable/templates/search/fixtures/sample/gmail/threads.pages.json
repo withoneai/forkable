@@ -1,0 +1,147 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List a User's Gmail Threads",
+  "actionId": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "threads": [
+          {
+            "id": "9db4207b184a1faa",
+            "snippet": "Owen asked to see it Thursday morning, so edits by Wednesday night would help.",
+            "historyId": "5120131"
+          },
+          {
+            "id": "08edfeefd7e3f863",
+            "snippet": "Happy to lock the annual rate if we can get the MSA signed by Friday. Let me know on the multi-year quote.",
+            "historyId": "5120004"
+          },
+          {
+            "id": "1861589cc3b3fe0b",
+            "snippet": "Hi Dana, I'm the founder of Hooli (cc my cofounder Mia). We help sales teams turn call notes into CRM updates. Worth 15 ",
+            "historyId": "5120080"
+          },
+          {
+            "id": "abcc4869f3df1787",
+            "snippet": "Thanks. Add the Initrode starter deal at 18k.",
+            "historyId": "5120091"
+          },
+          {
+            "id": "7e81bd1f996564f3",
+            "snippet": "Bumping this. I need an answer by tomorrow to plan the sprint.",
+            "historyId": "5120111"
+          },
+          {
+            "id": "c972a61b16d56875",
+            "snippet": "This week: forecasting in a slow quarter, plus five templates for pipeline reviews.",
+            "historyId": "5120160"
+          },
+          {
+            "id": "edb64e4c7f8df755",
+            "snippet": "Any update? Our CFO is asking whether the pilot is on track. Can you confirm the fix date?",
+            "historyId": "5120042"
+          },
+          {
+            "id": "a6fdaf1e067ec868",
+            "snippet": "Thursday works. Let's hold November 18 for the board.",
+            "historyId": "5120062"
+          },
+          {
+            "id": "7db9ec1ecd545c7c",
+            "snippet": "Receipt for October. Total 249.00 USD. Thank you for your business.",
+            "historyId": "5120190"
+          },
+          {
+            "id": "84344d908e74300d",
+            "snippet": "Your Acme password expires in 5 days. Change it from the account portal.",
+            "historyId": "5120230"
+          },
+          {
+            "id": "0471a56d88a437b7",
+            "snippet": "New pricing page copy is in the doc. Mostly FYI, comments welcome until Friday.",
+            "historyId": "5120120"
+          },
+          {
+            "id": "6f5925fd3fee5d2e",
+            "snippet": "Ten stories from sales leaders this week.",
+            "historyId": "5120170"
+          }
+        ],
+        "resultSizeEstimate": 24,
+        "nextPageToken": "gm-page-2"
+      }
+    },
+    {
+      "match": {
+        "cursor": "gm-page-2"
+      },
+      "response": {
+        "threads": [
+          {
+            "id": "11d9cab2b1fe3eca",
+            "snippet": "Answered and attached. Mia confirmed the SSO answers.",
+            "historyId": "5120011"
+          },
+          {
+            "id": "6e94e3aa03dcd8ed",
+            "snippet": "Sharing a sanitized sample of our export so Mia can reproduce the import issue.",
+            "historyId": "5120140"
+          },
+          {
+            "id": "6c6ab8ff010f8ca4",
+            "snippet": "Checklist for moving the pipeline from HubSpot to Attio. Contacts and companies first, deals once Globex closes.",
+            "historyId": "5120100"
+          },
+          {
+            "id": "2ba2c9c3776a1619",
+            "snippet": "It does. I can send a quote for 40 seats once your ops review is done. When is it?",
+            "historyId": "5120151"
+          },
+          {
+            "id": "5932e8077f4c1db0",
+            "snippet": "Join us Thursday to learn how EU procurement teams evaluate software.",
+            "historyId": "5120180"
+          },
+          {
+            "id": "b57d659c68004a1d",
+            "snippet": "Dana, meet Marco, our counsel. He will run the MSA redline from our side. Marco, Dana leads the renewal at Acme.",
+            "historyId": "5120020"
+          },
+          {
+            "id": "87b09348091b5c18",
+            "snippet": "Looks good. Anika will join for the data part.",
+            "historyId": "5120051"
+          },
+          {
+            "id": "5ac62ce1aa9e9fab",
+            "snippet": "Your trip to Chicago is confirmed. Departs November 12, 8:05 AM.",
+            "historyId": "5120200"
+          },
+          {
+            "id": "dbe07e2544aebb76",
+            "snippet": "Intro to a CFO in our portfolio who is shopping for exactly what Acme sells. Want me to connect you?",
+            "historyId": "5120070"
+          },
+          {
+            "id": "e1603a9300f38387",
+            "snippet": "Thanks Dana, Tuesday works.",
+            "historyId": "5120031"
+          },
+          {
+            "id": "4d540ab15d1fe41b",
+            "snippet": "Thanks Ravi, sharing the SOC report link separately.",
+            "historyId": "5120211"
+          },
+          {
+            "id": "2156c0f67c246c9a",
+            "snippet": "Yes, Wednesday at 9.",
+            "historyId": "5120221"
+          }
+        ],
+        "resultSizeEstimate": 24
+      }
+    }
+  ]
+}

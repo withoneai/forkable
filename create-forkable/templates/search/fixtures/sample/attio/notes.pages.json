@@ -1,0 +1,90 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ0CZucANAI::qH4Oc4NvS1GWLSVnKugSCA Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 2",
+  "actionId": "conn_mod_def::GJ0CZucANAI::qH4Oc4NvS1GWLSVnKugSCA",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "data": [
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "note_id": "65c4a411-7c8a-5f4b-b067-2c923e34a3b3"
+            },
+            "parent_object": "people",
+            "parent_record_id": "2f95711c-de90-5c49-8ea2-774f6b6cd2f8",
+            "title": "Priya: multi-year ask",
+            "meeting_id": null,
+            "content_plaintext": "Priya wants a multi-year discount quoted before she takes the renewal to her CFO. Two years at 8% off is the ceiling Sam approved.",
+            "content_markdown": "Priya wants a multi-year discount quoted before she takes the renewal to her CFO. Two years at 8% off is the ceiling Sam approved.",
+            "tags": [
+              {
+                "type": "workspace-member",
+                "workspace_member_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+              }
+            ],
+            "created_by_actor": {
+              "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+              "type": "workspace-member"
+            },
+            "created_at": {
+              "$rel": "-2d 17:00"
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "note_id": "26322817-1545-5921-8503-6f882fda8cee"
+            },
+            "parent_object": "people",
+            "parent_record_id": "0e7093cd-49f5-5063-a901-5229a7645759",
+            "title": "Initech pilot scope",
+            "meeting_id": null,
+            "content_plaintext": "Ravi confirmed the pilot covers two data sources and one team. Success means the nightly CSV import runs under 10 minutes.",
+            "content_markdown": "Ravi confirmed the pilot covers two data sources and one team. Success means the nightly CSV import runs under 10 minutes.",
+            "tags": [
+              {
+                "type": "workspace-member",
+                "workspace_member_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+              }
+            ],
+            "created_by_actor": {
+              "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+              "type": "workspace-member"
+            },
+            "created_at": {
+              "$rel": "-8d 12:00"
+            }
+          },
+          {
+            "id": {
+              "workspace_id": "06f14c70-97fd-50b8-a3d2-9ede51297480",
+              "note_id": "8bbbc1c2-5407-5ae1-a299-997116c09fc6"
+            },
+            "parent_object": "companies",
+            "parent_record_id": "adb833d6-47a1-5a4d-b0b2-980565bc4e13",
+            "title": "Hooli triage",
+            "meeting_id": null,
+            "content_plaintext": "Inbound from Jules. Too early for us; keep warm, no call this quarter.",
+            "content_markdown": "Inbound from Jules. Too early for us; keep warm, no call this quarter.",
+            "tags": [
+              {
+                "type": "workspace-member",
+                "workspace_member_id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b"
+              }
+            ],
+            "created_by_actor": {
+              "id": "bcb7d190-4c4e-5dce-8098-6730c3ff2a5b",
+              "type": "workspace-member"
+            },
+            "created_at": {
+              "$rel": "-1d 10:00"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

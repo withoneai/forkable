@@ -1,0 +1,173 @@
+{
+  "$schema": "https://search.forkable.dev/schema/pack-1.json",
+  "name": "Intercom",
+  "platform": "intercom",
+  "profiles": [
+    {
+      "$schema": "https://search.forkable.dev/schema/profile-1.json",
+      "id": "intercom.conversations",
+      "platform": "intercom",
+      "model": "conversations",
+      "kind": "message",
+      "title": "Intercom conversations",
+      "description": "Support conversations with every reply and note, the customer, the teammates who answered, tags and state. One item per conversation.",
+      "author": "builtin",
+      "revision": 1,
+      "verified": "fixture",
+      "enabledByDefault": true,
+      "settings": {
+        "backfill": {
+          "type": "duration",
+          "default": "365d",
+          "label": "How far back"
+        }
+      },
+      "list": {
+        "actionId": "conn_mod_def::GJ4ph00Ee5o::WDltQcvIQ7ihlSIXbytpug",
+        "headers": {
+          "Intercom-Version": "2.14"
+        },
+        "body": {
+          "query": {
+            "field": "updated_at",
+            "operator": ">",
+            "value": "{{ run.since | unix }}"
+          }
+        },
+        "resultsPath": "conversations",
+        "idPath": "id",
+        "pagination": {
+          "type": "cursor",
+          "next": "pages.next.starting_after",
+          "passAs": "body:pagination.starting_after"
+        },
+        "pageSize": {
+          "param": "pagination.per_page",
+          "value": 50,
+          "in": "body"
+        }
+      },
+      "incremental": {
+        "strategy": "watermark",
+        "field": "item.updated_at",
+        "order": "asc",
+        "overlap": "5m",
+        "initial": "{{ settings.backfill }}"
+      },
+      "hydrate": {
+        "request": {
+          "actionId": "conn_mod_def::GJ4piENYNso::YLibV_rIQoCTcede_c3Hsw",
+          "headers": {
+            "Intercom-Version": "2.14"
+          },
+          "pathVars": {
+            "conversationId": "{{ item.id }}"
+          }
+        },
+        "fingerprint": "{{ item.updated_at }}",
+        "concurrency": 2,
+        "notFoundIsDelete": true
+      },
+      "deletes": {
+        "reconcile": "onFullPass",
+        "fullPassEvery": "14d"
+      },
+      "fields": {
+        "title": {
+          "coalesce": [
+            "detail.title",
+            "item.title",
+            {
+              "path": "item.source.subject",
+              "decode": "html"
+            },
+            {
+              "template": "Conversation with {{ item.source.author.name }}"
+            }
+          ]
+        },
+        "body": {
+          "join": [
+            {
+              "path": "detail.source.body",
+              "decode": "html"
+            },
+            {
+              "path": "detail.conversation_parts.conversation_parts[].body",
+              "pick": "join",
+              "sep": "\n\n",
+              "decode": "html"
+            }
+          ],
+          "sep": "\n\n"
+        },
+        "occurredAt": {
+          "path": "item.created_at",
+          "decode": "datetime"
+        },
+        "updatedAt": {
+          "path": "item.updated_at",
+          "decode": "datetime"
+        },
+        "container": "item.source.type",
+        "labels": {
+          "path": "detail.tags.tags[].name",
+          "pick": "all"
+        },
+        "facets": {
+          "channel": "item.source.type",
+          "sender": "item.source.author.name",
+          "threadId": "item.id",
+          "replyCount": "detail.conversation_parts.total_count",
+          "x_state": "item.state",
+          "x_priority": "item.priority",
+          "x_open": {
+            "test": "item.open == true"
+          }
+        }
+      },
+      "entities": {
+        "refs": [
+          {
+            "role": "from",
+            "type": "person",
+            "email": {
+              "path": "item.source.author.email",
+              "decode": "email"
+            },
+            "name": "item.source.author.name"
+          },
+          {
+            "role": "author",
+            "type": "person",
+            "email": {
+              "path": "author.email",
+              "decode": "email"
+            },
+            "name": "author.name",
+            "each": "detail.conversation_parts.conversation_parts[]"
+          },
+          {
+            "role": "about",
+            "type": "person",
+            "externalId": {
+              "template": "intercom:contact:{{ el.id }}"
+            },
+            "each": "detail.contacts.contacts[]"
+          }
+        ]
+      },
+      "chunk": {
+        "strategy": "paragraph",
+        "header": "{{ doc.title }}",
+        "maxTokens": 400
+      },
+      "limits": {
+        "requestsPerMinute": 60
+      },
+      "schedule": {
+        "every": "15m"
+      }
+    }
+  ]
+}

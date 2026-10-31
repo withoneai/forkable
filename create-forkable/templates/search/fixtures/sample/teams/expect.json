@@ -1,0 +1,16 @@
+{
+  "$comment": "test:profiles expectations (CONTRACT 12): items per profile after all fixture runs",
+  "profiles": {
+    "teams.chat-messages": 18,
+    "teams.channel-messages": 3
+  },
+  "kinds": {
+    "message": 21
+  },
+  "tombstoned": 0,
+  "enabledByDefault": {
+    "teams.chat-messages": 18
+  },
+  "items": 21,
+  "entities": {}
+}

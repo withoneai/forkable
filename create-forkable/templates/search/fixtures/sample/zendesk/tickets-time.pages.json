@@ -1,0 +1,181 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ8Yg-NVdgo::eilHTHLdTV2SKwKT8ARILQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), Incremental Ticket Export (Time-Based); dry-run page only",
+  "actionId": "sample::zendesk::incremental-tickets-time",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "tickets": [
+          {
+            "id": 1009,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1009.json",
+            "subject": "Two factor reset",
+            "description": "One of our admins lost their phone.",
+            "status": "closed",
+            "priority": "normal",
+            "requester_id": 9001,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-30d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-28d 09:00"
+            },
+            "tags": [
+              "account"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-28d 09:00"
+            }
+          },
+          {
+            "id": 1010,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1010.json",
+            "subject": "Webhook retries",
+            "description": "Do failed webhooks retry, and how often?",
+            "status": "solved",
+            "priority": "low",
+            "requester_id": 9003,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-15d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-14d 10:00"
+            },
+            "tags": [
+              "api"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-14d 10:00"
+            }
+          },
+          {
+            "id": 1012,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1012.json",
+            "subject": "Bulk API rate limit hit",
+            "description": "We hit 429s on the bulk endpoint during migration.",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9005,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-20d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-14d 10:00"
+            },
+            "tags": [
+              "api"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-14d 10:00"
+            }
+          },
+          {
+            "id": 1003,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1003.json",
+            "subject": "Need a sample export format",
+            "description": "Can you share the expected CSV header order?",
+            "status": "solved",
+            "priority": "normal",
+            "requester_id": 9003,
+            "assignee_id": 9006,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-9d 09:00"
+            },
+            "updated_at": {
+              "$rel": "-8d 12:00"
+            },
+            "tags": [
+              "import"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-8d 12:00"
+            }
+          },
+          {
+            "id": 1005,
+            "url": "https://acme.zendesk.com/api/v2/tickets/1005.json",
+            "subject": "Starter plan API limits",
+            "description": "What are the API limits on the starter plan?",
+            "status": "solved",
+            "priority": "low",
+            "requester_id": 9005,
+            "assignee_id": null,
+            "group_id": 360001,
+            "brand_id": 360002,
+            "created_at": {
+              "$rel": "-8d 10:00"
+            },
+            "updated_at": {
+              "$rel": "-7d 14:00"
+            },
+            "tags": [
+              "pricing"
+            ],
+            "custom_fields": [],
+            "via": {
+              "channel": "email",
+              "source": {}
+            },
+            "allow_attachments": true,
+            "allow_channelback": false,
+            "is_public": true,
+            "generated_timestamp": {
+              "$relUnix": "-7d 14:00"
+            }
+          }
+        ],
+        "next_page": "https://acme.zendesk.com/api/v2/incremental/tickets.json?start_time=1761700000",
+        "count": 5,
+        "end_of_stream": true,
+        "end_time": {
+          "$relUnix": "-3h"
+        }
+      }
+    }
+  ]
+}

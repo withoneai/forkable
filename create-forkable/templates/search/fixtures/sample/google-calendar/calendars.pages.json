@@ -1,0 +1,61 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 5",
+  "actionId": "conn_mod_def::GJ6Rk8ghCfI::FsO0bmOYSHOsPSIvrcOZxQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "kind": "calendar#calendarList",
+        "etag": "\"p33acmecal0001\"",
+        "items": [
+          {
+            "kind": "calendar#calendarListEntry",
+            "etag": "\"1761700000000000\"",
+            "id": "dana@acme.com",
+            "summary": "dana@acme.com",
+            "timeZone": "America/Los_Angeles",
+            "colorId": "14",
+            "backgroundColor": "#9fe1e7",
+            "foregroundColor": "#000000",
+            "selected": true,
+            "primary": true,
+            "accessRole": "owner",
+            "defaultReminders": [
+              {
+                "method": "popup",
+                "minutes": 10
+              }
+            ],
+            "conferenceProperties": {
+              "allowedConferenceSolutionTypes": [
+                "hangoutsMeet"
+              ]
+            }
+          },
+          {
+            "kind": "calendar#calendarListEntry",
+            "etag": "\"1761700000000001\"",
+            "id": "c_acme.sales.team@group.calendar.google.com",
+            "summary": "Acme Sales",
+            "description": "Team calendar for the sales team",
+            "timeZone": "America/Los_Angeles",
+            "colorId": "9",
+            "backgroundColor": "#7bd148",
+            "foregroundColor": "#000000",
+            "selected": true,
+            "accessRole": "writer",
+            "defaultReminders": [],
+            "conferenceProperties": {
+              "allowedConferenceSolutionTypes": [
+                "hangoutsMeet"
+              ]
+            }
+          }
+        ],
+        "nextSyncToken": "gcal-callist-sync-1"
+      }
+    }
+  ]
+}

@@ -30,6 +30,8 @@ export interface Catalog {
 interface Display {
   mark: GlyphId;
   tier: "Official";
+  /** Shorter card text when the catalog description is written for agents. */
+  cardDescription?: string;
   cardNote?: string;
   platforms: TemplatePlatform[];
   previewRows: { label: string; detail: string }[];
@@ -54,7 +56,7 @@ export interface Template {
   code?: string;
   /** A standalone public repo (owner/name) the Replit, Bolt and Lovable links can open. */
   repo?: string;
-  /** Builders that can run it (Rill's embedded Postgres can't start in Bolt). */
+  /** Builders that can run it (embedded Postgres, as in Rill and Search, can't start in Bolt). */
   builders: Builder[];
   description: string;
   kind: string;
@@ -86,6 +88,28 @@ const DISPLAY: Record<string, Display> = {
       { label: "Priya Nair, term sheet redlines", detail: "Goal · by Thursday" },
       { label: "Victor Lang, board deck", detail: "VIP · drafted" },
       { label: "Riley Chen, offsite date", detail: "VIP · drafted" },
+    ],
+  },
+  search: {
+    mark: "S",
+    cardDescription:
+      "One search box over your CRM, mail, calendars, docs, chat and meeting notes. An AI answers with citations, and a new profile adds any other tool.",
+    // Embedded Postgres with pgvector, so like Rill it can't start in Bolt.
+    builders: ["replit", "lovable"],
+    tier: "Official",
+    platforms: [
+      { name: "HubSpot", slug: "hubspot" },
+      { name: "Gmail", slug: "gmail" },
+      { name: "Google Calendar", slug: "google-calendar" },
+      { name: "Notion", slug: "notion" },
+      { name: "Linear", slug: "linear" },
+      { name: "Slack", slug: "slack" },
+      { name: "Granola", slug: "granola" },
+    ],
+    previewRows: [
+      { label: "Globex renewal 2027", detail: "HubSpot · $84,000" },
+      { label: "Re: Globex renewal terms", detail: "Gmail · Priya Shah" },
+      { label: "Initech pilot kickoff", detail: "Granola · Oct 22" },
     ],
   },
   brief: {
@@ -121,7 +145,7 @@ export const TEMPLATES: Template[] = Object.entries(DISPLAY).flatMap(([id, d]) =
       code: c.code ?? undefined,
       repo: c.repo ?? undefined,
       builders: d.builders ?? ["replit", "bolt", "lovable"],
-      description: d.cardNote ? `${c.description} ${d.cardNote}` : c.description,
+      description: [d.cardDescription ?? c.description, d.cardNote].filter(Boolean).join(" "),
       kind: c.kind,
       platforms: d.platforms,
       previewRows: d.previewRows,

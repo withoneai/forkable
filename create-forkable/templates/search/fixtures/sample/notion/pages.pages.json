@@ -1,0 +1,566 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ5En67fz04::-CJAS419SVWm7L2l6brp6A Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 7",
+  "actionId": "conn_mod_def::GJ5En67fz04::-CJAS419SVWm7L2l6brp6A",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "object": "list",
+        "type": "page_or_data_source",
+        "page_or_data_source": {},
+        "next_cursor": "cac10fb4-e531-5945-b27d-638214cff75d",
+        "has_more": true,
+        "results": [
+          {
+            "object": "page",
+            "id": "5f859f5f-3e36-5ee6-8707-8fdaf452c479",
+            "created_time": {
+              "$rel": "-12d 09:00"
+            },
+            "last_edited_time": {
+              "$rel": "-1d 20:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Q3-investor-update-5f859f5f3e365ee687078fdaf452c479",
+            "public_url": null,
+            "parent": {
+              "type": "workspace",
+              "workspace": true
+            },
+            "properties": {
+              "title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Q3 investor update",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Q3 investor update",
+                    "href": null
+                  }
+                ]
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "fa3bf312-3b03-5d7f-b7d5-0ef1c4c1eeba"
+            }
+          },
+          {
+            "object": "page",
+            "id": "92a240c6-d852-5691-93dd-0b7d6fb05ff2",
+            "created_time": {
+              "$rel": "-90d 10:00"
+            },
+            "last_edited_time": {
+              "$rel": "-2d 18:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Globex-account-plan-92a240c6d852569193dd0b7d6fb05ff2",
+            "public_url": null,
+            "parent": {
+              "type": "data_source_id",
+              "data_source_id": "8c5a27af-b31a-5af4-802d-ccec6efb5462",
+              "database_id": "31b31c5d-d5f7-5967-8b09-989a4767b9c9"
+            },
+            "properties": {
+              "Name": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Globex account plan",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Globex account plan",
+                    "href": null
+                  }
+                ]
+              },
+              "Champion": {
+                "id": "c%3Ah%3D",
+                "type": "email",
+                "email": "priya@globex.com"
+              },
+              "Owner": {
+                "id": "o%5Bw",
+                "type": "people",
+                "people": [
+                  {
+                    "object": "user",
+                    "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78",
+                    "name": "Dana Oyelaran",
+                    "avatar_url": null,
+                    "type": "person",
+                    "person": {
+                      "email": "dana@acme.com"
+                    }
+                  }
+                ]
+              },
+              "Stage": {
+                "id": "s%7Bt",
+                "type": "status",
+                "status": {
+                  "id": "st_contract_sent",
+                  "name": "Contract sent",
+                  "color": "green"
+                }
+              },
+              "ARR": {
+                "id": "a%40r",
+                "type": "number",
+                "number": 84000
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            }
+          },
+          {
+            "object": "page",
+            "id": "49fb051f-06be-523d-9447-00be6e41c0d0",
+            "created_time": {
+              "$rel": "-50d 10:00"
+            },
+            "last_edited_time": {
+              "$rel": "-2d 11:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Ledger-2-0-launch-plan-49fb051f06be523d944700be6e41c0d0",
+            "public_url": null,
+            "parent": {
+              "type": "workspace",
+              "workspace": true
+            },
+            "properties": {
+              "title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Ledger 2.0 launch plan",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Ledger 2.0 launch plan",
+                    "href": null
+                  }
+                ]
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "600ca92a-2216-50c3-aaec-ba84caab1444"
+            }
+          },
+          {
+            "object": "page",
+            "id": "cf9925ad-49e9-5f10-843f-35f947899599",
+            "created_time": {
+              "$rel": "-40d 11:00"
+            },
+            "last_edited_time": {
+              "$rel": "-3d 12:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Initech-account-plan-cf9925ad49e95f10843f35f947899599",
+            "public_url": null,
+            "parent": {
+              "type": "data_source_id",
+              "data_source_id": "8c5a27af-b31a-5af4-802d-ccec6efb5462",
+              "database_id": "31b31c5d-d5f7-5967-8b09-989a4767b9c9"
+            },
+            "properties": {
+              "Name": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Initech account plan",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Initech account plan",
+                    "href": null
+                  }
+                ]
+              },
+              "Champion": {
+                "id": "c%3Ah%3D",
+                "type": "email",
+                "email": "ravi@initech.io"
+              },
+              "Owner": {
+                "id": "o%5Bw",
+                "type": "people",
+                "people": [
+                  {
+                    "object": "user",
+                    "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78",
+                    "name": "Dana Oyelaran",
+                    "avatar_url": null,
+                    "type": "person",
+                    "person": {
+                      "email": "dana@acme.com"
+                    }
+                  }
+                ]
+              },
+              "Stage": {
+                "id": "s%7Bt",
+                "type": "status",
+                "status": {
+                  "id": "st_pilot",
+                  "name": "Pilot",
+                  "color": "green"
+                }
+              },
+              "ARR": {
+                "id": "a%40r",
+                "type": "number",
+                "number": 36000
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            }
+          },
+          {
+            "object": "page",
+            "id": "e61c036d-a75a-5abd-ba2d-30e59cf29930",
+            "created_time": {
+              "$rel": "-70d 09:00"
+            },
+            "last_edited_time": {
+              "$rel": "-4d 16:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Umbrella-EU-expansion-brief-e61c036da75a5abdba2d30e59cf29930",
+            "public_url": null,
+            "parent": {
+              "type": "data_source_id",
+              "data_source_id": "8c5a27af-b31a-5af4-802d-ccec6efb5462",
+              "database_id": "31b31c5d-d5f7-5967-8b09-989a4767b9c9"
+            },
+            "properties": {
+              "Name": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Umbrella EU expansion brief",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Umbrella EU expansion brief",
+                    "href": null
+                  }
+                ]
+              },
+              "Champion": {
+                "id": "c%3Ah%3D",
+                "type": "email",
+                "email": "hannah.cole@umbrella.co"
+              },
+              "Owner": {
+                "id": "o%5Bw",
+                "type": "people",
+                "people": [
+                  {
+                    "object": "user",
+                    "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78",
+                    "name": "Dana Oyelaran",
+                    "avatar_url": null,
+                    "type": "person",
+                    "person": {
+                      "email": "dana@acme.com"
+                    }
+                  }
+                ]
+              },
+              "Stage": {
+                "id": "s%7Bt",
+                "type": "status",
+                "status": {
+                  "id": "st_negotiation",
+                  "name": "Negotiation",
+                  "color": "green"
+                }
+              },
+              "ARR": {
+                "id": "a%40r",
+                "type": "number",
+                "number": 120000
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "match": {
+        "cursor": "cac10fb4-e531-5945-b27d-638214cff75d"
+      },
+      "response": {
+        "object": "list",
+        "type": "page_or_data_source",
+        "page_or_data_source": {},
+        "next_cursor": null,
+        "has_more": false,
+        "results": [
+          {
+            "object": "page",
+            "id": "cac10fb4-e531-5945-b27d-638214cff75d",
+            "created_time": {
+              "$rel": "-120d 10:00"
+            },
+            "last_edited_time": {
+              "$rel": "-10d 10:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Pilot-playbook-cac10fb4e5315945b27d638214cff75d",
+            "public_url": null,
+            "parent": {
+              "type": "workspace",
+              "workspace": true
+            },
+            "properties": {
+              "title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Pilot playbook",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Pilot playbook",
+                    "href": null
+                  }
+                ]
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "fa3bf312-3b03-5d7f-b7d5-0ef1c4c1eeba"
+            }
+          },
+          {
+            "object": "page",
+            "id": "7b5eb3c3-60ce-5614-b10d-435df026f8b1",
+            "created_time": {
+              "$rel": "-180d 10:00"
+            },
+            "last_edited_time": {
+              "$rel": "-15d 10:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Pricing-and-discount-policy-7b5eb3c360ce5614b10d435df026f8b1",
+            "public_url": null,
+            "parent": {
+              "type": "page_id",
+              "page_id": "9489a915-a163-5603-9a76-63ee5cdf3310"
+            },
+            "properties": {
+              "title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Pricing and discount policy",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Pricing and discount policy",
+                    "href": null
+                  }
+                ]
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            }
+          },
+          {
+            "object": "page",
+            "id": "9489a915-a163-5603-9a76-63ee5cdf3310",
+            "created_time": {
+              "$rel": "-200d 10:00"
+            },
+            "last_edited_time": {
+              "$rel": "-25d 10:00"
+            },
+            "in_trash": false,
+            "is_locked": false,
+            "url": "https://www.notion.so/acme/Sales-playbook-2026-9489a915a16356039a7663ee5cdf3310",
+            "public_url": null,
+            "parent": {
+              "type": "workspace",
+              "workspace": true
+            },
+            "properties": {
+              "title": {
+                "id": "title",
+                "type": "title",
+                "title": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "Sales playbook 2026",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "Sales playbook 2026",
+                    "href": null
+                  }
+                ]
+              }
+            },
+            "icon": null,
+            "cover": null,
+            "created_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            },
+            "last_edited_by": {
+              "object": "user",
+              "id": "aa3423d0-ad16-59b2-8ffe-094ea24ccb78"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

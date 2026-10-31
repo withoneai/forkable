@@ -1,0 +1,32 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ Response Fields (One CLI 2.10.0 actions load, 2026-10-29), List a User's Gmail Threads",
+  "actionId": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ",
+  "pages": [
+    {
+      "match": {
+        "cursor": null,
+        "connection": "sample:gmail:personal"
+      },
+      "response": {
+        "threads": [
+          {
+            "id": "49b3ec1e490fad98",
+            "snippet": "Your monthly membership renews on November 15. Nothing to do if you want to keep climbing.",
+            "historyId": "5120240"
+          },
+          {
+            "id": "3182d15b95fcec81",
+            "snippet": "We picked the lighthouse novel for November. Meeting at mine on the 21st, 7 PM.",
+            "historyId": "5120240"
+          },
+          {
+            "id": "1d9c784be9cbfa3d",
+            "snippet": "Your flight to Lisbon is confirmed. Departs December 18, 7:40 AM. Seat 14C.",
+            "historyId": "5120240"
+          }
+        ],
+        "resultSizeEstimate": 3
+      }
+    }
+  ]
+}

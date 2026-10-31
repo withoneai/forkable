@@ -1,0 +1,132 @@
+{
+  "$shapedFrom": "conn_mod_def::GJ3kYWYoo38::XLCOkotzRHyXigkeSyVCKg Response Fields (One CLI 2.10.0 actions load, 2026-10-29), docs/research/one-actions.md section 1",
+  "actionId": "conn_mod_def::GJ3kYWYoo38::XLCOkotzRHyXigkeSyVCKg",
+  "pages": [
+    {
+      "match": {
+        "cursor": null
+      },
+      "response": {
+        "total": 4,
+        "results": [
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-45d 10:00"
+            },
+            "id": "401",
+            "properties": {
+              "dealname": "Globex renewal 2027",
+              "amount": "84000",
+              "deal_currency_code": "USD",
+              "dealstage": "contractsent",
+              "closedate": {
+                "$rel": "+16d 00:00"
+              },
+              "pipeline": "default",
+              "description": "Annual renewal at the 2027 rate. Priya is the champion; legal redline is final.",
+              "hubspot_owner_id": "71001",
+              "hs_lastmodifieddate": {
+                "$rel": "-6h"
+              },
+              "createdate": {
+                "$rel": "-45d 10:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-6h"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-3/401"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-70d 09:00"
+            },
+            "id": "402",
+            "properties": {
+              "dealname": "Umbrella EU expansion",
+              "amount": "120000",
+              "deal_currency_code": "EUR",
+              "dealstage": "decisionmakerboughtin",
+              "closedate": {
+                "$rel": "+40d 00:00"
+              },
+              "pipeline": "default",
+              "description": "Roll Acme out to Umbrella's three EU entities. Procurement questionnaire in progress.",
+              "hubspot_owner_id": "71002",
+              "hs_lastmodifieddate": {
+                "$rel": "-3d 09:20"
+              },
+              "createdate": {
+                "$rel": "-70d 09:00"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-3d 09:20"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-3/402"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-14d 10:10"
+            },
+            "id": "403",
+            "properties": {
+              "dealname": "Initrode starter plan",
+              "amount": "18000",
+              "deal_currency_code": "USD",
+              "dealstage": "qualifiedtobuy",
+              "closedate": {
+                "$rel": "+30d 00:00"
+              },
+              "pipeline": "default",
+              "description": "Starter plan for the Denver operations team.",
+              "hubspot_owner_id": "71001",
+              "hs_lastmodifieddate": {
+                "$rel": "-7d 15:10"
+              },
+              "createdate": {
+                "$rel": "-14d 10:10"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-7d 15:10"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-3/403"
+          },
+          {
+            "archived": false,
+            "createdAt": {
+              "$rel": "-1d 08:40"
+            },
+            "id": "404",
+            "properties": {
+              "dealname": "Hooli design partner",
+              "amount": "12000",
+              "deal_currency_code": "USD",
+              "dealstage": "appointmentscheduled",
+              "closedate": {
+                "$rel": "+60d 00:00"
+              },
+              "pipeline": "default",
+              "description": "Inbound from the founder. Intro call was cancelled.",
+              "hubspot_owner_id": "71001",
+              "hs_lastmodifieddate": {
+                "$rel": "-1d 08:40"
+              },
+              "createdate": {
+                "$rel": "-1d 08:40"
+              }
+            },
+            "updatedAt": {
+              "$rel": "-1d 08:40"
+            },
+            "url": "https://app.hubspot.com/contacts/48213907/record/0-3/404"
+          }
+        ]
+      }
+    }
+  ]
+}

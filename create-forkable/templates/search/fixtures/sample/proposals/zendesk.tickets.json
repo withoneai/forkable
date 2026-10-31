@@ -1,0 +1,271 @@
+{
+  "$shapedFrom": "ProposalOutput (CONTRACT 4.6): what the proposal model returns for the sample Zendesk draft. Saving zendesk.tickets indexes 12 tickets.",
+  "models": [
+    {
+      "recommended": true,
+      "reason": "Tickets are what people search for in a help desk, and this export returns only what changed since the last run.",
+      "profile": {
+        "$schema": "https://search.forkable.dev/schema/profile-1.json",
+        "id": "zendesk.tickets",
+        "platform": "zendesk",
+        "model": "tickets",
+        "kind": "record",
+        "title": "Zendesk tickets",
+        "description": "Support tickets changed since the last run, from Zendesk's cursor-based incremental export.",
+        "author": "sample",
+        "revision": 1,
+        "verified": "none",
+        "sampleOnly": true,
+        "proposal": {
+          "by": "fixture",
+          "draftId": "drf_sample_zendesk",
+          "at": "2026-10-29T10:12:00Z"
+        },
+        "list": {
+          "actionId": "sample::zendesk::incremental-tickets-cursor",
+          "query": {
+            "start_time": "{{ run.since | unix }}",
+            "support_type_scope": "all"
+          },
+          "resultsPath": "tickets",
+          "idPath": "id",
+          "pagination": {
+            "type": "cursor",
+            "next": "after_cursor",
+            "passAs": "query:cursor",
+            "hasMore": "end_of_stream",
+            "hasMoreInverted": true
+          }
+        },
+        "incremental": {
+          "strategy": "watermark",
+          "field": "item.updated_at",
+          "order": "asc",
+          "overlap": "10m",
+          "initial": "180d"
+        },
+        "deletes": {
+          "when": "item.status == 'deleted'",
+          "reconcile": "onFullPass",
+          "fullPassEvery": "7d"
+        },
+        "fields": {
+          "title": "item.subject",
+          "body": {
+            "path": "item.description",
+            "decode": "html"
+          },
+          "occurredAt": {
+            "path": "item.created_at",
+            "decode": "datetime"
+          },
+          "updatedAt": {
+            "path": "item.updated_at",
+            "decode": "datetime"
+          },
+          "url": "https://acme.zendesk.com/agent/tickets/{{ item.id }}",
+          "status": "item.status",
+          "labels": {
+            "path": "item.tags[]",
+            "pick": "all"
+          },
+          "facets": {
+            "x_priority": "item.priority",
+            "x_channel": "item.via.channel"
+          }
+        },
+        "entities": {
+          "refs": [
+            {
+              "role": "author",
+              "type": "person",
+              "externalId": {
+                "template": "zendesk:user:{{ item.requester_id }}"
+              }
+            },
+            {
+              "role": "assignee",
+              "type": "person",
+              "externalId": {
+                "template": "zendesk:user:{{ item.assignee_id }}"
+              }
+            }
+          ]
+        },
+        "chunk": {
+          "strategy": "paragraph",
+          "maxTokens": 400
+        },
+        "schedule": {
+          "every": "30m"
+        }
+      },
+      "fieldNotes": [
+        {
+          "target": "title",
+          "path": "item.subject",
+          "confidence": 0.97,
+          "reason": "Short, present on every ticket"
+        },
+        {
+          "target": "body",
+          "path": "item.description",
+          "confidence": 0.9,
+          "reason": "First comment, the customer's words"
+        },
+        {
+          "target": "occurredAt",
+          "path": "item.created_at",
+          "confidence": 0.95,
+          "reason": "ISO creation time on every sample"
+        },
+        {
+          "target": "updatedAt",
+          "path": "item.updated_at",
+          "confidence": 0.95,
+          "reason": "Also the incremental watermark"
+        },
+        {
+          "target": "url",
+          "path": "item.url",
+          "confidence": 0.62,
+          "reason": "API url; agent page built from its subdomain"
+        },
+        {
+          "target": "status",
+          "path": "item.status",
+          "confidence": 0.93,
+          "reason": "new, open, pending, hold, solved, closed"
+        },
+        {
+          "target": "labels",
+          "path": "item.tags[]",
+          "confidence": 0.88,
+          "reason": "Tags are how agents group tickets"
+        },
+        {
+          "target": "facets.x_priority",
+          "path": "item.priority",
+          "confidence": 0.8,
+          "reason": "Useful filter, not a core facet"
+        },
+        {
+          "target": "entities.refs[0]",
+          "path": "item.requester_id",
+          "confidence": 0.7,
+          "reason": "Only an id; names need the users model"
+        }
+      ],
+      "questions": [
+        "The API returns an API url, not the agent page. Is https://acme.zendesk.com/agent/tickets/<id> the right link?"
+      ]
+    },
+    {
+      "recommended": false,
+      "reason": "A directory of requesters and agents. Turn it on only if you want ticket authors to show as people.",
+      "profile": {
+        "$schema": "https://search.forkable.dev/schema/profile-1.json",
+        "id": "zendesk.users",
+        "platform": "zendesk",
+        "model": "users",
+        "kind": "person",
+        "title": "Zendesk people",
+        "description": "Requesters and agents, so ticket authors resolve to people.",
+        "author": "sample",
+        "revision": 1,
+        "verified": "none",
+        "sampleOnly": true,
+        "proposal": {
+          "by": "fixture",
+          "draftId": "drf_sample_zendesk",
+          "at": "2026-10-29T10:12:00Z"
+        },
+        "list": {
+          "actionId": "sample::zendesk::incremental-users",
+          "query": {
+            "start_time": "{{ run.since | unix }}"
+          },
+          "resultsPath": "users",
+          "idPath": "id",
+          "pagination": {
+            "type": "nextUrl",
+            "next": "next_page"
+          }
+        },
+        "incremental": {
+          "strategy": "watermark",
+          "field": "item.updated_at",
+          "order": "asc",
+          "overlap": "10m",
+          "initial": "all"
+        },
+        "deletes": {
+          "when": "item.active == false",
+          "reconcile": "onFullPass",
+          "fullPassEvery": "7d"
+        },
+        "fields": {
+          "title": "item.name",
+          "body": {
+            "join": [
+              "item.email",
+              "item.role"
+            ],
+            "sep": ". "
+          },
+          "occurredAt": {
+            "path": "item.created_at",
+            "decode": "datetime"
+          },
+          "updatedAt": {
+            "path": "item.updated_at",
+            "decode": "datetime"
+          },
+          "url": "https://acme.zendesk.com/agent/users/{{ item.id }}",
+          "facets": {
+            "email": {
+              "path": "item.email",
+              "decode": "email"
+            }
+          }
+        },
+        "entities": {
+          "directory": true,
+          "is": {
+            "type": "person",
+            "email": {
+              "path": "item.email",
+              "decode": "email"
+            },
+            "name": "item.name",
+            "externalId": {
+              "template": "zendesk:user:{{ item.id }}"
+            }
+          }
+        },
+        "chunk": {
+          "strategy": "whole"
+        },
+        "schedule": {
+          "every": "60m"
+        }
+      },
+      "fieldNotes": [
+        {
+          "target": "title",
+          "path": "item.name",
+          "confidence": 0.95,
+          "reason": "Full name on every sample"
+        },
+        {
+          "target": "entities.is.email",
+          "path": "item.email",
+          "confidence": 0.93,
+          "reason": "Merges with people from mail and CRM"
+        }
+      ],
+      "questions": []
+    }
+  ],
+  "notes": "List Tickets and List Recent Tickets return the same objects without a change filter, so the cursor export is the better list. The time-based export is older and pages less evenly."
+}
