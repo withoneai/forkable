@@ -1,8 +1,8 @@
 {
   "version": 1,
   "site": "https://forkable.dev",
-  "command": "npm create forkable@latest <dir> -- --template <id>",
-  "agentCommand": "npm create forkable@latest <dir> -- --template <id> --json --yes",
+  "command": "npm create forkable@latest <id>",
+  "agentCommand": "npm create forkable@latest <id> -- --json --yes",
   "templates": [
     {
       "id": "forkable-starter",
@@ -44,7 +44,7 @@
         "typesafe"
       ],
       "packageManager": "pnpm",
-      "create": "npm create forkable@latest my-inbox -- --template rill",
+      "create": "npm create forkable@latest rill",
       "demo": "pnpm start",
       "site": "https://rill.forkable.dev",
       "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/rill",
@@ -84,7 +84,7 @@
         "typesafe"
       ],
       "packageManager": "pnpm",
-      "create": "npm create forkable@latest my-search -- --template search",
+      "create": "npm create forkable@latest search",
       "demo": "pnpm start",
       "site": "https://search.forkable.dev",
       "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/search",

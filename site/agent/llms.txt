@@ -5,7 +5,7 @@
 
 ## Start
 
-npm create forkable@latest <dir> -- --template <id>
+npm create forkable@latest <id>
 
 The `--` matters. Without it npm keeps the flags for itself and the command fails.
 
@@ -18,7 +18,7 @@ Machine-readable list: https://forkable.dev/templates.json
 ## If you are an agent
 
 1. Pick a template id from https://forkable.dev/templates.json (only ones with "status": "available").
-2. Fork it: `npm create forkable@latest <dir> -- --template <id> --json --yes`. If that version of create-forkable says it does not know `--json`, run `npm create forkable@latest <dir> -- --template <id>` instead. Add `--for "<who>" --in "<where>"` when the human said who the business is for and where.
+2. Fork it: `npm create forkable@latest <id> -- --json --yes`. If that version of create-forkable says it does not know `--json`, run `npm create forkable@latest <id>` instead. Add `--for "<who>" --in "<where>"` when the human said who the business is for and where.
 3. Read AGENTS.md in the fork before you change anything. It has the rules the repo runs on.
 4. Run the demo (`npm start`, or `pnpm start` for pnpm templates). Success means it exits 0. No account and no keys are needed.
 5. Stop and ask the human before any secret, git push, deploy or publish. Never write a secret into .env, a file, a log or the chat. Going live needs one Connect app that the human makes in the One dashboard.

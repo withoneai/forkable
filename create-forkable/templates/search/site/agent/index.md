@@ -5,7 +5,7 @@ keyword and meaning, and docks an AI on the right that cites what it finds. It's
 so you can fork it and run your own. Free and open source, MIT licensed.
 
 ```
-npm create forkable@latest my-search -- --template search
+npm create forkable@latest search
 ```
 
 Try it on the Acme sample first. No account needed.

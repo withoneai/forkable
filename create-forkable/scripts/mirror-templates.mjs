@@ -278,7 +278,7 @@ in \`local/profile.md\` with who it is for and where, and starts a fresh git
 history:
 
 \`\`\`
-npm create forkable@latest my-${id === "forkable-starter" ? "business" : id} -- --template ${id}
+npm create forkable@latest ${id === "forkable-starter" ? "my-business" : id}
 \`\`\`
 
 Starting from this repo instead (Use this template, or a builder import):

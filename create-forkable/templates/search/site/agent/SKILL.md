@@ -16,11 +16,11 @@ anyone makes an account.
 
 1. **Fork it.**
    ```
-   npm create forkable@latest my-search -- --template search
+   npm create forkable@latest search
    ```
-   Add `--for "<who>" --in "<where>"` after the template flag if the human said who it is for and where.
+   Add `-- --for "<who>" --in "<where>"` after it if the human said who it is for and where.
 2. **Check the demo.** The fork succeeded when `pnpm start` exits 0 on the sample index.
-3. **Read the rules.** `cd my-search`, then read `AGENTS.md` (it wins over this skill), `local/profile.md`,
+3. **Read the rules.** `cd search`, then read `AGENTS.md` (it wins over this skill), `local/profile.md`,
    `connect.manifest.json` and `README.md`.
 4. **Add a source.** Built-in profiles cover HubSpot, Attio, Gmail, Outlook Mail, Google Calendar,
    Outlook Calendar, Notion, Linear, Slack, Teams and Granola. For anything else, the add-search-profile

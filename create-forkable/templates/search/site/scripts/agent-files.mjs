@@ -61,7 +61,7 @@ out(
       license: "MIT",
       source: "https://github.com/withoneai/forkable-search",
       source_in_forkable: "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/search",
-      command: "npm create forkable@latest my-search -- --template search",
+      command: "npm create forkable@latest search",
       quickstart: `${SITE_URL}/llms.txt`,
       skills: { index: `${SITE_URL}/.well-known/agent-skills/index.json`, search: SKILL_URL },
       content: {

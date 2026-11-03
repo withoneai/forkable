@@ -5,14 +5,14 @@
 
 ## Start
 
-npm create forkable@latest my-search -- --template search
+npm create forkable@latest search
 
 Runs on the keyless Acme Inc sample first. No account or keys needed.
 
 ## If you are an agent
 
-1. Fork it: `npm create forkable@latest my-search -- --template search`. Add `--for "<who>" --in "<where>"` after the template flag if the human said who it is for and where.
-2. `cd my-search`, then read AGENTS.md in the fork before you change anything.
+1. Fork it: `npm create forkable@latest search`. Add `-- --for "<who>" --in "<where>"` after it if the human said who it is for and where.
+2. `cd search`, then read AGENTS.md in the fork before you change anything.
 3. Run the demo (`pnpm start`). Success means it exits 0.
 4. Stop and ask the human before any secret, git push, deploy or publish. Going live needs one Connect app: `pnpm connect` prints an approval link the human confirms in One, then the human pastes the two secrets on the app's /setup/connect screen.
 

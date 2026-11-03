@@ -37,7 +37,7 @@ Always put `--` before the flags. Without it npm keeps `--template`, `--for` and
 ### 2a. With agent mode
 
 ```
-npm create forkable@latest <dir> -- --template <id> --json --yes
+npm create forkable@latest <id> -- --json --yes
 ```
 
 Add `--for "<who>" --in "<where>"` when the human said who the business is for and where. They go into `local/profile.md`.
@@ -55,7 +55,7 @@ Success is exit code 0 with `demoExitCode: 0` in the JSON.
 ### 2b. With the published version (0.2.0)
 
 ```
-npm create forkable@latest <dir> -- --template <id> --for "<who>" --in "<where>"
+npm create forkable@latest <id> -- --for "<who>" --in "<where>"
 ```
 
 `--for` and `--in` are optional. It prints, in order:

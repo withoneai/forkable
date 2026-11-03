@@ -134,7 +134,7 @@ function printCatalogTable(catalog, source) {
   say(line(head));
   rows.forEach((r) => say(line(r)));
   say("");
-  say(`  Fork one:  npm create forkable@latest <dir> -- --template <id>`);
+  say(`  Fork one:  npm create forkable@latest <id>`);
   say(`  Catalog:   ${source === "remote" ? process.env.FORKABLE_CATALOG_URL || CATALOG_URL : "bundled with create-forkable " + cliVersion + " (no live list from forkable.dev)"}`);
 }
 
@@ -175,7 +175,7 @@ Templates in this package: ${bundledTemplateIds().join(", ")}
 
 Examples:
   npm create forkable@latest rill -- --for "real estate agents" --in "Los Angeles"
-  npm create forkable@latest my-inbox -- --template rill --json --yes`);
+  npm create forkable@latest rill -- --json --yes`);
 }
 
 // ---- args -----------------------------------------------------------------

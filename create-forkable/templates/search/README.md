@@ -20,7 +20,7 @@ Secured by One. Each person connects their own accounts and can revoke them at a
 Fork it with Forkable:
 
 ```
-npm create forkable@latest my-search -- --template search
+npm create forkable@latest search
 ```
 
 Or clone it:

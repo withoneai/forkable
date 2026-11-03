@@ -51,7 +51,7 @@ create-forkable never prompts, and it never overwrites a directory.
 
 ```
 npm create forkable@latest -- --list --json
-npm create forkable@latest my-inbox -- --template rill --json --yes
+npm create forkable@latest rill -- --json --yes
 ```
 
 `--list` reads the live catalog at https://forkable.dev/templates.json
@@ -67,7 +67,7 @@ end:
 ```json
 {
   "ok": true,
-  "dir": "/abs/path/my-inbox",
+  "dir": "/abs/path/rill",
   "template": "rill",
   "version": "0.1.0",
   "cliVersion": "0.3.0",
@@ -76,11 +76,11 @@ end:
   "installed": true,
   "demoExitCode": 0,
   "git": true,
-  "nextSteps": [{ "read": "/abs/path/my-inbox/AGENTS.md", "why": "..." }],
+  "nextSteps": [{ "read": "/abs/path/rill/AGENTS.md", "why": "..." }],
   "envNeededToGoLive": ["..."],
-  "agentsMd": "/abs/path/my-inbox/AGENTS.md",
+  "agentsMd": "/abs/path/rill/AGENTS.md",
   "warnings": [],
-  "welcome": "/abs/path/my-inbox/forkable/welcome.mjs"
+  "welcome": "/abs/path/rill/forkable/welcome.mjs"
 }
 ```
 
