@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "status": "ok",
+  "final": "Changed the heading to Hello Acme.",
+  "payloads": [{ "text": "Changed the heading to Hello Acme." }],
+  "usage": { "input": 12000, "output": 340, "total": 12340 },
+  "costUsd": 0.0123,
+  "assistantTurns": 3,
+  "bridgeCalls": 0,
+  "toolSummary": { "write": 1, "exec": 1 },
+  "model": "gpt-5.6-terra",
+  "provider": "openai",
+  "sessionId": "5b0b1a3c-1f7e-4a39-9d2a-6f1d7c0a1e11"
+}

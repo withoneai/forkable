@@ -1,0 +1,880 @@
+{
+ "_id": "conn_mod_def::GIi2iy8hP4o::Bn9C2U8RREySIMiqwHKn2w",
+ "connectionPlatform": "vercel",
+ "title": "Create One or More Project Environment Variables",
+ "method": "POST",
+ "path": "/v10/projects/{{IDORNAME}}/env",
+ "tags": [],
+ "knowledge": "# Create One or More Project Environment Variables\n\n## Prerequisites\n\n- You must have permission to create or update environment variables for the specified Vercel project.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.vercel.com/v10/projects/{{idOrName}}/env`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates one or more environment variables for a specified Vercel project by supplying the variable's key, value, type, and target. The project is identified by its unique ID or name in the URL. If the `upsert=true` query parameter is provided, existing environment variables with the same key and target will be updated instead of creating duplicates.\n\n## Enforcement Rules\n\n- The `idOrName` path parameter **must always be present** and must be a non-empty string representing the project ID or name.\n- When executing, always construct the path as `/v10/projects/{{idOrName}}/env`, where `{{idOrName}}` is the user-supplied project ID or name.\n- Do **not** call the API with a missing or empty `idOrName` (e.g., avoid `/v10/projects//env` or `/v10/projects/env`).\n- Do **not** infer or guess the project identifier beyond the user's input.\n- When executing, send Path Parameters in the URL, not in the body.\n- When executing, send Query Parameters as URL query parameters, not in the body.\n\n### Valid Examples\n\n```\n/v10/projects/my-project/env\n/v10/projects/prj_1234567890/env\n```\n\n### Invalid Examples\n\n```\n/v10/projects//env\n/v10/projects/env\n```\n\n## Required Path Parameters\n\n| Parameter   | Type   | Description                                            |\n|-------------|--------|--------------------------------------------------------|\n| `idOrName`  | string | The unique project identifier or the project name.     |\n\n## Optional Query Parameters\n\n| Parameter | Type   | Description                                                                                               |\n|-----------|--------|-----------------------------------------------------------------------------------------------------------|\n| `upsert`  | string | If set to `\"true\"`, update the variable if it exists instead of creating a duplicate.                     |\n| `teamId`  | string | The Team identifier to perform the request on behalf of.                                                  |\n| `slug`    | string | The Team slug to perform the request on behalf of.                                                        |\n\n## Required Request Body Fields\n\nThe request body must be a JSON object or array of objects representing environment variables to create.\n\nEach environment variable object requires:\n\n| Parameter | Type   | Description                                                                                                     |\n|-----------|--------|-----------------------------------------------------------------------------------------------------------------|\n| `key`     | string | The environment variable name.                                                                                  |\n| `value`   | string | The environment variable value.                                                                                 |\n| `type`    | string | The variable type. Allowed values: `\"secret\"`, `\"system\"`, `\"encrypted\"`, `\"plain\"`, `\"sensitive\"`.            |\n| `target`  | array or string | The deployment targets. Allowed values: `\"production\"`, `\"preview\"`, `\"development\"`. Can be a string or array of strings. |\n\nYou may submit either a single object or an array of objects in the request body.\n\n## Optional Request Body Fields\n\n| Parameter             | Type     | Description                                                                                                    |\n|-----------------------|----------|----------------------------------------------------------------------------------------------------------------|\n| `comment`             | string   | A comment/description for the environment variable.                                                            |\n| `gitBranch`           | string   | The git branch this env var applies to.                                                                        |\n| `edgeConfigId`        | string   | Edge configuration ID, if relevant.                                                                            |\n| `edgeConfigTokenId`   | string   | Edge config token ID, if relevant.                                                                             |\n| `contentHint`         | object   | Hints about the content, for certain integrations (see below for structure).                                   |\n| `internalContentHint` | object   | Internal content hints.                                                                                        |\n| `customEnvironmentIds`| array    | Custom environment IDs.                                                                                        |\n| `system`              | boolean  | If true, indicates a system variable.                                                                          |\n| `sunsetSecretId`      | string   | For variables migrated from `secret` to `sensitive`.                                                           |\n| `vsmValue`            | string   | Additional value for internal use.                                                                             |\n| `configurationId`     | string   | Configuration ID for the variable.                                                                             |\n\n#### `contentHint` Structure\n\nDepending on integrations, `contentHint` may have one of the following shapes (all fields required unless noted):\n\n- `{ \"type\": \"redis-url\", \"storeId\": string }`\n- `{ \"type\": \"redis-rest-api-url\", \"storeId\": string }`\n- `{ \"type\": \"redis-rest-api-token\", \"storeId\": string }`\n- `{ \"type\": \"redis-rest-api-read-only-token\", \"storeId\": string }`\n- `{ \"type\": \"blob-read-write-token\", \"storeId\": string }`\n- `{ \"type\": \"postgres-url\", \"storeId\": string }`\n- `{ \"type\": \"postgres-url-non-pooling\", \"storeId\": string }`\n- `{ \"type\": \"postgres-prisma-url\", \"storeId\": string }`\n- `{ \"type\": \"postgres-user\", \"storeId\": string }`\n- `{ \"type\": \"postgres-host\", \"storeId\": string }`\n- `{ \"type\": \"postgres-password\", \"storeId\": string }`\n- `{ \"type\": \"postgres-database\", \"storeId\": string }`\n- `{ \"type\": \"postgres-url-no-ssl\", \"storeId\": string }`\n- `{ \"type\": \"integration-store-secret\", \"storeId\": string, \"integrationId\": string, \"integrationProductId\": string, \"integrationConfigurationId\": string }`\n- `{ \"type\": \"flags-connection-string\", \"projectId\": string }`\n\n#### `internalContentHint` Structure\n\n- `{ \"type\": \"flags-secret\", \"encryptedValue\": string }`\n\n## Response\n\n### Success Response (201 Created)\n\n```json\n{\n  \"created\": [\n    {\n      \"id\": \"env_abc123\",\n      \"key\": \"DATABASE_URL\",\n      \"value\": \"postgres://user:pass@host:5432/db\",\n      \"type\": \"encrypted\",\n      \"target\": [\"production\", \"preview\"],\n      \"sunsetSecretId\": null,\n      \"decrypted\": false,\n      \"vsmValue\": null,\n      \"configurationId\": \"cfg_456def\",\n      \"createdAt\": 1710000000000,\n      \"updatedAt\": 1710000000000,\n      \"createdBy\": \"user_789xyz\",\n      \"updatedBy\": \"user_789xyz\",\n      \"gitBranch\": \"main\",\n      \"edgeConfigId\": null,\n      \"edgeConfigTokenId\": null,\n      \"contentHint\": {\n        \"type\": \"postgres-url\",\n        \"storeId\": \"store_123\"\n      },\n      \"internalContentHint\": {\n        \"type\": \"flags-secret\",\n        \"encryptedValue\": \"abcxyz123encrypted\"\n      },\n      \"comment\": \"Primary database URL\",\n      \"customEnvironmentIds\": [],\n      \"system\": false\n    }\n  ],\n  \"failed\": []\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_body\",\n    \"message\": \"One of the provided values in the request body is invalid.\"\n  }\n}\n```\n\n### Error Response (401 Unauthorized)\n\n```json\n{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"The request is not authorized.\"\n  }\n}\n```\n\n### Error Response (402 Payment Required)\n\n```json\n{\n  \"error\": {\n    \"code\": \"payment_required\",\n    \"message\": \"The account is missing a payment so payment method must be updated.\"\n  }\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"You do not have permission to access this resource.\"\n  }\n}\n```\n\n### Error Response (404 Not Found)\n\n```json\n{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"The project was not found.\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"error\": {\n    \"code\": \"conflict\",\n    \"message\": \"The project is being transferred and creating an environment variable is not possible.\"\n  }\n}\n```\n\n### Error Response (429 Too Many Requests)\n\n```json\n{\n  \"error\": {\n    \"code\": \"rate_limited\",\n    \"message\": \"Too many requests.\"\n  }\n}\n```\n\n### Error Response (500 Internal Server Error)\n\n```json\n{\n  \"error\": {\n    \"code\": \"server_error\",\n    \"message\": \"An internal server error occurred.\"\n  }\n}\n```\n\n## Response Fields\n\n| Field                      | Type    | Description                                                                                                                                |\n|----------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------|\n| `created`                  | array   | List of successfully created environment variable objects.                                                                                  |\n| `created[].id`             | string  | Unique identifier for the environment variable.                                                                                            |\n| `created[].key`            | string  | Name of the environment variable.                                                                                                          |\n| `created[].value`          | string  | Value of the environment variable.                                                                                                         |\n| `created[].type`           | string  | Environment variable type. One of `\"secret\"`, `\"system\"`, `\"encrypted\"`, `\"plain\"`, `\"sensitive\"`.                                        |\n| `created[].target`         | array   | Deployment targets for the environment variable.                                                                                           |\n| `created[].sunsetSecretId` | string  | If set, identifies a variable migrated from type `secret` to `sensitive`.                                                                  |\n| `created[].decrypted`      | boolean | Whether the value is decrypted.                                                                                                            |\n| `created[].vsmValue`       | string  | Internal value for variable store management.                                                                                              |\n| `created[].configurationId`| string  | Configuration ID for the variable.                                                                                                         |\n| `created[].createdAt`      | number  | Timestamp (milliseconds since epoch) when the variable was created.                                                                        |\n| `created[].updatedAt`      | number  | Timestamp when the variable was last updated.                                                                                              |\n| `created[].createdBy`      | string  | User ID of who created the variable.                                                                                                       |\n| `created[].updatedBy`      | string  | User ID of who last updated the variable.                                                                                                  |\n| `created[].gitBranch`      | string  | Git branch the variable is associated with, if any.                                                                                        |\n| `created[].edgeConfigId`   | string  | Edge configuration ID, if any.                                                                                                             |\n| `created[].edgeConfigTokenId`| string| Edge config token ID, if any.                                                                                                              |\n| `created[].contentHint`    | object  | Integration-specific content hints (see above).                                                                                            |\n| `created[].internalContentHint`| object| Internal content hints (see above).                                                                                                       |\n| `created[].comment`        | string  | Comment or description for the variable.                                                                                                   |\n| `created[].customEnvironmentIds`| array | Custom environment IDs, if any.                                                                                                            |\n| `created[].system`         | boolean | Whether the variable is a system variable.                                                                                                 |\n| `failed`                   | array   | List of failed environment variable creation attempts.                                                                                     |\n| `failed[].error`           | object  | Error details for each failed variable.                                                                                                    |\n| `failed[].error.code`      | string  | Error code.                                                                                                                                |\n| `failed[].error.message`   | string  | Error message.                                                                                                                             |\n| `failed[].error.key`       | string  | The key of the environment variable that failed.                                                                                           |\n| `failed[].error.envVarId`  | string  | The environment variable ID, if applicable.                                                                                                |\n| `failed[].error.envVarKey` | string  | The key of the environment variable, if applicable.                                                                                        |\n| `failed[].error.action`    | string  | The action that caused the error.                                                                                                          |\n| `failed[].error.link`      | string  | A relevant link for the error, if available.                                                                                               |\n| `failed[].error.value`     | string/array | The attempted value or target, if applicable.                                                                                             |\n| `failed[].error.gitBranch` | string  | The git branch, if applicable.                                                                                                             |\n| `failed[].error.target`    | string/array | The deployment target, if applicable.                                                                                                     |\n| `failed[].error.project`   | string  | The project identifier, if applicable.                                                                                                     |\n\n## Sample Request\n\n```bash\ncurl --location --request POST 'https://api.vercel.com/v10/projects/my-project/env' \\\n  --header 'Content-Type: application/json' \\\n  --data '[\n    {\n      \"key\": \"DATABASE_URL\",\n      \"value\": \"postgres://user:pass@host:5432/db\",\n      \"type\": \"encrypted\",\n      \"target\": [\"production\", \"preview\"],\n      \"comment\": \"Primary database URL\"\n    }\n  ]'\n```\n\n## Example Usage\n\n### Example 1: Create a Single Environment Variable\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/prj_1234567890/env' \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"key\": \"API_KEY\",\n    \"value\": \"my-secret-value\",\n    \"type\": \"secret\",\n    \"target\": [\"production\"]\n  }'\n```\n\n### Example 2: Upsert (Update If Exists) an Environment Variable\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/env?upsert=true' \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"key\": \"REDIS_URL\",\n      \"value\": \"redis://host:6379\",\n      \"type\": \"plain\",\n      \"target\": [\"preview\", \"development\"]\n    }\n  ]'\n```\n\n### Example 3: Create Multiple Environment Variables for a Specific Git Branch\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/env' \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"key\": \"BRANCH_TOKEN\",\n      \"value\": \"abc123dev\",\n      \"type\": \"sensitive\",\n      \"target\": [\"development\"],\n      \"gitBranch\": \"dev\"\n    },\n    {\n      \"key\": \"BRANCH_TOKEN\",\n      \"value\": \"xyz123prod\",\n      \"type\": \"sensitive\",\n      \"target\": [\"production\"],\n      \"gitBranch\": \"main\"\n    }\n  ]'\n```\n\n## Behavior\n\n1. **Validation**: Validates all required fields (`key`, `value`, `type`, `target`) for each environment variable object.\n2. **Creation/Upsert**: If `upsert=true`, updates existing variables with the same `key` and `target`; otherwise, creates new ones unless they already exist.\n3. **Processing**: Handles integration and internal content hints if provided.\n4. **Response**: Returns arrays of created and failed environment variable objects for batch operations.\n\n## Notes\n\n- The `target` field can be a single string or an array of any combination of `\"production\"`, `\"preview\"`, `\"development\"`.\n- The endpoint supports both single-object and array-of-objects request bodies for batch creation.\n- When creating environment variables for a team project, use `teamId` or `slug` as query parameters as needed.\n- Use `upsert=true` to avoid duplicate variables by updating existing ones.\n- Only valid `key` names and allowed `type`/`target` values are accepted; otherwise, the request will fail.\n\n## Gotchas\n\n- An ongoing environment variable update for the same project will cause a 400 error.\n- Attempting to create a variable that already exists (with the same `key` and `target`) without `upsert=true` will result in a 403 error.\n- Creating variables for projects undergoing transfer (409 error) or when a payment is required (402 error) will fail.\n- The request will fail if the total project document size exceeds the allowed limit.\n\n## Error Handling\n\n- **400 Bad Request**: Invalid request body, invalid query parameters, an ongoing update, or project document too large.\n- **401 Unauthorized**: Missing or invalid authentication.\n- **402 Payment Required**: Account needs updated payment method.\n- **403 Forbidden**: Insufficient permissions, variable already exists, or extra permissions required for production variables.\n- **404 Not Found**: Project not found.\n- **409 Conflict**: Project is being transferred.\n- **429 Too Many Requests**: Rate limit exceeded.\n- **500 Internal Server Error**: Unexpected server error.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "definitions": {
+    "ContentHint": {
+     "description": "Hints about the content, for certain integrations.",
+     "oneOf": [
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "redis-url",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "redis-rest-api-url",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "redis-rest-api-token",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "redis-rest-api-read-only-token",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "blob-read-write-token",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-url",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-url-non-pooling",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-prisma-url",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-user",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-host",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-password",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-database",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "postgres-url-no-ssl",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "integrationConfigurationId": {
+         "type": "string"
+        },
+        "integrationId": {
+         "type": "string"
+        },
+        "integrationProductId": {
+         "type": "string"
+        },
+        "storeId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "integration-store-secret",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "storeId",
+        "integrationId",
+        "integrationProductId",
+        "integrationConfigurationId"
+       ],
+       "type": "object"
+      },
+      {
+       "additionalProperties": false,
+       "properties": {
+        "projectId": {
+         "type": "string"
+        },
+        "type": {
+         "const": "flags-connection-string",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "projectId"
+       ],
+       "type": "object"
+      }
+     ],
+     "title": "Content Hint"
+    },
+    "EnvironmentVariableInput": {
+     "additionalProperties": false,
+     "description": "An environment variable object to create.",
+     "properties": {
+      "comment": {
+       "description": "A comment/description for the environment variable.",
+       "type": "string"
+      },
+      "configurationId": {
+       "description": "Configuration ID for the variable.",
+       "type": "string"
+      },
+      "contentHint": {
+       "$ref": "#/definitions/ContentHint"
+      },
+      "customEnvironmentIds": {
+       "description": "Custom environment IDs.",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "edgeConfigId": {
+       "description": "Edge configuration ID, if relevant.",
+       "type": "string"
+      },
+      "edgeConfigTokenId": {
+       "description": "Edge config token ID, if relevant.",
+       "type": "string"
+      },
+      "gitBranch": {
+       "description": "The git branch this env var applies to.",
+       "type": "string"
+      },
+      "internalContentHint": {
+       "$ref": "#/definitions/InternalContentHint"
+      },
+      "key": {
+       "description": "The environment variable name.",
+       "type": "string"
+      },
+      "sunsetSecretId": {
+       "description": "For variables migrated from `secret` to `sensitive`.",
+       "type": "string"
+      },
+      "system": {
+       "description": "If true, indicates a system variable.",
+       "type": "boolean"
+      },
+      "target": {
+       "$ref": "#/definitions/TargetValue"
+      },
+      "type": {
+       "description": "The variable type.",
+       "enum": [
+        "secret",
+        "system",
+        "encrypted",
+        "plain",
+        "sensitive"
+       ],
+       "type": "string"
+      },
+      "value": {
+       "description": "The environment variable value.",
+       "type": "string"
+      },
+      "vsmValue": {
+       "description": "Additional value for internal use.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "key",
+      "value",
+      "type",
+      "target"
+     ],
+     "title": "Environment Variable Input",
+     "type": "object"
+    },
+    "InternalContentHint": {
+     "additionalProperties": false,
+     "description": "Internal content hints.",
+     "properties": {
+      "encryptedValue": {
+       "type": "string"
+      },
+      "type": {
+       "const": "flags-secret",
+       "type": "string"
+      }
+     },
+     "required": [
+      "type",
+      "encryptedValue"
+     ],
+     "title": "Internal Content Hint",
+     "type": "object"
+    },
+    "TargetValue": {
+     "description": "Deployment target(s). Can be a single string or an array of strings.",
+     "oneOf": [
+      {
+       "enum": [
+        "production",
+        "preview",
+        "development"
+       ],
+       "type": "string"
+      },
+      {
+       "items": {
+        "enum": [
+         "production",
+         "preview",
+         "development"
+        ],
+        "type": "string"
+       },
+       "type": "array"
+      }
+     ],
+     "title": "Target Value"
+    }
+   },
+   "description": "Creates one or more environment variables for a specified Vercel project by supplying the variable's key, value, type, and target. The project is identified by its unique ID or name in the URL. If the `upsert=true` query parameter is provided, existing environment variables with the same key and target will be updated instead of creating duplicates.",
+   "properties": {
+    "body": {
+     "description": "The request body must be a JSON object or array of objects representing environment variables to create.",
+     "oneOf": [
+      {
+       "$ref": "#/definitions/EnvironmentVariableInput"
+      },
+      {
+       "items": {
+        "$ref": "#/definitions/EnvironmentVariableInput"
+       },
+       "type": "array"
+      }
+     ],
+     "title": "Request Body"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the request body.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for POST /v10/projects/{idOrName}/env",
+     "properties": {
+      "idOrName": {
+       "description": "The unique project identifier or the project name.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "idOrName"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters for the request.",
+     "properties": {
+      "slug": {
+       "description": "The Team slug to perform the request on behalf of.",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "The Team identifier to perform the request on behalf of.",
+       "type": "string"
+      },
+      "upsert": {
+       "description": "If set to \"true\", update the variable if it exists instead of creating a duplicate.",
+       "enum": [
+        "true"
+       ],
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Create One or More Project Environment Variables \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response structure for successful and error outcomes when creating one or more project environment variables.",
+   "properties": {
+    "created": {
+     "description": "List of successfully created environment variable objects.",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "comment": {
+        "description": "Comment or description for the variable.",
+        "type": "string"
+       },
+       "configurationId": {
+        "description": "Configuration ID for the variable.",
+        "type": "string"
+       },
+       "contentHint": {
+        "additionalProperties": true,
+        "description": "Integration-specific content hints.",
+        "properties": {
+         "integrationConfigurationId": {
+          "type": "string"
+         },
+         "integrationId": {
+          "type": "string"
+         },
+         "integrationProductId": {
+          "type": "string"
+         },
+         "projectId": {
+          "type": "string"
+         },
+         "storeId": {
+          "type": "string"
+         },
+         "type": {
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "createdAt": {
+        "description": "Timestamp (milliseconds since epoch) when the variable was created.",
+        "type": "number"
+       },
+       "createdBy": {
+        "description": "User ID of who created the variable.",
+        "type": "string"
+       },
+       "customEnvironmentIds": {
+        "description": "Custom environment IDs, if any.",
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       "decrypted": {
+        "description": "Whether the value is decrypted.",
+        "type": "boolean"
+       },
+       "edgeConfigId": {
+        "description": "Edge configuration ID, if any.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "edgeConfigTokenId": {
+        "description": "Edge config token ID, if any.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "gitBranch": {
+        "description": "Git branch the variable is associated with, if any.",
+        "type": "string"
+       },
+       "id": {
+        "description": "Unique identifier for the environment variable.",
+        "type": "string"
+       },
+       "internalContentHint": {
+        "additionalProperties": true,
+        "description": "Internal content hints.",
+        "properties": {
+         "encryptedValue": {
+          "type": "string"
+         },
+         "type": {
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "key": {
+        "description": "Name of the environment variable.",
+        "type": "string"
+       },
+       "sunsetSecretId": {
+        "description": "If set, identifies a variable migrated from type `secret` to `sensitive`.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "system": {
+        "description": "Whether the variable is a system variable.",
+        "type": "boolean"
+       },
+       "target": {
+        "description": "Deployment targets for the environment variable.",
+        "items": {
+         "enum": [
+          "production",
+          "preview",
+          "development"
+         ],
+         "type": "string"
+        },
+        "type": "array"
+       },
+       "type": {
+        "description": "Environment variable type.",
+        "enum": [
+         "secret",
+         "system",
+         "encrypted",
+         "plain",
+         "sensitive"
+        ],
+        "type": "string"
+       },
+       "updatedAt": {
+        "description": "Timestamp when the variable was last updated.",
+        "type": "number"
+       },
+       "updatedBy": {
+        "description": "User ID of who last updated the variable.",
+        "type": "string"
+       },
+       "value": {
+        "description": "Value of the environment variable.",
+        "type": "string"
+       },
+       "vsmValue": {
+        "description": "Internal value for variable store management.",
+        "type": [
+         "string",
+         "null"
+        ]
+       }
+      },
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "error": {
+     "additionalProperties": true,
+     "description": "Error response body.",
+     "properties": {
+      "code": {
+       "description": "Error code.",
+       "enum": [
+        "invalid_body",
+        "unauthorized",
+        "payment_required",
+        "forbidden",
+        "not_found",
+        "conflict",
+        "rate_limited",
+        "server_error"
+       ],
+       "type": "string"
+      },
+      "message": {
+       "description": "Error message.",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    },
+    "failed": {
+     "description": "List of failed environment variable creation attempts.",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "error": {
+        "additionalProperties": true,
+        "description": "Error details for each failed variable.",
+        "properties": {
+         "action": {
+          "description": "The action that caused the error.",
+          "type": "string"
+         },
+         "code": {
+          "description": "Error code.",
+          "type": "string"
+         },
+         "envVarId": {
+          "description": "The environment variable ID, if applicable.",
+          "type": "string"
+         },
+         "envVarKey": {
+          "description": "The key of the environment variable, if applicable.",
+          "type": "string"
+         },
+         "gitBranch": {
+          "description": "The git branch, if applicable.",
+          "type": "string"
+         },
+         "key": {
+          "description": "The key of the environment variable that failed.",
+          "type": "string"
+         },
+         "link": {
+          "description": "A relevant link for the error, if available.",
+          "type": "string"
+         },
+         "message": {
+          "description": "Error message.",
+          "type": "string"
+         },
+         "project": {
+          "description": "The project identifier, if applicable.",
+          "type": "string"
+         },
+         "target": {
+          "description": "The deployment target, if applicable.",
+          "oneOf": [
+           {
+            "type": "string"
+           },
+           {
+            "items": {
+             "type": "string"
+            },
+            "type": "array"
+           }
+          ]
+         },
+         "value": {
+          "description": "The attempted value or target, if applicable.",
+          "oneOf": [
+           {
+            "type": "string"
+           },
+           {
+            "items": {
+             "type": "string"
+            },
+            "type": "array"
+           }
+          ]
+         }
+        },
+        "type": "object"
+       }
+      },
+      "type": "object"
+     },
+     "type": "array"
+    }
+   },
+   "title": "Create One or More Project Environment Variables \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": [
+     {
+      "comment": "Primary database URL",
+      "configurationId": "cfg_456def",
+      "contentHint": {
+       "integrationConfigurationId": "iconfig_789",
+       "integrationId": "int_123",
+       "integrationProductId": "prod_456",
+       "storeId": "store_123",
+       "type": "integration-store-secret"
+      },
+      "customEnvironmentIds": [
+       "env_custom_1",
+       "env_custom_2"
+      ],
+      "edgeConfigId": "edgecfg_123",
+      "edgeConfigTokenId": "edgetoken_456",
+      "gitBranch": "main",
+      "internalContentHint": {
+       "encryptedValue": "abcxyz123encrypted",
+       "type": "flags-secret"
+      },
+      "key": "DATABASE_URL",
+      "sunsetSecretId": "sec_legacy_123",
+      "system": false,
+      "target": [
+       "production",
+       "preview"
+      ],
+      "type": "encrypted",
+      "value": "postgres://user:pass@host:5432/db",
+      "vsmValue": "internal-managed-value"
+     }
+    ],
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "idOrName": "my-project"
+    },
+    "query": {
+     "slug": "my-team",
+     "teamId": "team_123456",
+     "upsert": "true"
+    }
+   },
+   "output": {
+    "created": [
+     {
+      "comment": "Primary database URL",
+      "configurationId": "cfg_456def",
+      "contentHint": {
+       "integrationConfigurationId": "iconfig_optional",
+       "integrationId": "int_optional",
+       "integrationProductId": "prod_optional",
+       "projectId": "prj_1234567890",
+       "storeId": "store_123",
+       "type": "postgres-url"
+      },
+      "createdAt": 1710000000000,
+      "createdBy": "user_789xyz",
+      "customEnvironmentIds": [],
+      "decrypted": false,
+      "edgeConfigId": null,
+      "edgeConfigTokenId": null,
+      "gitBranch": "main",
+      "id": "env_abc123",
+      "internalContentHint": {
+       "encryptedValue": "abcxyz123encrypted",
+       "type": "flags-secret"
+      },
+      "key": "DATABASE_URL",
+      "sunsetSecretId": null,
+      "system": false,
+      "target": [
+       "production",
+       "preview"
+      ],
+      "type": "encrypted",
+      "updatedAt": 1710000000000,
+      "updatedBy": "user_789xyz",
+      "value": "postgres://user:pass@host:5432/db",
+      "vsmValue": null
+     }
+    ],
+    "error": {
+     "code": "invalid_body",
+     "message": "One of the provided values in the request body is invalid."
+    },
+    "failed": [
+     {
+      "error": {
+       "action": "create",
+       "code": "conflict",
+       "envVarId": "env_existing_789",
+       "envVarKey": "REDIS_URL",
+       "gitBranch": "dev",
+       "key": "REDIS_URL",
+       "link": "https://vercel.com/docs",
+       "message": "The environment variable already exists for the specified target.",
+       "project": "my-project",
+       "target": [
+        "preview",
+        "development"
+       ],
+       "value": [
+        "preview",
+        "development"
+       ]
+      }
+     }
+    ]
+   }
+  }
+ }
+}

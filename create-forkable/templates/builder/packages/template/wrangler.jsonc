@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "__PROJECT_SLUG__",
+  "main": "server/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // The React app is served as static assets; /api/* runs the Worker first.
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // Local D1 runs inside the dev server with no account. The id is filled in at publish.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "__PROJECT_SLUG__",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "server/db/migrations"
+    }
+  ]
+}

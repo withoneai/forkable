@@ -1,0 +1,162 @@
+{
+ "_id": "conn_mod_def::GJ3ok-Q0D40::oLWNlcx4QDORaL_18z-MsQ",
+ "connectionPlatform": "gmail",
+ "title": "List a User’s Gmail Threads",
+ "method": "GET",
+ "path": "/gmail/v1/users/{{userId}}/threads",
+ "tags": [
+  "hidden:agents"
+ ],
+ "knowledge": "# List a User’s Gmail Threads\n\n## Prerequisites\n\n- Access to the user’s Gmail mailbox with an appropriate Gmail scope (as supported by this endpoint):  \n  `https://mail.google.com/`, `https://www.googleapis.com/auth/gmail.metadata`, `https://www.googleapis.com/auth/gmail.modify`, or `https://www.googleapis.com/auth/gmail.readonly`\n\n## Method\n\n`GET`\n\n## URL\n\n`https://gmail.googleapis.com/gmail/v1/users/{{userId}}/threads`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nLists the threads in the user’s mailbox. You can filter results by label IDs, include spam/trash, and use a Gmail-style search query. Results are paginated.\n\n## Enforcement Rules\n\n- The `userId` path parameter **must always be present**.\n- If the user provides a `userId`, use that value directly.\n- If the user does **not** provide a `userId`, default it explicitly to `\"me\"`.\n- Always construct the path as `/gmail/v1/users/{{userId}}/threads`, where `{{userId}}` is a **non-empty string**.\n- Do **not** call the API with a missing or empty `userId` (e.g., avoid `/gmail/v1/users//threads` or `/gmail/v1/users/threads`).\n- Do **not** infer or guess the `userId` beyond the user's input or the default `\"me\"`.\n- When executing the action, ensure to send **Path Parameters** in the URL and **not** in the body.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body.\n\n### Valid Examples\n\n```http\n/gmail/v1/users/me/threads\n/gmail/v1/users/user@example.com/threads\n```\n\n### Invalid Examples\n\n```http\n/gmail/v1/users//threads\n/gmail/v1/users/threads\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `userId` | string | The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`. |\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|----------|------|-------------|\n| `maxResults` | integer (uint32) | Maximum number of threads to return. Default: `100`. Maximum allowed: `500`. |\n| `labelIds` | string (repeated) | Only return threads with labels that match **all** of the specified label IDs. |\n| `q` | string | Only return threads matching the specified query. Supports the same query format as the Gmail search box (e.g., `\"from:someuser@example.com rfc822msgid: is:unread\"`). **Cannot be used** when accessing the API using the `gmail.metadata` scope. |\n| `includeSpamTrash` | boolean | Include threads from `SPAM` and `TRASH` in the results. Default: `false`. |\n| `pageToken` | string | Page token to retrieve a specific page of results in the list. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"threads\": [\n    {\n      \"id\": \"1789a1b2c3d4e5f6\",\n      \"historyId\": \"9876543210\"\n    },\n    {\n      \"id\": \"1789a1b2c3d4e5f7\",\n      \"historyId\": \"9876543211\"\n    }\n  ],\n  \"nextPageToken\": \"NEXT_PAGE_TOKEN\",\n  \"resultSizeEstimate\": 245\n}\n```\n\n## Response Fields\n\n| Field | Type | Description |\n|------|------|-------------|\n| `threads` | array | List of threads. Note: each thread resource does not contain a list of `messages`. The list of `messages` for a given thread can be fetched using the `threads.get` method. |\n| `threads[].id` | string | The unique ID of the thread. |\n| `threads[].historyId` | string (uint64) | The ID of the last history record that modified this thread. |\n| `nextPageToken` | string | Page token to retrieve the next page of results in the list. |\n| `resultSizeEstimate` | integer (uint32) | Estimated total number of results. |\n\n## Sample Request\n\n```bash\ncurl -i --location --request GET \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/threads?maxResults=100&includeSpamTrash=false' \\\n  --header 'Accept: application/json'\n```\n\n## Example Usage\n\n### Example 1: List threads with a Gmail search query\n\n```bash\ncurl -sS \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/threads?q=from%3Asomeuser%40example.com%20is%3Aunread&maxResults=50' \\\n  -H 'Accept: application/json'\n```\n\n### Example 2: List threads that have specific labels (repeated `labelIds`)\n\n```bash\ncurl -sS \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/threads?labelIds=INBOX&labelIds=UNREAD&maxResults=25' \\\n  -H 'Accept: application/json'\n```\n\n### Example 3: Paginate through results using `pageToken`\n\n```bash\ncurl -sS \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/threads?pageToken=NEXT_PAGE_TOKEN&maxResults=100' \\\n  -H 'Accept: application/json'\n```\n\n## Notes\n\n- `labelIds` is a repeated query parameter; provide it multiple times in the URL query string (e.g., `...&labelIds=INBOX&labelIds=UNREAD`).\n- The `q` parameter supports Gmail’s search syntax, but it is **not allowed** when using the `gmail.metadata` scope.\n- This endpoint returns thread metadata (like `id` and `historyId`); message lists are retrieved via `threads.get`.\n\n## Gotchas\n\n- Setting `maxResults` above `500` is not allowed.\n- If you expect spam/trash threads, set `includeSpamTrash=true`; otherwise they are excluded.\n\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Lists the threads in the user’s mailbox. You can filter results by label IDs, include spam/trash, and use a Gmail-style search query. Results are paginated.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Expected response media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for listing a user's Gmail threads.",
+     "properties": {
+      "userId": {
+       "description": "The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "userId"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters for filtering and paginating Gmail threads.",
+     "properties": {
+      "includeSpamTrash": {
+       "description": "Include threads from `SPAM` and `TRASH` in the results. Default: `false`.",
+       "type": "boolean"
+      },
+      "labelIds": {
+       "description": "Only return threads with labels that match all of the specified label IDs. This is a repeated query parameter and should be provided multiple times in the URL query string.",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "maxResults": {
+       "description": "Maximum number of threads to return. Default: `100`. Maximum allowed: `500`.",
+       "maximum": 500,
+       "minimum": 0,
+       "type": "integer"
+      },
+      "pageToken": {
+       "description": "Page token to retrieve a specific page of results in the list.",
+       "type": "string"
+      },
+      "q": {
+       "description": "Only return threads matching the specified query. Supports the same query format as the Gmail search box (e.g., `\"from:someuser@example.com rfc822msgid: is:unread\"`). Cannot be used when accessing the API using the `gmail.metadata` scope.",
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "List a User’s Gmail Threads – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response containing a paginated list of Gmail threads for the specified user.",
+   "properties": {
+    "nextPageToken": {
+     "description": "Page token to retrieve the next page of results in the list.",
+     "type": "string"
+    },
+    "resultSizeEstimate": {
+     "description": "Estimated total number of results.",
+     "type": "integer"
+    },
+    "threads": {
+     "description": "List of threads. Note: each thread resource does not contain a list of `messages`. The list of `messages` for a given thread can be fetched using the `threads.get` method.",
+     "items": {
+      "additionalProperties": true,
+      "description": "A Gmail thread resource summary.",
+      "properties": {
+       "historyId": {
+        "description": "The ID of the last history record that modified this thread.",
+        "type": "string"
+       },
+       "id": {
+        "description": "The unique ID of the thread.",
+        "type": "string"
+       }
+      },
+      "title": "Thread",
+      "type": "object"
+     },
+     "type": "array"
+    }
+   },
+   "title": "List a User’s Gmail Threads – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "path": {
+     "userId": "me"
+    },
+    "query": {
+     "includeSpamTrash": false,
+     "labelIds": [
+      "INBOX",
+      "UNREAD"
+     ],
+     "maxResults": 100,
+     "pageToken": "NEXT_PAGE_TOKEN",
+     "q": "from:someuser@example.com is:unread"
+    }
+   },
+   "output": {
+    "nextPageToken": "NEXT_PAGE_TOKEN",
+    "resultSizeEstimate": 245,
+    "threads": [
+     {
+      "historyId": "9876543210",
+      "id": "1789a1b2c3d4e5f6"
+     },
+     {
+      "historyId": "9876543211",
+      "id": "1789a1b2c3d4e5f7"
+     }
+    ]
+   }
+  }
+ }
+}

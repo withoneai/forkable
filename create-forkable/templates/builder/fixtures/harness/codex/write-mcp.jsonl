@@ -1,0 +1,9 @@
+{"type":"thread.started","thread_id":"01a16cce-d4af-7991-a2ce-bf16f820cdee"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll create `note.txt` and then query the builder server’s `project_errors` tool."}}
+{"type":"item.started","item":{"id":"item_1","type":"file_change","changes":[{"path":"/tmp/harness-rec/cx/note.txt","kind":"add"}],"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"file_change","changes":[{"path":"/tmp/harness-rec/cx/note.txt","kind":"add"}],"status":"completed"}}
+{"type":"item.started","item":{"id":"item_2","type":"mcp_tool_call","server":"builder","tool":"project_errors","arguments":{},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_2","type":"mcp_tool_call","server":"builder","tool":"project_errors","arguments":{},"result":{"content":[{"type":"text","text":"server says: pong"}],"structured_content":null},"error":null,"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"Created `note.txt` containing `hi`.\n\n`project_errors`: `server says: pong`"}}
+{"type":"turn.completed","usage":{"input_tokens":71631,"cached_input_tokens":64128,"cache_write_input_tokens":0,"output_tokens":637,"reasoning_output_tokens":448}}

@@ -97,6 +97,25 @@
       ]
     },
     {
+      "id": "builder",
+      "name": "Builder",
+      "status": "available",
+      "kind": "App builder",
+      "tagline": "Describe an app. Your own coding agent builds it.",
+      "description": "An app builder on your own computer. Your Claude Code or Codex writes a real app in a real repo with a live preview, and every app comes with its integrations and Sign in with One. One dialog publishes it to GitHub or Vercel.",
+      "platforms": [
+        "github",
+        "vercel"
+      ],
+      "packageManager": "pnpm",
+      "create": "npm create forkable@latest builder",
+      "demo": "pnpm start",
+      "site": "https://one.builders",
+      "code": "https://github.com/withoneai/forkable/tree/main/create-forkable/templates/builder",
+      "repo": "withoneai/forkable-builder",
+      "envToGoLive": []
+    },
+    {
       "id": "brief",
       "name": "Brief",
       "status": "coming-soon",

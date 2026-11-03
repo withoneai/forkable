@@ -35,11 +35,11 @@ Options:
   -h, --help          Show this help.
 ```
 
-Three templates ship in this package: `forkable-starter` (the default, a
-small single-package app), `rill` (`--template rill`), a full AI email
-client, and `search` (`--template search`), one search box over
-everything a user connects, with an AI that answers with citations. Rill
-and Search each have their own pnpm workspace, database and UI (Search
+Four templates ship in this package: `forkable-starter` (the default, a
+small single-package app), `rill`, a full AI email client, `search`, one
+search box over everything a user connects, with an AI that answers with
+citations, and `builder`, an app builder driven by your own coding agent.
+Rill, Search and Builder each have their own pnpm workspace, database and UI (Search
 needs Node 22.12 or newer). A template
 that ships a `pnpm-workspace.yaml` installs and runs with pnpm instead of
 npm; everything else needs nothing beyond Node. More official and

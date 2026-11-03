@@ -1,0 +1,225 @@
+{
+ "_id": "conn_mod_def::GJ3ZK-BoUAw::f8MXbEVgQJ2sEdoPzO3NPA",
+ "connectionPlatform": "github",
+ "title": "Update a Repository Git Reference",
+ "method": "PATCH",
+ "path": "/repos/{{owner}}/{{repo}}/git/refs/{{ref}}",
+ "tags": [],
+ "knowledge": "# Update a Repository Git Reference\n\n## Prerequisites\n\n- You must have permission to update Git references in the target repository.\n\n## Method\n\n`PATCH`\n\n## URL\n\n`https://api.github.com/repos/{{owner}}/{{repo}}/git/refs/{{ref}}`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nUpdates the provided Git reference to point to a new SHA. This can be used to move a branch or tag ref, optionally forcing the update.\n\n## Enforcement Rules\n\n- The `owner` path parameter **must always be present**.\n- The `repo` path parameter **must always be present**.\n- The `ref` path parameter **must always be present**.\n- Do **not** call the API with missing or empty path parameters (e.g., avoid `/repos//...`, `/git/refs/` with an empty `ref`).\n- Always construct the path as `/repos/{{owner}}/{{repo}}/git/refs/{{ref}}`, where each path parameter is a **non-empty string**.\n- When executing the action, ensure to send **Path Parameters in the URL and not in the body**.\n- When executing the action, ensure to send **Query Parameters as URL query parameters and not in the body** (this endpoint does not document any query parameters).\n\n### Valid Examples\n\n```http\n/repos/octocat/Hello-World/git/refs/heads/feature-a\n/repos/my-org/my-repo/git/refs/tags/v1.2.3\n```\n\n### Invalid Examples\n\n```http\n/repos//Hello-World/git/refs/heads/feature-a\n/repos/octocat//git/refs/heads/feature-a\n/repos/octocat/Hello-World/git/refs/\n/repos/octocat/Hello-World/git/refs\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|---|---|---|\n| `owner` | string | The account owner of the repository. The name is not case sensitive. |\n| `repo` | string | The name of the repository without the `.git` extension. The name is not case sensitive. |\n| `ref` | string | The Git reference (example: `heads/feature-a`). For more information, see Git References in the Git documentation. |\n\n## Required Request Body Fields\n\n| Parameter | Type | Description |\n|---|---|---|\n| `sha` | string | The SHA1 value to set this reference to. |\n\n## Optional Request Body Fields\n\n| Parameter | Type | Description |\n|---|---|---|\n| `force` | boolean | Indicates whether to force the update or to make sure the update is a fast-forward update. Default: `false`. Leaving this out or setting it to `false` will make sure you're not overwriting work. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"ref\": \"refs/heads/feature-a\",\n  \"node_id\": \"MDM6UmVmMTIzNDU2Nzg5OnJlZnMvaGVhZHMvZmVhdHVyZS1h\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a\",\n  \"object\": {\n    \"type\": \"commit\",\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\",\n    \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"message\": \"Conflict\",\n  \"documentation_url\": \"https://docs.github.com/rest/git/refs#update-a-reference\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a\",\n  \"status\": \"409\"\n}\n```\n\n### Error Response (422 Unprocessable Entity)\n\n```json\n{\n  \"message\": \"Validation Failed\",\n  \"documentation_url\": \"https://docs.github.com/rest/git/refs#update-a-reference\",\n  \"errors\": [\n    {\n      \"resource\": \"Reference\",\n      \"field\": \"sha\",\n      \"message\": \"Invalid SHA\",\n      \"code\": \"invalid\",\n      \"index\": 0,\n      \"value\": \"not-a-sha\"\n    }\n  ]\n}\n```\n\n## Response Fields\n\n| Field | Type | Description |\n|---|---|---|\n| `ref` | string | The full Git reference name. |\n| `node_id` | string | The node ID of the reference. |\n| `url` | string | API URL for the reference. |\n| `object` | object | The Git object the reference points to. |\n| `object.type` | string | Type of the referenced object. |\n| `object.sha` | string | SHA for the reference. Must be exactly 40 characters (minLength=40, maxLength=40). |\n| `object.url` | string | API URL for the referenced object. |\n\n## Sample Request\n\n```bash\ncurl -i --location --request PATCH 'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\",\n    \"force\": true\n  }'\n```\n\n## Example Usage\n\n### Example 1: Fast-forward update (force omitted; defaults to false)\n\n```bash\ncurl -i --location --request PATCH 'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }'\n```\n\n### Example 2: Force update the ref to a specific commit SHA\n\n```bash\ncurl -i --location --request PATCH 'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\",\n    \"force\": true\n  }'\n```\n\n## Notes\n\n- `force=false` (default) helps prevent overwriting work by requiring a fast-forward update.\n- The `ref` path parameter is expected in the form shown in the docs example (e.g., `heads/feature-a`).\n\n## Error Handling\n\n- **409 Conflict**: The update could not be applied due to a conflict.\n- **422 Unprocessable Entity**: Validation failed, or the endpoint has been spammed.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Updates the provided Git reference to point to a new SHA. This can be used to move a branch or tag ref, optionally forcing the update.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Request body for updating a Git reference to a new SHA.",
+     "properties": {
+      "force": {
+       "description": "Indicates whether to force the update or to make sure the update is a fast-forward update. Default: `false`. Leaving this out or setting it to `false` will make sure you're not overwriting work.",
+       "type": "boolean"
+      },
+      "sha": {
+       "description": "The SHA1 value to set this reference to.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "sha"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Requested response media type.",
+       "type": "string"
+      },
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Request body media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept",
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the repository Git reference update endpoint. Each path parameter must be a non-empty string.",
+     "properties": {
+      "owner": {
+       "description": "The account owner of the repository. The name is not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "ref": {
+       "description": "The Git reference (example: `heads/feature-a`). For more information, see Git References in the Git documentation.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "repo": {
+       "description": "The name of the repository without the `.git` extension. The name is not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "owner",
+      "repo",
+      "ref"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Update a Repository Git Reference \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Successful response structure from the GitHub API, or documented error responses.",
+   "properties": {
+    "documentation_url": {
+     "description": "URL to the API documentation for this endpoint.",
+     "type": "string"
+    },
+    "errors": {
+     "description": "Validation errors, or indication that the endpoint has been spammed.",
+     "items": {
+      "additionalProperties": true,
+      "description": "A validation error item.",
+      "properties": {
+       "code": {
+        "description": "The validation error code.",
+        "type": "string"
+       },
+       "field": {
+        "description": "The field associated with the error.",
+        "type": "string"
+       },
+       "index": {
+        "description": "The index of the invalid item when applicable.",
+        "type": "integer"
+       },
+       "message": {
+        "description": "A human-readable validation error message.",
+        "type": "string"
+       },
+       "resource": {
+        "description": "The resource associated with the error.",
+        "type": "string"
+       },
+       "value": {
+        "description": "The invalid value.",
+        "type": "string"
+       }
+      },
+      "title": "Validation Error",
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "message": {
+     "description": "Error message for conflict or validation failures.",
+     "type": "string"
+    },
+    "node_id": {
+     "description": "The node ID of the reference.",
+     "type": "string"
+    },
+    "object": {
+     "additionalProperties": true,
+     "description": "The Git object the reference points to.",
+     "properties": {
+      "sha": {
+       "description": "SHA for the reference. Must be exactly 40 characters.",
+       "maxLength": 40,
+       "minLength": 40,
+       "type": "string"
+      },
+      "type": {
+       "description": "Type of the referenced object.",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for the referenced object.",
+       "type": "string"
+      }
+     },
+     "title": "Git Object",
+     "type": "object"
+    },
+    "ref": {
+     "description": "The full Git reference name.",
+     "type": "string"
+    },
+    "status": {
+     "description": "HTTP-style status string included in some error responses.",
+     "type": "string"
+    },
+    "url": {
+     "description": "API URL for the reference.",
+     "type": "string"
+    }
+   },
+   "title": "Update a Repository Git Reference Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "force": true,
+     "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd"
+    },
+    "headers": {
+     "Accept": "application/json",
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "owner": "octocat",
+     "ref": "heads/feature-a",
+     "repo": "Hello-World"
+    }
+   },
+   "output": {
+    "documentation_url": "https://docs.github.com/rest/git/refs#update-a-reference",
+    "errors": [
+     {
+      "code": "invalid",
+      "field": "sha",
+      "index": 0,
+      "message": "Invalid SHA",
+      "resource": "Reference",
+      "value": "not-a-sha"
+     }
+    ],
+    "message": "Validation Failed",
+    "node_id": "MDM6UmVmMTIzNDU2Nzg5OnJlZnMvaGVhZHMvZmVhdHVyZS1h",
+    "object": {
+     "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
+     "type": "commit",
+     "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
+    },
+    "ref": "refs/heads/feature-a",
+    "status": "409",
+    "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a"
+   }
+  }
+ }
+}

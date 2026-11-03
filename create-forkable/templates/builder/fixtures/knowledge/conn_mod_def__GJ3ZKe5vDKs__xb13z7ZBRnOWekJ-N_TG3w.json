@@ -1,0 +1,202 @@
+{
+ "_id": "conn_mod_def::GJ3ZKe5vDKs::xb13z7ZBRnOWekJ-N_TG3w",
+ "connectionPlatform": "github",
+ "title": "Get a Repository Git Reference",
+ "method": "GET",
+ "path": "/repos/{{owner}}/{{repo}}/git/ref/{{ref}}",
+ "tags": [],
+ "knowledge": "# Get a Repository Git Reference\n\n## Prerequisites\n\n- You must have access to the target repository.\n\n## Method\n\n`GET`\n\n## URL\n\n`https://api.github.com/repos/{{owner}}/{{repo}}/git/ref/{{ref}}`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nReturns a single Git reference (ref) from a repository\u2019s Git database. The `ref` path parameter must be formatted as `heads/<branch name>` for branches or `tags/<tag name>` for tags. If the `ref` does not exist, the API returns `404`.\n\n## Enforcement Rules\n\n- The `owner` path parameter **must always be present** and **must be a non-empty string**.\n- The `repo` path parameter **must always be present** and **must be a non-empty string** (do not include the `.git` extension).\n- The `ref` path parameter **must always be present** and **must be a non-empty string**.\n- The `ref` value **must be formatted** as:\n  - `heads/<branch name>` for branches\n  - `tags/<tag name>` for tags\n- Do **not** call the API with missing or empty path parameters (e.g., avoid `/repos//...`, `/git/ref/`).\n- When executing the action, ensure to send **Path Parameters in the URL**, not in the body.\n- When executing the action, ensure to send **Query Parameters as URL query parameters**, not in the body. (This endpoint does not document any query parameters.)\n\n### Valid Examples\n\n```http\n/repos/octocat/Hello-World/git/ref/heads/main\n/repos/octocat/Hello-World/git/ref/tags/v1.0.0\n```\n\n### Invalid Examples\n\n```http\n/repos/octocat/Hello-World/git/ref/\n/repos//Hello-World/git/ref/heads/main\n/repos/octocat/Hello-World/git/ref/main\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `owner`  | string | The account owner of the repository. Not case sensitive. |\n| `repo`   | string | The name of the repository **without** the `.git` extension. Not case sensitive. |\n| `ref`    | string | The Git reference. Must be formatted as `heads/<branch>` or `tags/<tag>`. Example: `heads/feature-a`. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"ref\": \"refs/heads/feature-a\",\n  \"node_id\": \"REF_kwDOABCD1234\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a\",\n  \"object\": {\n    \"type\": \"commit\",\n    \"sha\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n    \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/commits/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n  }\n}\n```\n\n### Error Response (404 Not Found)\n\n```json\n{\n  \"message\": \"Not Found\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/ref/heads/does-not-exist\",\n  \"status\": \"404\"\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"message\": \"Conflict\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/ref/heads/main\",\n  \"status\": \"409\"\n}\n```\n\n## Response Fields\n\n| Field        | Type   | Description |\n|-------------|--------|-------------|\n| `ref`       | string | The full Git ref name returned by the API (commonly like `refs/heads/<branch>` or `refs/tags/<tag>`). |\n| `node_id`   | string | The GitHub node ID for the ref. |\n| `url`       | string | API URL for this ref resource. |\n| `object`    | object | The Git object the ref points to. |\n| `object.type` | string | Type of Git object (for example, `commit`). |\n| `object.sha`  | string | SHA for the reference. Exactly 40 characters. |\n| `object.url`  | string | API URL for the referenced Git object. |\n\n## Sample Request\n\n```bash\ncurl -i --location \\\n  --request GET 'https://api.github.com/repos/octocat/Hello-World/git/ref/heads/feature-a' \\\n  --header 'Accept: application/json'\n```\n\n## Example Usage\n\n### Example 1: Get a branch ref\n\n```bash\ncurl -i --location \\\n  'https://api.github.com/repos/octocat/Hello-World/git/ref/heads/main' \\\n  -H 'Accept: application/json'\n```\n\n### Example 2: Get a tag ref\n\n```bash\ncurl -i --location \\\n  'https://api.github.com/repos/octocat/Hello-World/git/ref/tags/v1.0.0' \\\n  -H 'Accept: application/json'\n```\n\n## Notes\n\n- If the `ref` does not match an existing ref, the API returns `404`.\n- To trigger a test merge commit (used to check pull request mergeability), you must explicitly request the pull request via the \u201cGet a pull request\u201d endpoint; fetching refs alone does not trigger that behavior.\n\n## Error Handling\n\n- **404 Not Found**: The specified `ref` does not exist in the repository.\n- **409 Conflict**: The API reports a conflict for the request (as documented by the endpoint).",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Returns a single Git reference (ref) from a repository\u2019s Git database.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Requested response media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the repository and Git reference.",
+     "properties": {
+      "owner": {
+       "description": "The account owner of the repository. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "ref": {
+       "description": "The Git reference. Must be formatted as heads/<branch> or tags/<tag>. Example: heads/feature-a.",
+       "minLength": 1,
+       "pattern": "^(heads|tags)\\/.+$",
+       "type": "string"
+      },
+      "repo": {
+       "description": "The name of the repository without the .git extension. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "owner",
+      "repo",
+      "ref"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "This endpoint does not document any query parameters.",
+     "properties": {},
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Get a Repository Git Reference \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response for retrieving a single Git reference from a repository\u2019s Git database, including success and documented error variants.",
+   "oneOf": [
+    {
+     "additionalProperties": true,
+     "description": "Successful response (200 OK) containing the Git reference.",
+     "properties": {
+      "node_id": {
+       "description": "The GitHub node ID for the ref.",
+       "type": "string"
+      },
+      "object": {
+       "additionalProperties": true,
+       "description": "The Git object the ref points to.",
+       "properties": {
+        "sha": {
+         "description": "SHA for the reference. Exactly 40 characters.",
+         "maxLength": 40,
+         "minLength": 40,
+         "type": "string"
+        },
+        "type": {
+         "description": "Type of Git object (for example, commit).",
+         "type": "string"
+        },
+        "url": {
+         "description": "API URL for the referenced Git object.",
+         "type": "string"
+        }
+       },
+       "title": "Git Object",
+       "type": "object"
+      },
+      "ref": {
+       "description": "The full Git ref name returned by the API (commonly like refs/heads/<branch> or refs/tags/<tag>).",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for this ref resource.",
+       "type": "string"
+      }
+     },
+     "title": "Success Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Error response when the specified ref does not exist in the repository.",
+     "properties": {
+      "documentation_url": {
+       "description": "Documentation URL for the error.",
+       "type": "string"
+      },
+      "message": {
+       "const": "Not Found",
+       "description": "Error message.",
+       "type": "string"
+      },
+      "status": {
+       "const": "404",
+       "description": "HTTP-like status code returned by the API as a string.",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for the requested ref resource.",
+       "type": "string"
+      }
+     },
+     "title": "404 Not Found Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Error response when the API reports a conflict for the request.",
+     "properties": {
+      "documentation_url": {
+       "description": "Documentation URL for the error.",
+       "type": "string"
+      },
+      "message": {
+       "const": "Conflict",
+       "description": "Error message.",
+       "type": "string"
+      },
+      "status": {
+       "const": "409",
+       "description": "HTTP-like status code returned by the API as a string.",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for the requested ref resource.",
+       "type": "string"
+      }
+     },
+     "title": "409 Conflict Response",
+     "type": "object"
+    }
+   ],
+   "title": "Get a Repository Git Reference \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "path": {
+     "owner": "octocat",
+     "ref": "heads/feature-a",
+     "repo": "Hello-World"
+    },
+    "query": {}
+   },
+   "output": {
+    "node_id": "REF_kwDOABCD1234",
+    "object": {
+     "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "type": "commit",
+     "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "ref": "refs/heads/feature-a",
+    "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/feature-a"
+   }
+  }
+ }
+}

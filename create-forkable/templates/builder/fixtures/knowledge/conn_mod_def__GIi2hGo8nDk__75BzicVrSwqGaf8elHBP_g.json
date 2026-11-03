@@ -1,0 +1,292 @@
+{
+ "_id": "conn_mod_def::GIi2hGo8nDk::75BzicVrSwqGaf8elHBP_g",
+ "connectionPlatform": "vercel",
+ "title": "Add a Domain to a Project",
+ "method": "POST",
+ "path": "/v10/projects/{{idOrName}}/domains",
+ "tags": [
+  "human-verified"
+ ],
+ "knowledge": "# Add a Domain to a Project\n\n## Prerequisites\n\n- Requires permission to add domains to the specified Vercel project.\n- You must know the project `id` or `name`.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.vercel.com/v10/projects/{{idOrName}}/domains`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nAdds a domain to a Vercel project. You must specify the project by `id` or `name` in the URL and provide the domain name in the request body. If the domain is not yet verified, the response will include verification challenges to complete. If the domain already exists on the project, the request will fail with a 400 error.\n\n## Enforcement Rules\n\n- The `idOrName` path parameter **must always be present** and must be a non-empty string.\n- When executing, send `idOrName` as a path parameter in the URL, not in the body.\n- When executing, send query parameters as URL query parameters, not in the body.\n- Do **not** call the API with a missing or empty `idOrName` (avoid `/projects//domains` or `/projects/domains`).\n- Valid request paths:\n    - `/v10/projects/my-project/domains`\n    - `/v10/projects/123abc/domains`\n- Invalid request paths:\n    - `/v10/projects//domains`\n    - `/v10/projects/domains`\n\n## Required Path Parameters\n\n| Parameter   | Type   | Description                                            |\n|-------------|--------|--------------------------------------------------------|\n| `idOrName`  | string | The unique project identifier or project name          |\n\n## Optional Query Parameters\n\n| Parameter | Type   | Description                                                       |\n|-----------|--------|-------------------------------------------------------------------|\n| `teamId`  | string | The Team identifier to perform the request on behalf of           |\n| `slug`    | string | The Team slug to perform the request on behalf of                 |\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description                            |\n|-----------|--------|----------------------------------------|\n| `name`    | string | The project domain name (e.g. \"www.example.com\") |\n\n## Optional Request Body Fields\n\n| Parameter            | Type    | Description                                                                                          |\n|----------------------|---------|------------------------------------------------------------------------------------------------------|\n| `gitBranch`          | string  | Git branch to link the project domain. Max length: 250.                                               |\n| `customEnvironmentId`| string  | The unique custom environment identifier within the project.                                          |\n| `redirect`           | string  | Target destination domain for redirect (e.g., \"foobar.com\").                                          |\n| `redirectStatusCode` | integer | Status code for domain redirect. Possible values: 301, 302, 307, 308.                                 |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"name\": \"www.example.com\",\n  \"apexName\": \"example.com\",\n  \"projectId\": \"prj_abc123\",\n  \"redirect\": null,\n  \"redirectStatusCode\": null,\n  \"gitBranch\": null,\n  \"customEnvironmentId\": null,\n  \"updatedAt\": 1712056872101,\n  \"createdAt\": 1712056872099,\n  \"verified\": false,\n  \"verification\": [\n    {\n      \"type\": \"TXT\",\n      \"domain\": \"www.example.com\",\n      \"value\": \"vercel-verification=abc123xyz\",\n      \"reason\": \"This TXT record is required to verify domain ownership.\"\n    }\n  ]\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"bad_request\",\n    \"message\": \"The domain is not valid\"\n  }\n}\n```\n\n### Error Response (401 Unauthorized)\n\n```json\n{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"The request is not authorized\"\n  }\n}\n```\n\n### Error Response (402 Payment Required)\n\n```json\n{\n  \"error\": {\n    \"code\": \"payment_required\",\n    \"message\": \"The account is missing a payment method\"\n  }\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"You do not have permission to access this resource\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"error\": {\n    \"code\": \"conflict\",\n    \"message\": \"The domain is already assigned to another Vercel project\"\n  }\n}\n```\n\n## Response Fields\n\n| Field                      | Type    | Description                                                                                     |\n|----------------------------|---------|-------------------------------------------------------------------------------------------------|\n| `name`                     | string  | The domain name added to the project                                                            |\n| `apexName`                 | string  | The apex/root domain                                                                            |\n| `projectId`                | string  | The project ID to which the domain is added                                                     |\n| `redirect`                 | string  | Target destination domain for redirect                                                          |\n| `redirectStatusCode`       | number  | Status code for domain redirect (301, 302, 307, 308)                                            |\n| `gitBranch`                | string  | The Git branch linked to the project domain                                                     |\n| `customEnvironmentId`      | string  | The custom environment identifier within the project                                            |\n| `updatedAt`                | number  | Timestamp (ms since UNIX epoch) when the domain was last updated                                |\n| `createdAt`                | number  | Timestamp (ms since UNIX epoch) when the domain was added                                       |\n| `verified`                 | boolean | `true` if the domain is verified for use with the project; `false` if not yet verified          |\n| `verification`             | array   | List of verification challenges to complete if `verified` is `false`                            |\n| `verification[].type`      | string  | Type of verification challenge (e.g., \"TXT\")                                                    |\n| `verification[].domain`    | string  | Domain to check for the verification value                                                      |\n| `verification[].value`     | string  | Value to use for the verification challenge (e.g., content of a TXT record)                     |\n| `verification[].reason`    | string  | Reason for the challenge                                                                        |\n\n## Sample Request\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/domains' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"name\": \"www.example.com\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Add a Domain to a Project by Name\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/domains' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"name\": \"www.example.com\"\n  }'\n```\n\n### Example 2: Add a Domain with Git Branch and Custom Environment\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/domains?teamId=team_123' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"name\": \"preview.example.com\",\n    \"gitBranch\": \"develop\",\n    \"customEnvironmentId\": \"env_456\"\n  }'\n```\n\n### Example 3: Add a Domain with Redirect\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project/domains' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"name\": \"redirect.example.com\",\n    \"redirect\": \"foobar.com\",\n    \"redirectStatusCode\": 307\n  }'\n```\n\n## Behavior\n\n1. Validates required fields and mutual exclusivity (cannot set both `gitBranch` and `redirect`).\n2. If the domain is not verified, returns verification challenges in the response.\n3. If the domain already exists on the project, returns a 400 error.\n4. If a redirect is set, the domain will redirect to the target with the specified status code.\n\n## Notes\n\n- You cannot set both a `gitBranch` and a `redirect` for the same domain.\n- Domains must be valid and not already assigned to another project.\n- To complete verification, use the `/projects/:idOrName/domains/:domain/verify` endpoint with the provided challenge.\n- If the domain is not verified, it will not be used as an alias until the challenge is completed.\n- The `verified` field in the response indicates if the domain is ready for use.\n- The `redirectStatusCode` must be one of: 301, 302, 307, 308.\n- The maximum length for `gitBranch` is 250 characters.\n\n## Gotchas\n\n- Do **not** omit the `idOrName` path parameter.\n- If both `gitBranch` and `redirect` are provided, the request will fail.\n- Cannot add a domain if the latest production deployment for the project was not successful.\n- A domain cannot redirect to itself.\n- Cannot set a production branch as a branch for your domain.\n- You may receive a `409 Conflict` if the domain is already used by another Vercel project (even if not yet verified).\n\n## Error Handling\n\n- **400 Bad Request**: Invalid domain, both `gitBranch` and `redirect` set, domain already exists, invalid redirect, etc.\n- **401 Unauthorized**: Request not authorized.\n- **402 Payment Required**: Account is missing a payment method or is soft-blocked.\n- **403 Forbidden**: No permission to access the resource or domain.\n- **409 Conflict**: Domain already assigned to another project, domain not allowed, project is being transferred.\n\nError responses will include an `error` object with `code` and `message` fields describing the issue.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Adds a domain to a Vercel project. You must specify the project by `id` or `name` in the URL and provide the domain name in the request body. If the domain is not yet verified, the response will include verification challenges to complete. If the domain already exists on the project, the request will fail with a 400 error.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "allOf": [
+      {
+       "not": {
+        "required": [
+         "gitBranch",
+         "redirect"
+        ]
+       }
+      }
+     ],
+     "description": "Request body for adding a domain to a project.",
+     "properties": {
+      "customEnvironmentId": {
+       "description": "The unique custom environment identifier within the project.",
+       "type": "string"
+      },
+      "gitBranch": {
+       "description": "Git branch to link the project domain. Max length: 250.",
+       "maxLength": 250,
+       "type": "string"
+      },
+      "name": {
+       "description": "The project domain name (e.g. \"www.example.com\")",
+       "type": "string"
+      },
+      "redirect": {
+       "description": "Target destination domain for redirect (e.g., \"foobar.com\").",
+       "type": "string"
+      },
+      "redirectStatusCode": {
+       "description": "Status code for domain redirect. Possible values: 301, 302, 307, 308.",
+       "enum": [
+        301,
+        302,
+        307,
+        308
+       ],
+       "type": "integer"
+      }
+     },
+     "required": [
+      "name"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the request body.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the project domain creation endpoint.",
+     "properties": {
+      "idOrName": {
+       "description": "The unique project identifier or project name",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "idOrName"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters to perform the request on behalf of a team.",
+     "properties": {
+      "slug": {
+       "description": "The Team slug to perform the request on behalf of",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "The Team identifier to perform the request on behalf of",
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Add a Domain to a Project \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "description": "Response returned by the Vercel API when adding a domain to a project, including success and error variants.",
+   "oneOf": [
+    {
+     "additionalProperties": true,
+     "description": "Successful response when a domain is added to a project.",
+     "properties": {
+      "apexName": {
+       "description": "The apex/root domain",
+       "type": "string"
+      },
+      "createdAt": {
+       "description": "Timestamp (ms since UNIX epoch) when the domain was added",
+       "type": "number"
+      },
+      "customEnvironmentId": {
+       "description": "The custom environment identifier within the project",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "gitBranch": {
+       "description": "The Git branch linked to the project domain",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "name": {
+       "description": "The domain name added to the project",
+       "type": "string"
+      },
+      "projectId": {
+       "description": "The project ID to which the domain is added",
+       "type": "string"
+      },
+      "redirect": {
+       "description": "Target destination domain for redirect",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "redirectStatusCode": {
+       "description": "Status code for domain redirect (301, 302, 307, 308)",
+       "enum": [
+        301,
+        302,
+        307,
+        308,
+        null
+       ],
+       "type": [
+        "number",
+        "null"
+       ]
+      },
+      "updatedAt": {
+       "description": "Timestamp (ms since UNIX epoch) when the domain was last updated",
+       "type": "number"
+      },
+      "verification": {
+       "description": "List of verification challenges to complete if `verified` is `false`",
+       "items": {
+        "additionalProperties": true,
+        "properties": {
+         "domain": {
+          "description": "Domain to check for the verification value",
+          "type": "string"
+         },
+         "reason": {
+          "description": "Reason for the challenge",
+          "type": "string"
+         },
+         "type": {
+          "description": "Type of verification challenge (e.g., \"TXT\")",
+          "type": "string"
+         },
+         "value": {
+          "description": "Value to use for the verification challenge (e.g., content of a TXT record)",
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "verified": {
+       "description": "`true` if the domain is verified for use with the project; `false` if not yet verified",
+       "type": "boolean"
+      }
+     },
+     "title": "Successful Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Error response returned when the request fails.",
+     "properties": {
+      "error": {
+       "additionalProperties": true,
+       "properties": {
+        "code": {
+         "description": "Machine-readable error code.",
+         "enum": [
+          "bad_request",
+          "unauthorized",
+          "payment_required",
+          "forbidden",
+          "conflict"
+         ],
+         "type": "string"
+        },
+        "message": {
+         "description": "Human-readable error message.",
+         "type": "string"
+        }
+       },
+       "type": "object"
+      }
+     },
+     "title": "Error Response",
+     "type": "object"
+    }
+   ],
+   "title": "Add a Domain to a Project \u2013 Response"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "customEnvironmentId": "env_456",
+     "gitBranch": "develop",
+     "name": "preview.example.com",
+     "redirectStatusCode": 307
+    },
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "idOrName": "my-project"
+    },
+    "query": {
+     "slug": "my-team",
+     "teamId": "team_123"
+    }
+   },
+   "output": {
+    "apexName": "example.com",
+    "createdAt": 1712056872099,
+    "customEnvironmentId": null,
+    "gitBranch": null,
+    "name": "www.example.com",
+    "projectId": "prj_abc123",
+    "redirect": null,
+    "redirectStatusCode": null,
+    "updatedAt": 1712056872101,
+    "verification": [
+     {
+      "domain": "www.example.com",
+      "reason": "This TXT record is required to verify domain ownership.",
+      "type": "TXT",
+      "value": "vercel-verification=abc123xyz"
+     }
+    ],
+    "verified": false
+   }
+  }
+ }
+}

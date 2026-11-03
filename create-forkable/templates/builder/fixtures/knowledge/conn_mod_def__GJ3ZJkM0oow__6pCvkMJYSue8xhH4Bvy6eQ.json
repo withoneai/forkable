@@ -1,0 +1,261 @@
+{
+ "_id": "conn_mod_def::GJ3ZJkM0oow::6pCvkMJYSue8xhH4Bvy6eQ",
+ "connectionPlatform": "github",
+ "title": "Create a Repository Blob",
+ "method": "POST",
+ "path": "/repos/{{owner}}/{{repo}}/git/blobs",
+ "tags": [],
+ "knowledge": "# Create a Repository Blob\n\n## Prerequisites\n\n- You must have access to the target repository.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.github.com/repos/{{owner}}/{{repo}}/git/blobs`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new Git blob in the specified repository and returns its SHA and API URL. The blob content can be provided as UTF-8 text or base64-encoded data.\n\n## Enforcement Rules\n\n- The `owner` path parameter **must always be present** and **non-empty**.\n- The `repo` path parameter **must always be present** and **non-empty**.\n- Always construct the path as `/repos/{{owner}}/{{repo}}/git/blobs`.\n- Do **not** call the API with missing or empty path parameters (e.g., avoid `/repos//my-repo/git/blobs` or `/repos/octo-org//git/blobs`).\n- When executing the action, ensure to send **Path Parameters in the URL and not in the body**.\n- This endpoint has **no query parameters**.\n- When executing the action, ensure to send **Query Parameters in the URL as query parameters and not in the body** (none apply here).\n\n### Valid Examples\n\n```http\n/repos/octo-org/hello-world/git/blobs\n/repos/github/docs/git/blobs\n```\n\n### Invalid Examples\n\n```http\n/repos//hello-world/git/blobs\n/repos/octo-org//git/blobs\n/repos/octo-org/hello-world/git/blobs?owner=octo-org\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `owner`  | string | The account owner of the repository. Not case sensitive. |\n| `repo`   | string | The name of the repository without the `.git` extension. Not case sensitive. |\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `content` | string | The new blob's content. |\n\n## Optional Request Body Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `encoding` | string | The encoding used for `content`. Default: `\"utf-8\"`. Supported values: `\"utf-8\"`, `\"base64\"`. |\n\n## Response\n\n### Success Response (201 Created)\n\nHeaders include:\n\n- `Location` (string)\n\n```json\n{\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/blobs/3f9a0f0f7a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d\",\n  \"sha\": \"3f9a0f0f7a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d\"\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"message\": \"Forbidden\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/blobs\",\n  \"status\": \"403\"\n}\n```\n\n### Error Response (404 Resource not found)\n\n```json\n{\n  \"message\": \"Not Found\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/blobs\",\n  \"status\": \"404\"\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"message\": \"Conflict\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/blobs\",\n  \"status\": \"409\"\n}\n```\n\n### Error Response (422 Validation failed) \u2014 Variant A\n\n```json\n{\n  \"message\": \"Validation Failed\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"errors\": [\n    {\n      \"resource\": \"Blob\",\n      \"field\": \"content\",\n      \"message\": \"content is invalid\",\n      \"code\": \"invalid\",\n      \"index\": 0,\n      \"value\": \"...\"\n    }\n  ]\n}\n```\n\n### Error Response (422 Validation failed) \u2014 Variant B (secret scanning metadata)\n\n```json\n{\n  \"message\": \"Validation Failed\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"status\": \"422\",\n  \"metadata\": {\n    \"secret_scanning\": {\n      \"bypass_placeholders\": [\n        {\n          \"placeholder_id\": \"<secret-scanning-push-protection-bypass-placeholder-id>\",\n          \"token_type\": \"string\"\n        }\n      ]\n    }\n  }\n}\n```\n\n## Response Fields\n\n| Field | Type | Description |\n|------|------|-------------|\n| `url` | string | API URL for the created blob. |\n| `sha` | string | SHA identifier of the created blob. |\n\n## Sample Request\n\n```bash\ncurl -i --request POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/blobs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"content\": \"Content of the blob\",\n    \"encoding\": \"utf-8\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Create a UTF-8 blob (default encoding)\n\n```bash\ncurl -i --request POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/blobs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"content\": \"Hello from a blob\"\n  }'\n```\n\n### Example 2: Create a base64-encoded blob\n\n```bash\ncurl -i --request POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/blobs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"content\": \"SGVsbG8gZnJvbSBhIGJsb2I=\",\n    \"encoding\": \"base64\"\n  }'\n```\n\n## Behavior\n\n1. Accepts blob `content` and optional `encoding`.\n2. Creates a Git blob object in the repository.\n3. Returns the blob `sha` and its API `url` (and a `Location` response header).\n\n## Notes\n\n- `repo` should be provided **without** the `.git` extension.\n- Only `\"utf-8\"` and `\"base64\"` encodings are documented as supported.\n\n## Error Handling\n\n- **403 Forbidden**: You don\u2019t have permission to access or write to the repository.\n- **404 Not Found**: The repository (or path) does not exist or is not accessible.\n- **409 Conflict**: The request conflicts with repository state.\n- **422 Validation Failed**: The request body failed validation; may include detailed `errors` or `metadata.secret_scanning` information.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates a new Git blob in the specified repository and returns its SHA and API URL. The blob content can be provided as UTF-8 text or base64-encoded data.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Blob content payload",
+     "properties": {
+      "content": {
+       "description": "The new blob's content.",
+       "type": "string"
+      },
+      "encoding": {
+       "description": "The encoding used for content. Default: \"utf-8\". Supported values: \"utf-8\", \"base64\".",
+       "enum": [
+        "utf-8",
+        "base64"
+       ],
+       "type": "string"
+      }
+     },
+     "required": [
+      "content"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Requested response media type",
+       "type": "string"
+      },
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Request body media type",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept",
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for /repos/{owner}/{repo}/git/blobs",
+     "properties": {
+      "owner": {
+       "description": "The account owner of the repository. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "repo": {
+       "description": "The name of the repository without the .git extension. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "owner",
+      "repo"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Create a Repository Blob \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Successful response structure from the API, including documented error variants and response headers.",
+   "properties": {
+    "body": {
+     "additionalProperties": true,
+     "description": "Success or error response body.",
+     "properties": {
+      "documentation_url": {
+       "description": "URL to the API documentation.",
+       "type": "string"
+      },
+      "errors": {
+       "description": "Validation error details.",
+       "items": {
+        "additionalProperties": true,
+        "description": "Detailed validation error information.",
+        "properties": {
+         "code": {
+          "description": "Validation error code.",
+          "type": "string"
+         },
+         "field": {
+          "description": "Field associated with the validation error.",
+          "type": "string"
+         },
+         "index": {
+          "description": "Index of the invalid item.",
+          "type": "integer"
+         },
+         "message": {
+          "description": "Validation error message.",
+          "type": "string"
+         },
+         "resource": {
+          "description": "Resource type associated with the validation error.",
+          "type": "string"
+         },
+         "value": {
+          "description": "Submitted value associated with the validation error.",
+          "type": "string"
+         }
+        },
+        "title": "Validation Error",
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "message": {
+       "description": "Error message.",
+       "type": "string"
+      },
+      "metadata": {
+       "additionalProperties": true,
+       "description": "Additional metadata returned in some validation error responses.",
+       "properties": {
+        "secret_scanning": {
+         "additionalProperties": true,
+         "description": "Secret scanning metadata included in validation failure responses.",
+         "properties": {
+          "bypass_placeholders": {
+           "description": "Bypass placeholders for secret scanning push protection.",
+           "items": {
+            "additionalProperties": true,
+            "description": "Secret scanning bypass placeholder details.",
+            "properties": {
+             "placeholder_id": {
+              "description": "Secret-scanning push-protection bypass placeholder ID.",
+              "type": "string"
+             },
+             "token_type": {
+              "description": "Type of token detected.",
+              "type": "string"
+             }
+            },
+            "title": "Bypass Placeholder",
+            "type": "object"
+           },
+           "type": "array"
+          }
+         },
+         "title": "Secret Scanning Metadata",
+         "type": "object"
+        }
+       },
+       "title": "Metadata",
+       "type": "object"
+      },
+      "sha": {
+       "description": "SHA identifier of the created blob.",
+       "type": "string"
+      },
+      "status": {
+       "description": "HTTP status code represented as a string in documented error responses.",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for the created blob.",
+       "type": "string"
+      }
+     },
+     "title": "Response Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "Headers returned by the API. Success responses include Location.",
+     "properties": {
+      "Location": {
+       "description": "Location header for the created resource.",
+       "type": "string"
+      }
+     },
+     "title": "Response Headers",
+     "type": "object"
+    }
+   },
+   "title": "Create a Repository Blob Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "content": "SGVsbG8gZnJvbSBhIGJsb2I=",
+     "encoding": "base64"
+    },
+    "headers": {
+     "Accept": "application/json",
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "owner": "octo-org",
+     "repo": "hello-world"
+    }
+   },
+   "output": {
+    "body": {
+     "documentation_url": "https://docs.github.com/rest",
+     "errors": [
+      {
+       "code": "invalid",
+       "field": "content",
+       "index": 0,
+       "message": "content is invalid",
+       "resource": "Blob",
+       "value": "..."
+      }
+     ],
+     "message": "Validation Failed",
+     "metadata": {
+      "secret_scanning": {
+       "bypass_placeholders": [
+        {
+         "placeholder_id": "<secret-scanning-push-protection-bypass-placeholder-id>",
+         "token_type": "string"
+        }
+       ]
+      }
+     },
+     "sha": "3f9a0f0f7a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d",
+     "status": "422",
+     "url": "https://api.github.com/repos/octo-org/hello-world/git/blobs/3f9a0f0f7a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d"
+    },
+    "headers": {
+     "Location": "https://api.github.com/repos/octo-org/hello-world/git/blobs/3f9a0f0f7a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d"
+    }
+   }
+  }
+ }
+}

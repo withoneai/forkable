@@ -34,6 +34,7 @@ const TEMPLATES = [
   { id: "forkable-starter", src: join(here, "..", "..", "starter") },
   { id: "rill", src: join(homedir(), "projects", "connect-usecases", "orez") },
   { id: "search", src: join(homedir(), "projects", "connect-usecases", "search"), ref: "public-ready" },
+  { id: "builder", src: join(homedir(), "projects", "connect-usecases", "builder"), ref: "public-ready" },
 ];
 
 const only = [];

@@ -1,0 +1,444 @@
+{
+ "_id": "conn_mod_def::GIi15DgMrtk::4sacesKzT3abQ63_h7ZSfw",
+ "connectionPlatform": "vercel",
+ "title": "Get a Deployment by ID or URL",
+ "method": "GET",
+ "path": "/v13/deployments/{{idOrUrl}}",
+ "tags": [
+  "human-verified"
+ ],
+ "knowledge": "# Get a Deployment by ID or URL\n\n## Prerequisites\n\n- User must have access to the deployment (either public information or, for private fields, be an owner or team member).\n- The deployment must exist (ID or URL must be valid).\n\n## Method\n\n`GET`\n\n## URL\n\n`https://api.vercel.com/v13/deployments/{{idOrUrl}}`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nRetrieves detailed information about a specific Vercel deployment, either by its unique ID or by its hostname (URL). If the authenticated user or team is an owner of the deployment, additional private fields are included. Supports adding Git repository details and can operate on behalf of a specific team.\n\n## Enforcement Rules\n\n- The `idOrUrl` path parameter **must always be present** in the URL.\n- `idOrUrl` accepts either the deployment's unique ID (e.g., `dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ`) or the deployment's unique hostname (e.g., `my-instant-deployment-3ij3cxz9qr.now.sh`).\n- Do **not** call the API with a missing or empty `idOrUrl` (e.g., avoid `/deployments//` or `/deployments/`).\n- When executing, send **Path Parameters** in the URL and **Query Parameters** as URL query parameters (not in the body).\n\n### Valid Examples\n\n```\n/v13/deployments/dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ\n/v13/deployments/my-instant-deployment-3ij3cxz9qr.now.sh\n```\n\n### Invalid Examples\n\n```\n/v13/deployments/\n/v13/deployments//\n```\n\n## Required Path Parameters\n\n| Parameter   | Type   | Description                                                                 |\n|-------------|--------|-----------------------------------------------------------------------------|\n| `idOrUrl`   | string | The unique identifier or hostname (URL) of the deployment. **Required.**    |\n\n## Optional Query Parameters\n\n| Parameter        | Type   | Description                                                                                   |\n|------------------|--------|-----------------------------------------------------------------------------------------------|\n| `withGitRepoInfo`| string | Whether to include detailed git repository information in the response. Values: \"1\" or \"true\". |\n| `teamId`         | string | The Team ID to perform the request on behalf of.                                              |\n| `slug`           | string | The Team slug to perform the request on behalf of.                                            |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"id\": \"dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ\",\n  \"name\": \"my-project\",\n  \"url\": \"my-instant-deployment-3ij3cxz9qr.now.sh\",\n  \"createdAt\": 1540257589405,\n  \"readyState\": \"READY\",\n  \"type\": \"LAMBDAS\",\n  \"public\": false,\n  \"creator\": {\n    \"uid\": \"user_12345\",\n    \"username\": \"vercel-user\",\n    \"avatar\": \"https://avatars.vercel.com/u/12345\"\n  },\n  \"status\": \"READY\",\n  \"regions\": [\"sfo1\", \"iad1\"],\n  \"team\": {\n    \"id\": \"team_abcde\",\n    \"name\": \"My Team\",\n    \"slug\": \"my-team\",\n    \"avatar\": \"https://avatars.vercel.com/team_abcde\"\n  },\n  \"project\": {\n    \"id\": \"prj_abcde12345\",\n    \"name\": \"my-project\",\n    \"framework\": \"nextjs\"\n  },\n  \"alias\": [\n    \"my-instant-deployment-3ij3cxz9qr.now.sh\",\n    \"my-project.my-team.now.sh\"\n  ],\n  \"aliasAssigned\": true,\n  \"buildSkipped\": false,\n  \"build\": {\n    \"env\": [\"NODE_ENV=production\"]\n  },\n  \"buildArtifactUrls\": [\"https://builds.vercel.com/artifacts/abc123.zip\"],\n  \"builds\": [\n    {\n      \"use\": \"@vercel/node\",\n      \"src\": \"api/hello.js\",\n      \"config\": {}\n    }\n  ],\n  \"env\": [\"NODE_ENV\", \"API_URL\"],\n  \"images\": {\n    \"sizes\": [640, 750, 828, 1080, 1200, 1920],\n    \"qualities\": [75, 85],\n    \"domains\": [\"example.com\"],\n    \"formats\": [\"image/webp\", \"image/avif\"],\n    \"dangerouslyAllowSVG\": false\n  },\n  \"meta\": {},\n  \"version\": 2\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"bad_request\",\n    \"message\": \"Invalid value for withGitRepoInfo\"\n  }\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"You do not have permission to access this resource.\"\n  }\n}\n```\n\n### Error Response (404 Not Found)\n\n```json\n{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"The deployment was not found\"\n  }\n}\n```\n\n## Response Fields\n\n| Field                              | Type     | Description                                                                                             |\n|-------------------------------------|----------|---------------------------------------------------------------------------------------------------------|\n| `id`                               | string   | Unique identifier for the deployment.                                                                    |\n| `name`                             | string   | Name of the project at deployment time.                                                                  |\n| `url`                              | string   | Unique URL/hostname of the deployment.                                                                   |\n| `createdAt`                        | number   | Unix timestamp (ms) when the deployment was created.                                                     |\n| `readyState`                       | string   | Deployment state: \"QUEUED\", \"BUILDING\", \"ERROR\", \"INITIALIZING\", \"READY\", \"CANCELED\".                   |\n| `type`                             | string   | Platform type, typically \"LAMBDAS\".                                                                      |\n| `public`                           | boolean  | Whether the deployment is public (`true`) or private (`false`).                                          |\n| `creator.uid`                      | string   | User ID of the creator.                                                                                  |\n| `creator.username`                 | string   | Username of the creator.                                                                                 |\n| `creator.avatar`                   | string   | Avatar URL of the creator.                                                                               |\n| `status`                           | string   | Deployment status: \"QUEUED\", \"BUILDING\", \"ERROR\", \"INITIALIZING\", \"READY\", \"CANCELED\".                  |\n| `regions`                          | array    | Regions where the deployment exists.                                                                     |\n| `team.id`                          | string   | Team ID (if owned by a team).                                                                            |\n| `team.name`                        | string   | Team name.                                                                                               |\n| `team.slug`                        | string   | Team slug.                                                                                               |\n| `team.avatar`                      | string   | Team avatar URL.                                                                                         |\n| `project.id`                       | string   | Project ID associated with the deployment.                                                               |\n| `project.name`                     | string   | Project name.                                                                                            |\n| `project.framework`                | string   | Framework used (e.g., \"nextjs\").                                                                         |\n| `alias`                            | array    | List of all aliases assigned to the deployment.                                                          |\n| `aliasAssigned`                    | boolean  | If aliases in `alias` were assigned successfully.                                                        |\n| `buildSkipped`                     | boolean  | Whether the build was skipped.                                                                           |\n| `build.env`                        | array    | List of environment variables used for build.                                                            |\n| `buildArtifactUrls`                | array    | URLs to build artifacts.                                                                                 |\n| `builds`                           | array    | Array of build steps, including builder used, source, and config.                                        |\n| `env`                              | array    | List of environment variables used by the deployment.                                                    |\n| `images.sizes`                     | array    | Supported image sizes.                                                                                   |\n| `images.qualities`                 | array    | Supported image qualities.                                                                               |\n| `images.domains`                   | array    | Allowed image domains.                                                                                   |\n| `images.formats`                   | array    | Supported image formats (e.g., \"image/webp\", \"image/avif\").                                              |\n| `images.dangerouslyAllowSVG`       | boolean  | If SVG images are allowed.                                                                               |\n| `meta`                             | object   | Additional metadata.                                                                                     |\n| `version`                          | number   | Platform version used to create the deployment (e.g., 2).                                                |\n\n*Note: The actual response is much larger and may include all fields described in the Description section if authenticated as an owner.*\n\n## Sample Request\n\n```bash\ncurl -X GET 'https://api.vercel.com/v13/deployments/dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ'\n```\n\n## Example Usage\n\n### Example 1: Get Deployment by ID\n\n```bash\ncurl -X GET 'https://api.vercel.com/v13/deployments/dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ'\n```\n\n### Example 2: Get Deployment by URL/Hostname\n\n```bash\ncurl -X GET 'https://api.vercel.com/v13/deployments/my-instant-deployment-3ij3cxz9qr.now.sh'\n```\n\n### Example 3: Get Deployment with Git Repo Info and for a Team\n\n```bash\ncurl -X GET 'https://api.vercel.com/v13/deployments/dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ?withGitRepoInfo=1&teamId=team_abcde'\n```\n\n## Behavior\n\n1. **Validation**: Checks that the `idOrUrl` path parameter is present and valid.\n2. **Permission Check**: Returns only public information unless the authenticated user/team is an owner.\n3. **Data Retrieval**: Fetches deployment details, optionally including Git repository info and team context.\n4. **Response Return**: Returns deployment data as JSON, or an error if not found or not authorized.\n\n## Notes\n\n- The `idOrUrl` parameter can be either a deployment's unique ID or its unique hostname.\n- Setting `withGitRepoInfo` to \"1\" or \"true\" includes git repository details if available.\n- `teamId` and `slug` are mutually exclusive; only one should be provided to specify a team.\n- No request body is required for this GET endpoint.\n- If you provide both `teamId` and `slug`, the API may return an error.\n\n## Gotchas\n\n- You must always provide a non-empty `idOrUrl` in the URL path.\n- If `idOrUrl` does not match any deployment, a 404 error is returned.\n- If you lack permission for a private deployment, a 403 error is returned.\n- If `withGitRepoInfo` is set to a non-boolean value, a 400 error is returned.\n\n## Error Handling\n\n- **400 Bad Request**: Invalid query parameter value (e.g., invalid `withGitRepoInfo`).\n- **403 Forbidden**: You do not have permission to access the deployment.\n- **404 Not Found**: Deployment not found (invalid `idOrUrl`).\n\nError examples are shown above.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Retrieves detailed information about a specific Vercel deployment, either by its unique ID or by its hostname (URL). If the authenticated user or team is an owner of the deployment, additional private fields are included. Supports adding Git repository details and can operate on behalf of a specific team.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the request.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the deployment lookup request.",
+     "properties": {
+      "idOrUrl": {
+       "description": "The unique identifier or hostname (URL) of the deployment. Required.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "idOrUrl"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters for including git repository information and specifying team context.",
+     "properties": {
+      "slug": {
+       "description": "The Team slug to perform the request on behalf of.",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "The Team ID to perform the request on behalf of.",
+       "type": "string"
+      },
+      "withGitRepoInfo": {
+       "description": "Whether to include detailed git repository information in the response. Values: \"1\" or \"true\".",
+       "enum": [
+        "1",
+        "true"
+       ],
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Get a Deployment by ID or URL \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response containing deployment details for a Vercel deployment, or an error object for bad request, forbidden, or not found conditions.",
+   "properties": {
+    "alias": {
+     "description": "List of all aliases assigned to the deployment.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "aliasAssigned": {
+     "description": "If aliases in `alias` were assigned successfully.",
+     "type": "boolean"
+    },
+    "build": {
+     "additionalProperties": true,
+     "description": "Build configuration and environment details.",
+     "properties": {
+      "env": {
+       "description": "List of environment variables used for build.",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      }
+     },
+     "title": "Build",
+     "type": "object"
+    },
+    "buildArtifactUrls": {
+     "description": "URLs to build artifacts.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "buildSkipped": {
+     "description": "Whether the build was skipped.",
+     "type": "boolean"
+    },
+    "builds": {
+     "description": "Array of build steps, including builder used, source, and config.",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "config": {
+        "additionalProperties": true,
+        "description": "Configuration for the build step.",
+        "type": "object"
+       },
+       "src": {
+        "description": "Source path for the build step.",
+        "type": "string"
+       },
+       "use": {
+        "description": "Builder used for the build step.",
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "createdAt": {
+     "description": "Unix timestamp (ms) when the deployment was created.",
+     "type": "number"
+    },
+    "creator": {
+     "additionalProperties": true,
+     "description": "Information about the creator of the deployment.",
+     "properties": {
+      "avatar": {
+       "description": "Avatar URL of the creator.",
+       "type": "string"
+      },
+      "uid": {
+       "description": "User ID of the creator.",
+       "type": "string"
+      },
+      "username": {
+       "description": "Username of the creator.",
+       "type": "string"
+      }
+     },
+     "title": "Creator",
+     "type": "object"
+    },
+    "env": {
+     "description": "List of environment variables used by the deployment.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "error": {
+     "additionalProperties": true,
+     "description": "Error response object for invalid request, forbidden access, or deployment not found.",
+     "properties": {
+      "code": {
+       "description": "Machine-readable error code.",
+       "enum": [
+        "bad_request",
+        "forbidden",
+        "not_found"
+       ],
+       "type": "string"
+      },
+      "message": {
+       "description": "Human-readable error message.",
+       "type": "string"
+      }
+     },
+     "title": "Error",
+     "type": "object"
+    },
+    "id": {
+     "description": "Unique identifier for the deployment.",
+     "type": "string"
+    },
+    "images": {
+     "additionalProperties": true,
+     "description": "Image optimization configuration for the deployment.",
+     "properties": {
+      "dangerouslyAllowSVG": {
+       "description": "If SVG images are allowed.",
+       "type": "boolean"
+      },
+      "domains": {
+       "description": "Allowed image domains.",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "formats": {
+       "description": "Supported image formats (e.g., \"image/webp\", \"image/avif\").",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "qualities": {
+       "description": "Supported image qualities.",
+       "items": {
+        "type": "number"
+       },
+       "type": "array"
+      },
+      "sizes": {
+       "description": "Supported image sizes.",
+       "items": {
+        "type": "number"
+       },
+       "type": "array"
+      }
+     },
+     "title": "Images",
+     "type": "object"
+    },
+    "meta": {
+     "additionalProperties": true,
+     "description": "Additional metadata.",
+     "type": "object"
+    },
+    "name": {
+     "description": "Name of the project at deployment time.",
+     "type": "string"
+    },
+    "project": {
+     "additionalProperties": true,
+     "description": "Project associated with the deployment.",
+     "properties": {
+      "framework": {
+       "description": "Framework used (e.g., \"nextjs\").",
+       "type": "string"
+      },
+      "id": {
+       "description": "Project ID associated with the deployment.",
+       "type": "string"
+      },
+      "name": {
+       "description": "Project name.",
+       "type": "string"
+      }
+     },
+     "title": "Project",
+     "type": "object"
+    },
+    "public": {
+     "description": "Whether the deployment is public (true) or private (false).",
+     "type": "boolean"
+    },
+    "readyState": {
+     "description": "Deployment state: \"QUEUED\", \"BUILDING\", \"ERROR\", \"INITIALIZING\", \"READY\", \"CANCELED\".",
+     "enum": [
+      "QUEUED",
+      "BUILDING",
+      "ERROR",
+      "INITIALIZING",
+      "READY",
+      "CANCELED"
+     ],
+     "type": "string"
+    },
+    "regions": {
+     "description": "Regions where the deployment exists.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "status": {
+     "description": "Deployment status: \"QUEUED\", \"BUILDING\", \"ERROR\", \"INITIALIZING\", \"READY\", \"CANCELED\".",
+     "enum": [
+      "QUEUED",
+      "BUILDING",
+      "ERROR",
+      "INITIALIZING",
+      "READY",
+      "CANCELED"
+     ],
+     "type": "string"
+    },
+    "team": {
+     "additionalProperties": true,
+     "description": "Team information if the deployment is owned by a team.",
+     "properties": {
+      "avatar": {
+       "description": "Team avatar URL.",
+       "type": "string"
+      },
+      "id": {
+       "description": "Team ID (if owned by a team).",
+       "type": "string"
+      },
+      "name": {
+       "description": "Team name.",
+       "type": "string"
+      },
+      "slug": {
+       "description": "Team slug.",
+       "type": "string"
+      }
+     },
+     "title": "Team",
+     "type": "object"
+    },
+    "type": {
+     "description": "Platform type, typically \"LAMBDAS\".",
+     "type": "string"
+    },
+    "url": {
+     "description": "Unique URL/hostname of the deployment.",
+     "type": "string"
+    },
+    "version": {
+     "description": "Platform version used to create the deployment (e.g., 2).",
+     "type": "number"
+    }
+   },
+   "title": "Get a Deployment by ID or URL \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "idOrUrl": "dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ"
+    },
+    "query": {
+     "slug": "my-team",
+     "teamId": "team_abcde",
+     "withGitRepoInfo": "1"
+    }
+   },
+   "output": {
+    "alias": [
+     "my-instant-deployment-3ij3cxz9qr.now.sh",
+     "my-project.my-team.now.sh"
+    ],
+    "aliasAssigned": true,
+    "build": {
+     "env": [
+      "NODE_ENV=production"
+     ]
+    },
+    "buildArtifactUrls": [
+     "https://builds.vercel.com/artifacts/abc123.zip"
+    ],
+    "buildSkipped": false,
+    "builds": [
+     {
+      "config": {},
+      "src": "api/hello.js",
+      "use": "@vercel/node"
+     }
+    ],
+    "createdAt": 1540257589405,
+    "creator": {
+     "avatar": "https://avatars.vercel.com/u/12345",
+     "uid": "user_12345",
+     "username": "vercel-user"
+    },
+    "env": [
+     "NODE_ENV",
+     "API_URL"
+    ],
+    "error": {
+     "code": "bad_request",
+     "message": "Invalid value for withGitRepoInfo"
+    },
+    "id": "dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ",
+    "images": {
+     "dangerouslyAllowSVG": false,
+     "domains": [
+      "example.com"
+     ],
+     "formats": [
+      "image/webp",
+      "image/avif"
+     ],
+     "qualities": [
+      75,
+      85
+     ],
+     "sizes": [
+      640,
+      750,
+      828,
+      1080,
+      1200,
+      1920
+     ]
+    },
+    "meta": {},
+    "name": "my-project",
+    "project": {
+     "framework": "nextjs",
+     "id": "prj_abcde12345",
+     "name": "my-project"
+    },
+    "public": false,
+    "readyState": "READY",
+    "regions": [
+     "sfo1",
+     "iad1"
+    ],
+    "status": "READY",
+    "team": {
+     "avatar": "https://avatars.vercel.com/team_abcde",
+     "id": "team_abcde",
+     "name": "My Team",
+     "slug": "my-team"
+    },
+    "type": "LAMBDAS",
+    "url": "my-instant-deployment-3ij3cxz9qr.now.sh",
+    "version": 2
+   }
+  }
+ }
+}

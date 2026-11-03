@@ -1,0 +1,49 @@
+{
+  "name": "builder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Builder, a local app builder you can fork. Your own coding agent writes the app, and every app comes with its integrations and Sign in with One.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n server,ui -c yellow,magenta --kill-others-on-fail 'pnpm --filter @builder/server dev' 'wait-on -t 60000 http-get://127.0.0.1:51989/api/health && pnpm --filter @builder/ui dev'",
+    "dev:server": "pnpm --filter @builder/server dev",
+    "dev:ui": "pnpm --filter @builder/ui dev",
+    "build": "pnpm --filter @builder/ui build",
+    "serve": "pnpm build && pnpm --filter @builder/cli run start",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "vitest run",
+    "start": "pnpm --filter @builder/cli demo",
+    "doctor": "pnpm --filter @builder/cli run doctor",
+    "db:generate": "pnpm --filter @builder/core generate",
+    "welcome": "node forkable/welcome.mjs"
+  },
+  "devDependencies": {
+    "@builder/core": "workspace:*",
+    "@builder/harness": "workspace:*",
+    "@builder/server": "workspace:*",
+    "@builder/template": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@types/node": "^22.15.0",
+    "concurrently": "^9.1.0",
+    "playwright-core": "^1.55.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.0",
+    "wait-on": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.4.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@embedded-postgres/darwin-arm64",
+      "@embedded-postgres/darwin-x64",
+      "@embedded-postgres/linux-x64",
+      "@embedded-postgres/linux-arm64",
+      "esbuild",
+      "workerd"
+    ]
+  }
+}

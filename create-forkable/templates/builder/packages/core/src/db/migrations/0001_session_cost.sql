@@ -1,0 +1,1 @@
+ALTER TABLE "turns" ADD COLUMN "session_cost_usd" double precision;

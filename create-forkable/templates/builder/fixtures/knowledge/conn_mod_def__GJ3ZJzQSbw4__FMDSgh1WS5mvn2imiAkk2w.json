@@ -1,0 +1,222 @@
+{
+ "_id": "conn_mod_def::GJ3ZJzQSbw4::FMDSgh1WS5mvn2imiAkk2w",
+ "connectionPlatform": "github",
+ "title": "Create a Repository Git Reference",
+ "method": "POST",
+ "path": "/repos/{{owner}}/{{repo}}/git/refs",
+ "tags": [],
+ "knowledge": "# Create a Repository Git Reference\n\n## Prerequisites\n\n- Repository must **not** be empty (empty repositories have no branches). You cannot create new references for empty repositories, even if the commit SHA-1 exists.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.github.com/repos/{{owner}}/{{repo}}/git/refs`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new Git reference (for example, a branch ref) in the specified repository. The `ref` must be a fully qualified reference name, and the `sha` must be a 40-character SHA-1.\n\n## Enforcement Rules\n\n- The `owner` path parameter **must always be present**.\n- The `repo` path parameter **must always be present**.\n- Always construct the path as `/repos/{{owner}}/{{repo}}/git/refs`, where `{{owner}}` and `{{repo}}` are **non-empty strings**.\n- Do **not** call the API with missing or empty path parameters (e.g., avoid `/repos//my-repo/git/refs`, `/repos/octo-org//git/refs`, or `/repos/git/refs`).\n- When executing the action, ensure to send **Path Parameters in the URL and not in the body**.\n- This endpoint has **no query parameters**; do not send body fields as query parameters.\n\n### Valid Examples\n\n```http\n/repos/octo-org/hello-world/git/refs\n/repos/octocat/Spoon-Knife/git/refs\n```\n\n### Invalid Examples\n\n```http\n/repos//hello-world/git/refs\n/repos/octo-org//git/refs\n/repos/git/refs\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `owner`  | string | The account owner of the repository. Not case sensitive. |\n| `repo`   | string | The name of the repository without the `.git` extension. Not case sensitive. |\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `ref`    | string | Fully qualified reference name (e.g., `refs/heads/master`). If it does not start with `refs` and have at least two slashes, it will be rejected. |\n| `sha`    | string | The SHA-1 value for this reference. |\n\n## Response\n\n### Success Response (201 Created)\n\nResponse headers include:\n\n- `Location`: string\n\n```json\n{\n  \"ref\": \"refs/heads/featureA\",\n  \"node_id\": \"MDM6UmVmMTIzNDU2Nzg5OnJlZnMvaGVhZHMvZmVhdHVyZUE=\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/refs/heads/featureA\",\n  \"object\": {\n    \"type\": \"commit\",\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\",\n    \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"message\": \"Conflict\",\n  \"documentation_url\": \"https://docs.github.com/rest/git/refs#create-a-reference\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/refs\",\n  \"status\": \"409\"\n}\n```\n\n### Error Response (422 Unprocessable Entity)\n\n```json\n{\n  \"message\": \"Validation Failed\",\n  \"documentation_url\": \"https://docs.github.com/rest/git/refs#create-a-reference\",\n  \"errors\": [\n    {\n      \"resource\": \"Reference\",\n      \"field\": \"ref\",\n      \"message\": \"Reference name must start with 'refs/'\",\n      \"code\": \"invalid\",\n      \"index\": 0,\n      \"value\": \"heads/featureA\"\n    }\n  ]\n}\n```\n\n## Response Fields\n\n| Field         | Type   | Description |\n|--------------|--------|-------------|\n| `ref`        | string | The fully qualified reference name. |\n| `node_id`    | string | Node ID of the reference. |\n| `url`        | string | API URL for the reference. |\n| `object`     | object | The Git object the reference points to. |\n| `object.type`| string | Type of the referenced object. |\n| `object.sha` | string | SHA for the reference. Must be exactly 40 characters (minLength=40, maxLength=40). |\n| `object.url` | string | API URL for the referenced object. |\n\n## Sample Request\n\n```bash\ncurl -i --location --request POST 'https://api.github.com/repos/octo-org/hello-world/git/refs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"ref\": \"refs/heads/featureA\",\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Create a Branch Reference\n\n```bash\ncurl -i --location --request POST 'https://api.github.com/repos/octo-org/hello-world/git/refs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"ref\": \"refs/heads/new-feature\",\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }'\n```\n\n### Example 2: Create Another Reference Name\n\n```bash\ncurl -i --location --request POST 'https://api.github.com/repos/octocat/Spoon-Knife/git/refs' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"ref\": \"refs/heads/release-1.0\",\n    \"sha\": \"aa218f56b14c9653891f9e74264a383fa43fefbd\"\n  }'\n```\n\n## Behavior\n\n1. **Validation**: Validates `ref` formatting and `sha` length/format.\n2. **Repository state check**: Rejects creation if the repository is empty (has no branches).\n3. **Reference creation**: Creates the ref pointing to the provided Git object SHA.\n4. **Response**: Returns the created reference and the target object metadata.\n\n## Notes\n\n- `owner` and `repo` are not case sensitive.\n- `repo` should not include the `.git` suffix.\n- The `ref` must be fully qualified (for example, `refs/heads/master`).\n\n## Gotchas\n\n- Creating refs in **empty repositories** is not supported.\n- If `ref` does not start with `refs` and contain at least two slashes, the request will be rejected.\n- `sha` is expected to be a 40-character SHA-1 string.\n\n## Error Handling\n\n- **409 Conflict**: Returned when the server reports a conflict creating the reference.\n- **422 Unprocessable Entity**: Returned when validation fails (e.g., invalid `ref`) or if the endpoint has been spammed.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates a new Git reference (for example, a branch ref) in the specified repository. The `ref` must be a fully qualified reference name, and the `sha` must be a 40-character SHA-1.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Body containing the new Git reference to create.",
+     "properties": {
+      "ref": {
+       "description": "Fully qualified reference name (e.g., `refs/heads/master`). If it does not start with `refs` and have at least two slashes, it will be rejected.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "sha": {
+       "description": "The SHA-1 value for this reference. Expected to be a 40-character SHA-1 string.",
+       "maxLength": 40,
+       "minLength": 40,
+       "type": "string"
+      }
+     },
+     "required": [
+      "ref",
+      "sha"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "Request headers.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Accepted response media type.",
+       "type": "string"
+      },
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Request body media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept",
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for /repos/{owner}/{repo}/git/refs.",
+     "properties": {
+      "owner": {
+       "description": "The account owner of the repository. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "repo": {
+       "description": "The name of the repository without the `.git` extension. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "owner",
+      "repo"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Create a Repository Git Reference \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Possible success or error response returned by the API when creating a Git reference.",
+   "properties": {
+    "documentation_url": {
+     "description": "URL to the API documentation for this endpoint or error.",
+     "type": "string"
+    },
+    "errors": {
+     "description": "Validation error details.",
+     "items": {
+      "additionalProperties": true,
+      "description": "Details for an individual validation error.",
+      "properties": {
+       "code": {
+        "description": "Validation error code.",
+        "type": "string"
+       },
+       "field": {
+        "description": "Field associated with the error.",
+        "type": "string"
+       },
+       "index": {
+        "description": "Index of the offending item.",
+        "type": "integer"
+       },
+       "message": {
+        "description": "Validation error message.",
+        "type": "string"
+       },
+       "resource": {
+        "description": "Resource associated with the error.",
+        "type": "string"
+       },
+       "value": {
+        "description": "Value that caused the validation error.",
+        "type": "string"
+       }
+      },
+      "title": "Validation Error",
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "message": {
+     "description": "Error message.",
+     "type": "string"
+    },
+    "node_id": {
+     "description": "Node ID of the reference.",
+     "type": "string"
+    },
+    "object": {
+     "additionalProperties": true,
+     "description": "The Git object the reference points to.",
+     "properties": {
+      "sha": {
+       "description": "SHA for the reference. Must be exactly 40 characters.",
+       "maxLength": 40,
+       "minLength": 40,
+       "type": "string"
+      },
+      "type": {
+       "description": "Type of the referenced object.",
+       "type": "string"
+      },
+      "url": {
+       "description": "API URL for the referenced object.",
+       "type": "string"
+      }
+     },
+     "title": "Git Object",
+     "type": "object"
+    },
+    "ref": {
+     "description": "The fully qualified reference name.",
+     "type": "string"
+    },
+    "status": {
+     "description": "HTTP-style status value returned in some error responses.",
+     "type": "string"
+    },
+    "url": {
+     "description": "API URL for the reference or error context URL depending on response variant.",
+     "type": "string"
+    }
+   },
+   "title": "Create a Repository Git Reference Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "ref": "refs/heads/featureA",
+     "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd"
+    },
+    "headers": {
+     "Accept": "application/json",
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "owner": "octo-org",
+     "repo": "hello-world"
+    }
+   },
+   "output": {
+    "documentation_url": "https://docs.github.com/rest/git/refs#create-a-reference",
+    "errors": [
+     {
+      "code": "invalid",
+      "field": "ref",
+      "index": 0,
+      "message": "Reference name must start with 'refs/'",
+      "resource": "Reference",
+      "value": "heads/featureA"
+     }
+    ],
+    "message": "Validation Failed",
+    "node_id": "MDM6UmVmMTIzNDU2Nzg5OnJlZnMvaGVhZHMvZmVhdHVyZUE=",
+    "object": {
+     "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
+     "type": "commit",
+     "url": "https://api.github.com/repos/octo-org/hello-world/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
+    },
+    "ref": "refs/heads/featureA",
+    "status": "409",
+    "url": "https://api.github.com/repos/octo-org/hello-world/git/refs/heads/featureA"
+   }
+  }
+ }
+}

@@ -1,0 +1,322 @@
+{
+ "_id": "conn_mod_def::GJ3ZKCHKkUA::xHBDE-LtSkWfVdTQxLIp3g",
+ "connectionPlatform": "github",
+ "title": "Create a Repository Git Tree",
+ "method": "POST",
+ "path": "/repos/{{owner}}/{{repo}}/git/trees",
+ "tags": [],
+ "knowledge": "# Create a Repository Git Tree\n\n## Prerequisites\n\n- You must have access to the target repository (sufficient permissions to create Git objects in the repo).\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.github.com/repos/{{owner}}/{{repo}}/git/trees`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\",\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new Git tree object in a repository. The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint overwrites the contents of the tree with the new path contents and creates a new tree structure.\n\nIf you use this endpoint to add, delete, or modify file contents in a tree, you must create a commit from the tree and then update a branch reference to point to the new commit. Returns an error if you try to delete a file that does not exist.\n\n## Enforcement Rules\n\n- The `owner` path parameter **must always be present**.\n- The `repo` path parameter **must always be present**.\n- Always construct the path as `/repos/{{owner}}/{{repo}}/git/trees`, where `{{owner}}` and `{{repo}}` are **non-empty strings**.\n- Do **not** call the API with missing or empty path parameters (e.g., avoid `/repos//my-repo/git/trees`, `/repos/octo-org//git/trees`, or `/repos/octo-org/my-repo/git/trees` missing segments).\n- Do **not** infer or guess `owner` or `repo` beyond what the user provides.\n- When executing the action, ensure to send **Path Parameters** in the URL and **not in the body**.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not in the body** (this endpoint has no documented query parameters).\n\n### Valid Examples\n\n```http\n/repos/octo-org/hello-world/git/trees\n/repos/octocat/Hello-World/git/trees\n```\n\n### Invalid Examples\n\n```http\n/repos//hello-world/git/trees\n/repos/octo-org//git/trees\n/repos/octo-org/hello-world/git/trees/\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `owner`  | string | The account owner of the repository. Not case sensitive. |\n| `repo`   | string | The name of the repository without the `.git` extension. Not case sensitive. |\n\n## Required Request Body Fields\n\n| Parameter | Type | Description |\n|----------|------|-------------|\n| `tree`   | array | Objects specifying a tree structure. Each entry may include `path`, `mode`, `type`, `sha`, `content`. |\n\n## Optional Request Body Fields\n\n| Parameter   | Type   | Description |\n|------------|--------|-------------|\n| `base_tree` | string | SHA1 of an existing Git tree object used as the base for the new tree. Entries in `tree` overwrite items from `base_tree` with the same `path`. If omitted, GitHub creates a new tree only from `tree`. If you later commit this tree, files from the parent commit\u2019s tree that are not included in `tree` will be listed as deleted by the new commit. |\n\n## `tree[]` Entry Fields\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `path`   | string | The file referenced in the tree. |\n| `mode`   | string | File mode. One of: `100644` (file/blob), `100755` (executable/blob), `040000` (subdirectory/tree), `160000` (submodule/commit), `120000` (symlink/blob). |\n| `type`   | string | One of: `blob`, `tree`, `commit`. |\n| `sha`    | string | SHA1 of the object in the tree (also called `tree.sha`). If `null`, the file will be deleted. **Note:** Use either `sha` or `content` to specify contents. Using both returns an error. |\n| `content`| string | Content to write for this file; GitHub writes a blob and uses its SHA for this entry. **Note:** Use either `content` or `sha`. Using both returns an error. |\n\n## Response\n\n### Success Response (201 Created)\n\nHeaders may include:\n\n- `Location`: string\n\n```json\n{\n  \"sha\": \"9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/trees/9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n  \"truncated\": false,\n  \"tree\": [\n    {\n      \"path\": \"file.rb\",\n      \"mode\": \"100644\",\n      \"type\": \"blob\",\n      \"sha\": \"44b4fc6d56897b048c772eb4087f854f46256132\",\n      \"size\": 132,\n      \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132\"\n    }\n  ]\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"message\": \"Forbidden\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/trees\",\n  \"status\": \"403\"\n}\n```\n\n### Error Response (404 Resource not found)\n\n```json\n{\n  \"message\": \"Not Found\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/trees\",\n  \"status\": \"404\"\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"message\": \"Conflict\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"url\": \"https://api.github.com/repos/octo-org/hello-world/git/trees\",\n  \"status\": \"409\"\n}\n```\n\n### Error Response (422 Validation failed, or the endpoint has been spammed.)\n\n```json\n{\n  \"message\": \"Validation Failed\",\n  \"documentation_url\": \"https://docs.github.com/rest\",\n  \"errors\": [\n    {\n      \"resource\": \"Tree\",\n      \"field\": \"tree\",\n      \"message\": \"Invalid tree entry\",\n      \"code\": \"invalid\",\n      \"index\": 0,\n      \"value\": \"file.rb\"\n    }\n  ]\n}\n```\n\n## Response Fields\n\n| Field | Type | Description |\n|------|------|-------------|\n| `sha` | string | SHA1 of the created tree. |\n| `url` | string | API URL for the created tree. |\n| `truncated` | boolean | Indicates whether the returned tree was truncated. |\n| `tree` | array | Objects specifying the created tree structure. |\n| `tree[].path` | string | Path for the entry. |\n| `tree[].mode` | string | Mode for the entry. |\n| `tree[].type` | string | Type for the entry (`blob`, `tree`, `commit`). |\n| `tree[].sha` | string | SHA1 for the entry. |\n| `tree[].size` | integer | Size of the entry (when provided). |\n| `tree[].url` | string | API URL for the entry (when provided). |\n\n## Sample Request\n\n```bash\ncurl -i --request POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/trees' \\\n  --header 'Accept: application/json' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"base_tree\": \"9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n    \"tree\": [\n      {\n        \"path\": \"file.rb\",\n        \"mode\": \"100644\",\n        \"type\": \"blob\",\n        \"sha\": \"44b4fc6d56897b048c772eb4087f854f46256132\"\n      }\n    ]\n  }'\n```\n\n## Example Usage\n\n### Example 1: Create a tree based on an existing tree SHA\n\n```bash\ncurl -sS -X POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/trees' \\\n  -H 'Accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"base_tree\": \"9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n    \"tree\": [\n      { \"path\": \"file.rb\", \"mode\": \"100644\", \"type\": \"blob\", \"sha\": \"44b4fc6d56897b048c772eb4087f854f46256132\" }\n    ]\n  }'\n```\n\n### Example 2: Create/update a file by providing `content` (instead of `sha`)\n\n```bash\ncurl -sS -X POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/trees' \\\n  -H 'Accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"base_tree\": \"9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n    \"tree\": [\n      { \"path\": \"README.md\", \"mode\": \"100644\", \"type\": \"blob\", \"content\": \"# Hello World\\n\" }\n    ]\n  }'\n```\n\n### Example 3: Delete a file by setting `sha` to `null`\n\n```bash\ncurl -sS -X POST \\\n  'https://api.github.com/repos/octo-org/hello-world/git/trees' \\\n  -H 'Accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"base_tree\": \"9fb037999f264ba9a7fc6274d15fa3ae2ab98312\",\n    \"tree\": [\n      { \"path\": \"old.txt\", \"mode\": \"100644\", \"type\": \"blob\", \"sha\": null }\n    ]\n  }'\n```\n\n## Behavior\n\n1. Validates `owner`/`repo` and the request body structure.\n2. If `base_tree` is provided, starts from that tree; otherwise starts from only the provided `tree` entries.\n3. Applies entries in `tree`; entries with the same `path` overwrite existing ones from `base_tree`.\n4. If `sha` is `null`, attempts to delete the file (errors if the file does not exist).\n5. Returns the created tree SHA and the resulting tree listing (may be truncated).\n\n## Notes\n\n- The endpoint accepts nested entries; overlapping nested paths can overwrite prior contents.\n- To apply the tree to a branch, you must:\n  1) create a commit using the new tree, then  \n  2) update a reference to point to that commit.\n- For `tree[]` entries, use **either** `sha` **or** `content` to set contents; providing both returns an error.\n\n## Gotchas\n\n- If you omit `base_tree` and later commit the resulting tree, files from the parent commit\u2019s tree that are not included in `tree` will appear as deleted in the new commit.\n- Deleting a non-existent file (using `sha: null`) returns an error.\n- Providing both `sha` and `content` for the same `tree[]` entry returns an error.\n\n## Error Handling\n\n- **403 Forbidden**: Not allowed to access or modify the repository.\n- **404 Not Found**: Repository (or resource) not found.\n- **409 Conflict**: Conflict creating the tree (as returned by the API).\n- **422 Unprocessable Entity**: Validation failed or the endpoint has been spammed; includes an `errors[]` array with details.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates a new Git tree object in a repository. The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint overwrites the contents of the tree with the new path contents and creates a new tree structure.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Request body for creating a Git tree.",
+     "properties": {
+      "base_tree": {
+       "description": "SHA1 of an existing Git tree object used as the base for the new tree. Entries in `tree` overwrite items from `base_tree` with the same `path`. If omitted, GitHub creates a new tree only from `tree`. If you later commit this tree, files from the parent commit\u2019s tree that are not included in `tree` will be listed as deleted by the new commit.",
+       "type": "string"
+      },
+      "tree": {
+       "description": "Objects specifying a tree structure. Each entry may include `path`, `mode`, `type`, `sha`, `content`.",
+       "items": {
+        "additionalProperties": false,
+        "description": "An entry in the Git tree. Use either `sha` or `content` to specify contents. Using both returns an error.",
+        "properties": {
+         "content": {
+          "description": "Content to write for this file; GitHub writes a blob and uses its SHA for this entry. Note: Use either `content` or `sha`. Using both returns an error.",
+          "type": "string"
+         },
+         "mode": {
+          "description": "File mode. One of: `100644` (file/blob), `100755` (executable/blob), `040000` (subdirectory/tree), `160000` (submodule/commit), `120000` (symlink/blob).",
+          "enum": [
+           "100644",
+           "100755",
+           "040000",
+           "160000",
+           "120000"
+          ],
+          "type": "string"
+         },
+         "path": {
+          "description": "The file referenced in the tree.",
+          "type": "string"
+         },
+         "sha": {
+          "description": "SHA1 of the object in the tree (also called `tree.sha`). If `null`, the file will be deleted. Note: Use either `sha` or `content` to specify contents. Using both returns an error.",
+          "type": [
+           "string",
+           "null"
+          ]
+         },
+         "type": {
+          "description": "One of: `blob`, `tree`, `commit`.",
+          "enum": [
+           "blob",
+           "tree",
+           "commit"
+          ],
+          "type": "string"
+         }
+        },
+        "title": "Tree Entry",
+        "type": "object"
+       },
+       "type": "array"
+      }
+     },
+     "required": [
+      "tree"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Requested response media type.",
+       "type": "string"
+      },
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Request body media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept",
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the repository owner and repository name.",
+     "properties": {
+      "owner": {
+       "description": "The account owner of the repository. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "repo": {
+       "description": "The name of the repository without the `.git` extension. Not case sensitive.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "owner",
+      "repo"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers",
+    "body"
+   ],
+   "title": "Create a Repository Git Tree \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Successful response structure from the API, or one of the documented error response shapes.",
+   "properties": {
+    "documentation_url": {
+     "description": "URL to API documentation.",
+     "type": "string"
+    },
+    "errors": {
+     "description": "Validation error details for 422 responses.",
+     "items": {
+      "additionalProperties": true,
+      "description": "A validation error detail item.",
+      "properties": {
+       "code": {
+        "description": "Error code.",
+        "type": "string"
+       },
+       "field": {
+        "description": "Field associated with the error.",
+        "type": "string"
+       },
+       "index": {
+        "description": "Index of the invalid item.",
+        "type": "integer"
+       },
+       "message": {
+        "description": "Error message.",
+        "type": "string"
+       },
+       "resource": {
+        "description": "Resource associated with the error.",
+        "type": "string"
+       },
+       "value": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "number"
+         },
+         {
+          "type": "integer"
+         },
+         {
+          "type": "boolean"
+         },
+         {
+          "type": "null"
+         },
+         {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         {
+          "items": {},
+          "type": "array"
+         }
+        ],
+        "description": "Value associated with the error."
+       }
+      },
+      "title": "Validation Error",
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "message": {
+     "description": "Error message for failed requests.",
+     "type": "string"
+    },
+    "sha": {
+     "description": "SHA1 of the created tree.",
+     "type": "string"
+    },
+    "status": {
+     "description": "HTTP status code returned in documented error responses.",
+     "enum": [
+      "403",
+      "404",
+      "409"
+     ],
+     "type": "string"
+    },
+    "tree": {
+     "description": "Objects specifying the created tree structure.",
+     "items": {
+      "additionalProperties": true,
+      "description": "An entry in the created tree structure.",
+      "properties": {
+       "mode": {
+        "description": "Mode for the entry.",
+        "type": "string"
+       },
+       "path": {
+        "description": "Path for the entry.",
+        "type": "string"
+       },
+       "sha": {
+        "description": "SHA1 for the entry.",
+        "type": "string"
+       },
+       "size": {
+        "description": "Size of the entry (when provided).",
+        "type": "integer"
+       },
+       "type": {
+        "description": "Type for the entry (`blob`, `tree`, `commit`).",
+        "enum": [
+         "blob",
+         "tree",
+         "commit"
+        ],
+        "type": "string"
+       },
+       "url": {
+        "description": "API URL for the entry (when provided).",
+        "type": "string"
+       }
+      },
+      "title": "Created Tree Entry",
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "truncated": {
+     "description": "Indicates whether the returned tree was truncated.",
+     "type": "boolean"
+    },
+    "url": {
+     "description": "API URL for the created tree.",
+     "type": "string"
+    }
+   },
+   "title": "Create a Repository Git Tree Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "base_tree": "9fb037999f264ba9a7fc6274d15fa3ae2ab98312",
+     "tree": [
+      {
+       "content": "# Hello World\n",
+       "mode": "100644",
+       "path": "README.md",
+       "sha": "44b4fc6d56897b048c772eb4087f854f46256132",
+       "type": "blob"
+      }
+     ]
+    },
+    "headers": {
+     "Accept": "application/json",
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "owner": "octo-org",
+     "repo": "hello-world"
+    }
+   },
+   "output": {
+    "documentation_url": "https://docs.github.com/rest",
+    "errors": [
+     {
+      "code": "invalid",
+      "field": "tree",
+      "index": 0,
+      "message": "Invalid tree entry",
+      "resource": "Tree",
+      "value": "file.rb"
+     }
+    ],
+    "message": "Validation Failed",
+    "sha": "9fb037999f264ba9a7fc6274d15fa3ae2ab98312",
+    "status": "403",
+    "tree": [
+     {
+      "mode": "100644",
+      "path": "file.rb",
+      "sha": "44b4fc6d56897b048c772eb4087f854f46256132",
+      "size": 132,
+      "type": "blob",
+      "url": "https://api.github.com/repos/octo-org/hello-world/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132"
+     }
+    ],
+    "truncated": false,
+    "url": "https://api.github.com/repos/octo-org/hello-world/git/trees/9fb037999f264ba9a7fc6274d15fa3ae2ab98312"
+   }
+  }
+ }
+}

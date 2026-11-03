@@ -1,0 +1,9 @@
+{"type":"thread.started","thread_id":"01a16cce-3561-7851-8b0e-95b571e1d93e"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I will create the file and query the builder server."}}
+{"type":"item.started","item":{"id":"item_1","type":"command_execution","command":"/bin/zsh -lc \"printf 'hi' > note.txt && curl -s -m 3 http://127.0.0.1:51977/shell\"","aggregated_output":"","exit_code":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"/bin/zsh -lc \"printf 'hi' > note.txt && curl -s -m 3 http://127.0.0.1:51977/shell\"","aggregated_output":"","exit_code":7,"status":"failed"}}
+{"type":"item.started","item":{"id":"item_2","type":"mcp_tool_call","server":"builder","tool":"project_errors","arguments":{},"result":null,"error":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_2","type":"mcp_tool_call","server":"builder","tool":"project_errors","arguments":{},"result":null,"error":{"message":"MCP tool call requires approval, but approval policy is never"},"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"Created note.txt. The MCP call needed approval."}}
+{"type":"turn.completed","usage":{"input_tokens":54024,"cached_input_tokens":46336,"cache_write_input_tokens":0,"output_tokens":723,"reasoning_output_tokens":488}}

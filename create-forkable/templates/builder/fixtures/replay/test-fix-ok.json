@@ -1,0 +1,70 @@
+{
+ "turns": [
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Added broken.ts"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const a: string = 1;\n"
+    }
+   ],
+   "delayMs": 0
+  },
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Fixed"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const a: string = \"1\";\n"
+    }
+   ],
+   "delayMs": 0
+  }
+ ]
+}

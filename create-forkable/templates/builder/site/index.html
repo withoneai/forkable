@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Builder, apps that work with every tool you use</title>
+    <meta name="description" content="A free, open source app builder you fork and run. Describe an app, your own Claude Code or Codex writes it with a live preview, and every app is connected to thousands of tools through One, with Sign in with One built in. Publish to Vercel or GitHub in one click. A Forkable business." />
+    <link rel="canonical" href="https://one.builders/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="One" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfdfc" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Builder" />
+    <meta property="og:url" content="https://one.builders/" />
+    <meta property="og:title" content="Builder, apps that work with every tool you use" />
+    <meta property="og:description" content="A free, open source app builder you fork and run. Describe an app, your own Claude Code or Codex writes it with a live preview, and every app is connected to thousands of tools through One, with Sign in with One built in. Publish to Vercel or GitHub in one click. A Forkable business." />
+    <meta property="og:image" content="https://one.builders/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://one.builders/og.png" />
+    <meta name="twitter:site" content="@withoneai" />
+    <meta name="twitter:title" content="Builder, apps that work with every tool you use" />
+    <meta name="twitter:description" content="A free, open source app builder you fork and run. Describe an app, your own Claude Code or Codex writes it with a live preview, and every app is connected to thousands of tools through One, with Sign in with One built in. Publish to Vercel or GitHub in one click. A Forkable business." />
+    <script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Builder",
+    "url": "https://one.builders/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux",
+    "description": "A free, open source app builder you fork and run. Describe an app, your own Claude Code or Codex writes it with a live preview, and every app is connected to thousands of tools through One, with Sign in with One built in. Publish to Vercel or GitHub in one click. A Forkable business.",
+    "isAccessibleForFree": true,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Forkable",
+      "url": "https://forkable.dev/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "One",
+      "legalName": "One Systems, Inc.",
+      "url": "https://www.withone.ai"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What do I need to run it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "macOS or Linux, Node 22, and Claude Code or Codex installed and signed in. Fork it, run it, and type what you want on Home. The first project is ready in about a minute; after that, a few seconds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who pays for the AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You do, directly, through the coding agent you already use. There are no credits and no markup. Builder drives your Claude Code or Codex, and its plan covers the turns."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does an app connect to Gmail, Slack or Stripe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Through One. The agent finds the action in One's catalog and writes a typed call to it. The people who use your app sign in with One and connect their own accounts, so the app never holds a provider key."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does one-click publish actually do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It checks the version you are on (typecheck, build, secrets, access list, audit), then deploys it to Vercel or exports it to a GitHub repo, on your own One account."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the code mine?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every project is a plain git repo on your machine: React, Hono and Drizzle. Builder itself is open source."
+        }
+      }
+    ]
+  }
+]
+    </script>
+    <script>
+      (function () {
+        var saved = localStorage.getItem("builder-site-theme");
+        var dark = saved ? saved === "dark" : true;
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <h1>Builder, apps that work with every tool you use</h1>
+      <p>A free, open source app builder you fork and run. Describe an app, your own Claude Code or Codex writes it with a live preview, and every app is connected to thousands of tools through One, with Sign in with One built in. Publish to Vercel or GitHub in one click. A Forkable business. Part of <a href="https://forkable.dev">Forkable</a>.</p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

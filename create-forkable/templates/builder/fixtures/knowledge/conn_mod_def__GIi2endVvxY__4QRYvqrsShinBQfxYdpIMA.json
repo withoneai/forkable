@@ -1,0 +1,790 @@
+{
+ "_id": "conn_mod_def::GIi2endVvxY::4QRYvqrsShinBQfxYdpIMA",
+ "connectionPlatform": "vercel",
+ "title": "Create a New Project",
+ "method": "POST",
+ "path": "/v11/projects",
+ "tags": [
+  "human-verified"
+ ],
+ "knowledge": "# Create a New Project\n\n## Prerequisites\n\n- Must have permission to create projects on the target account or team.\n- The project name is required.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.vercel.com/v11/projects`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new project in Vercel with the specified configuration. At minimum, a project name must be provided. Additional options allow for detailed project setup, such as build commands, environment variables, framework selection, Git repository linkage, and more. This endpoint can be used to create projects on behalf of a team or for an individual account.\n\n## Enforcement Rules\n\n- If performing the action for a team, provide either the `teamId` or `slug` as a query parameter; otherwise, the project is created for the authenticated user's account.\n- Do **not** send `teamId` or `slug` in the request body; always provide them as query parameters.\n- All other fields go in the JSON request body.\n- The project `name` field in the request body is always required and must be \u2264 100 characters.\n\n### Valid Examples\n\n```\nPOST /v11/projects?teamId=team_abc123\nPOST /v11/projects?slug=my-team\nPOST /v11/projects\n```\n\n### Invalid Examples\n\n```\nPOST /v11/projects (with teamId or slug in the body)\nPOST /v11/projects (without project 'name' in the body)\n```\n\n## Required Query Parameters\n\n| Parameter | Type   | Description                                                                                  |\n|-----------|--------|----------------------------------------------------------------------------------------------|\n| `teamId`  | string | The Team identifier to perform the request on behalf of. (Required for team-scoped projects) |\n| `slug`    | string | The Team slug to perform the request on behalf of. (Alternative to teamId)                  |\n\n- Either `teamId` or `slug` is required for creating projects in a team context; omit both to create in the authenticated user's personal account.\n\n## Optional Query Parameters\n\n_None additional._\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description                                         |\n|-----------|--------|-----------------------------------------------------|\n| `name`    | string | The desired name for the project (max 100 chars)    |\n\n## Optional Request Body Fields\n\n| Parameter                       | Type      | Description                                                                                                              |\n|----------------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------|\n| `enablePreviewFeedback`          | boolean   | Opt-in to preview toolbar on the project level                                                                           |\n| `enableProductionFeedback`       | boolean   | Opt-in to production toolbar on the project level                                                                        |\n| `previewDeploymentsDisabled`     | boolean   | If true, disables preview deployments for the project                                                                    |\n| `previewDeploymentSuffix`        | string    | Custom domain suffix for preview deployments (max 253 chars, must be team-owned domain)                                  |\n| `buildCommand`                   | string    | Build command for the project (max 256 chars; null for auto-detect)                                                      |\n| `commandForIgnoringBuildStep`    | string    | Command to skip the build step (max 256 chars)                                                                           |\n| `devCommand`                     | string    | Dev command for the project (max 256 chars; null for auto-detect)                                                        |\n| `environmentVariables`           | array     | List of environment variable objects (see below for object structure)                                                    |\n| `framework`                      | string    | Framework used, e.g., nextjs, gatsby, vue, etc. Null for none                                                           |\n| `gitRepository`                  | object    | Git repository info: {repo (string), type (string: github, github-limited, gitlab, bitbucket)}                           |\n| `installCommand`                 | string    | Install command for the project (max 256 chars; null for auto-detect)                                                    |\n| `skipGitConnectDuringLink`       | boolean   | If true, skips git connect prompts during CLI link                                                                       |\n| `ssoProtection`                  | object    | SSO protection config: {deploymentType: string [all, preview, prod_deployment_urls_and_all_previews, all_except_custom_domains]} |\n| `outputDirectory`                | string    | Output directory (max 256 chars; null for auto-detect)                                                                   |\n| `publicSource`                   | boolean   | Whether source code and logs for deployments are public                                                                  |\n| `rootDirectory`                  | string    | Directory/path to source code (max 256 chars; null for root)                                                             |\n| `serverlessFunctionRegion`       | string    | Serverless function deployment region (max 4 chars)                                                                      |\n| `serverlessFunctionZeroConfigFailover` | boolean| Zero config failover for serverless functions                                                                            |\n| `oidcTokenConfig`                | object    | OpenID Connect token config: {enabled: boolean, issuerMode: string [team, global]}                                       |\n| `enableAffectedProjectsDeployments` | boolean | Skip deployments when no changes to root/dependencies                                                                    |\n| `resourceConfig`                 | object    | Project resource config (see below for structure)                                                                        |\n\n### Environment Variables Object Structure\n\n| Parameter | Type    | Description                                                                                           |\n|-----------|---------|-------------------------------------------------------------------------------------------------------|\n| `key`     | string  | Name of the environment variable (required)                                                           |\n| `value`   | string  | Value for the environment variable (required)                                                         |\n| `target`  | string or array | One or more of: \"production\", \"preview\", \"development\" (required)                             |\n| `gitBranch` | string | Optional; git branch (max 250 chars; must have target=preview)                                       |\n| `type`    | string  | One of: system, secret, encrypted, plain, sensitive                                                   |\n\n### Git Repository Object Structure\n\n| Parameter | Type   | Description                                                                                  |\n|-----------|--------|----------------------------------------------------------------------------------------------|\n| `repo`    | string | The name of the git repository, e.g., \"vercel/next.js\" (required)                            |\n| `type`    | string | The Git provider: `github`, `github-limited`, `gitlab`, `bitbucket` (required)               |\n\n### Resource Config Object Structure\n\n| Parameter                  | Type    | Description                                                                          |\n|----------------------------|---------|--------------------------------------------------------------------------------------|\n| `fluid`                    | boolean | Enable fluid concurrency                                                             |\n| `functionDefaultRegions`   | array   | Regions to deploy functions to (required)                                            |\n| `functionDefaultTimeout`   | number  | Timeout for functions (1-900 seconds)                                                |\n| `functionDefaultMemoryType`| string  | One of: standard_legacy, standard, performance                                       |\n| `functionZeroConfigFailover` | boolean | Zero config failover for functions                                                  |\n| `elasticConcurrencyEnabled`| boolean | Enable elastic concurrency                                                           |\n| `buildMachineType`         | string  | enhanced, turbo                                                                      |\n| `isNSNBDisabled`           | boolean | Disable NSNB                                                                         |\n| `buildQueue`               | object  | {configuration: string [\"SKIP_NAMESPACE_QUEUE\", \"WAIT_FOR_NAMESPACE_QUEUE\"]}          |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"id\": \"prj_Abc123Xyz456\",\n  \"name\": \"a-project-name\",\n  \"accountId\": \"acct_1234abcd5678\",\n  \"framework\": \"nextjs\",\n  \"buildCommand\": \"npm run build\",\n  \"devCommand\": \"npm run dev\",\n  \"installCommand\": \"npm install\",\n  \"outputDirectory\": \"build\",\n  \"publicSource\": false,\n  \"createdAt\": 1715123456789,\n  \"updatedAt\": 1715123456790,\n  \"gitRepository\": {\n    \"repo\": \"vercel/next.js\",\n    \"type\": \"github\"\n  },\n  \"environmentVariables\": [\n    {\n      \"key\": \"MY_API_KEY\",\n      \"value\": \"secret-value\",\n      \"target\": [\"production\", \"preview\"],\n      \"type\": \"encrypted\"\n    }\n  ],\n  \"resourceConfig\": {\n    \"functionDefaultRegions\": [\"iad1\", \"cdg1\"],\n    \"functionDefaultTimeout\": 60,\n    \"functionDefaultMemoryType\": \"standard\",\n    \"fluid\": false,\n    \"elasticConcurrencyEnabled\": false,\n    \"buildMachineType\": \"enhanced\"\n  },\n  \"enablePreviewFeedback\": true,\n  \"enableProductionFeedback\": false,\n  \"skipGitConnectDuringLink\": false,\n  \"previewDeploymentsDisabled\": false,\n  \"ssoProtection\": null,\n  \"oidcTokenConfig\": {\n    \"enabled\": true,\n    \"issuerMode\": \"team\"\n  },\n  \"domains\": [],\n  \"latestDeployments\": [],\n  \"permissions\": {},\n  \"live\": true\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_request\",\n    \"message\": \"One of the provided values in the request body is invalid.\"\n  }\n}\n```\n\n### Error Response (401 Unauthorized)\n\n```json\n{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"The request is not authorized.\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"error\": {\n    \"code\": \"conflict\",\n    \"message\": \"A project with the provided name already exists.\"\n  }\n}\n```\n\n### Error Response (Other Codes)\n\n- 402: Account is soft-blocked or missing payment method.\n- 403: You do not have permission to access this resource.\n- 404: Resource not found.\n- 428: Owner does not have protection add-on.\n- 429: Rate limit exceeded.\n- 500: Internal server error.\n\n## Response Fields\n\n| Field                            | Type      | Description                                                                               |\n|-----------------------------------|-----------|-------------------------------------------------------------------------------------------|\n| `id`                             | string    | Unique identifier for the project                                                         |\n| `name`                           | string    | Project name                                                                              |\n| `accountId`                      | string    | Account or team ID that owns the project                                                  |\n| `framework`                      | string    | Name of the framework used (e.g., nextjs)                                                 |\n| `buildCommand`                   | string    | Build command                                                                             |\n| `devCommand`                     | string    | Dev command                                                                               |\n| `installCommand`                 | string    | Install command                                                                           |\n| `outputDirectory`                | string    | Directory for build output                                                                |\n| `publicSource`                   | boolean   | Whether the source code and logs are public                                               |\n| `createdAt`                      | number    | Timestamp when the project was created                                                    |\n| `updatedAt`                      | number    | Timestamp when the project was last updated                                               |\n| `gitRepository.repo`             | string    | Git repository name                                                                       |\n| `gitRepository.type`             | string    | Git provider                                                                              |\n| `environmentVariables`           | array     | List of environment variable objects                                                      |\n| `resourceConfig`                 | object    | Project resource configuration                                                            |\n| `enablePreviewFeedback`          | boolean   | Whether preview feedback is enabled                                                       |\n| `enableProductionFeedback`       | boolean   | Whether production feedback is enabled                                                    |\n| `skipGitConnectDuringLink`       | boolean   | If true, skips Git connect prompts during CLI link                                        |\n| `previewDeploymentsDisabled`     | boolean   | If true, disables preview deployments                                                     |\n| `ssoProtection`                  | object    | SSO protection configuration (nullable)                                                   |\n| `oidcTokenConfig.enabled`        | boolean   | Whether OpenID Connect tokens are enabled                                                 |\n| `oidcTokenConfig.issuerMode`     | string    | Token issuer mode (\"team\" or \"global\")                                                    |\n| `domains`                        | array     | List of domains attached to the project                                                   |\n| `latestDeployments`              | array     | List of latest deployments                                                                |\n| `permissions`                    | object    | Permissions for the project                                                               |\n| `live`                           | boolean   | Whether the project is live                                                               |\n\n## Sample Request\n\n```bash\ncurl -X POST \"https://api.vercel.com/v11/projects?teamId=team_abc123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"name\": \"my-vercel-project\",\n        \"framework\": \"nextjs\",\n        \"buildCommand\": \"npm run build\",\n        \"devCommand\": \"npm run dev\",\n        \"environmentVariables\": [\n          {\n            \"key\": \"MY_API_KEY\",\n            \"value\": \"supersecret\",\n            \"target\": [\"production\"]\n          }\n        ],\n        \"gitRepository\": {\n          \"repo\": \"your-org/your-repo\",\n          \"type\": \"github\"\n        }\n      }'\n```\n\n## Example Usage\n\n### Example 1: Create a Simple Project in Personal Account\n\n```bash\ncurl -X POST \"https://api.vercel.com/v11/projects\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"name\": \"simple-project\"\n      }'\n```\n\n### Example 2: Create a Next.js Project for a Team by Slug\n\n```bash\ncurl -X POST \"https://api.vercel.com/v11/projects?slug=my-team\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"name\": \"nextjs-app\",\n        \"framework\": \"nextjs\",\n        \"buildCommand\": \"npm run build\",\n        \"devCommand\": \"npm run dev\"\n      }'\n```\n\n### Example 3: Create a Project with Environment Variables and SSO Protection\n\n```bash\ncurl -X POST \"https://api.vercel.com/v11/projects?teamId=team_abc123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"name\": \"secure-project\",\n        \"environmentVariables\": [\n          {\n            \"key\": \"ENV_MODE\",\n            \"value\": \"production\",\n            \"target\": [\"production\"]\n          }\n        ],\n        \"ssoProtection\": {\n          \"deploymentType\": \"all\"\n        }\n      }'\n```\n\n## Behavior\n\n1. Validates that the project name is present and \u2264 100 characters.\n2. Validates any provided query parameters (`teamId`, `slug`) for team scope.\n3. Creates the project with the provided configuration, including commands, environment variables, and integrations.\n4. Returns the created project object on success, or an error message and code otherwise.\n\n## Notes\n\n- Provide either `teamId` or `slug` in the query string to create a project in a team; otherwise, the project will be created in the authenticated user's account.\n- All project configuration fields except for `name` are optional and will default if not provided.\n- Maximum length constraints apply to several string fields (see field descriptions).\n- Environment variable `target` can be a single value or an array.\n- Null values for command fields (`buildCommand`, `devCommand`, etc.) will result in Vercel attempting to auto-detect the value.\n- Only domains owned by the team can be used in `previewDeploymentSuffix`.\n\n## Gotchas\n\n- Omitting the required `name` field or exceeding its length limit will result in a 400 error.\n- Attempting to create a project with a duplicate name returns a 409 conflict error.\n- If both `teamId` and `slug` are specified, behavior is not guaranteed\u2014use only one.\n- Do not include team information in the request body; use query parameters only.\n- Most errors are returned in an `error` object with `code` and `message`.\n- Some configuration options (like multi-region serverless or advanced resource configs) may be restricted based on your plan.\n- Null or missing optional fields will be ignored or auto-detected by Vercel.\n\n## Error Handling\n\n- **400 Bad Request**: Invalid or missing required body or query parameters; invalid environment variable; invalid Git repository info.\n- **401 Unauthorized**: Missing or invalid access token, or not authorized to create projects.\n- **402 Payment Required**: Account blocked or missing payment method.\n- **403 Forbidden**: You do not have permission to create projects for the specified account or team.\n- **404 Not Found**: Provided team, slug, or resource does not exist.\n- **409 Conflict**: Project with the given name already exists.\n- **428 Precondition Required**: Owner does not have required protection add-on.\n- **429 Too Many Requests**: Rate limit exceeded.\n- **500 Internal Server Error**: Unexpected server or processing error.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates a new project in Vercel with the specified configuration. At minimum, a project name must be provided. Additional options allow for detailed project setup, such as build commands, environment variables, framework selection, Git repository linkage, and more. This endpoint can be used to create projects on behalf of a team or for an individual account.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "JSON request body for creating a new Vercel project.",
+     "properties": {
+      "buildCommand": {
+       "description": "Build command for the project (max 256 chars; null for auto-detect)",
+       "maxLength": 256,
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "commandForIgnoringBuildStep": {
+       "description": "Command to skip the build step (max 256 chars)",
+       "maxLength": 256,
+       "type": "string"
+      },
+      "devCommand": {
+       "description": "Dev command for the project (max 256 chars; null for auto-detect)",
+       "maxLength": 256,
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "enableAffectedProjectsDeployments": {
+       "description": "Skip deployments when no changes to root/dependencies",
+       "type": "boolean"
+      },
+      "enablePreviewFeedback": {
+       "description": "Opt-in to preview toolbar on the project level",
+       "type": "boolean"
+      },
+      "enableProductionFeedback": {
+       "description": "Opt-in to production toolbar on the project level",
+       "type": "boolean"
+      },
+      "environmentVariables": {
+       "description": "List of environment variable objects",
+       "items": {
+        "additionalProperties": false,
+        "description": "Environment variable configuration object.",
+        "properties": {
+         "gitBranch": {
+          "description": "Optional; git branch (max 250 chars; must have target=preview)",
+          "maxLength": 250,
+          "type": "string"
+         },
+         "key": {
+          "description": "Name of the environment variable (required)",
+          "type": "string"
+         },
+         "target": {
+          "description": "One or more of: production, preview, development (required)",
+          "oneOf": [
+           {
+            "enum": [
+             "production",
+             "preview",
+             "development"
+            ],
+            "type": "string"
+           },
+           {
+            "items": {
+             "enum": [
+              "production",
+              "preview",
+              "development"
+             ],
+             "type": "string"
+            },
+            "type": "array"
+           }
+          ]
+         },
+         "type": {
+          "description": "One of: system, secret, encrypted, plain, sensitive",
+          "enum": [
+           "system",
+           "secret",
+           "encrypted",
+           "plain",
+           "sensitive"
+          ],
+          "type": "string"
+         },
+         "value": {
+          "description": "Value for the environment variable (required)",
+          "type": "string"
+         }
+        },
+        "required": [
+         "key",
+         "value",
+         "target"
+        ],
+        "title": "Environment Variable",
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "framework": {
+       "description": "Framework used, e.g., nextjs, gatsby, vue, etc. Null for none",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "gitRepository": {
+       "additionalProperties": false,
+       "description": "Git repository info.",
+       "properties": {
+        "repo": {
+         "description": "The name of the git repository, e.g., \"vercel/next.js\" (required)",
+         "type": "string"
+        },
+        "type": {
+         "description": "The Git provider",
+         "enum": [
+          "github",
+          "github-limited",
+          "gitlab",
+          "bitbucket"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [
+        "repo",
+        "type"
+       ],
+       "title": "Git Repository",
+       "type": "object"
+      },
+      "installCommand": {
+       "description": "Install command for the project (max 256 chars; null for auto-detect)",
+       "maxLength": 256,
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "name": {
+       "description": "The desired name for the project (max 100 chars)",
+       "maxLength": 100,
+       "type": "string"
+      },
+      "oidcTokenConfig": {
+       "additionalProperties": false,
+       "description": "OpenID Connect token config.",
+       "properties": {
+        "enabled": {
+         "description": "Whether OpenID Connect tokens are enabled",
+         "type": "boolean"
+        },
+        "issuerMode": {
+         "description": "Token issuer mode",
+         "enum": [
+          "team",
+          "global"
+         ],
+         "type": "string"
+        }
+       },
+       "title": "OIDC Token Config",
+       "type": "object"
+      },
+      "outputDirectory": {
+       "description": "Output directory (max 256 chars; null for auto-detect)",
+       "maxLength": 256,
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "previewDeploymentSuffix": {
+       "description": "Custom domain suffix for preview deployments (max 253 chars, must be team-owned domain)",
+       "maxLength": 253,
+       "type": "string"
+      },
+      "previewDeploymentsDisabled": {
+       "description": "If true, disables preview deployments for the project",
+       "type": "boolean"
+      },
+      "publicSource": {
+       "description": "Whether source code and logs for deployments are public",
+       "type": "boolean"
+      },
+      "resourceConfig": {
+       "additionalProperties": false,
+       "description": "Project resource configuration.",
+       "properties": {
+        "buildMachineType": {
+         "description": "Build machine type",
+         "enum": [
+          "enhanced",
+          "turbo"
+         ],
+         "type": "string"
+        },
+        "buildQueue": {
+         "additionalProperties": false,
+         "description": "Build queue configuration.",
+         "properties": {
+          "configuration": {
+           "description": "Build queue configuration",
+           "enum": [
+            "SKIP_NAMESPACE_QUEUE",
+            "WAIT_FOR_NAMESPACE_QUEUE"
+           ],
+           "type": "string"
+          }
+         },
+         "title": "Build Queue",
+         "type": "object"
+        },
+        "elasticConcurrencyEnabled": {
+         "description": "Enable elastic concurrency",
+         "type": "boolean"
+        },
+        "fluid": {
+         "description": "Enable fluid concurrency",
+         "type": "boolean"
+        },
+        "functionDefaultMemoryType": {
+         "description": "Default memory type for functions",
+         "enum": [
+          "standard_legacy",
+          "standard",
+          "performance"
+         ],
+         "type": "string"
+        },
+        "functionDefaultRegions": {
+         "description": "Regions to deploy functions to (required)",
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "functionDefaultTimeout": {
+         "description": "Timeout for functions (1-900 seconds)",
+         "type": "number"
+        },
+        "functionZeroConfigFailover": {
+         "description": "Zero config failover for functions",
+         "type": "boolean"
+        },
+        "isNSNBDisabled": {
+         "description": "Disable NSNB",
+         "type": "boolean"
+        }
+       },
+       "required": [
+        "functionDefaultRegions"
+       ],
+       "title": "Resource Config",
+       "type": "object"
+      },
+      "rootDirectory": {
+       "description": "Directory/path to source code (max 256 chars; null for root)",
+       "maxLength": 256,
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "serverlessFunctionRegion": {
+       "description": "Serverless function deployment region (max 4 chars)",
+       "maxLength": 4,
+       "type": "string"
+      },
+      "serverlessFunctionZeroConfigFailover": {
+       "description": "Zero config failover for serverless functions",
+       "type": "boolean"
+      },
+      "skipGitConnectDuringLink": {
+       "description": "If true, skips git connect prompts during CLI link",
+       "type": "boolean"
+      },
+      "ssoProtection": {
+       "additionalProperties": false,
+       "description": "SSO protection config.",
+       "properties": {
+        "deploymentType": {
+         "description": "Deployment protection scope",
+         "enum": [
+          "all",
+          "preview",
+          "prod_deployment_urls_and_all_previews",
+          "all_except_custom_domains"
+         ],
+         "type": "string"
+        }
+       },
+       "title": "SSO Protection",
+       "type": "object"
+      }
+     },
+     "required": [
+      "name"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Provide either teamId or slug to create the project for a team; omit both to create it for the authenticated user's personal account.",
+     "properties": {
+      "slug": {
+       "description": "The Team slug to perform the request on behalf of. Alternative to teamId.",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "The Team identifier to perform the request on behalf of. Required for team-scoped projects.",
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Create a New Project \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response returned by Vercel when creating a new project, including success and error variants.",
+   "properties": {
+    "accountId": {
+     "description": "Account or team ID that owns the project",
+     "type": "string"
+    },
+    "buildCommand": {
+     "description": "Build command",
+     "type": "string"
+    },
+    "createdAt": {
+     "description": "Timestamp when the project was created",
+     "type": "number"
+    },
+    "devCommand": {
+     "description": "Dev command",
+     "type": "string"
+    },
+    "domains": {
+     "description": "List of domains attached to the project",
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "enablePreviewFeedback": {
+     "description": "Whether preview feedback is enabled",
+     "type": "boolean"
+    },
+    "enableProductionFeedback": {
+     "description": "Whether production feedback is enabled",
+     "type": "boolean"
+    },
+    "environmentVariables": {
+     "description": "List of environment variable objects",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "gitBranch": {
+        "description": "Git branch",
+        "type": "string"
+       },
+       "key": {
+        "description": "Name of the environment variable",
+        "type": "string"
+       },
+       "target": {
+        "description": "One or more target environments",
+        "oneOf": [
+         {
+          "enum": [
+           "production",
+           "preview",
+           "development"
+          ],
+          "type": "string"
+         },
+         {
+          "items": {
+           "enum": [
+            "production",
+            "preview",
+            "development"
+           ],
+           "type": "string"
+          },
+          "type": "array"
+         }
+        ]
+       },
+       "type": {
+        "description": "Environment variable type",
+        "enum": [
+         "system",
+         "secret",
+         "encrypted",
+         "plain",
+         "sensitive"
+        ],
+        "type": "string"
+       },
+       "value": {
+        "description": "Value for the environment variable",
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "error": {
+     "additionalProperties": true,
+     "description": "Error information returned for failed requests.",
+     "properties": {
+      "code": {
+       "description": "Machine-readable error code",
+       "type": "string"
+      },
+      "message": {
+       "description": "Human-readable error message",
+       "type": "string"
+      }
+     },
+     "title": "Error",
+     "type": "object"
+    },
+    "framework": {
+     "description": "Name of the framework used (e.g., nextjs)",
+     "type": "string"
+    },
+    "gitRepository": {
+     "additionalProperties": true,
+     "description": "Git repository information.",
+     "properties": {
+      "repo": {
+       "description": "Git repository name",
+       "type": "string"
+      },
+      "type": {
+       "description": "Git provider",
+       "enum": [
+        "github",
+        "github-limited",
+        "gitlab",
+        "bitbucket"
+       ],
+       "type": "string"
+      }
+     },
+     "title": "Git Repository",
+     "type": "object"
+    },
+    "id": {
+     "description": "Unique identifier for the project",
+     "type": "string"
+    },
+    "installCommand": {
+     "description": "Install command",
+     "type": "string"
+    },
+    "latestDeployments": {
+     "description": "List of latest deployments",
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "live": {
+     "description": "Whether the project is live",
+     "type": "boolean"
+    },
+    "name": {
+     "description": "Project name",
+     "type": "string"
+    },
+    "oidcTokenConfig": {
+     "additionalProperties": true,
+     "description": "OpenID Connect token configuration",
+     "properties": {
+      "enabled": {
+       "description": "Whether OpenID Connect tokens are enabled",
+       "type": "boolean"
+      },
+      "issuerMode": {
+       "description": "Token issuer mode",
+       "enum": [
+        "team",
+        "global"
+       ],
+       "type": "string"
+      }
+     },
+     "title": "OIDC Token Config",
+     "type": "object"
+    },
+    "outputDirectory": {
+     "description": "Directory for build output",
+     "type": "string"
+    },
+    "permissions": {
+     "additionalProperties": true,
+     "description": "Permissions for the project",
+     "type": "object"
+    },
+    "previewDeploymentsDisabled": {
+     "description": "If true, disables preview deployments",
+     "type": "boolean"
+    },
+    "publicSource": {
+     "description": "Whether the source code and logs are public",
+     "type": "boolean"
+    },
+    "resourceConfig": {
+     "additionalProperties": true,
+     "description": "Project resource configuration",
+     "properties": {
+      "buildMachineType": {
+       "description": "Build machine type",
+       "enum": [
+        "enhanced",
+        "turbo"
+       ],
+       "type": "string"
+      },
+      "buildQueue": {
+       "additionalProperties": true,
+       "properties": {
+        "configuration": {
+         "description": "Build queue configuration",
+         "enum": [
+          "SKIP_NAMESPACE_QUEUE",
+          "WAIT_FOR_NAMESPACE_QUEUE"
+         ],
+         "type": "string"
+        }
+       },
+       "type": "object"
+      },
+      "elasticConcurrencyEnabled": {
+       "description": "Enable elastic concurrency",
+       "type": "boolean"
+      },
+      "fluid": {
+       "description": "Enable fluid concurrency",
+       "type": "boolean"
+      },
+      "functionDefaultMemoryType": {
+       "description": "Default memory type for functions",
+       "enum": [
+        "standard_legacy",
+        "standard",
+        "performance"
+       ],
+       "type": "string"
+      },
+      "functionDefaultRegions": {
+       "description": "Regions to deploy functions to",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "functionDefaultTimeout": {
+       "description": "Timeout for functions",
+       "type": "number"
+      },
+      "functionZeroConfigFailover": {
+       "description": "Zero config failover for functions",
+       "type": "boolean"
+      },
+      "isNSNBDisabled": {
+       "description": "Disable NSNB",
+       "type": "boolean"
+      }
+     },
+     "title": "Resource Config",
+     "type": "object"
+    },
+    "skipGitConnectDuringLink": {
+     "description": "If true, skips Git connect prompts during CLI link",
+     "type": "boolean"
+    },
+    "ssoProtection": {
+     "additionalProperties": true,
+     "description": "SSO protection configuration (nullable)",
+     "properties": {
+      "deploymentType": {
+       "description": "Deployment protection scope",
+       "enum": [
+        "all",
+        "preview",
+        "prod_deployment_urls_and_all_previews",
+        "all_except_custom_domains"
+       ],
+       "type": "string"
+      }
+     },
+     "type": [
+      "object",
+      "null"
+     ]
+    },
+    "updatedAt": {
+     "description": "Timestamp when the project was last updated",
+     "type": "number"
+    }
+   },
+   "title": "Create a New Project \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "buildCommand": "npm run build",
+     "commandForIgnoringBuildStep": "echo skip-build",
+     "devCommand": "npm run dev",
+     "enableAffectedProjectsDeployments": true,
+     "enablePreviewFeedback": true,
+     "enableProductionFeedback": false,
+     "environmentVariables": [
+      {
+       "gitBranch": "main",
+       "key": "MY_API_KEY",
+       "target": [
+        "production",
+        "preview"
+       ],
+       "type": "encrypted",
+       "value": "supersecret"
+      }
+     ],
+     "framework": "nextjs",
+     "gitRepository": {
+      "repo": "your-org/your-repo",
+      "type": "github"
+     },
+     "installCommand": "npm install",
+     "name": "my-vercel-project",
+     "oidcTokenConfig": {
+      "enabled": true,
+      "issuerMode": "team"
+     },
+     "outputDirectory": "build",
+     "previewDeploymentSuffix": "preview.example.com",
+     "previewDeploymentsDisabled": false,
+     "publicSource": false,
+     "resourceConfig": {
+      "buildMachineType": "enhanced",
+      "buildQueue": {
+       "configuration": "WAIT_FOR_NAMESPACE_QUEUE"
+      },
+      "elasticConcurrencyEnabled": false,
+      "fluid": false,
+      "functionDefaultMemoryType": "standard",
+      "functionDefaultRegions": [
+       "iad1",
+       "cdg1"
+      ],
+      "functionDefaultTimeout": 60,
+      "functionZeroConfigFailover": false,
+      "isNSNBDisabled": false
+     },
+     "rootDirectory": "apps/web",
+     "serverlessFunctionRegion": "iad1",
+     "serverlessFunctionZeroConfigFailover": true,
+     "skipGitConnectDuringLink": false,
+     "ssoProtection": {
+      "deploymentType": "all"
+     }
+    },
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "query": {
+     "slug": "my-team",
+     "teamId": "team_abc123"
+    }
+   },
+   "output": {
+    "accountId": "acct_1234abcd5678",
+    "buildCommand": "npm run build",
+    "createdAt": 1715123456789,
+    "devCommand": "npm run dev",
+    "domains": [],
+    "enablePreviewFeedback": true,
+    "enableProductionFeedback": false,
+    "environmentVariables": [
+     {
+      "gitBranch": "main",
+      "key": "MY_API_KEY",
+      "target": [
+       "production",
+       "preview"
+      ],
+      "type": "encrypted",
+      "value": "secret-value"
+     }
+    ],
+    "error": {
+     "code": "invalid_request",
+     "message": "One of the provided values in the request body is invalid."
+    },
+    "framework": "nextjs",
+    "gitRepository": {
+     "repo": "vercel/next.js",
+     "type": "github"
+    },
+    "id": "prj_Abc123Xyz456",
+    "installCommand": "npm install",
+    "latestDeployments": [],
+    "live": true,
+    "name": "a-project-name",
+    "oidcTokenConfig": {
+     "enabled": true,
+     "issuerMode": "team"
+    },
+    "outputDirectory": "build",
+    "permissions": {},
+    "previewDeploymentsDisabled": false,
+    "publicSource": false,
+    "resourceConfig": {
+     "buildMachineType": "enhanced",
+     "buildQueue": {
+      "configuration": "WAIT_FOR_NAMESPACE_QUEUE"
+     },
+     "elasticConcurrencyEnabled": false,
+     "fluid": false,
+     "functionDefaultMemoryType": "standard",
+     "functionDefaultRegions": [
+      "iad1",
+      "cdg1"
+     ],
+     "functionDefaultTimeout": 60,
+     "functionZeroConfigFailover": false,
+     "isNSNBDisabled": false
+    },
+    "skipGitConnectDuringLink": false,
+    "ssoProtection": {
+     "deploymentType": "all"
+    },
+    "updatedAt": 1715123456790
+   }
+  }
+ }
+}

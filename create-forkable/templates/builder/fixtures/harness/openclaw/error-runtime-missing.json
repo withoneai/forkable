@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "status": "error",
+  "final": "",
+  "payloads": [],
+  "model": null,
+  "provider": null,
+  "sessionId": "77bc746e-9e8e-4cc3-8a29-ce9e64d57aa7",
+  "error": {
+    "message": "Agent harness runtime \"codex\" is unavailable because its plugin registration is missing from this prepared run. Enable or reinstall the plugin that provides this runtime, restart the Gateway, then retry.",
+    "kind": "exception"
+  }
+}

@@ -1,0 +1,536 @@
+{
+ "_id": "conn_mod_def::GJ1CqXgQaDM::Axz-At86SF-Z9PH0cP-x7Q",
+ "connectionPlatform": "calendly",
+ "title": "List a User's Event Types",
+ "method": "GET",
+ "path": "/event_types",
+ "tags": [],
+ "knowledge": "# List a User's Event Types\n\n## Prerequisites\n\n- OAuth app/token must have the required scope: `event_types:read`\n\n## Method\n\n`GET`\n\n## URL\n\n`https://api.calendly.com/event_types`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nReturns all Event Types associated with a specified User or Organization. You must provide **either** `organization` **or** `user` as a query parameter to scope the results.\n\n## Enforcement Rules\n\n- **At least one** of these query parameters **must** be provided: `organization` or `user`.\n- Do **not** call this endpoint without `organization` and without `user`.\n- `user_availability_schedule` is only valid **in conjunction with** `user`.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body.\n- This endpoint has **no request body**.\n\n### Valid Examples\n\n```http\n/event_types?user=https%3A%2F%2Fapi.calendly.com%2Fusers%2FAAAAAAAAAAAAAAAA\n/event_types?organization=https%3A%2F%2Fapi.calendly.com%2Forganizations%2FAAAAAAAAAAAAAAAA\n/event_types?user=https%3A%2F%2Fapi.calendly.com%2Fusers%2FAAAAAAAAAAAAAAAA&user_availability_schedule=https%3A%2F%2Fapi.calendly.com%2Fuser_availability_schedules%2FAAAAAAAAAAAAAAAA\n```\n\n### Invalid Examples\n\n```http\n/event_types\n/event_types?user_availability_schedule=https%3A%2F%2Fapi.calendly.com%2Fuser_availability_schedules%2FAAAAAAAAAAAAAAAA\n```\n\n## Required Query Parameters\n\n| Parameter      | Type   | Description |\n|----------------|--------|-------------|\n| `organization` | string | **Required if `user` is not provided.** Organization URI. “View available personal, team, and organization event types associated with the organization's URI.” Format: URI. |\n| `user`         | string | **Required if `organization` is not provided.** User URI. “View available personal, team, and organization event types associated with the user's URI.” Format: URI. |\n\n## Optional Query Parameters\n\n| Parameter                    | Type    | Description |\n|-----------------------------|---------|-------------|\n| `admin_managed`             | boolean | Return only admin managed event types if `true`, exclude admin managed event types if `false`, or include all event types if omitted. |\n| `user_availability_schedule`| string  | URI. **Used in conjunction with `user`**; returns a filtered list of Event Types that use the given primary availability schedule. |\n| `active`                    | boolean | Return only active event types if `true`, only inactive if `false`, or all event types if omitted. |\n| `count`                     | number  | Number of rows to return. Min `1`, max `100`. Default: `20`. |\n| `page_token`                | string  | Token to pass to get the next or previous portion of the collection. |\n| `sort`                      | string  | Order results by field and direction. Accepts a comma-separated list of `{field}:{direction}`. Supported fields: `name`, `position`, `created_at`, `updated_at`. Directions: `asc`, `desc`. Default: `name:asc`. Example: `name`. |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"collection\": [\n    {\n      \"uri\": \"https://api.calendly.com/event_types/AAAAAAAAAAAAAAAA\",\n      \"name\": \"15 Minute Meeting\",\n      \"active\": true,\n      \"booking_method\": \"instant\",\n      \"slug\": \"acmesales\",\n      \"scheduling_url\": \"https://calendly.com/acmesales\",\n      \"duration\": 15,\n      \"duration_options\": [1, 13, 15, 720],\n      \"kind\": \"solo\",\n      \"pooling_type\": \"round_robin\",\n      \"type\": \"StandardEventType\",\n      \"color\": \"#fff200\",\n      \"created_at\": \"2019-01-02T03:04:05.678123Z\",\n      \"updated_at\": \"2019-08-07T06:05:04.321123Z\",\n      \"internal_note\": \"Internal note\",\n      \"is_paid\": false,\n      \"description_plain\": \"15 Minute Meeting\",\n      \"description_html\": \"<p>15 Minute Meeting</p>\",\n      \"profile\": {\n        \"type\": \"User\",\n        \"name\": \"Tamara Jones\",\n        \"owner\": \"https://api.calendly.com/users/AAAAAAAAAAAAAAAA\"\n      },\n      \"secret\": true,\n      \"deleted_at\": null,\n      \"admin_managed\": false,\n      \"locations\": [\n        {\n          \"kind\": \"inbound_call\",\n          \"phone_number\": \"+ 380934567654\",\n          \"additional_info\": \"Additional information about location\"\n        }\n      ],\n      \"position\": 0,\n      \"custom_questions\": [\n        {\n          \"name\": \"Company Name\",\n          \"type\": \"string\",\n          \"position\": 0,\n          \"enabled\": true,\n          \"required\": true,\n          \"answer_choices\": [],\n          \"include_other\": false\n        },\n        {\n          \"name\": \"What would you like to discuss?\",\n          \"type\": \"text\",\n          \"position\": 0,\n          \"enabled\": true,\n          \"required\": true,\n          \"answer_choices\": [],\n          \"include_other\": false\n        },\n        {\n          \"name\": \"Number of employees\",\n          \"answer_choices\": [\"1\", \"2-10\", \"11-20\", \"20+\"],\n          \"enabled\": true,\n          \"include_other\": true,\n          \"position\": 2,\n          \"required\": false,\n          \"type\": \"single_select\"\n        },\n        {\n          \"name\": \"Multi-Select Question\",\n          \"answer_choices\": [\"Answer 1\", \"Answer 2\", \"Answer 3\", \"Answer 4\"],\n          \"enabled\": true,\n          \"include_other\": true,\n          \"position\": 2,\n          \"required\": false,\n          \"type\": \"multi_select\"\n        },\n        {\n          \"name\": \"Phone Number\",\n          \"type\": \"phone_number\",\n          \"position\": 0,\n          \"enabled\": true,\n          \"required\": true,\n          \"answer_choices\": [],\n          \"include_other\": false\n        }\n      ],\n      \"locale\": \"en\"\n    }\n  ],\n  \"pagination\": {\n    \"count\": 20,\n    \"next_page\": \"https://api.calendly.com/event_types?count=1&page_token=sNjq4TvMDfUHEl7zHRR0k0E1PCEJWvdi\",\n    \"previous_page\": \"https://api.calendly.com/event_types?count=1&page_token=VJs2rfDYeY8ahZpq0QI1O114LJkNjd7H\",\n    \"next_page_token\": \"sNjq4TvMDfUHEl7zHRR0k0E1PCEJWvdi\",\n    \"previous_page_token\": \"VJs2rfDYeY8ahZpq0QI1O114LJkNjd7H\"\n  }\n}\n```\n\n### Error Responses\n\n#### 400 Bad Request\n\n```json\n{\n  \"message\": \"Bad Request\"\n}\n```\n\n#### 401 Unauthorized\n\n```json\n{\n  \"message\": \"Unauthorized\"\n}\n```\n\n#### 403 Forbidden\n\n```json\n{\n  \"message\": \"Forbidden\"\n}\n```\n\n#### 404 Not Found\n\n```json\n{\n  \"message\": \"Not Found\"\n}\n```\n\n#### 500 Internal Server Error\n\n```json\n{\n  \"message\": \"Internal Server Error\"\n}\n```\n\n## Response Fields\n\n| Field | Type | Description |\n|------|------|-------------|\n| `collection` | array | Service response collection: array of Event Types. |\n| `collection[].active` | boolean | Indicates if the event is active or not. |\n| `collection[].admin_managed` | boolean | Indicates if this event type is managed by an organization admin. |\n| `collection[].booking_method` | string | Indicates if the event type is for a poll or an instant booking. Allowed values: `instant`, `poll`. |\n| `collection[].color` | string | Hexadecimal color value of the scheduling page. Pattern: `^#[a-f\\\\d]{6}$`. |\n| `collection[].created_at` | string | Date-time when the event type was created (ISO 8601). |\n| `collection[].custom_questions` | array | Array of `EventTypeCustomQuestion`. |\n| `collection[].deleted_at` | string \\| null | Date-time when the event type was deleted (ISO 8601) or `null`. |\n| `collection[].description_html` | string \\| null | Description formatted with HTML. |\n| `collection[].description_plain` | string \\| null | Description as plain text. |\n| `collection[].duration` | number | Length of sessions booked with this event type (minutes). |\n| `collection[].duration_options` | array(integer) \\| null | Array of duration options; always `null` for adhoc event types. |\n| `collection[].internal_note` | string \\| null | Contents of an internal note associated with the event type. |\n| `collection[].is_paid` | boolean | Indicates whether the event type is paid. |\n| `collection[].kind` | string | Event type kind. Allowed values: `solo`, `group`. |\n| `collection[].locale` | string | Locale used to determine scheduling page language. Allowed values: `en`, `fr`, `es`, `de`, `nl`, `pt`, `it`, `uk`. |\n| `collection[].locations` | array \\| null | Configuration information for each possible location for this Event Type. |\n| `collection[].name` | string \\| null | Human-readable event type name. |\n| `collection[].pooling_type` | string \\| null | Allowed values: `round_robin`, `collective`, `multi_pool`, `null`. |\n| `collection[].position` | integer | Position order of Event Type, starting with 0. |\n| `collection[].profile` | object \\| null | Publicly visible profile of a User or Team associated with the Event Type. |\n| `collection[].profile.type` | string | Profile type (example shows `User`). |\n| `collection[].profile.name` | string | Profile name. |\n| `collection[].profile.owner` | string | URI of the profile owner. |\n| `collection[].scheduling_url` | string | Scheduling page URL where invitees book the event type. |\n| `collection[].secret` | boolean | Indicates if the event type is hidden on the owner's main scheduling page. |\n| `collection[].slug` | string \\| null | Human-readable portion of the event type URL. |\n| `collection[].type` | string | Allowed values: `StandardEventType`, `AdhocEventType`. |\n| `collection[].updated_at` | string | Date-time when the event type was last updated (ISO 8601). |\n| `collection[].uri` | string | Canonical reference (unique identifier) for the event type (URI). |\n| `pagination` | object | Pagination metadata. |\n| `pagination.count` | integer | The number of rows returned (0–100). |\n| `pagination.next_page` | string \\| null | URI to return the next page of an ordered list, or `null`. |\n| `pagination.previous_page` | string \\| null | URI to return the previous page of an ordered list, or `null`. |\n| `pagination.next_page_token` | string \\| null | Token to return the next page, or `null`. |\n| `pagination.previous_page_token` | string \\| null | Token to return the previous page, or `null`. |\n\n## Sample Request\n\n```bash\ncurl --request GET \\\n  --url 'https://api.calendly.com/event_types?user=https%3A%2F%2Fapi.calendly.com%2Fusers%2FAAAAAAAAAAAAAAAA&count=20&sort=name:asc' \\\n  --header 'Accept: application/json'\n```\n\n## Example Usage\n\n### Example 1: List event types for a user (only active)\n\n```bash\ncurl --request GET \\\n  --url 'https://api.calendly.com/event_types?user=https%3A%2F%2Fapi.calendly.com%2Fusers%2FAAAAAAAAAAAAAAAA&active=true' \\\n  --header 'Accept: application/json'\n```\n\n### Example 2: List event types for an organization (admin-managed only)\n\n```bash\ncurl --request GET \\\n  --url 'https://api.calendly.com/event_types?organization=https%3A%2F%2Fapi.calendly.com%2Forganizations%2FAAAAAAAAAAAAAAAA&admin_managed=true' \\\n  --header 'Accept: application/json'\n```\n\n### Example 3: Filter by a user’s primary availability schedule\n\n```bash\ncurl --request GET \\\n  --url 'https://api.calendly.com/event_types?user=https%3A%2F%2Fapi.calendly.com%2Fusers%2FAAAAAAAAAAAAAAAA&user_availability_schedule=https%3A%2F%2Fapi.calendly.com%2Fuser_availability_schedules%2FAAAAAAAAAAAAAAAA' \\\n  --header 'Accept: application/json'\n```\n\n## Notes\n\n- Either `organization` or `user` is required to use this endpoint.\n- `count` defaults to `20` and cannot exceed `100`.\n- Use `page_token` to paginate; `pagination.next_page_token` / `pagination.previous_page_token` in the response provide tokens for navigation.\n\n## Error Handling\n\n- **400**: Invalid or missing required query scoping (e.g., neither `organization` nor `user` provided).\n- **401**: Missing/invalid OAuth token.\n- **403**: Authenticated but not permitted (e.g., missing `event_types:read` scope).\n- **404**: Referenced resources not found (e.g., invalid URIs).\n- **500**: Server-side error.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Returns all Event Types associated with a specified User or Organization. You must provide either `organization` or `user` as a query parameter to scope the results.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Expected response media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "allOf": [
+      {
+       "if": {
+        "required": [
+         "user_availability_schedule"
+        ]
+       },
+       "then": {
+        "required": [
+         "user"
+        ]
+       }
+      }
+     ],
+     "anyOf": [
+      {
+       "required": [
+        "organization"
+       ]
+      },
+      {
+       "required": [
+        "user"
+       ]
+      }
+     ],
+     "description": "Query parameters used to scope and filter event types. At least one of `organization` or `user` must be provided. `user_availability_schedule` is only valid in conjunction with `user`.",
+     "properties": {
+      "active": {
+       "description": "Return only active event types if `true`, only inactive if `false`, or all event types if omitted.",
+       "type": "boolean"
+      },
+      "admin_managed": {
+       "description": "Return only admin managed event types if `true`, exclude admin managed event types if `false`, or include all event types if omitted.",
+       "type": "boolean"
+      },
+      "count": {
+       "description": "Number of rows to return. Min `1`, max `100`. Default: `20`.",
+       "maximum": 100,
+       "minimum": 1,
+       "type": "number"
+      },
+      "organization": {
+       "description": "Required if `user` is not provided. Organization URI. View available personal, team, and organization event types associated with the organization's URI.",
+       "format": "uri",
+       "type": "string"
+      },
+      "page_token": {
+       "description": "Token to pass to get the next or previous portion of the collection.",
+       "type": "string"
+      },
+      "sort": {
+       "description": "Order results by field and direction. Accepts a comma-separated list of `{field}:{direction}`. Supported fields: `name`, `position`, `created_at`, `updated_at`. Directions: `asc`, `desc`. Default: `name:asc`. Example: `name`.",
+       "type": "string"
+      },
+      "user": {
+       "description": "Required if `organization` is not provided. User URI. View available personal, team, and organization event types associated with the user's URI.",
+       "format": "uri",
+       "type": "string"
+      },
+      "user_availability_schedule": {
+       "description": "URI. Used in conjunction with `user`; returns a filtered list of Event Types that use the given primary availability schedule.",
+       "format": "uri",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    }
+   },
+   "required": [
+    "query",
+    "headers"
+   ],
+   "title": "List a User's Event Types – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response containing a collection of event types and pagination metadata, or an error message.",
+   "properties": {
+    "collection": {
+     "description": "Service response collection: array of Event Types.",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "active": {
+        "description": "Indicates if the event is active or not.",
+        "type": "boolean"
+       },
+       "admin_managed": {
+        "description": "Indicates if this event type is managed by an organization admin.",
+        "type": "boolean"
+       },
+       "booking_method": {
+        "description": "Indicates if the event type is for a poll or an instant booking.",
+        "enum": [
+         "instant",
+         "poll"
+        ],
+        "type": "string"
+       },
+       "color": {
+        "description": "Hexadecimal color value of the scheduling page.",
+        "pattern": "^#[a-f\\d]{6}$",
+        "type": "string"
+       },
+       "created_at": {
+        "description": "Date-time when the event type was created (ISO 8601).",
+        "type": "string"
+       },
+       "custom_questions": {
+        "description": "Array of `EventTypeCustomQuestion`.",
+        "items": {
+         "additionalProperties": true,
+         "properties": {
+          "answer_choices": {
+           "description": "Available answer choices.",
+           "items": {
+            "type": "string"
+           },
+           "type": "array"
+          },
+          "enabled": {
+           "description": "Whether the custom question is enabled.",
+           "type": "boolean"
+          },
+          "include_other": {
+           "description": "Whether an 'other' option is included.",
+           "type": "boolean"
+          },
+          "name": {
+           "description": "Question name.",
+           "type": "string"
+          },
+          "position": {
+           "description": "Question position.",
+           "type": "integer"
+          },
+          "required": {
+           "description": "Whether answering the custom question is required.",
+           "type": "boolean"
+          },
+          "type": {
+           "description": "Question type.",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "deleted_at": {
+        "description": "Date-time when the event type was deleted (ISO 8601) or `null`.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "description_html": {
+        "description": "Description formatted with HTML.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "description_plain": {
+        "description": "Description as plain text.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "duration": {
+        "description": "Length of sessions booked with this event type (minutes).",
+        "type": "number"
+       },
+       "duration_options": {
+        "description": "Array of duration options; always `null` for adhoc event types.",
+        "items": {
+         "type": "integer"
+        },
+        "type": [
+         "array",
+         "null"
+        ]
+       },
+       "internal_note": {
+        "description": "Contents of an internal note associated with the event type.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "is_paid": {
+        "description": "Indicates whether the event type is paid.",
+        "type": "boolean"
+       },
+       "kind": {
+        "description": "Event type kind.",
+        "enum": [
+         "solo",
+         "group"
+        ],
+        "type": "string"
+       },
+       "locale": {
+        "description": "Locale used to determine scheduling page language.",
+        "enum": [
+         "en",
+         "fr",
+         "es",
+         "de",
+         "nl",
+         "pt",
+         "it",
+         "uk"
+        ],
+        "type": "string"
+       },
+       "locations": {
+        "description": "Configuration information for each possible location for this Event Type.",
+        "items": {
+         "additionalProperties": true,
+         "properties": {
+          "additional_info": {
+           "description": "Additional information about location.",
+           "type": "string"
+          },
+          "kind": {
+           "description": "Location kind.",
+           "type": "string"
+          },
+          "phone_number": {
+           "description": "Phone number for the location.",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "type": [
+         "array",
+         "null"
+        ]
+       },
+       "name": {
+        "description": "Human-readable event type name.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "pooling_type": {
+        "description": "Allowed values: `round_robin`, `collective`, `multi_pool`, `null`.",
+        "enum": [
+         "round_robin",
+         "collective",
+         "multi_pool",
+         null
+        ],
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "position": {
+        "description": "Position order of Event Type, starting with 0.",
+        "type": "integer"
+       },
+       "profile": {
+        "additionalProperties": true,
+        "description": "Publicly visible profile of a User or Team associated with the Event Type.",
+        "properties": {
+         "name": {
+          "description": "Profile name.",
+          "type": "string"
+         },
+         "owner": {
+          "description": "URI of the profile owner.",
+          "format": "uri",
+          "type": "string"
+         },
+         "type": {
+          "description": "Profile type (example shows `User`).",
+          "type": "string"
+         }
+        },
+        "type": [
+         "object",
+         "null"
+        ]
+       },
+       "scheduling_url": {
+        "description": "Scheduling page URL where invitees book the event type.",
+        "type": "string"
+       },
+       "secret": {
+        "description": "Indicates if the event type is hidden on the owner's main scheduling page.",
+        "type": "boolean"
+       },
+       "slug": {
+        "description": "Human-readable portion of the event type URL.",
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "type": {
+        "description": "Allowed values: `StandardEventType`, `AdhocEventType`.",
+        "enum": [
+         "StandardEventType",
+         "AdhocEventType"
+        ],
+        "type": "string"
+       },
+       "updated_at": {
+        "description": "Date-time when the event type was last updated (ISO 8601).",
+        "type": "string"
+       },
+       "uri": {
+        "description": "Canonical reference (unique identifier) for the event type (URI).",
+        "format": "uri",
+        "type": "string"
+       }
+      },
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "message": {
+     "description": "Error message for 400, 401, 403, 404, or 500 responses.",
+     "type": "string"
+    },
+    "pagination": {
+     "additionalProperties": true,
+     "description": "Pagination metadata.",
+     "properties": {
+      "count": {
+       "description": "The number of rows returned (0–100).",
+       "type": "integer"
+      },
+      "next_page": {
+       "description": "URI to return the next page of an ordered list, or `null`.",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "next_page_token": {
+       "description": "Token to return the next page, or `null`.",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "previous_page": {
+       "description": "URI to return the previous page of an ordered list, or `null`.",
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "previous_page_token": {
+       "description": "Token to return the previous page, or `null`.",
+       "type": [
+        "string",
+        "null"
+       ]
+      }
+     },
+     "type": "object"
+    }
+   },
+   "title": "List a User's Event Types – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "query": {
+     "active": true,
+     "admin_managed": false,
+     "count": 20,
+     "organization": "https://api.calendly.com/organizations/BBBBBBBBBBBBBBBB",
+     "page_token": "sNjq4TvMDfUHEl7zHRR0k0E1PCEJWvdi",
+     "sort": "name:asc",
+     "user": "https://api.calendly.com/users/AAAAAAAAAAAAAAAA",
+     "user_availability_schedule": "https://api.calendly.com/user_availability_schedules/CCCCCCCCCCCCCCCC"
+    }
+   },
+   "output": {
+    "collection": [
+     {
+      "active": true,
+      "admin_managed": false,
+      "booking_method": "instant",
+      "color": "#fff200",
+      "created_at": "2019-01-02T03:04:05.678123Z",
+      "custom_questions": [
+       {
+        "answer_choices": [],
+        "enabled": true,
+        "include_other": false,
+        "name": "Company Name",
+        "position": 0,
+        "required": true,
+        "type": "string"
+       },
+       {
+        "answer_choices": [],
+        "enabled": true,
+        "include_other": false,
+        "name": "What would you like to discuss?",
+        "position": 1,
+        "required": true,
+        "type": "text"
+       },
+       {
+        "answer_choices": [
+         "1",
+         "2-10",
+         "11-20",
+         "20+"
+        ],
+        "enabled": true,
+        "include_other": true,
+        "name": "Number of employees",
+        "position": 2,
+        "required": false,
+        "type": "single_select"
+       },
+       {
+        "answer_choices": [
+         "Answer 1",
+         "Answer 2",
+         "Answer 3",
+         "Answer 4"
+        ],
+        "enabled": true,
+        "include_other": true,
+        "name": "Multi-Select Question",
+        "position": 3,
+        "required": false,
+        "type": "multi_select"
+       },
+       {
+        "answer_choices": [],
+        "enabled": true,
+        "include_other": false,
+        "name": "Phone Number",
+        "position": 4,
+        "required": true,
+        "type": "phone_number"
+       }
+      ],
+      "deleted_at": null,
+      "description_html": "<p>15 Minute Meeting</p>",
+      "description_plain": "15 Minute Meeting",
+      "duration": 15,
+      "duration_options": [
+       1,
+       13,
+       15,
+       720
+      ],
+      "internal_note": "Internal note",
+      "is_paid": false,
+      "kind": "solo",
+      "locale": "en",
+      "locations": [
+       {
+        "additional_info": "Additional information about location",
+        "kind": "inbound_call",
+        "phone_number": "+380934567654"
+       }
+      ],
+      "name": "15 Minute Meeting",
+      "pooling_type": "round_robin",
+      "position": 0,
+      "profile": {
+       "name": "Tamara Jones",
+       "owner": "https://api.calendly.com/users/AAAAAAAAAAAAAAAA",
+       "type": "User"
+      },
+      "scheduling_url": "https://calendly.com/acmesales",
+      "secret": true,
+      "slug": "acmesales",
+      "type": "StandardEventType",
+      "updated_at": "2019-08-07T06:05:04.321123Z",
+      "uri": "https://api.calendly.com/event_types/AAAAAAAAAAAAAAAA"
+     }
+    ],
+    "message": "Bad Request",
+    "pagination": {
+     "count": 20,
+     "next_page": "https://api.calendly.com/event_types?count=1&page_token=sNjq4TvMDfUHEl7zHRR0k0E1PCEJWvdi",
+     "next_page_token": "sNjq4TvMDfUHEl7zHRR0k0E1PCEJWvdi",
+     "previous_page": "https://api.calendly.com/event_types?count=1&page_token=VJs2rfDYeY8ahZpq0QI1O114LJkNjd7H",
+     "previous_page_token": "VJs2rfDYeY8ahZpq0QI1O114LJkNjd7H"
+    }
+   }
+  }
+ }
+}

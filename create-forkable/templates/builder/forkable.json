@@ -1,0 +1,8 @@
+{
+  "starter": "0.1.1",
+  "forkedFrom": null,
+  "name": "builder",
+  "tagline": "Describe an app. Your own coding agent builds it.",
+  "sample": "Acme Inc",
+  "welcome": "forkable/welcome.mjs"
+}

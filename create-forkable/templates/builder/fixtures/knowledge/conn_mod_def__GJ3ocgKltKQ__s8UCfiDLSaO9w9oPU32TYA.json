@@ -1,0 +1,83 @@
+{
+ "_id": "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA",
+ "connectionPlatform": "gmail",
+ "title": "Permanently Delete a User's Gmail Message",
+ "method": "DELETE",
+ "path": "/gmail/v1/users/{{userId}}/messages/{{id}}",
+ "tags": [],
+ "knowledge": "# Permanently Delete a User's Gmail Message\n\n## Prerequisites\n\n- The caller must have permission to delete Gmail messages for the target user.\n- OAuth scope required by the API: `https://mail.google.com/`\n\n## Method\n\n`DELETE`\n\n## URL\n\n`https://gmail.googleapis.com/gmail/v1/users/{{userId}}/messages/{{id}}`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nImmediately and permanently deletes the specified Gmail message. This operation cannot be undone. The API recommends using `messages.trash` instead when possible.\n\n## Enforcement Rules\n\n- The `userId` path parameter **must always be present**.\n- If the user provides a `userId`, use that value directly.\n- If the user does **not** provide a `userId`, default it explicitly to `\"me\"`.\n- The `id` path parameter **must always be present** and must be a **non-empty string** (the message ID to delete).\n- Always construct the path as `/gmail/v1/users/{{userId}}/messages/{{id}}`, where `{{userId}}` and `{{id}}` are **non-empty strings**.\n- Do **not** call the API with a missing or empty `userId` or `id` (e.g., avoid `/users//messages/...` or `/messages//`).\n- Do **not** infer or guess `userId` beyond the user's input or the default `\"me\"`.\n- When executing the action, ensure to send **Path Parameters in the URL and not in the body**.\n- When executing the action, ensure to send **Query Parameters in the URL as query parameters and not in the body**.\n\n### Valid Examples\n\n```http\n/gmail/v1/users/me/messages/1789c3a1b2cdef0\n/gmail/v1/users/user@example.com/messages/1789c3a1b2cdef0\n```\n\n### Invalid Examples\n\n```http\n/gmail/v1/users//messages/1789c3a1b2cdef0\n/gmail/v1/users/me/messages/\n/gmail/v1/users/me/messages\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `userId` | string | The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`. |\n| `id`     | string | The ID of the message to delete. |\n\n## Response\n\nThis endpoint typically returns an empty response body on success.\n\n### Success Response (204 No Content)\n\n```json\n{}\n```\n\n## Sample Request\n\n```bash\ncurl -i --location --request DELETE \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/messages/1789c3a1b2cdef0' \\\n  --header 'Accept: application/json'\n```\n\n## Notes\n\n- This deletion is **immediate and permanent** and **cannot be undone**.\n- The API explicitly recommends preferring `messages.trash` instead of permanent deletion when possible.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Immediately and permanently deletes the specified Gmail message. This operation cannot be undone. The API recommends using `messages.trash` instead when possible.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Expected response media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for deleting a Gmail message.",
+     "properties": {
+      "id": {
+       "description": "The ID of the message to delete.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "userId": {
+       "default": "me",
+       "description": "The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "userId",
+      "id"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Permanently Delete a User's Gmail Message – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Successful 204 No Content response body.",
+   "properties": {},
+   "title": "Success Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "path": {
+     "id": "1789c3a1b2cdef0",
+     "userId": "me"
+    }
+   },
+   "output": {}
+  }
+ }
+}

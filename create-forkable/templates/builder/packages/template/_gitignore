@@ -1,0 +1,11 @@
+node_modules
+dist
+.wrangler
+.vercel
+.dev.vars
+.env*
+__BRAND_PROJECT_DIR__/shots
+__BRAND_PROJECT_DIR__/logs
+__BRAND_PROJECT_DIR__/attachments
+*.tsbuildinfo
+.DS_Store

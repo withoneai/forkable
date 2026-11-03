@@ -1,0 +1,1 @@
+ALTER TABLE "connect_users" ADD COLUMN "reference" text;

@@ -1,0 +1,169 @@
+{
+ "turns": [
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Added broken.ts"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const a: string = 1;\n"
+    }
+   ],
+   "delayMs": 0
+  },
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Tried a fix"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const b: number = \"two\";\n"
+    }
+   ],
+   "delayMs": 0
+  },
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Tried again"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const c: boolean = 3;\n"
+    }
+   ],
+   "delayMs": 0
+  },
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Tried once more"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const d: string[] = 4;\n"
+    }
+   ],
+   "delayMs": 0
+  },
+  {
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-test"
+    },
+    {
+     "t": "tool_start",
+     "id": "w",
+     "name": "Write",
+     "kind": "write",
+     "files": [
+      "src/broken.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Unreachable"
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/broken.ts",
+     "content": "export const e = 5;\n"
+    }
+   ],
+   "delayMs": 0
+  }
+ ]
+}

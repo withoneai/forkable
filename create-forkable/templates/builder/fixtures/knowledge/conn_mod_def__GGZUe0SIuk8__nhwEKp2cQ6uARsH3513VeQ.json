@@ -1,0 +1,276 @@
+{
+ "_id": "conn_mod_def::GGZUe0SIuk8::nhwEKp2cQ6uARsH3513VeQ",
+ "connectionPlatform": "gmail",
+ "title": "Create Draft",
+ "method": "POST",
+ "path": "/v1/gmail/create-draft",
+ "tags": [
+  "custom",
+  "human-verified"
+ ],
+ "knowledge": "# Create Draft\n\n## Endpoint\n\n`POST http://one-medley/v1/gmail/create-draft`\n\n## Description\n\nCreates an email draft in Gmail without sending it. Takes the message as fields - recipients, subject, body - and assembles the RFC 2822 message Gmail's API requires, so the caller never builds MIME or base64.\n\nThe draft can be edited or sent later, through the Gmail interface or through Gmail's `drafts.send` action using the `draftId` this returns.\n\nPlain-text bodies are escaped and wrapped in HTML, which avoids Gmail's plain-text line wrapping. A caller who already has HTML passes `isHtml: true` and it is stored as written.\n\n## Request Body\n\n### Required Request Body Fields\n\n| Parameter       | Type               | Description                                                          |\n|-----------------|--------------------|----------------------------------------------------------------------|\n| `connectionKey` | string             | The connection key for Gmail authentication                          |\n| `to`            | string \\| string[] | Recipient(s). A comma-separated string or an array                   |\n| `subject`       | string             | Subject line. Non-ASCII subjects are RFC 2047 encoded automatically  |\n| `body`          | string             | Body content. Plain text unless `isHtml` is set                      |\n\n### Optional Request Body Fields\n\n| Parameter    | Type               | Description                                                                        |\n|--------------|--------------------|------------------------------------------------------------------------------------|\n| `cc`         | string \\| string[] | CC recipients                                                                       |\n| `bcc`        | string \\| string[] | BCC recipients                                                                      |\n| `isHtml`     | boolean            | Treat `body` as HTML and store it unescaped (default: `false`)                       |\n| `from`       | string             | The `From` header. Must be an address the account is allowed to send as              |\n| `replyTo`    | string             | The `Reply-To` header                                                                |\n| `inReplyTo`  | string             | The `Message-ID` this replies to                                                     |\n| `references` | string             | The `References` header, for threading in non-Gmail clients                          |\n| `threadId`   | string             | Attaches the draft to an existing conversation                                       |\n| `labelIds`   | string[]           | Labels applied to the saved draft                                                    |\n| `userId`     | string             | The mailbox to create the draft in (default: `\"me\"`, the credential's own)            |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"draftId\": \"r-8814920495823\",\n  \"messageId\": \"18d3c5e2f8a91234\",\n  \"threadId\": \"18d3c5e2f8a91234\",\n  \"historyId\": \"1234567\",\n  \"labelIds\": [\"DRAFT\"],\n  \"sizeEstimate\": 512,\n  \"internalDate\": \"1704729000000\",\n  \"snippet\": \"Here is the outline we discussed.\",\n  \"message\": \"Draft created\",\n  \"summary\": \"Gmail draft created successfully\"\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"statusCode\": 400,\n  \"message\": \"The request body is not valid for `create-draft`\",\n  \"error\": \"Bad Request\"\n}\n```\n\nReturned when `to`, `subject` or `body` is missing, or a field has the wrong type. **Nothing is written** in this case.\n\n## Response Fields\n\n| Field          | Type     | Description                                                              |\n|----------------|----------|--------------------------------------------------------------------------|\n| `draftId`      | string   | **The draft's ID** - what `drafts.send` and `drafts.update` take          |\n| `messageId`    | string   | The ID of the message inside the draft                                   |\n| `threadId`     | string   | The conversation the draft belongs to                                    |\n| `historyId`    | string   | Gmail history ID                                                         |\n| `labelIds`     | string[] | Labels applied, normally including `DRAFT`                               |\n| `sizeEstimate` | number   | Estimated size of the draft in bytes                                     |\n| `internalDate` | string   | Gmail internal timestamp, epoch milliseconds                             |\n| `snippet`      | string   | Gmail's preview of the draft                                             |\n| `message`      | string   | Success message                                                          |\n| `summary`      | string   | Summary of the operation                                                 |\n\n`draftId` is listed first because it is the one field needed to do anything further with what was just created.\n\n## Sample Request\n\n```bash\ncurl -i --location --request POST 'http://one-medley/v1/gmail/create-draft' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"connectionKey\": \"live::gmail::default::<your-connection-key>\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Proposal draft\",\n    \"body\": \"Here is the outline we discussed.\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Simple Draft\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/create-draft \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Proposal draft\",\n    \"body\": \"Here is the outline we discussed.\"\n  }'\n```\n\n### Example 2: HTML Draft With CC\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/create-draft \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": [\"john@example.com\", \"jane@example.com\"],\n    \"cc\": \"team@example.com\",\n    \"subject\": \"Q3 summary\",\n    \"body\": \"<h1>Q3</h1><p>Numbers attached next week.</p>\",\n    \"isHtml\": true\n  }'\n```\n\n### Example 3: Draft a Reply Into an Existing Thread\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/create-draft \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Re: Meeting Tomorrow\",\n    \"body\": \"2 PM works.\",\n    \"threadId\": \"18d3c5e2f8a91234\",\n    \"inReplyTo\": \"<CAF=abc123@mail.gmail.com>\",\n    \"labelIds\": [\"DRAFT\"]\n  }'\n```\n\n### Example 4: Create Then Send\n\n```bash\n# create\ncurl -X POST http://one-medley/v1/gmail/create-draft \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Proposal\",\n    \"body\": \"Attached.\"\n  }'\n# then pass the returned draftId to Gmail's \"Send a User's Draft Email\" action\n```\n\n## Behavior\n\n1. **Validate request**: `connectionKey`, `to`, `subject` and `body` must be present. A malformed request is refused before anything is written.\n2. **Assemble the message**: MIME headers, the subject RFC 2047 encoded if it is not ASCII, and the body as HTML.\n3. **Encode**: the whole message base64url, as Gmail's `raw` field requires.\n4. **Create**: one call to `drafts.create`, with `threadId` and `labelIds` when given.\n5. **Answer**: the draft ID first, then the IDs of the message it holds.\n\n## Notes\n\n- Uses one Gmail action: `drafts.create`.\n- The draft is always stored as `text/html; charset=UTF-8`. Plain text is HTML-escaped first, so a `<` in what you write is preserved rather than becoming markup.\n- Newlines in a plain-text body become `<br>`.\n- Non-ASCII subjects are encoded as `=?UTF-8?B?…?=`.\n- **A draft is not sent.** It appears in the Drafts folder until sent explicitly.\n- `threadId` attaches the draft to a conversation; Gmail additionally requires the subject to match the thread's.\n- `from` only works for an address the authenticated account is allowed to send as.\n- Attachments are not supported by this endpoint.\n\n## Error Handling\n\n- **400 Bad Request**: a header value containing a line break. `subject`, `to`, `cc`, `bcc`, `from`, `replyTo`, `inReplyTo` and `references` are all refused if they contain CR or LF, because a header value that spans lines is a second header - a subject of `\"Hi\\r\\nBcc: someone@else\"` would otherwise add a recipient you never named. Refused, not stripped.\n- **400 Bad Request**: `to` that resolves to no address (`\"\"`, `[]`, `\" , \"`). The message would carry a bare `To:` header.\n\n- **400 Bad Request**: a missing or mistyped field. Refused before the message is assembled, so nothing is written.\n- **Gmail's own errors** are returned with the platform's status and body - for example `403` for an unpermitted `from`, or `400` when `threadId` names a thread whose subject does not match.\n- Creating a draft is repeatable in a way sending is not, but this action is still not retried automatically: a retry would leave two drafts.\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates an email draft in Gmail without sending it. Takes the message as fields - recipients, subject, body - and assembles the RFC 2822 message Gmail's API requires, so the caller never builds MIME or base64.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Draft creation payload.",
+     "properties": {
+      "bcc": {
+       "description": "BCC recipients",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "body": {
+       "description": "Body content. Plain text unless `isHtml` is set",
+       "type": "string"
+      },
+      "cc": {
+       "description": "CC recipients",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "connectionKey": {
+       "description": "The connection key for Gmail authentication",
+       "type": "string"
+      },
+      "from": {
+       "description": "The `From` header. Must be an address the account is allowed to send as",
+       "type": "string"
+      },
+      "inReplyTo": {
+       "description": "The `Message-ID` this replies to",
+       "type": "string"
+      },
+      "isHtml": {
+       "description": "Treat `body` as HTML and store it unescaped (default: `false`)",
+       "type": "boolean"
+      },
+      "labelIds": {
+       "description": "Labels applied to the saved draft",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "references": {
+       "description": "The `References` header, for threading in non-Gmail clients",
+       "type": "string"
+      },
+      "replyTo": {
+       "description": "The `Reply-To` header",
+       "type": "string"
+      },
+      "subject": {
+       "description": "Subject line. Non-ASCII subjects are RFC 2047 encoded automatically",
+       "type": "string"
+      },
+      "threadId": {
+       "description": "Attaches the draft to an existing conversation",
+       "type": "string"
+      },
+      "to": {
+       "description": "Recipient(s). A comma-separated string or an array",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "userId": {
+       "description": "The mailbox to create the draft in (default: `\"me\"`, the credential's own)",
+       "type": "string"
+      }
+     },
+     "required": [
+      "connectionKey",
+      "to",
+      "subject",
+      "body"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers required for the create draft request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the JSON request body.",
+       "type": "string"
+      },
+      "x-one-secret": {
+       "description": "Internal signing key.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "x-one-secret"
+     ],
+     "title": "Headers",
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Create Draft – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response structure for creating a Gmail draft. Success returns the created draft and message metadata; errors return platform or validation error details.",
+   "oneOf": [
+    {
+     "additionalProperties": true,
+     "description": "Successful response when the draft is created.",
+     "properties": {
+      "draftId": {
+       "description": "The draft's ID - what `drafts.send` and `drafts.update` take",
+       "type": "string"
+      },
+      "historyId": {
+       "description": "Gmail history ID",
+       "type": "string"
+      },
+      "internalDate": {
+       "description": "Gmail internal timestamp, epoch milliseconds",
+       "type": "string"
+      },
+      "labelIds": {
+       "description": "Labels applied, normally including `DRAFT`",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "message": {
+       "description": "Success message",
+       "type": "string"
+      },
+      "messageId": {
+       "description": "The ID of the message inside the draft",
+       "type": "string"
+      },
+      "sizeEstimate": {
+       "description": "Estimated size of the draft in bytes",
+       "type": "number"
+      },
+      "snippet": {
+       "description": "Gmail's preview of the draft",
+       "type": "string"
+      },
+      "summary": {
+       "description": "Summary of the operation",
+       "type": "string"
+      },
+      "threadId": {
+       "description": "The conversation the draft belongs to",
+       "type": "string"
+      }
+     },
+     "title": "Create Draft Success Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Error response when the request is invalid or another platform/Gmail error occurs.",
+     "properties": {
+      "error": {
+       "description": "Error type",
+       "type": "string"
+      },
+      "message": {
+       "description": "Error message",
+       "type": "string"
+      },
+      "statusCode": {
+       "description": "HTTP-like status code for the error",
+       "type": "integer"
+      }
+     },
+     "title": "Create Draft Error Response",
+     "type": "object"
+    }
+   ],
+   "title": "Create Draft – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "bcc": [
+      "manager@example.com"
+     ],
+     "body": "<h1>Q3</h1><p>Numbers attached next week.</p>",
+     "cc": "team@example.com",
+     "connectionKey": "live::gmail::default::your-connection-key",
+     "from": "sender@example.com",
+     "inReplyTo": "<CAF=abc123@mail.gmail.com>",
+     "isHtml": true,
+     "labelIds": [
+      "DRAFT",
+      "Label_123"
+     ],
+     "references": "<CAF=threadroot@mail.gmail.com> <CAF=abc123@mail.gmail.com>",
+     "replyTo": "reply@example.com",
+     "subject": "Q3 summary",
+     "threadId": "18d3c5e2f8a91234",
+     "to": [
+      "john@example.com",
+      "jane@example.com"
+     ],
+     "userId": "me"
+    },
+    "headers": {
+     "Content-Type": "application/json",
+     "x-one-secret": "your-one-secret"
+    }
+   },
+   "output": {
+    "draftId": "r-8814920495823",
+    "historyId": "1234567",
+    "internalDate": "1704729000000",
+    "labelIds": [
+     "DRAFT"
+    ],
+    "message": "Draft created",
+    "messageId": "18d3c5e2f8a91234",
+    "sizeEstimate": 512,
+    "snippet": "Here is the outline we discussed.",
+    "summary": "Gmail draft created successfully",
+    "threadId": "18d3c5e2f8a91234"
+   }
+  }
+ }
+}

@@ -1,0 +1,155 @@
+{
+ "_id": "conn_mod_def::GIi2lFp8GxQ::mVT_rCp8R8iVzg6Dg91e1w",
+ "connectionPlatform": "vercel",
+ "title": "Promote a Project Deployment to Production",
+ "method": "POST",
+ "path": "/v10/projects/{{PROJECTID}}/promote/{{DEPLOYMENTID}}",
+ "tags": [],
+ "knowledge": "# Promote a Project Deployment to Production\n\n## Prerequisites\n\n- Must have permission to manage deployments for the project.\n- If promoting on behalf of a Team, you must be a member with deployment privileges.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.vercel.com/v10/projects/{{projectId}}/promote/{{deploymentId}}`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nPromotes the specified deployment to production for a given project. This action points all production domains for the project to the deployment identified by `deploymentId`. **Note:** This does NOT rebuild the deployment. Use the create-deployments endpoint if a rebuild is needed.\n\n## Enforcement Rules\n\n- Both `projectId` and `deploymentId` path parameters **must always be present** and non-empty.\n- Always construct the path as `/v10/projects/{{projectId}}/promote/{{deploymentId}}`, where both parameters are valid strings.\n- When executing, send Path Parameters in the URL, not in the body.\n- When executing, send Query Parameters as URL query parameters, not in the body.\n- Do **not** call the API with missing or empty `projectId` or `deploymentId` (avoid `/v10/projects//promote/`).\n- `teamId` and `slug` are optional query parameters; include them only if needed.\n\n### Valid Examples\n\n```http\n/v10/projects/my-project-id/promote/dpl_abc123\n/v10/projects/example123/promote/dpl_xyz789\n```\n\n### Invalid Examples\n\n```http\n/v10/projects//promote/\n/v10/projects/promote/\n/v10/projects/my-project-id/promote/\n```\n\n## Required Path Parameters\n\n| Parameter      | Type   | Description                                                |\n|----------------|--------|------------------------------------------------------------|\n| `projectId`    | string | The unique identifier of the project to promote deployment for. |\n| `deploymentId` | string | The deployment ID to promote to production.                |\n\n## Optional Query Parameters\n\n| Parameter | Type   | Description                                               |\n|-----------|--------|-----------------------------------------------------------|\n| `teamId`  | string | The Team identifier to perform the request on behalf of.  |\n| `slug`    | string | The Team slug to perform the request on behalf of.        |\n\n## Response\n\n### Success Response (201 Created or 202 Accepted)\n\n```json\n{\n  \"projectId\": \"example123\",\n  \"deploymentId\": \"dpl_abc123\",\n  \"aliases\": [\n    \"myproject.com\",\n    \"www.myproject.com\"\n  ],\n  \"status\": \"promoted\",\n  \"createdAt\": 1712300000000\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"bad_request\",\n    \"message\": \"One of the provided values in the request query is invalid.\"\n  }\n}\n```\n\n### Error Response (401 Unauthorized)\n\n```json\n{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"The request is not authorized.\"\n  }\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"You do not have permission to access this resource.\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"error\": {\n    \"code\": \"conflict\",\n    \"message\": \"Cannot promote deployment due to conflicting state.\"\n  }\n}\n```\n\n## Response Fields\n\n| Field         | Type     | Description                                                      |\n|---------------|----------|------------------------------------------------------------------|\n| `projectId`   | string   | The ID of the project the deployment was promoted for.           |\n| `deploymentId`| string   | The ID of the deployment that was promoted.                      |\n| `aliases`     | array    | List of production domains now pointing to this deployment.      |\n| `status`      | string   | Status of the promotion (typically \"promoted\").                  |\n| `createdAt`   | integer  | Timestamp (ms since epoch) when the promotion occurred.          |\n| `error.code`  | string   | Error code, if an error occurred.                                |\n| `error.message`| string  | Error message, if an error occurred.                             |\n\n## Sample Request\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/example123/promote/dpl_abc123' \\\n  -H 'Content-Type: application/json'\n```\n\n## Example Usage\n\n### Example 1: Promote a Deployment to Production\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/my-project-id/promote/dpl_456def'\n```\n\n### Example 2: Promote a Deployment for a Team Using teamId\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/project-xyz/promote/dpl_789ghi?teamId=team_123'\n```\n\n### Example 3: Promote a Deployment for a Team Using slug\n\n```bash\ncurl -X POST 'https://api.vercel.com/v10/projects/project-xyz/promote/dpl_789ghi?slug=myteam'\n```\n\n## Behavior\n\n1. Validates the presence and correctness of `projectId` and `deploymentId`.\n2. Verifies permissions for the user (and team, if provided).\n3. Points all production domains for the project to the specified deployment.\n4. Returns status and affected domains.\n\n## Notes\n\n- This endpoint does **not** rebuild the deployment.\n- Use the create-deployments endpoint if you need to rebuild before promoting.\n- The promotion is instant and affects all configured production domains.\n- If both `teamId` and `slug` are provided, `teamId` takes precedence.\n\n## Gotchas\n\n- Omitting `projectId` or `deploymentId` will result in an error.\n- Attempting to promote a deployment not associated with the project will fail.\n- You must have sufficient permissions to perform this operation.\n- Promoting a deployment does not affect its build status or content.\n\n## Error Handling\n\n- **400 Bad Request**: One or more provided query values are invalid.\n- **401 Unauthorized**: The request lacks valid authentication credentials.\n- **403 Forbidden**: You do not have permission to access this resource.\n- **409 Conflict**: The deployment cannot be promoted due to conflicting state (e.g., already promoted or invalid deployment).\n\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Promotes the specified deployment to production for a given project. This action points all production domains for the project to the deployment identified by `deploymentId`. Note: This does NOT rebuild the deployment. Use the create-deployments endpoint if a rebuild is needed.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the request body.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for promoting a project deployment to production.",
+     "properties": {
+      "deploymentId": {
+       "description": "The deployment ID to promote to production.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "projectId": {
+       "description": "The unique identifier of the project to promote deployment for.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "projectId",
+      "deploymentId"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters for performing the request on behalf of a team. If both `teamId` and `slug` are provided, `teamId` takes precedence.",
+     "properties": {
+      "slug": {
+       "description": "The Team slug to perform the request on behalf of.",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "The Team identifier to perform the request on behalf of.",
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Promote a Project Deployment to Production \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response returned after attempting to promote the specified deployment to production for a project.",
+   "properties": {
+    "aliases": {
+     "description": "List of production domains now pointing to this deployment.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "createdAt": {
+     "description": "Timestamp (ms since epoch) when the promotion occurred.",
+     "type": "integer"
+    },
+    "deploymentId": {
+     "description": "The ID of the deployment that was promoted.",
+     "type": "string"
+    },
+    "error": {
+     "additionalProperties": true,
+     "description": "Error information returned when the request fails.",
+     "properties": {
+      "code": {
+       "description": "Error code, if an error occurred.",
+       "type": "string"
+      },
+      "message": {
+       "description": "Error message, if an error occurred.",
+       "type": "string"
+      }
+     },
+     "title": "Error",
+     "type": "object"
+    },
+    "projectId": {
+     "description": "The ID of the project the deployment was promoted for.",
+     "type": "string"
+    },
+    "status": {
+     "description": "Status of the promotion (typically \"promoted\").",
+     "type": "string"
+    }
+   },
+   "title": "Promote a Project Deployment to Production \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "path": {
+     "deploymentId": "dpl_abc123",
+     "projectId": "example123"
+    },
+    "query": {
+     "slug": "myteam",
+     "teamId": "team_123"
+    }
+   },
+   "output": {
+    "aliases": [
+     "myproject.com",
+     "www.myproject.com"
+    ],
+    "createdAt": 1712300000000,
+    "deploymentId": "dpl_abc123",
+    "error": {
+     "code": "bad_request",
+     "message": "One of the provided values in the request query is invalid."
+    },
+    "projectId": "example123",
+    "status": "promoted"
+   }
+  }
+ }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@builder/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/node.ts",
+    "start": "tsx src/node.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@builder/core": "workspace:*",
+    "@builder/harness": "workspace:*",
+    "@hono/node-server": "^1.14.0",
+    "@withone/connect": "0.17.2",
+    "esbuild": "^0.25.0",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "drizzle-orm": "^0.44.0",
+    "typescript": "^5.9.3"
+  }
+}

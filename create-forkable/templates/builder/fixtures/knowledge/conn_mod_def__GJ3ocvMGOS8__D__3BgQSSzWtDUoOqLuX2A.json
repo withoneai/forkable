@@ -1,0 +1,389 @@
+{
+ "_id": "conn_mod_def::GJ3ocvMGOS8::D__3BgQSSzWtDUoOqLuX2A",
+ "connectionPlatform": "gmail",
+ "title": "Get a User's Gmail Message",
+ "method": "GET",
+ "path": "/gmail/v1/users/{{userId}}/messages/{{id}}",
+ "tags": [],
+ "knowledge": "# Get a User's Gmail Message\n\n## Prerequisites\n\n- Must have access to the user’s Gmail mailbox with an appropriate Gmail scope (see **Notes**).\n\n## Method\n\n`GET`\n\n## URL\n\n`https://gmail.googleapis.com/gmail/v1/users/{{userId}}/messages/{{id}}`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nGets a specific Gmail message by message ID. You can control how much of the message is returned using the `format` query parameter (e.g., minimal metadata, full parsed payload, raw RFC 2822 content, or headers-only metadata).\n\n## Enforcement Rules\n\n- The `userId` path parameter **must always be present**.\n- If the user provides a `userId`, use that value directly.\n- If the user does **not** provide a `userId`, default it explicitly to `\"me\"`.\n- Always construct the path as `/gmail/v1/users/{{userId}}/messages/{{id}}`, where `{{userId}}` is a **non-empty string**.\n- Do **not** call the API with a missing or empty `userId` (e.g., avoid `/gmail/v1/users//messages/{{id}}`).\n- The `id` path parameter **must always be present** and **non-empty**.\n- When executing the action, ensure to send **Path Parameters** in the URL and **not** in the body.\n- When executing the action, ensure to send **Query Parameters** in the URL as query parameters and **not** in the body.\n\n### Valid Examples\n\n```http\n/gmail/v1/users/me/messages/186a7c2d3f9a1b2c\n/gmail/v1/users/user@example.com/messages/186a7c2d3f9a1b2c\n```\n\n### Invalid Examples\n\n```http\n/gmail/v1/users//messages/186a7c2d3f9a1b2c\n/gmail/v1/users/me/messages/\n/gmail/v1/users/me/messages\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `userId` | string | The user's email address. The special value `me` can be used to indicate the authenticated user. Default: `me`. |\n| `id`     | string | The ID of the message to retrieve. This ID is usually retrieved using `messages.list`. The ID is also contained in results when a message is inserted (`messages.insert`) or imported (`messages.import`). |\n\n## Optional Query Parameters\n\n| Parameter | Type | Description |\n|----------|------|-------------|\n| `format` | string | The format to return the message in. Default: `full`. Possible values: `minimal` (only message ID and labels), `full` (full message data with body parsed in `payload`; `raw` not used), `raw` (full message data with body in `raw` as base64url; `payload` not used), `metadata` (only message ID, labels, and headers). Note: `full`/`raw` cannot be used when accessing the API using the `gmail.metadata` scope. |\n| `metadataHeaders` | string (repeated) | When given and `format` is `METADATA`, only include headers specified. (Repeat the query parameter to specify multiple headers.) |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"id\": \"186a7c2d3f9a1b2c\",\n  \"threadId\": \"186a7c2c1a0b9d8e\",\n  \"labelIds\": [\"INBOX\", \"UNREAD\"],\n  \"snippet\": \"A short part of the message text.\",\n  \"internalDate\": \"1710000000000\",\n  \"sizeEstimate\": 52341,\n  \"historyId\": \"987654321\",\n  \"payload\": {\n    \"partId\": \"\",\n    \"mimeType\": \"multipart/alternative\",\n    \"filename\": \"\",\n    \"headers\": [\n      { \"name\": \"From\", \"value\": \"Sender <sender@example.com>\" },\n      { \"name\": \"To\", \"value\": \"user@example.com\" },\n      { \"name\": \"Subject\", \"value\": \"Example subject\" },\n      { \"name\": \"Date\", \"value\": \"Mon, 10 Mar 2025 10:00:00 +0000\" }\n    ],\n    \"body\": {\n      \"size\": 0\n    },\n    \"parts\": [\n      {\n        \"partId\": \"0\",\n        \"mimeType\": \"text/plain\",\n        \"filename\": \"\",\n        \"headers\": [{ \"name\": \"Content-Type\", \"value\": \"text/plain; charset=UTF-8\" }],\n        \"body\": {\n          \"size\": 120,\n          \"data\": \"VGhpcyBpcyBhIHBsYWluIHRleHQgYm9keS4\"\n        }\n      },\n      {\n        \"partId\": \"1\",\n        \"mimeType\": \"text/html\",\n        \"filename\": \"\",\n        \"headers\": [{ \"name\": \"Content-Type\", \"value\": \"text/html; charset=UTF-8\" }],\n        \"body\": {\n          \"size\": 240,\n          \"data\": \"PGRpdj5UaGlzIGlzIGFuIEhUTUwgYm9keS48L2Rpdj4\"\n        }\n      }\n    ]\n  }\n}\n```\n\n### Error Responses\n\nThe scraped content did not provide explicit error response bodies for this endpoint.\n\n## Response Fields\n\n| Field | Type | Description |\n|------|------|-------------|\n| `id` | string | The immutable ID of the message. |\n| `threadId` | string | The ID of the thread the message belongs to. To add a message/draft to a thread, criteria include matching `threadId`, compliant `References`/`In-Reply-To` headers, and matching `Subject`. |\n| `labelIds` | array[string] | List of IDs of labels applied to this message. |\n| `snippet` | string | A short part of the message text. |\n| `internalDate` | string (int64) | Internal message creation timestamp (epoch ms) used for ordering. |\n| `sizeEstimate` | integer (int32) | Estimated size in bytes of the message. |\n| `historyId` | string (uint64) | The ID of the last history record that modified this message. |\n| `payload` | object | A single MIME message part (parsed content when `format=full` or `metadata`). |\n| `payload.partId` | string | The immutable ID of the message part. |\n| `payload.mimeType` | string | The MIME type of the message part. |\n| `payload.filename` | string | Filename of the attachment (only present if this part represents an attachment). |\n| `payload.headers` | array[object] | Headers on this message part (top-level includes standard RFC 2822 headers like `To`, `From`, `Subject`). |\n| `payload.headers[].name` | string | Header name before the `:` separator (e.g., `To`). |\n| `payload.headers[].value` | string | Header value after the `:` separator (e.g., `someuser@example.com`). |\n| `payload.body` | object | The body of a single MIME message part. |\n| `payload.body.size` | integer (int32) | Number of bytes for the message part data (encoding notwithstanding). |\n| `payload.body.data` | string | Body data as a base64url encoded string. May be empty for container parts or when content is provided as an attachment. |\n| `payload.body.attachmentId` | string | If present, ID of an external attachment retrievable via `messages.attachments.get`. |\n| `payload.parts` | array | Child MIME parts (applies to container parts like `multipart/*`). |\n| `raw` | string | Entire email message in RFC 2822 format, base64url encoded. Returned when `format=RAW` is supplied. |\n| `classificationLabelValues` | array[object] | Classification Label values on the message (Google Workspace accounts only). |\n| `classificationLabelValues[].labelId` | string | Required. Canonical or raw alphanumeric classification label ID (maps to Google Drive Labels API). |\n| `classificationLabelValues[].fields` | array[object] | Field values for the given classification label ID. |\n| `classificationLabelValues[].fields[].fieldId` | string | Required. Field ID for the Classification Label Value. |\n| `classificationLabelValues[].fields[].selection` | string | Selection choice ID (only if the field type is `SELECTION`). |\n\n## Sample Request\n\n```bash\ncurl -i --location --request GET \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/messages/186a7c2d3f9a1b2c?format=full' \\\n  --header 'Accept: application/json'\n```\n\n## Example Usage\n\n### Example 1: Get minimal message info (ID + labels)\n\n```bash\ncurl -sS --location \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/messages/186a7c2d3f9a1b2c?format=minimal' \\\n  -H 'Accept: application/json'\n```\n\n### Example 2: Get raw RFC 2822 message (base64url encoded)\n\n```bash\ncurl -sS --location \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/messages/186a7c2d3f9a1b2c?format=raw' \\\n  -H 'Accept: application/json'\n```\n\n### Example 3: Get only specific headers (metadata)\n\n```bash\ncurl -sS --location \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/messages/186a7c2d3f9a1b2c?format=metadata&metadataHeaders=From&metadataHeaders=To&metadataHeaders=Subject' \\\n  -H 'Accept: application/json'\n```\n\n## Behavior\n\n1. Validates `userId` and message `id`.\n2. Retrieves the message.\n3. Shapes the response based on `format`:\n   - `full`: parsed content in `payload`\n   - `raw`: raw content in `raw` (base64url); `payload` not used\n   - `metadata`: message ID, labels, and headers (optionally filtered by `metadataHeaders`)\n   - `minimal`: message ID and labels only\n\n## Notes\n\n- Scopes listed for this endpoint include:\n  - `https://mail.google.com/`\n  - `https://www.googleapis.com/auth/gmail.readonly`\n  - `https://www.googleapis.com/auth/gmail.modify`\n  - `https://www.googleapis.com/auth/gmail.metadata`\n  - `https://www.googleapis.com/auth/gmail.addons.current.message.*` (as shown in the scraped content)\n- `format=full` and `format=raw` cannot be used when accessing the API using the `gmail.metadata` scope (per scraped description).\n- `metadataHeaders` is a **repeated** query parameter (specify it multiple times to request multiple headers).\n\n## Gotchas\n\n- `metadataHeaders` only applies when using metadata format (documented as `format` is `METADATA`); using it with other formats may not have the intended effect.\n- If a MIME part’s `body.attachmentId` is present, the content may need to be fetched separately via `messages.attachments.get` rather than using `body.data`.\n\n## Recipe — Extract headers and decode the body\n\nFor `format=full` the response is a MIME tree. To get the data agents usually want:\n\n- **Envelope headers (From/To/Cc/Subject/Date):** search `payload.headers[]` for the matching `name` value. The top-level `payload.headers` array contains the RFC 2822 headers; sub-parts only carry MIME headers like `Content-Type`.\n- **Body text:**\n  - If `payload.mimeType` starts with `text/` and `payload.body.data` is set: base64url-decode `payload.body.data` (replace `-` → `+`, `_` → `/`, pad with `=` to a multiple of 4, then base64-decode).\n  - Otherwise walk `payload.parts[]` recursively and pick the part whose `mimeType` is `text/plain` (preferred) or `text/html`. Base64url-decode that part's `body.data` the same way.\n- **Attachments:** parts where `body.attachmentId` is set (and `body.data` is empty). Fetch each via **Get a Gmail Message Attachment** (`conn_mod_def::GJ3ocG2ED_w::LGrrJyM-QFmKBaHwvMWwzQ`) using `messageId` + the part's `attachmentId`.\n\nIf the caller only needs envelope fields (From/To/Subject/Date), pass `format=metadata` with `metadataHeaders` — the response is ~1 KB instead of the typical 50–200 KB of `format=full`, and skips the base64url decoding entirely.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Gets a specific Gmail message by message ID. You can control how much of the message is returned using the `format` query parameter (e.g., minimal metadata, full parsed payload, raw RFC 2822 content, or headers-only metadata).",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Expected response content type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the Gmail message to retrieve.",
+     "properties": {
+      "id": {
+       "description": "The ID of the message to retrieve. This ID is usually retrieved using `messages.list`. The ID is also contained in results when a message is inserted (`messages.insert`) or imported (`messages.import`).",
+       "minLength": 1,
+       "type": "string"
+      },
+      "userId": {
+       "default": "me",
+       "description": "The user's email address. The special value `me` can be used to indicate the authenticated user. Default: `me`.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "userId",
+      "id"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional query parameters that control the response format.",
+     "properties": {
+      "format": {
+       "default": "full",
+       "description": "The format to return the message in. Default: `full`. Possible values: `minimal` (only message ID and labels), `full` (full message data with body parsed in `payload`; `raw` not used), `raw` (full message data with body in `raw` as base64url; `payload` not used), `metadata` (only message ID, labels, and headers). Note: `full`/`raw` cannot be used when accessing the API using the `gmail.metadata` scope.",
+       "enum": [
+        "minimal",
+        "full",
+        "raw",
+        "metadata"
+       ],
+       "type": "string"
+      },
+      "metadataHeaders": {
+       "description": "When given and `format` is `METADATA`, only include headers specified. Repeat the query parameter to specify multiple headers.",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Get a User's Gmail Message – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Successful response structure for a Gmail message. The shape varies by the requested format.",
+   "properties": {
+    "classificationLabelValues": {
+     "description": "Classification Label values on the message (Google Workspace accounts only).",
+     "items": {
+      "additionalProperties": true,
+      "properties": {
+       "fields": {
+        "description": "Field values for the given classification label ID.",
+        "items": {
+         "additionalProperties": true,
+         "properties": {
+          "fieldId": {
+           "description": "Required. Field ID for the Classification Label Value.",
+           "type": "string"
+          },
+          "selection": {
+           "description": "Selection choice ID (only if the field type is `SELECTION`).",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "labelId": {
+        "description": "Required. Canonical or raw alphanumeric classification label ID (maps to Google Drive Labels API).",
+        "type": "string"
+       }
+      },
+      "required": [
+       "labelId"
+      ],
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "historyId": {
+     "description": "The ID of the last history record that modified this message.",
+     "type": "string"
+    },
+    "id": {
+     "description": "The immutable ID of the message.",
+     "type": "string"
+    },
+    "internalDate": {
+     "description": "Internal message creation timestamp (epoch ms) used for ordering.",
+     "type": "string"
+    },
+    "labelIds": {
+     "description": "List of IDs of labels applied to this message.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "payload": {
+     "additionalProperties": true,
+     "description": "A single MIME message part (parsed content when `format=full` or `metadata`).",
+     "properties": {
+      "body": {
+       "additionalProperties": true,
+       "description": "The body of a single MIME message part.",
+       "properties": {
+        "attachmentId": {
+         "description": "If present, ID of an external attachment retrievable via `messages.attachments.get`.",
+         "type": "string"
+        },
+        "data": {
+         "description": "Body data as a base64url encoded string. May be empty for container parts or when content is provided as an attachment.",
+         "type": "string"
+        },
+        "size": {
+         "description": "Number of bytes for the message part data (encoding notwithstanding).",
+         "type": "integer"
+        }
+       },
+       "type": "object"
+      },
+      "filename": {
+       "description": "Filename of the attachment (only present if this part represents an attachment).",
+       "type": "string"
+      },
+      "headers": {
+       "description": "Headers on this message part (top-level includes standard RFC 2822 headers like `To`, `From`, `Subject`).",
+       "items": {
+        "additionalProperties": true,
+        "properties": {
+         "name": {
+          "description": "Header name before the `:` separator (e.g., `To`).",
+          "type": "string"
+         },
+         "value": {
+          "description": "Header value after the `:` separator (e.g., `someuser@example.com`).",
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "mimeType": {
+       "description": "The MIME type of the message part.",
+       "type": "string"
+      },
+      "partId": {
+       "description": "The immutable ID of the message part.",
+       "type": "string"
+      },
+      "parts": {
+       "description": "Child MIME parts (applies to container parts like `multipart/*`).",
+       "items": {
+        "additionalProperties": true,
+        "properties": {
+         "body": {
+          "additionalProperties": true,
+          "description": "The body of a single MIME message part.",
+          "properties": {
+           "attachmentId": {
+            "description": "If present, ID of an external attachment retrievable via `messages.attachments.get`.",
+            "type": "string"
+           },
+           "data": {
+            "description": "Body data as a base64url encoded string. May be empty for container parts or when content is provided as an attachment.",
+            "type": "string"
+           },
+           "size": {
+            "description": "Number of bytes for the message part data (encoding notwithstanding).",
+            "type": "integer"
+           }
+          },
+          "type": "object"
+         },
+         "filename": {
+          "description": "Filename of the attachment (only present if this part represents an attachment).",
+          "type": "string"
+         },
+         "headers": {
+          "description": "Headers on this message part.",
+          "items": {
+           "additionalProperties": true,
+           "properties": {
+            "name": {
+             "description": "Header name before the `:` separator (e.g., `To`).",
+             "type": "string"
+            },
+            "value": {
+             "description": "Header value after the `:` separator (e.g., `someuser@example.com`).",
+             "type": "string"
+            }
+           },
+           "type": "object"
+          },
+          "type": "array"
+         },
+         "mimeType": {
+          "description": "The MIME type of the message part.",
+          "type": "string"
+         },
+         "partId": {
+          "description": "The immutable ID of the message part.",
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      }
+     },
+     "title": "Message Part",
+     "type": "object"
+    },
+    "raw": {
+     "description": "Entire email message in RFC 2822 format, base64url encoded. Returned when `format=RAW` is supplied.",
+     "type": "string"
+    },
+    "sizeEstimate": {
+     "description": "Estimated size in bytes of the message.",
+     "type": "integer"
+    },
+    "snippet": {
+     "description": "A short part of the message text.",
+     "type": "string"
+    },
+    "threadId": {
+     "description": "The ID of the thread the message belongs to. To add a message/draft to a thread, criteria include matching `threadId`, compliant `References`/`In-Reply-To` headers, and matching `Subject`.",
+     "type": "string"
+    }
+   },
+   "title": "Get a User's Gmail Message – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "path": {
+     "id": "186a7c2d3f9a1b2c",
+     "userId": "me"
+    },
+    "query": {
+     "format": "metadata",
+     "metadataHeaders": [
+      "From",
+      "To",
+      "Subject"
+     ]
+    }
+   },
+   "output": {
+    "classificationLabelValues": [
+     {
+      "fields": [
+       {
+        "fieldId": "FIELD_001",
+        "selection": "CHOICE_PUBLIC"
+       }
+      ],
+      "labelId": "LABEL_ABC123"
+     }
+    ],
+    "historyId": "987654321",
+    "id": "186a7c2d3f9a1b2c",
+    "internalDate": "1710000000000",
+    "labelIds": [
+     "INBOX",
+     "UNREAD"
+    ],
+    "payload": {
+     "body": {
+      "attachmentId": "ATTACHMENT_123",
+      "data": "",
+      "size": 0
+     },
+     "filename": "",
+     "headers": [
+      {
+       "name": "From",
+       "value": "Sender <sender@example.com>"
+      },
+      {
+       "name": "To",
+       "value": "user@example.com"
+      },
+      {
+       "name": "Subject",
+       "value": "Example subject"
+      },
+      {
+       "name": "Date",
+       "value": "Mon, 10 Mar 2025 10:00:00 +0000"
+      }
+     ],
+     "mimeType": "multipart/alternative",
+     "partId": "",
+     "parts": [
+      {
+       "body": {
+        "attachmentId": "ATTACHMENT_TEXT_0",
+        "data": "VGhpcyBpcyBhIHBsYWluIHRleHQgYm9keS4",
+        "size": 120
+       },
+       "filename": "",
+       "headers": [
+        {
+         "name": "Content-Type",
+         "value": "text/plain; charset=UTF-8"
+        }
+       ],
+       "mimeType": "text/plain",
+       "partId": "0"
+      },
+      {
+       "body": {
+        "attachmentId": "ATTACHMENT_HTML_1",
+        "data": "PGRpdj5UaGlzIGlzIGFuIEhUTUwgYm9keS48L2Rpdj4",
+        "size": 240
+       },
+       "filename": "",
+       "headers": [
+        {
+         "name": "Content-Type",
+         "value": "text/html; charset=UTF-8"
+        }
+       ],
+       "mimeType": "text/html",
+       "partId": "1"
+      }
+     ]
+    },
+    "raw": "RnJvbTogU2VuZGVyIDxzZW5kZXJAZXhhbXBsZS5jb20-DQpUbzogdXNlckBleGFtcGxlLmNvbQ0KU3ViamVjdDogRXhhbXBsZSBzdWJqZWN0DQoNCkJvZHkgY29udGVudA",
+    "sizeEstimate": 52341,
+    "snippet": "A short part of the message text.",
+    "threadId": "186a7c2c1a0b9d8e"
+   }
+  }
+ }
+}

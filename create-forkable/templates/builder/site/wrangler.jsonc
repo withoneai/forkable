@@ -1,0 +1,10 @@
+{
+  // one.builders: the Builder landing page, served as Workers Static Assets.
+  // `pnpm build` first, then `npx wrangler deploy` from site/.
+  "name": "builder-site",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" },
+  "routes": [
+    { "pattern": "one.builders", "custom_domain": true }
+  ]
+}

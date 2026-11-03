@@ -1,0 +1,749 @@
+{
+ "_id": "conn_mod_def::GIi152aO03U::KTvTF_0ZTaS3tObzavwy0g",
+ "connectionPlatform": "vercel",
+ "title": "Create a New Deployment",
+ "method": "POST",
+ "path": "/v13/deployments",
+ "tags": [
+  "human-verified"
+ ],
+ "knowledge": "# Create a New Deployment\n\n## Prerequisites\n\n- You must have permission to create deployments in the specified project or team.\n- If not a git deployment, you must provide all required files in the request.\n\n## Method\n\n`POST`\n\n## URL\n\n`https://api.vercel.com/v13/deployments`\n\n## Headers\n\n```json\n{\n  \"Content-Type\": \"application/json\"\n}\n```\n\n## Description\n\nCreates a new deployment on Vercel with the specified configuration and files. If this is not a git deployment, you must provide all files in the request. Optionally, you can redeploy a previous deployment by specifying its deployment ID. The API supports detailed configuration options, including build settings, git metadata, file references, and more. You can also target a specific team or environment.\n\n## Enforcement Rules\n\n- All required fields in the request body must be included.\n- If uploading files (for non-git deployments), each file must be provided in the correct format.\n- Query parameters must be sent in the URL as query parameters, not in the body.\n- When acting on behalf of a team, include `teamId` or `slug` as a query parameter.\n- If redeploying, provide the previous deployment's ID using the `deploymentId` field in the request body.\n- Only one of `teamId` or `slug` should be provided to specify the team context.\n\n### Valid Examples\n\n```\nPOST https://api.vercel.com/v13/deployments?teamId=team_abc123\nPOST https://api.vercel.com/v13/deployments?slug=my-team-slug\n```\n\n### Invalid Examples\n\n```\nPOST https://api.vercel.com/v13/deployments (missing required fields)\n```\n\n## Required Query Parameters\n\n_None (but see optional parameters below for team context and deployment options)._\n\n## Optional Query Parameters\n\n| Parameter                       | Type   | Description                                                                                   |\n|----------------------------------|--------|-----------------------------------------------------------------------------------------------|\n| `forceNew`                      | enum[\"0\", \"1\"] | Forces a new deployment even if one with similar parameters exists; \"1\" = force, \"0\" = don't. |\n| `skipAutoDetectionConfirmation`  | enum[\"0\", \"1\"] | Skip framework detection confirmation; \"1\" = skip, \"0\" = don't.                                |\n| `teamId`                        | string | Team ID to perform the deployment on behalf of.                                               |\n| `slug`                          | string | Team slug to perform the deployment on behalf of.                                             |\n\n**When executing, send Query Parameters as URL query parameters, not in the body.**\n\n## Required Request Body Fields\n\n| Parameter | Type   | Description                                                       |\n|-----------|--------|-------------------------------------------------------------------|\n| `name`    | string | The project name used in the deployment URL (e.g., \"my-project\"). |\n\n## Optional Request Body Fields\n\n| Parameter                   | Type      | Description                                                                                                                           |\n|-----------------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------|\n| `customEnvironmentSlugOrId` | string    | Deploy to a custom environment, overriding the default environment.                                                                   |\n| `deploymentId`              | string    | ID of an existing deployment to redeploy.                                                                                             |\n| `files`                     | array     | List of file objects to include in the deployment (see **Files Object Format** below).                                                |\n| `gitMetadata`               | object    | Metadata about the git commit (see **Git Metadata Object** below).                                                                    |\n| `gitSource`                 | object    | Information about the git source (see **Git Source Object** below).                                                                   |\n| `meta`                      | object    | Key-value metadata pairs to attach to the deployment (e.g., `{ \"foo\": \"bar\" }`).                                                     |\n| `monorepoManager`           | string    | Monorepo manager used for this deployment, or `null` to select none.                                                                  |\n| `project`                   | string    | Target project identifier (overrides `name` if provided).                                                                             |\n| `projectSettings`           | object    | Build and project settings (see **Project Settings Object** below).                                                                   |\n| `target`                    | string    | Deployment target: `\"staging\"`, `\"production\"`, or custom environment identifier. Defaults to `\"preview\"`.                            |\n| `withLatestCommit`          | boolean   | If true and `deploymentId` is provided, deploys the latest commit instead of previous deployment's commit.                            |\n\n### Files Object Format (for each array item in `files`):\n\nEither:\n- `{ data: string, encoding: \"base64\"|\"utf-8\", file: string }`\n  - **data** (required): File content (base64 for binary files, plain text for source files)\n  - **encoding**: Encoding of data, one of `\"base64\"` or `\"utf-8\"`\n  - **file** (required): File name including the path\n\nOr:\n- `{ file: string, sha: string, size: integer }`\n  - **file** (required): File path relative to project root\n  - **sha**: SHA1 hash of file contents\n  - **size**: File size in bytes\n\n### Git Metadata Object\n\n| Field                | Type    | Description                                                    |\n|----------------------|---------|----------------------------------------------------------------|\n| `remoteUrl`          | string  | Git repository remote URL.                                     |\n| `commitAuthorName`   | string  | Commit author name.                                            |\n| `commitAuthorEmail`  | string  | Commit author email.                                           |\n| `commitMessage`      | string  | Commit message.                                                |\n| `commitRef`          | string  | Branch name.                                                   |\n| `commitSha`          | string  | Commit SHA.                                                    |\n| `dirty`              | boolean | Whether working tree was dirty.                                |\n| `ci`                 | boolean | Whether deployment was run in CI.                              |\n| `ciType`             | string  | Type of CI system used.                                        |\n| `ciGitProviderUsername` | string | Git provider username (if available).                         |\n| `ciGitRepoVisibility` | string | Repository visibility (if available).                          |\n\n### Git Source Object\n\nMultiple formats supported; key fields are:\n\n| Field         | Type      | Description                                                            |\n|---------------|-----------|------------------------------------------------------------------------|\n| `type`        | string    | Git provider type. E.g., \"github\", \"gitlab\", \"bitbucket\".              |\n| `repoId`      | string/int| Repository ID (for most providers).                                    |\n| `org`         | string    | Organization name (if applicable).                                     |\n| `repo`        | string    | Repository name (if applicable).                                       |\n| `ref`         | string    | Branch or tag reference.                                               |\n| `sha`         | string    | Commit SHA.                                                            |\n| `projectId`   | string/int| Project ID (for GitLab).                                               |\n| `repoUuid`    | string    | Repository UUID (for Bitbucket).                                       |\n| `workspaceUuid`| string   | Workspace UUID (for Bitbucket).                                        |\n| `owner`       | string    | Owner name (for Bitbucket).                                            |\n| `slug`        | string    | Slug (for Bitbucket).                                                  |\n\n### Project Settings Object\n\n| Field                       | Type     | Description                                                                                                  |\n|-----------------------------|----------|--------------------------------------------------------------------------------------------------------------|\n| `buildCommand`              | string   | The build command (max 256 chars). If `null`, auto-detected.                                                 |\n| `commandForIgnoringBuildStep` | string | Command to ignore build step (max 256 chars).                                                                |\n| `devCommand`                | string   | Dev command (max 256 chars). If `null`, auto-detected.                                                       |\n| `framework`                 | string   | Framework used (see full list in description; e.g., \"nextjs\", \"gatsby\", etc.).                               |\n| `installCommand`            | string   | Install command (max 256 chars). If `null`, auto-detected.                                                   |\n| `nodeVersion`               | string   | Node.js version; one of: \"24.x\", \"22.x\", \"20.x\", \"18.x\", \"16.x\", \"14.x\", \"12.x\", \"10.x\", \"8.10.x\".          |\n| `outputDirectory`           | string   | Output directory (max 256 chars). If `null`, auto-detected.                                                  |\n| `rootDirectory`             | string   | Project source directory or relative path (max 256 chars). If `null`, defaults to project root.              |\n| `serverlessFunctionRegion`  | string   | Region for serverless functions (max 4 chars).                                                               |\n| `skipGitConnectDuringLink`  | boolean  | If true, skips prompt to connect Git repo in CLI.                                                            |\n| `sourceFilesOutsideRootDirectory` | boolean | True if there are source files outside the root directory (monorepo support).                            |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"id\": \"dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ\",\n  \"createdAt\": 1540257589405,\n  \"name\": \"my-project\",\n  \"url\": \"my-instant-deployment-3ij3cxz9qr.now.sh\",\n  \"status\": \"BUILDING\",\n  \"readyState\": \"BUILDING\",\n  \"alias\": [\n    \"my-instant-deployment-3ij3cxz9qr.now.sh\"\n  ],\n  \"aliasAssigned\": true,\n  \"public\": false,\n  \"type\": \"LAMBDAS\",\n  \"project\": {\n    \"id\": \"prj_1234567890\",\n    \"name\": \"my-project\",\n    \"framework\": \"nextjs\"\n  },\n  \"creator\": {\n    \"uid\": \"96SnxkFiMyVKsK3pnoHfx3Hz\",\n    \"username\": \"john-doe\",\n    \"avatar\": \"https://vercel.com/avatar/abc123\"\n  },\n  \"team\": {\n    \"id\": \"team_abc123\",\n    \"name\": \"My Team\",\n    \"slug\": \"my-team\",\n    \"avatar\": \"https://vercel.com/avatar/team_abc123\"\n  },\n  \"projectSettings\": {\n    \"nodeVersion\": \"18.x\",\n    \"buildCommand\": \"npm run build\",\n    \"devCommand\": \"npm run dev\",\n    \"framework\": \"nextjs\",\n    \"installCommand\": \"npm install\",\n    \"outputDirectory\": \".next\",\n    \"webAnalytics\": {\n      \"id\": \"wa_123\",\n      \"disabledAt\": null,\n      \"enabledAt\": 1540257589405,\n      \"hasData\": false\n    }\n  },\n  \"regions\": [\"sfo1\", \"iad1\"],\n  \"target\": \"production\",\n  \"version\": 2\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"error\": {\n    \"code\": \"bad_request\",\n    \"message\": \"One of the provided values in the request body is invalid.\"\n  }\n}\n```\n\n### Error Response (401 Unauthorized)\n\n```json\n{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"The request is not authorized.\"\n  }\n}\n```\n\n### Error Response (402 Payment Required)\n\n```json\n{\n  \"error\": {\n    \"code\": \"payment_required\",\n    \"message\": \"The account was soft-blocked for an unhandled reason.\"\n  }\n}\n```\n\n### Error Response (403 Forbidden)\n\n```json\n{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"You do not have permission to access this resource.\"\n  }\n}\n```\n\n### Error Response (404 Not Found)\n\n```json\n{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"The requested resource was not found.\"\n  }\n}\n```\n\n### Error Response (409 Conflict)\n\n```json\n{\n  \"error\": {\n    \"code\": \"conflict\",\n    \"message\": \"The deployment project is being transferred.\"\n  }\n}\n```\n\n### Error Response (500 Internal Server Error)\n\n```json\n{\n  \"error\": {\n    \"code\": \"internal_server_error\",\n    \"message\": \"An unexpected error occurred.\"\n  }\n}\n```\n\n## Response Fields\n\n| Field                        | Type               | Description                                                                                  |\n|------------------------------|--------------------|----------------------------------------------------------------------------------------------|\n| `id`                         | string             | Unique identifier for the deployment.                                                        |\n| `createdAt`                  | number             | Timestamp (ms) when the deployment was created.                                              |\n| `name`                       | string             | Project name associated with the deployment.                                                 |\n| `url`                        | string             | URL of the created deployment.                                                               |\n| `status`                     | string             | Status of the deployment (\"QUEUED\", \"BUILDING\", \"READY\", \"ERROR\", \"CANCELED\", etc.).        |\n| `readyState`                 | string             | State of the deployment (\"QUEUED\", \"BUILDING\", \"READY\", etc.).                              |\n| `alias`                      | array of strings   | List of aliases assigned to this deployment.                                                 |\n| `aliasAssigned`              | boolean            | True if aliases were assigned successfully.                                                  |\n| `public`                     | boolean            | Whether the deployment is public.                                                            |\n| `type`                       | string             | Deployment type (e.g., \"LAMBDAS\").                                                           |\n| `project`                    | object             | Project info: id, name, framework.                                                           |\n| `creator`                    | object             | Creator info: uid, username, avatar.                                                         |\n| `team`                       | object             | Team info (if deployed on behalf of a team): id, name, slug, avatar.                         |\n| `projectSettings`            | object             | Project settings used for this deployment.                                                   |\n| `regions`                    | array of strings   | Regions where the deployment exists.                                                         |\n| `target`                     | string             | Deployment target: \"staging\", \"production\", or null (\"preview\").                             |\n| `version`                    | number             | Platform version used for the deployment.                                                    |\n| `error`                      | object             | Error object with code and message (only on errors).                                         |\n\n## Sample Request\n\n```bash\ncurl -X POST \"https://api.vercel.com/v13/deployments?teamId=team_abc123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"my-project\",\n    \"files\": [\n      {\n        \"file\": \"index.html\",\n        \"data\": \"<!doctype html><html><body>Hello, Vercel!</body></html>\",\n        \"encoding\": \"utf-8\"\n      }\n    ],\n    \"projectSettings\": {\n      \"buildCommand\": \"npm run build\",\n      \"devCommand\": \"npm run dev\",\n      \"framework\": \"nextjs\",\n      \"installCommand\": \"npm install\",\n      \"nodeVersion\": \"18.x\",\n      \"outputDirectory\": \".next\"\n    },\n    \"target\": \"production\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Create a Deployment for a Static Project\n\n```bash\ncurl -X POST \"https://api.vercel.com/v13/deployments\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"static-site\",\n    \"files\": [\n      {\n        \"file\": \"index.html\",\n        \"data\": \"<html><body>Static!</body></html>\",\n        \"encoding\": \"utf-8\"\n      }\n    ]\n  }'\n```\n\n### Example 2: Deploy on Behalf of a Team Using Team Slug\n\n```bash\ncurl -X POST \"https://api.vercel.com/v13/deployments?slug=my-team-slug\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"team-app\",\n    \"files\": [\n      {\n        \"file\": \"index.js\",\n        \"data\": \"console.log(\\\"Hello, team!\\\");\",\n        \"encoding\": \"utf-8\"\n      }\n    ]\n  }'\n```\n\n### Example 3: Redeploy a Previous Deployment\n\n```bash\ncurl -X POST \"https://api.vercel.com/v13/deployments?teamId=team_abc123\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"my-project\",\n    \"deploymentId\": \"dpl_1234567890\"\n  }'\n```\n\n## Behavior\n\n1. **Validation**: Validates required fields and file data.\n2. **Deployment Preparation**: If not a git deployment, all files must be provided.\n3. **Deployment Execution**: Begins deployment and returns deployment metadata.\n4. **Alias Assignment**: Assigns aliases if applicable (e.g., for production/staging targets).\n5. **Response**: Returns deployment object with status and URLs.\n\n## Notes\n\n- When deploying to a team, use either `teamId` or `slug` in the query string.\n- If using git, only references to the repository and commit are needed; otherwise, all files must be included.\n- For binary files, use `base64` encoding; for text files, use `utf-8`.\n- The deployment `target` field determines if the deployment is \"staging\", \"production\", or \"preview\".\n- Only one of `teamId` or `slug` should be provided in the query string.\n- If both `name` and `project` are provided, `project` takes precedence.\n- Maximum file size and number of files may be subject to Vercel platform limits.\n\n## Gotchas\n\n- Omitting required fields such as `name` or necessary files will result in a `400 Bad Request`.\n- Providing both `teamId` and `slug` may cause ambiguous behavior\u2014use only one.\n- If `deploymentId` is provided for redeploy, ensure it is valid and exists.\n- For non-git deployments, omitting the `files` array will cause deployment failure.\n- Incorrect file encoding in the `files` array may lead to invalid deployments.\n- Framework detection may prompt for confirmation unless `skipAutoDetectionConfirmation` is set.\n\n## Performance Considerations\n\n- Large deployments (many files or large files) may take longer to upload and process.\n- The deployment process is asynchronous; status may initially be \"BUILDING\" or \"QUEUED\".\n\n## Error Handling\n\n- **400 Bad Request**: Missing or invalid required fields, bad file encoding, etc.\n- **401 Unauthorized**: Not authenticated or token is missing/invalid.\n- **402 Payment Required**: Account is soft-blocked or requires payment update.\n- **403 Forbidden**: Insufficient permissions to deploy to the specified project or team.\n- **404 Not Found**: Target project or deployment not found.\n- **409 Conflict**: Deployment project is being transferred.\n- **500 Internal Server Error**: Unexpected error on Vercel's side.\n\n**Error responses contain an `error` object with `code` and `message` fields for diagnosis.**",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Creates a new deployment on Vercel with the specified configuration and files. If this is not a git deployment, you must provide all files in the request. Optionally, you can redeploy a previous deployment by specifying its deployment ID. The API supports detailed configuration options, including build settings, git metadata, file references, and more. You can also target a specific team or environment.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Deployment creation payload.",
+     "properties": {
+      "customEnvironmentSlugOrId": {
+       "description": "Deploy to a custom environment, overriding the default environment.",
+       "type": "string"
+      },
+      "deploymentId": {
+       "description": "ID of an existing deployment to redeploy.",
+       "type": "string"
+      },
+      "files": {
+       "description": "List of file objects to include in the deployment.",
+       "items": {
+        "anyOf": [
+         {
+          "additionalProperties": false,
+          "description": "Inline file content object.",
+          "properties": {
+           "data": {
+            "description": "File content (base64 for binary files, plain text for source files)",
+            "type": "string"
+           },
+           "encoding": {
+            "description": "Encoding of data, one of \"base64\" or \"utf-8\"",
+            "enum": [
+             "base64",
+             "utf-8"
+            ],
+            "type": "string"
+           },
+           "file": {
+            "description": "File name including the path",
+            "type": "string"
+           }
+          },
+          "required": [
+           "data",
+           "file"
+          ],
+          "type": "object"
+         },
+         {
+          "additionalProperties": false,
+          "description": "Referenced file object.",
+          "properties": {
+           "file": {
+            "description": "File path relative to project root",
+            "type": "string"
+           },
+           "sha": {
+            "description": "SHA1 hash of file contents",
+            "type": "string"
+           },
+           "size": {
+            "description": "File size in bytes",
+            "type": "integer"
+           }
+          },
+          "required": [
+           "file"
+          ],
+          "type": "object"
+         }
+        ]
+       },
+       "type": "array"
+      },
+      "gitMetadata": {
+       "additionalProperties": false,
+       "description": "Metadata about the git commit.",
+       "properties": {
+        "ci": {
+         "description": "Whether deployment was run in CI.",
+         "type": "boolean"
+        },
+        "ciGitProviderUsername": {
+         "description": "Git provider username (if available).",
+         "type": "string"
+        },
+        "ciGitRepoVisibility": {
+         "description": "Repository visibility (if available).",
+         "type": "string"
+        },
+        "ciType": {
+         "description": "Type of CI system used.",
+         "type": "string"
+        },
+        "commitAuthorEmail": {
+         "description": "Commit author email.",
+         "type": "string"
+        },
+        "commitAuthorName": {
+         "description": "Commit author name.",
+         "type": "string"
+        },
+        "commitMessage": {
+         "description": "Commit message.",
+         "type": "string"
+        },
+        "commitRef": {
+         "description": "Branch name.",
+         "type": "string"
+        },
+        "commitSha": {
+         "description": "Commit SHA.",
+         "type": "string"
+        },
+        "dirty": {
+         "description": "Whether working tree was dirty.",
+         "type": "boolean"
+        },
+        "remoteUrl": {
+         "description": "Git repository remote URL.",
+         "type": "string"
+        }
+       },
+       "title": "Git Metadata Object",
+       "type": "object"
+      },
+      "gitSource": {
+       "additionalProperties": false,
+       "description": "Information about the git source.",
+       "properties": {
+        "org": {
+         "description": "Organization name (if applicable).",
+         "type": "string"
+        },
+        "owner": {
+         "description": "Owner name (for Bitbucket).",
+         "type": "string"
+        },
+        "projectId": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "integer"
+          }
+         ],
+         "description": "Project ID (for GitLab)."
+        },
+        "ref": {
+         "description": "Branch or tag reference.",
+         "type": "string"
+        },
+        "repo": {
+         "description": "Repository name (if applicable).",
+         "type": "string"
+        },
+        "repoId": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "integer"
+          }
+         ],
+         "description": "Repository ID (for most providers)."
+        },
+        "repoUuid": {
+         "description": "Repository UUID (for Bitbucket).",
+         "type": "string"
+        },
+        "sha": {
+         "description": "Commit SHA.",
+         "type": "string"
+        },
+        "slug": {
+         "description": "Slug (for Bitbucket).",
+         "type": "string"
+        },
+        "type": {
+         "description": "Git provider type. E.g., \"github\", \"gitlab\", \"bitbucket\".",
+         "type": "string"
+        },
+        "workspaceUuid": {
+         "description": "Workspace UUID (for Bitbucket).",
+         "type": "string"
+        }
+       },
+       "title": "Git Source Object",
+       "type": "object"
+      },
+      "meta": {
+       "additionalProperties": {
+        "type": "string"
+       },
+       "description": "Key-value metadata pairs to attach to the deployment (e.g., { \"foo\": \"bar\" }).",
+       "type": "object"
+      },
+      "monorepoManager": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Monorepo manager used for this deployment, or null to select none."
+      },
+      "name": {
+       "description": "The project name used in the deployment URL (e.g., \"my-project\").",
+       "type": "string"
+      },
+      "project": {
+       "description": "Target project identifier (overrides name if provided).",
+       "type": "string"
+      },
+      "projectSettings": {
+       "additionalProperties": false,
+       "description": "Build and project settings.",
+       "properties": {
+        "buildCommand": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "The build command (max 256 chars). If null, auto-detected."
+        },
+        "commandForIgnoringBuildStep": {
+         "description": "Command to ignore build step (max 256 chars).",
+         "type": "string"
+        },
+        "devCommand": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Dev command (max 256 chars). If null, auto-detected."
+        },
+        "framework": {
+         "description": "Framework used (see full list in description; e.g., \"nextjs\", \"gatsby\", etc.).",
+         "type": "string"
+        },
+        "installCommand": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Install command (max 256 chars). If null, auto-detected."
+        },
+        "nodeVersion": {
+         "description": "Node.js version.",
+         "enum": [
+          "24.x",
+          "22.x",
+          "20.x",
+          "18.x",
+          "16.x",
+          "14.x",
+          "12.x",
+          "10.x",
+          "8.10.x"
+         ],
+         "type": "string"
+        },
+        "outputDirectory": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Output directory (max 256 chars). If null, auto-detected."
+        },
+        "rootDirectory": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Project source directory or relative path (max 256 chars). If null, defaults to project root."
+        },
+        "serverlessFunctionRegion": {
+         "description": "Region for serverless functions (max 4 chars).",
+         "type": "string"
+        },
+        "skipGitConnectDuringLink": {
+         "description": "If true, skips prompt to connect Git repo in CLI.",
+         "type": "boolean"
+        },
+        "sourceFilesOutsideRootDirectory": {
+         "description": "True if there are source files outside the root directory (monorepo support).",
+         "type": "boolean"
+        }
+       },
+       "title": "Project Settings Object",
+       "type": "object"
+      },
+      "target": {
+       "description": "Deployment target: \"staging\", \"production\", or custom environment identifier. Defaults to \"preview\".",
+       "type": "string"
+      },
+      "withLatestCommit": {
+       "description": "If true and deploymentId is provided, deploys the latest commit instead of previous deployment's commit.",
+       "type": "boolean"
+      }
+     },
+     "required": [
+      "name"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers for the request.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Content-Type"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "query": {
+     "additionalProperties": false,
+     "description": "Optional URL query parameters for team context and deployment options. Only one of teamId or slug should be provided.",
+     "properties": {
+      "forceNew": {
+       "description": "Forces a new deployment even if one with similar parameters exists; \"1\" = force, \"0\" = don't.",
+       "enum": [
+        "0",
+        "1"
+       ],
+       "type": "string"
+      },
+      "skipAutoDetectionConfirmation": {
+       "description": "Skip framework detection confirmation; \"1\" = skip, \"0\" = don't.",
+       "enum": [
+        "0",
+        "1"
+       ],
+       "type": "string"
+      },
+      "slug": {
+       "description": "Team slug to perform the deployment on behalf of.",
+       "type": "string"
+      },
+      "teamId": {
+       "description": "Team ID to perform the deployment on behalf of.",
+       "type": "string"
+      }
+     },
+     "title": "Query Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Create a New Deployment \u2013 Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response returned after creating a new deployment on Vercel, including success and error variants.",
+   "properties": {
+    "alias": {
+     "description": "List of aliases assigned to this deployment.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "aliasAssigned": {
+     "description": "True if aliases were assigned successfully.",
+     "type": "boolean"
+    },
+    "createdAt": {
+     "description": "Timestamp (ms) when the deployment was created.",
+     "type": "number"
+    },
+    "creator": {
+     "additionalProperties": true,
+     "description": "Creator info: uid, username, avatar.",
+     "properties": {
+      "avatar": {
+       "description": "Creator avatar URL.",
+       "type": "string"
+      },
+      "uid": {
+       "description": "Creator user ID.",
+       "type": "string"
+      },
+      "username": {
+       "description": "Creator username.",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    },
+    "error": {
+     "additionalProperties": true,
+     "description": "Error object with code and message (only on errors).",
+     "properties": {
+      "code": {
+       "description": "Machine-readable error code.",
+       "enum": [
+        "bad_request",
+        "unauthorized",
+        "payment_required",
+        "forbidden",
+        "not_found",
+        "conflict",
+        "internal_server_error"
+       ],
+       "type": "string"
+      },
+      "message": {
+       "description": "Human-readable error message.",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    },
+    "id": {
+     "description": "Unique identifier for the deployment.",
+     "type": "string"
+    },
+    "name": {
+     "description": "Project name associated with the deployment.",
+     "type": "string"
+    },
+    "project": {
+     "additionalProperties": true,
+     "description": "Project info: id, name, framework.",
+     "properties": {
+      "framework": {
+       "description": "Project framework.",
+       "type": "string"
+      },
+      "id": {
+       "description": "Project identifier.",
+       "type": "string"
+      },
+      "name": {
+       "description": "Project name.",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    },
+    "projectSettings": {
+     "additionalProperties": true,
+     "description": "Project settings used for this deployment.",
+     "properties": {
+      "buildCommand": {
+       "description": "Build command.",
+       "type": "string"
+      },
+      "devCommand": {
+       "description": "Development command.",
+       "type": "string"
+      },
+      "framework": {
+       "description": "Framework used.",
+       "type": "string"
+      },
+      "installCommand": {
+       "description": "Install command.",
+       "type": "string"
+      },
+      "nodeVersion": {
+       "description": "Node.js version used.",
+       "type": "string"
+      },
+      "outputDirectory": {
+       "description": "Output directory.",
+       "type": "string"
+      },
+      "webAnalytics": {
+       "additionalProperties": true,
+       "properties": {
+        "disabledAt": {
+         "anyOf": [
+          {
+           "type": "number"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Timestamp when web analytics was disabled, or null."
+        },
+        "enabledAt": {
+         "description": "Timestamp when web analytics was enabled.",
+         "type": "number"
+        },
+        "hasData": {
+         "description": "Whether web analytics has data.",
+         "type": "boolean"
+        },
+        "id": {
+         "description": "Web analytics identifier.",
+         "type": "string"
+        }
+       },
+       "type": "object"
+      }
+     },
+     "type": "object"
+    },
+    "public": {
+     "description": "Whether the deployment is public.",
+     "type": "boolean"
+    },
+    "readyState": {
+     "description": "State of the deployment (\"QUEUED\", \"BUILDING\", \"READY\", etc.).",
+     "type": "string"
+    },
+    "regions": {
+     "description": "Regions where the deployment exists.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "status": {
+     "description": "Status of the deployment (\"QUEUED\", \"BUILDING\", \"READY\", \"ERROR\", \"CANCELED\", etc.).",
+     "type": "string"
+    },
+    "target": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "description": "Deployment target: \"staging\", \"production\", or null (\"preview\")."
+    },
+    "team": {
+     "additionalProperties": true,
+     "description": "Team info (if deployed on behalf of a team): id, name, slug, avatar.",
+     "properties": {
+      "avatar": {
+       "description": "Team avatar URL.",
+       "type": "string"
+      },
+      "id": {
+       "description": "Team identifier.",
+       "type": "string"
+      },
+      "name": {
+       "description": "Team name.",
+       "type": "string"
+      },
+      "slug": {
+       "description": "Team slug.",
+       "type": "string"
+      }
+     },
+     "type": "object"
+    },
+    "type": {
+     "description": "Deployment type (e.g., \"LAMBDAS\").",
+     "type": "string"
+    },
+    "url": {
+     "description": "URL of the created deployment.",
+     "type": "string"
+    },
+    "version": {
+     "description": "Platform version used for the deployment.",
+     "type": "number"
+    }
+   },
+   "title": "Create a New Deployment \u2013 Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "customEnvironmentSlugOrId": "env_custom_123",
+     "deploymentId": "dpl_1234567890",
+     "files": [
+      {
+       "data": "<!doctype html><html><body>Hello, Vercel!</body></html>",
+       "encoding": "utf-8",
+       "file": "index.html"
+      },
+      {
+       "file": "assets/logo.png",
+       "sha": "3b5d5c3712955042212316173ccf37be80000000",
+       "size": 2048
+      }
+     ],
+     "gitMetadata": {
+      "ci": true,
+      "ciGitProviderUsername": "johndoe",
+      "ciGitRepoVisibility": "private",
+      "ciType": "github-actions",
+      "commitAuthorEmail": "john@example.com",
+      "commitAuthorName": "John Doe",
+      "commitMessage": "Deploy latest changes",
+      "commitRef": "main",
+      "commitSha": "abc123def456ghi789",
+      "dirty": false,
+      "remoteUrl": "https://github.com/acme/my-project.git"
+     },
+     "gitSource": {
+      "org": "acme",
+      "owner": "acme-owner",
+      "projectId": "987654321",
+      "ref": "main",
+      "repo": "my-project",
+      "repoId": "123456789",
+      "repoUuid": "{repo-uuid}",
+      "sha": "abc123def456ghi789",
+      "slug": "my-project",
+      "type": "github",
+      "workspaceUuid": "{workspace-uuid}"
+     },
+     "meta": {
+      "env": "production",
+      "foo": "bar"
+     },
+     "monorepoManager": "turbo",
+     "name": "my-project",
+     "project": "prj_1234567890",
+     "projectSettings": {
+      "buildCommand": "npm run build",
+      "commandForIgnoringBuildStep": "echo skip",
+      "devCommand": "npm run dev",
+      "framework": "nextjs",
+      "installCommand": "npm install",
+      "nodeVersion": "18.x",
+      "outputDirectory": ".next",
+      "rootDirectory": "apps/web",
+      "serverlessFunctionRegion": "iad1",
+      "skipGitConnectDuringLink": true,
+      "sourceFilesOutsideRootDirectory": false
+     },
+     "target": "production",
+     "withLatestCommit": true
+    },
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "query": {
+     "forceNew": "1",
+     "skipAutoDetectionConfirmation": "0",
+     "slug": "my-team-slug",
+     "teamId": "team_abc123"
+    }
+   },
+   "output": {
+    "alias": [
+     "my-instant-deployment-3ij3cxz9qr.now.sh"
+    ],
+    "aliasAssigned": true,
+    "createdAt": 1540257589405,
+    "creator": {
+     "avatar": "https://vercel.com/avatar/abc123",
+     "uid": "96SnxkFiMyVKsK3pnoHfx3Hz",
+     "username": "john-doe"
+    },
+    "error": {
+     "code": "bad_request",
+     "message": "One of the provided values in the request body is invalid."
+    },
+    "id": "dpl_89qyp1cskzkLrVicDaZoDbjyHuDJ",
+    "name": "my-project",
+    "project": {
+     "framework": "nextjs",
+     "id": "prj_1234567890",
+     "name": "my-project"
+    },
+    "projectSettings": {
+     "buildCommand": "npm run build",
+     "devCommand": "npm run dev",
+     "framework": "nextjs",
+     "installCommand": "npm install",
+     "nodeVersion": "18.x",
+     "outputDirectory": ".next",
+     "webAnalytics": {
+      "disabledAt": null,
+      "enabledAt": 1540257589405,
+      "hasData": false,
+      "id": "wa_123"
+     }
+    },
+    "public": false,
+    "readyState": "BUILDING",
+    "regions": [
+     "sfo1",
+     "iad1"
+    ],
+    "status": "BUILDING",
+    "target": "production",
+    "team": {
+     "avatar": "https://vercel.com/avatar/team_abc123",
+     "id": "team_abc123",
+     "name": "My Team",
+     "slug": "my-team"
+    },
+    "type": "LAMBDAS",
+    "url": "my-instant-deployment-3ij3cxz9qr.now.sh",
+    "version": 2
+   }
+  }
+ }
+}

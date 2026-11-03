@@ -1,0 +1,6 @@
+{
+  "$schema": "https://forkable.dev/schema/connect.manifest.v1.json",
+  "app": "builder",
+  "note": "Builder itself calls no platform action on a user's grant and has no Connect app. Each generated project turns on its own One Connect and keeps its own ask in .builder/scopes.json, derived from the calls in its code.",
+  "actions": []
+}

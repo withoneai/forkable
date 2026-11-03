@@ -1,0 +1,428 @@
+{
+ "_id": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ",
+ "connectionPlatform": "gmail",
+ "title": "List and View Email Threads",
+ "method": "POST",
+ "path": "/v1/gmail/get-threads",
+ "tags": [
+  "custom",
+  "human-verified"
+ ],
+ "knowledge": "# Get Threads\n\n## Endpoint\n\n`POST http://one-medley/v1/gmail/get-threads`\n\n## Description\n\nRetrieves a page of Gmail conversations, each carrying every message in it with headers, body, labels and attachment descriptions already extracted.\n\nTwo stages: one call lists the thread ids matching the search, then each thread is fetched. A thread fetch returns every message in the conversation, so the work is one call per *thread* rather than one per message. Threads are fetched many at once and a thread Gmail rate limits is retried; one that still cannot be fetched is reported in `failures` rather than dropped, so `totalFound` never overstates what came back.\n\n## Request Body\n\n### Required Request Body Fields\n\n| Parameter       | Type   | Description                                 |\n|-----------------|--------|---------------------------------------------|\n| `connectionKey` | string | The connection key for Gmail authentication |\n\n### Optional Request Body Fields\n\n| Parameter            | Type               | Description                                                                                                     |\n|----------------------|--------------------|-----------------------------------------------------------------------------------------------------------------|\n| `label`              | string \\| string[] | Gmail label(s) to filter by, e.g. `\"INBOX\"` or `[\"INBOX\", \"UNREAD\"]`. A list means a thread must carry all of them |\n| `numberOfThreads`    | number             | How many threads to retrieve, 1–100 (default: 10)                                                                 |\n| `query`              | string             | Gmail search query, e.g. `\"from:example@gmail.com is:unread\"`                                                     |\n| `pageToken`          | string             | Token for the next page, from a previous response's `nextPageToken`                                               |\n| `includeSpamTrash`   | boolean            | Include threads in `SPAM` and `TRASH` (default: `false`)                                                          |\n| `userId`             | string             | The mailbox to read (default: `\"me\"`, the credential's own)                                                       |\n| `format`             | string             | How much of each message to fetch: `\"full\"` (default), `\"metadata\"` or `\"minimal\"`. Cheaper than fetching in full and trimming afterwards |\n| `maxBodyLength`      | number             | Cut each message body to this many characters, appending `...`. Must be 1 or more; absent means the whole body    |\n| `includeAttachments` | boolean            | Also download each attachment's bytes into `attachments[].data` (default: `false`)                                |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"threads\": [\n    {\n      \"id\": \"18d3c5e2f8a91234\",\n      \"snippet\": \"Let's discuss the project tomorrow\",\n      \"historyId\": \"1234567\",\n      \"messages\": [\n        {\n          \"sender\": \"John Doe <john@example.com>\",\n          \"receiver\": \"me@gmail.com\",\n          \"time\": \"Mon, 8 Jan 2025 10:30:00 -0800\",\n          \"subject\": \"Meeting Tomorrow\",\n          \"body\": \"Hi, let's discuss the project tomorrow at 2 PM.\",\n          \"messageId\": \"18d3c5e2f8a91234\",\n          \"threadId\": \"18d3c5e2f8a91234\",\n          \"labelIds\": [\"INBOX\"],\n          \"historyId\": \"1234567\",\n          \"internalDate\": \"1704729000000\",\n          \"snippet\": \"Hi, let's discuss the project tomorrow at 2 PM.\",\n          \"attachments\": []\n        }\n      ]\n    }\n  ],\n  \"totalFound\": 1,\n  \"requestedCount\": 10,\n  \"label\": \"INBOX\",\n  \"query\": null,\n  \"nextPageToken\": \"abc123xyz789\",\n  \"resultSizeEstimate\": 245,\n  \"message\": \"Successfully retrieved 1 threads\",\n  \"summary\": \"Retrieved 1 Gmail threads from INBOX\"\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"statusCode\": 400,\n  \"message\": \"connectionKey is required\",\n  \"error\": \"Bad Request\"\n}\n```\n\n### Error Response (the platform's own status)\n\nWhen the **listing** stage fails there is nothing to answer with, so the call fails carrying Gmail's own status and body rather than a status of its own. A `threads.list` refused with 429 comes back as 429.\n\nA failure to fetch an individual thread never produces this; it appears in `failures` instead.\n\n## Response Fields\n\n| Field                             | Type     | Description                                                          |\n|-----------------------------------|----------|----------------------------------------------------------------------|\n| `threads`                         | array    | The conversations that were fetched, in the order Gmail listed them   |\n| `threads[].id`                    | string   | Gmail thread ID                                                       |\n| `threads[].snippet`               | string   | Gmail's preview of the conversation                                   |\n| `threads[].historyId`             | string   | Gmail history ID for the thread                                       |\n| `threads[].messages`              | array    | Every message in the conversation, oldest first                       |\n| `threads[].messages[].messageId`  | string   | That message's own ID - not the thread's                              |\n| `threads[].messages[].sender`     | string   | The `From` header                                                     |\n| `threads[].messages[].receiver`   | string   | The `To` header                                                       |\n| `threads[].messages[].time`       | string   | The `Date` header                                                     |\n| `threads[].messages[].subject`    | string   | The `Subject` header                                                  |\n| `threads[].messages[].body`       | string   | Decoded body text, `text/plain` preferred over HTML reduced to text   |\n| `threads[].messages[].labelIds`   | string[] | Labels applied to that message                                        |\n| `threads[].messages[].snippet`    | string   | Gmail's preview of that message                                       |\n| `threads[].messages[].attachments`| array    | One entry per attached file - described, downloaded only on request   |\n| `totalFound`                      | number   | How many threads are in `threads`                                     |\n| `requestedCount`                  | number   | How many were asked for, after clamping to 1–100                      |\n| `label`                           | string \\| string[] \\| null | The label filter that was applied, or `null`        |\n| `query`                           | string \\| null | The search query that was applied, or `null`                    |\n| `nextPageToken`                   | string   | (Optional) Token for the next page                                    |\n| `resultSizeEstimate`              | number   | (Optional) Gmail's estimate of how many threads match                 |\n| `failures`                        | array    | (Optional) Only present when a thread could not be fetched            |\n| `message`                         | string   | Success/empty message                                                 |\n| `summary`                         | string   | Summary of the operation                                              |\n\n## Sample Request\n\n```bash\ncurl -i --location --request POST 'http://one-medley/v1/gmail/get-threads' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"connectionKey\": \"live::gmail::default::<your-connection-key>\",\n    \"label\": \"INBOX\",\n    \"numberOfThreads\": 5\n  }'\n```\n\n## Example Usage\n\n### Example 1: Recent Inbox Conversations\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-threads \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"label\": \"INBOX\",\n    \"numberOfThreads\": 10\n  }'\n```\n\n### Example 2: Long Conversations, Trimmed\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-threads \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"query\": \"newer_than:7d\",\n    \"numberOfThreads\": 20,\n    \"maxBodyLength\": 500\n  }'\n```\n\n### Example 3: Pagination\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-threads \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"numberOfThreads\": 10,\n    \"pageToken\": \"abc123xyz789\"\n  }'\n```\n\n## Behavior\n\n1. **Validate request**: `connectionKey` in the body.\n2. **Normalize the count**: `numberOfThreads` is clamped to 1–100, defaulting to 10.\n3. **Build the search**: each `label` becomes `label:<name>` (quoted if it contains a space) and is joined with `query`.\n4. **List thread ids**: one call to `threads.list`.\n5. **Fetch each thread**: several at once. A thread answered with 429, 403 `userRateLimitExceeded` or a 5xx is retried up to three times before it is recorded as a failure.\n6. **Extract each message**: headers, decoded body, labels and a description of every attached file.\n7. **Answer**: the threads in the order they were listed, plus the paging token, plus `failures` if any thread could not be fetched.\n\n## Notes\n\n- Uses three Gmail actions: `threads.list`, `threads.get` and - only when asked - `messages.attachments.get`.\n- One thread fetch returns the whole conversation, so a thread carrying twenty messages costs one call, not twenty.\n- Every message carries its **own** `messageId`; only `threadId` is shared across the conversation.\n- Full Gmail search syntax is supported in `query` (`is:unread`, `has:attachment`, `newer_than:7d`, …).\n- A thread whose fetch fails does not fail the request. Check `failures`, and compare `totalFound` against `requestedCount`.\n\n## Performance Considerations\n\n- Listing costs one call; each thread costs one more, and that is where the time goes. Ask for what will be read and page with `nextPageToken`.\n- `maxBodyLength` is the lever on response size here. A long conversation carries every message's full body; cutting them to a few hundred characters is usually enough to decide which thread to open.\n- `includeAttachments` adds one call per attached file across every message in every thread, and can add megabytes. Leave it off and fetch a specific file by its `attachmentId`.\n- Gmail's per-user rate limit is 250 quota units per second and `threads.get` costs 10 - twice a single message, because a thread carries a whole conversation. How many are fetched at once is bounded per deployment to stay under that ceiling, and a throttled thread is retried rather than dropped.\n\n## Error Handling\n\n- **400 Bad Request**: `connectionKey` missing or a field with the wrong type.\n- **The platform's own status**: the listing call failed, so there is nothing to return. Gmail's status and body come back unaltered rather than being collapsed into one of medley's.\n- **Per-thread failures** never fail the request: they are retried, then recorded in `failures` with the platform's own status and body.\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Retrieves a page of Gmail conversations, each carrying every message in it with headers, body, labels and attachment descriptions already extracted.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Request body for retrieving Gmail threads.",
+     "properties": {
+      "connectionKey": {
+       "description": "The connection key for Gmail authentication",
+       "type": "string"
+      },
+      "format": {
+       "description": "How much of each message to fetch: \"full\" (default), \"metadata\" or \"minimal\".",
+       "enum": [
+        "full",
+        "metadata",
+        "minimal"
+       ],
+       "type": "string"
+      },
+      "includeAttachments": {
+       "description": "Also download each attachment's bytes into attachments[].data (default: false)",
+       "type": "boolean"
+      },
+      "includeSpamTrash": {
+       "description": "Include threads in SPAM and TRASH (default: false)",
+       "type": "boolean"
+      },
+      "label": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ],
+       "description": "Gmail label(s) to filter by, e.g. \"INBOX\" or [\"INBOX\", \"UNREAD\"]. A list means a thread must carry all of them"
+      },
+      "maxBodyLength": {
+       "description": "Cut each message body to this many characters, appending `...`. Must be 1 or more; absent means the whole body",
+       "type": "number"
+      },
+      "numberOfThreads": {
+       "description": "How many threads to retrieve, 1–100 (default: 10)",
+       "type": "number"
+      },
+      "pageToken": {
+       "description": "Token for the next page, from a previous response's nextPageToken",
+       "type": "string"
+      },
+      "query": {
+       "description": "Gmail search query, e.g. \"from:example@gmail.com is:unread\"",
+       "type": "string"
+      },
+      "userId": {
+       "description": "The mailbox to read (default: \"me\", the credential's own)",
+       "type": "string"
+      }
+     },
+     "required": [
+      "connectionKey"
+     ],
+     "title": "Get Threads Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the JSON request body.",
+       "type": "string"
+      },
+      "x-one-secret": {
+       "description": "Internal signing key used to authorize the request.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "x-one-secret"
+     ],
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Get Threads – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "anyOf": [
+    {
+     "additionalProperties": true,
+     "description": "Successful response containing fetched Gmail threads and related paging and summary information.",
+     "properties": {
+      "failures": {
+       "description": "(Optional) Only present when a thread could not be fetched",
+       "items": {
+        "additionalProperties": true,
+        "properties": {
+         "body": {
+          "description": "Unaltered response body from the failed thread fetch"
+         },
+         "error": {
+          "description": "Error category returned for the thread",
+          "type": "string"
+         },
+         "id": {
+          "description": "The thread ID that could not be fetched",
+          "type": "string"
+         },
+         "message": {
+          "description": "Failure message returned for the thread",
+          "type": "string"
+         },
+         "statusCode": {
+          "description": "The platform's own status for the failed thread fetch",
+          "type": "number"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "label": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "The label filter that was applied, or `null`"
+      },
+      "message": {
+       "description": "Success/empty message",
+       "type": "string"
+      },
+      "nextPageToken": {
+       "description": "(Optional) Token for the next page",
+       "type": "string"
+      },
+      "query": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "The search query that was applied, or `null`"
+      },
+      "requestedCount": {
+       "description": "How many were asked for, after clamping to 1–100",
+       "type": "number"
+      },
+      "resultSizeEstimate": {
+       "description": "(Optional) Gmail's estimate of how many threads match",
+       "type": "number"
+      },
+      "summary": {
+       "description": "Summary of the operation",
+       "type": "string"
+      },
+      "threads": {
+       "description": "The conversations that were fetched, in the order Gmail listed them",
+       "items": {
+        "additionalProperties": true,
+        "properties": {
+         "historyId": {
+          "description": "Gmail history ID for the thread",
+          "type": "string"
+         },
+         "id": {
+          "description": "Gmail thread ID",
+          "type": "string"
+         },
+         "messages": {
+          "description": "Every message in the conversation, oldest first",
+          "items": {
+           "additionalProperties": true,
+           "properties": {
+            "attachments": {
+             "description": "One entry per attached file - described, downloaded only on request",
+             "items": {
+              "additionalProperties": true,
+              "properties": {
+               "attachmentId": {
+                "description": "Attachment identifier used to fetch the file",
+                "type": "string"
+               },
+               "data": {
+                "description": "Downloaded attachment bytes when includeAttachments is true",
+                "type": "string"
+               },
+               "filename": {
+                "description": "Original attachment filename",
+                "type": "string"
+               },
+               "mimeType": {
+                "description": "Attachment MIME type",
+                "type": "string"
+               },
+               "size": {
+                "description": "Attachment size in bytes",
+                "type": "number"
+               }
+              },
+              "type": "object"
+             },
+             "type": "array"
+            },
+            "body": {
+             "description": "Decoded body text, `text/plain` preferred over HTML reduced to text",
+             "type": "string"
+            },
+            "historyId": {
+             "description": "Gmail history ID for the message",
+             "type": "string"
+            },
+            "internalDate": {
+             "description": "The internal Gmail timestamp for the message",
+             "type": "string"
+            },
+            "labelIds": {
+             "description": "Labels applied to that message",
+             "items": {
+              "type": "string"
+             },
+             "type": "array"
+            },
+            "messageId": {
+             "description": "That message's own ID - not the thread's",
+             "type": "string"
+            },
+            "receiver": {
+             "description": "The `To` header",
+             "type": "string"
+            },
+            "sender": {
+             "description": "The `From` header",
+             "type": "string"
+            },
+            "snippet": {
+             "description": "Gmail's preview of that message",
+             "type": "string"
+            },
+            "subject": {
+             "description": "The `Subject` header",
+             "type": "string"
+            },
+            "threadId": {
+             "description": "The Gmail thread ID shared across the conversation",
+             "type": "string"
+            },
+            "time": {
+             "description": "The `Date` header",
+             "type": "string"
+            }
+           },
+           "type": "object"
+          },
+          "type": "array"
+         },
+         "snippet": {
+          "description": "Gmail's preview of the conversation",
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "totalFound": {
+       "description": "How many threads are in `threads`",
+       "type": "number"
+      }
+     },
+     "title": "Success Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Bad request response when required inputs are missing or have the wrong type.",
+     "properties": {
+      "error": {
+       "description": "Error type",
+       "type": "string"
+      },
+      "message": {
+       "description": "Description of the bad request error",
+       "type": "string"
+      },
+      "statusCode": {
+       "description": "HTTP status code",
+       "type": "number"
+      }
+     },
+     "title": "400 Bad Request Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "When the listing stage fails, Gmail's own status and body are returned unaltered rather than a platform success shape.",
+     "title": "Platform/Gmail Listing Failure Response",
+     "type": "object"
+    }
+   ],
+   "description": "Successful thread results, bad request response, or an unaltered platform/Gmail error body when thread listing fails.",
+   "title": "Get Threads Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "connectionKey": "live::gmail::default::your-connection-key",
+     "format": "full",
+     "includeAttachments": true,
+     "includeSpamTrash": false,
+     "label": [
+      "INBOX",
+      "UNREAD"
+     ],
+     "maxBodyLength": 500,
+     "numberOfThreads": 10,
+     "pageToken": "abc123xyz789",
+     "query": "newer_than:7d is:unread",
+     "userId": "me"
+    },
+    "headers": {
+     "Content-Type": "application/json",
+     "x-one-secret": "your-one-secret"
+    }
+   },
+   "output": {
+    "failures": [
+     {
+      "body": {
+       "error": {
+        "code": 429,
+        "message": "Too Many Requests"
+       }
+      },
+      "error": "Too Many Requests",
+      "id": "18d3c5e2f8a90000",
+      "message": "Rate limit exceeded while fetching thread",
+      "statusCode": 429
+     }
+    ],
+    "label": [
+     "INBOX",
+     "UNREAD"
+    ],
+    "message": "Successfully retrieved 1 threads",
+    "nextPageToken": "abc123xyz789",
+    "query": "newer_than:7d is:unread",
+    "requestedCount": 10,
+    "resultSizeEstimate": 245,
+    "summary": "Retrieved 1 Gmail threads from INBOX and UNREAD",
+    "threads": [
+     {
+      "historyId": "1234567",
+      "id": "18d3c5e2f8a91234",
+      "messages": [
+       {
+        "attachments": [
+         {
+          "attachmentId": "att_001",
+          "data": "JVBERi0xLjQKJ...",
+          "filename": "agenda.pdf",
+          "mimeType": "application/pdf",
+          "size": 24576
+         }
+        ],
+        "body": "Hi, let's discuss the project tomorrow at 2 PM.",
+        "historyId": "1234567",
+        "internalDate": "1704729000000",
+        "labelIds": [
+         "INBOX",
+         "UNREAD"
+        ],
+        "messageId": "1900a1b2c3d4e5f6",
+        "receiver": "me@gmail.com",
+        "sender": "John Doe <john@example.com>",
+        "snippet": "Hi, let's discuss the project tomorrow at 2 PM.",
+        "subject": "Meeting Tomorrow",
+        "threadId": "18d3c5e2f8a91234",
+        "time": "Mon, 8 Jan 2025 10:30:00 -0800"
+       }
+      ],
+      "snippet": "Let's discuss the project tomorrow"
+     }
+    ],
+    "totalFound": 1
+   }
+  }
+ }
+}

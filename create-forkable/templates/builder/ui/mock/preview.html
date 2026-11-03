@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Acme tasks</title>
+<style>
+  :root { --fg:#1d1b19; --mut:#78716c; --bd:#ebe8e4; --bg:#faf9f7; --ac:#6d4ae0; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: var(--fg); background: var(--bg); }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 24px; display:flex; flex-direction:column; gap:20px; }
+  .eyebrow { font-size: 11px; letter-spacing:.05em; text-transform:uppercase; color: var(--mut); font-weight:500; margin:0 }
+  h1 { margin: 2px 0 0; font-size: 24px; letter-spacing:-.01em }
+  header { display:flex; align-items:flex-end; justify-content:space-between }
+  button.primary { background: var(--ac); color:#fff; border:0; border-radius:6px; height:32px; padding:0 12px; font:inherit; font-weight:500 }
+  .filters { display:flex; gap:4px }
+  .filters button { border:1px solid var(--bd); background:#fff; height:28px; padding:0 10px; border-radius:6px; font: 500 12px/1 Inter, system-ui; color: var(--mut) }
+  .filters button.on { color: var(--fg); background:#f1efec }
+  ul { list-style:none; margin:0; padding:0; background:#fff; border:1px solid var(--bd); border-radius:10px; }
+  li { display:flex; align-items:center; gap:12px; padding:12px 14px; border-bottom:1px solid var(--bd) }
+  li:last-child { border-bottom:0 }
+  .box { width:14px; height:14px; border:1.5px solid #b9b4ad; border-radius:4px }
+  .title { flex:1 }
+  .owner { width:22px; height:22px; border-radius:50%; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:600 }
+  .due { width:96px; text-align:right; font-size:12px; color: var(--mut) }
+  .late { color:#dc2626; font-weight:500 }
+  .done .title { color: var(--mut); text-decoration: line-through }
+  [data-sel] { outline: 2px solid var(--ac) !important; outline-offset: 2px; }
+  #__hover { position: fixed; pointer-events:none; border: 1.5px solid var(--ac); background: rgb(109 74 224 / .06); border-radius: 3px; z-index: 9999; display:none }
+  #__tag { position: fixed; pointer-events:none; z-index:10000; display:none; background: var(--ac); color:#fff; font: 500 10px/1 ui-monospace, monospace; padding: 3px 5px; border-radius:3px }
+</style>
+</head>
+<body>
+<div id="root">
+<main data-builder-loc="src/App.tsx:14:5">
+  <header data-builder-loc="src/App.tsx:15:7">
+    <div data-builder-loc="src/App.tsx:16:9">
+      <p class="eyebrow" data-builder-loc="src/App.tsx:17:11">Acme Inc</p>
+      <h1 data-builder-loc="src/App.tsx:18:11">Tasks</h1>
+    </div>
+    <button class="primary" data-builder-loc="src/App.tsx:20:9">New task</button>
+  </header>
+  <div class="filters" data-builder-loc="src/components/TaskList.tsx:12:5">
+    <button class="on" data-builder-loc="src/components/TaskList.tsx:13:7">All</button>
+    <button data-builder-loc="src/components/TaskList.tsx:14:7">Overdue</button>
+    <button data-builder-loc="src/components/TaskList.tsx:15:7">Done</button>
+  </div>
+  <ul data-builder-loc="src/components/TaskList.tsx:24:6">
+    <li data-builder-loc="src/components/TaskList.tsx:40:9"><span class="box"></span><span class="title" data-builder-loc="src/components/TaskList.tsx:42:11">Send the Q4 renewal quote to Globex</span><span class="owner" style="background:#f4b183">MR</span><span class="due">Oct 28</span></li>
+    <li data-builder-loc="src/components/TaskList.tsx:40:9"><span class="box"></span><span class="title" data-builder-loc="src/components/TaskList.tsx:42:11">Review the onboarding checklist</span><span class="owner" style="background:#9ec5fe">JL</span><span class="due">Oct 30</span></li>
+    <li data-builder-loc="src/components/TaskList.tsx:40:9"><span class="box"></span><span class="title" data-builder-loc="src/components/TaskList.tsx:42:11">Book the offsite venue</span><span class="owner" style="background:#b5e3c4">AK</span><span class="due late" data-builder-loc="src/components/TaskList.tsx:44:11">Oct 21</span></li>
+    <li data-builder-loc="src/components/TaskList.tsx:40:9"><span class="box"></span><span class="title" data-builder-loc="src/components/TaskList.tsx:42:11">Draft the November newsletter</span><span class="owner" style="background:#f2c6de">SP</span><span class="due">Nov 3</span></li>
+    <li class="done" data-builder-loc="src/components/TaskList.tsx:40:9"><span class="box" style="background:#1d1b19;border-color:#1d1b19"></span><span class="title" data-builder-loc="src/components/TaskList.tsx:42:11">Ship the pricing page update</span><span class="owner" style="background:#ffe08a">DW</span><span class="due">Oct 18</span></li>
+  </ul>
+</main>
+</div>
+<div id="__hover"></div><div id="__tag"></div>
+<script>
+// Mock of the injected client's channel (the real one is server/src/preview/client).
+(function () {
+  var EDITORS = ["http://127.0.0.1:5380", "http://127.0.0.1:51989", "http://localhost:51989"];
+  var mode = "none";
+  var hover = document.getElementById("__hover"), tag = document.getElementById("__tag");
+  function send(m) { m.source = "builder-preview"; EDITORS.forEach(function (o) { try { parent.postMessage(m, o); } catch (e) {} }); }
+  function tagged(el) { while (el && el !== document.body) { if (el.getAttribute && el.getAttribute("data-builder-loc")) return el; el = el.parentElement; } return null; }
+  function sel(el) { var r = el.getBoundingClientRect(); return { loc: el.getAttribute("data-builder-loc"), tag: el.tagName.toLowerCase(), text: (el.textContent || "").trim().slice(0, 80), classes: el.className || "", rect: { x: r.x, y: r.y, width: r.width, height: r.height } }; }
+  function hide() { hover.style.display = "none"; tag.style.display = "none"; }
+  document.addEventListener("mousemove", function (e) {
+    if (mode !== "select") return;
+    var el = tagged(e.target); if (!el) return hide();
+    var r = el.getBoundingClientRect();
+    Object.assign(hover.style, { display: "block", left: r.x + "px", top: r.y + "px", width: r.width + "px", height: r.height + "px" });
+    tag.textContent = "<" + el.tagName.toLowerCase() + "> " + el.getAttribute("data-builder-loc").split(":").slice(0, 2).join(":");
+    Object.assign(tag.style, { display: "block", left: r.x + "px", top: Math.max(0, r.y - 18) + "px" });
+  });
+  document.addEventListener("click", function (e) {
+    if (mode !== "select") return;
+    e.preventDefault(); e.stopPropagation();
+    var el = tagged(e.target); if (!el) return;
+    var add = e.metaKey || e.ctrlKey;
+    if (!add) document.querySelectorAll("[data-sel]").forEach(function (n) { n.removeAttribute("data-sel"); });
+    el.setAttribute("data-sel", "");
+    var anc = []; var p = el.parentElement; while (p) { var t = tagged(p); if (!t) break; anc.push(t.getAttribute("data-builder-loc")); p = t.parentElement; }
+    send({ kind: "select", selections: [sel(el)], additive: add, ancestors: anc });
+  }, true);
+  window.addEventListener("message", function (e) {
+    if (EDITORS.indexOf(e.origin) < 0 || !e.data || e.data.source !== "builder-editor") return;
+    if (e.data.kind === "mode") { mode = e.data.mode; document.body.style.cursor = mode === "select" ? "crosshair" : ""; if (mode !== "select") hide(); }
+    if (e.data.kind === "clear") document.querySelectorAll("[data-sel]").forEach(function (n) { n.removeAttribute("data-sel"); });
+  });
+  document.addEventListener("keydown", function (e) {
+    var k = e.key.toLowerCase();
+    if ((mode === "select" && (k === "s" || k === "escape")) || ((e.metaKey || e.ctrlKey) && k === "k") || e.key === "?") {
+      e.preventDefault(); send({ kind: "key", key: e.key, meta: e.metaKey || e.ctrlKey, shift: e.shiftKey, alt: e.altKey });
+    }
+  });
+  send({ kind: "hello", path: location.pathname, title: document.title });
+})();
+</script>
+</body>
+</html>

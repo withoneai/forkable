@@ -1,0 +1,319 @@
+{
+ "_id": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+ "connectionPlatform": "gmail",
+ "title": "Send Email",
+ "method": "POST",
+ "path": "/v1/gmail/send-email",
+ "tags": [
+  "custom",
+  "human-verified"
+ ],
+ "knowledge": "# Send Email\n\n## Endpoint\n\n`POST http://one-medley/v1/gmail/send-email`\n\n## Description\n\nSends an email through Gmail. Takes the message as fields - recipients, subject, body - and assembles the RFC 2822 message Gmail's API requires, so the caller never builds MIME or base64.\n\nSupports multiple recipients, CC and BCC, HTML or plain-text bodies, custom labels, and replying into an existing conversation via `threadId` with the `In-Reply-To` and `References` headers a standards-compliant client reads.\n\nPlain-text bodies are escaped and wrapped in HTML, which avoids Gmail's plain-text line wrapping. A caller who already has HTML passes `isHtml: true` and it is sent as written.\n\n## Request Body\n\n### Required Request Body Fields\n\n| Parameter       | Type               | Description                                                                  |\n|-----------------|--------------------|------------------------------------------------------------------------------|\n| `connectionKey` | string             | The connection key for Gmail authentication                                  |\n| `to`            | string \\| string[] | Recipient(s). A comma-separated string or an array                           |\n| `subject`       | string             | Subject line. Non-ASCII subjects are RFC 2047 encoded automatically          |\n| `body`          | string             | Body content. Plain text unless `isHtml` is set                              |\n\n### Optional Request Body Fields\n\n| Parameter    | Type               | Description                                                                                  |\n|--------------|--------------------|----------------------------------------------------------------------------------------------|\n| `cc`         | string \\| string[] | CC recipients                                                                                 |\n| `bcc`        | string \\| string[] | BCC recipients                                                                                |\n| `isHtml`     | boolean            | Treat `body` as HTML and send it unescaped (default: `false`)                                  |\n| `from`       | string             | The `From` header. Must be an address the account is allowed to send as                        |\n| `replyTo`    | string             | The `Reply-To` header                                                                          |\n| `inReplyTo`  | string             | The `Message-ID` this replies to, e.g. `<abc@mail.gmail.com>`                                   |\n| `references` | string             | The `References` header, for threading in non-Gmail clients                                     |\n| `threadId`   | string             | Gmail thread to send into. Gmail also requires the subject to match the thread's                |\n| `labelIds`   | string[]           | Labels to apply to the sent message. Absent means none - Gmail applies `SENT` itself            |\n| `classificationLabelValues` | array | Google Workspace data-classification labels, forwarded to Gmail unchanged. Each entry is your organization's own `{labelId, selectionId}` shape. Only meaningful on a Workspace account with classification configured; absent means none |\n| `userId`     | string             | The mailbox to send from (default: `\"me\"`, the credential's own)                                |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"email\": {\n    \"messageId\": \"18d3c5e2f8a91234\",\n    \"threadId\": \"18d3c5e2f8a91234\",\n    \"labelIds\": [\"SENT\"],\n    \"recipients\": {\n      \"to\": [\"john@example.com\"],\n      \"cc\": [\"team@example.com\"]\n    },\n    \"subject\": \"Meeting Tomorrow\",\n    \"sent\": true\n  },\n  \"message\": \"Successfully sent email \\\"Meeting Tomorrow\\\" to 2 recipients\",\n  \"summary\": \"Sent email \\\"Meeting Tomorrow\\\" (18d3c5e2f8a91234) to 2 recipients\"\n}\n```\n\n### Error Response (400 Bad Request)\n\n```json\n{\n  \"statusCode\": 400,\n  \"message\": \"The request body is not valid for `send-email`\",\n  \"error\": \"Bad Request\"\n}\n```\n\nReturned when `to`, `subject` or `body` is missing, or a field has the wrong type. **Nothing is sent** in this case.\n\n## Response Fields\n\n| Field                       | Type     | Description                                                            |\n|-----------------------------|----------|------------------------------------------------------------------------|\n| `email.messageId`           | string   | The ID Gmail assigned the sent message                                 |\n| `email.threadId`            | string   | The conversation it landed in                                          |\n| `email.labelIds`            | string[] | Labels Gmail applied                                                   |\n| `email.recipients.to`       | string[] | The `to` addresses, as parsed from the request                         |\n| `email.recipients.cc`       | string[] | (Optional) Only present when CC was given                              |\n| `email.recipients.bcc`      | string[] | (Optional) Only present when BCC was given                             |\n| `email.subject`             | string   | The subject that was sent                                              |\n| `email.sent`                | boolean  | Always `true` on a success response                                    |\n| `message`                   | string   | Success message naming the subject and recipient count                 |\n| `summary`                   | string   | Summary including the message ID                                       |\n\nThe recipient lists are reported from the request rather than from Gmail's answer, which carries only IDs - so the addresses can be confirmed without re-fetching the message.\n\n## Sample Request\n\n```bash\ncurl -i --location --request POST 'http://one-medley/v1/gmail/send-email' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"connectionKey\": \"live::gmail::default::<your-connection-key>\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Meeting Tomorrow\",\n    \"body\": \"Hi John,\\n\\nAre you free at 2 PM?\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Simple Message\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/send-email \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Meeting Tomorrow\",\n    \"body\": \"Hi John,\\n\\nAre you free at 2 PM?\"\n  }'\n```\n\n### Example 2: Several Recipients, With CC and BCC\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/send-email \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": [\"a@example.com\", \"b@example.com\"],\n    \"cc\": \"manager@example.com\",\n    \"bcc\": \"archive@example.com\",\n    \"subject\": \"Weekly update\",\n    \"body\": \"Everything shipped.\"\n  }'\n```\n\n### Example 3: HTML Body\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/send-email \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Release notes\",\n    \"body\": \"<h1>Shipped</h1><p>See the <a href=\\\"https://example.com\\\">changelog</a>.</p>\",\n    \"isHtml\": true\n  }'\n```\n\n### Example 4: Reply Into an Existing Thread\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/send-email \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"to\": \"john@example.com\",\n    \"subject\": \"Re: Meeting Tomorrow\",\n    \"body\": \"2 PM works.\",\n    \"threadId\": \"18d3c5e2f8a91234\",\n    \"inReplyTo\": \"<CAF=abc123@mail.gmail.com>\",\n    \"references\": \"<CAF=abc123@mail.gmail.com>\"\n  }'\n```\n\n## Behavior\n\n1. **Validate request**: `connectionKey`, `to`, `subject` and `body` must be present. A malformed request is refused before anything is sent.\n2. **Assemble the message**: MIME headers, the subject RFC 2047 encoded if it is not ASCII, and the body as HTML.\n3. **Encode**: the whole message base64url, as Gmail's `raw` field requires.\n4. **Send**: one call to `messages.send`, with `threadId` and `labelIds` when given.\n5. **Answer**: Gmail's IDs, plus the recipient lists from the request.\n\n## Notes\n\n- Uses one Gmail action: `messages.send`.\n- The message is always sent as `text/html; charset=UTF-8`. Plain text is HTML-escaped first, so a `<` in what you write arrives as a `<` rather than as markup.\n- Newlines in a plain-text body become `<br>`.\n- Non-ASCII subjects are encoded as `=?UTF-8?B?…?=`. A raw non-ASCII subject is not legal in a mail header.\n- **Threading needs both parts**: `threadId` is Gmail's own, and `inReplyTo`/`references` are what other mail clients read. Gmail additionally requires the subject to match the thread's, conventionally with a `Re:` prefix.\n- `from` only works for an address the authenticated account is allowed to send as; Gmail rejects anything else.\n- Labels are not defaulted. Applying `[\"INBOX\", \"UNREAD\"]` would mark a message you had just sent as unread mail in your own inbox.\n- Attachments are not supported by this endpoint.\n\n## Error Handling\n\n- **400 Bad Request**: a header value containing a line break. `subject`, `to`, `cc`, `bcc`, `from`, `replyTo`, `inReplyTo` and `references` are all refused if they contain CR or LF, because a header value that spans lines is a second header - a subject of `\"Hi\\r\\nBcc: someone@else\"` would otherwise add a recipient you never named. Refused, not stripped.\n- **400 Bad Request**: `to` that resolves to no address (`\"\"`, `[]`, `\" , \"`). The message would carry a bare `To:` header.\n\n- **400 Bad Request**: a missing or mistyped field. Refused before the message is assembled, so nothing is sent.\n- **Gmail's own errors** are returned with the platform's status and body - for example `403` for an unpermitted `from`, or `400` when `threadId` names a thread whose subject does not match.\n- **400 `Classification label is not enabled for the user`**: `classificationLabelValues` was sent to an account that has no Workspace classification taxonomy configured. **The message is not sent.** Omit the field unless the account is set up for it.\n- **This action is never retried.** A retried send is a second email, and no answer distinguishes \"the send failed\" from \"the send succeeded and the reply was lost\". A failure means the message may or may not have gone; check the mailbox rather than resending blindly.\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Sends an email through Gmail. Takes the message as fields - recipients, subject, body - and assembles the RFC 2822 message Gmail's API requires, so the caller never builds MIME or base64.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Request body for sending an email through Gmail.",
+     "properties": {
+      "bcc": {
+       "description": "BCC recipients",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "body": {
+       "description": "Body content. Plain text unless `isHtml` is set",
+       "type": "string"
+      },
+      "cc": {
+       "description": "CC recipients",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "classificationLabelValues": {
+       "description": "Google Workspace data-classification labels, forwarded to Gmail unchanged. Each entry is your organization's own `{labelId, selectionId}` shape. Only meaningful on a Workspace account with classification configured; absent means none",
+       "items": {
+        "additionalProperties": false,
+        "properties": {
+         "labelId": {
+          "description": "Organization-specific classification label ID",
+          "type": "string"
+         },
+         "selectionId": {
+          "description": "Organization-specific classification selection ID",
+          "type": "string"
+         }
+        },
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "connectionKey": {
+       "description": "The connection key for Gmail authentication",
+       "type": "string"
+      },
+      "from": {
+       "description": "The `From` header. Must be an address the account is allowed to send as",
+       "type": "string"
+      },
+      "inReplyTo": {
+       "description": "The `Message-ID` this replies to, e.g. `<abc@mail.gmail.com>`",
+       "type": "string"
+      },
+      "isHtml": {
+       "description": "Treat `body` as HTML and send it unescaped (default: `false`)",
+       "type": "boolean"
+      },
+      "labelIds": {
+       "description": "Labels to apply to the sent message. Absent means none - Gmail applies `SENT` itself",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "references": {
+       "description": "The `References` header, for threading in non-Gmail clients",
+       "type": "string"
+      },
+      "replyTo": {
+       "description": "The `Reply-To` header",
+       "type": "string"
+      },
+      "subject": {
+       "description": "Subject line. Non-ASCII subjects are RFC 2047 encoded automatically",
+       "type": "string"
+      },
+      "threadId": {
+       "description": "Gmail thread to send into. Gmail also requires the subject to match the thread's",
+       "type": "string"
+      },
+      "to": {
+       "description": "Recipient(s). A comma-separated string or an array",
+       "oneOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ]
+      },
+      "userId": {
+       "description": "The mailbox to send from (default: `\"me\"`, the credential's own)",
+       "type": "string"
+      }
+     },
+     "required": [
+      "connectionKey",
+      "to",
+      "subject",
+      "body"
+     ],
+     "title": "Send Email Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Request content type.",
+       "type": "string"
+      },
+      "x-one-secret": {
+       "description": "Internal signing key header.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "x-one-secret",
+      "Content-Type"
+     ],
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Send Email – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Response returned after attempting to send an email through Gmail.",
+   "properties": {
+    "email": {
+     "additionalProperties": true,
+     "description": "Present on successful send responses.",
+     "properties": {
+      "labelIds": {
+       "description": "Labels Gmail applied",
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "messageId": {
+       "description": "The ID Gmail assigned the sent message",
+       "type": "string"
+      },
+      "recipients": {
+       "additionalProperties": true,
+       "description": "The recipient lists as parsed from the request.",
+       "properties": {
+        "bcc": {
+         "description": "Only present when BCC was given",
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "cc": {
+         "description": "Only present when CC was given",
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        "to": {
+         "description": "The `to` addresses, as parsed from the request",
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       },
+       "type": "object"
+      },
+      "sent": {
+       "description": "Always `true` on a success response",
+       "type": "boolean"
+      },
+      "subject": {
+       "description": "The subject that was sent",
+       "type": "string"
+      },
+      "threadId": {
+       "description": "The conversation it landed in",
+       "type": "string"
+      }
+     },
+     "title": "Sent Email Details",
+     "type": "object"
+    },
+    "error": {
+     "description": "Error name returned on error responses",
+     "type": "string"
+    },
+    "message": {
+     "description": "Success message naming the subject and recipient count, or error message on failure",
+     "type": "string"
+    },
+    "statusCode": {
+     "description": "HTTP-style status code returned on error responses",
+     "type": "integer"
+    },
+    "summary": {
+     "description": "Summary including the message ID",
+     "type": "string"
+    }
+   },
+   "title": "Send Email – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "bcc": [
+      "archive@example.com"
+     ],
+     "body": "<h1>Shipped</h1><p>See the <a href=\"https://example.com\">changelog</a>.</p>",
+     "cc": [
+      "team@example.com"
+     ],
+     "classificationLabelValues": [
+      {
+       "labelId": "confidentiality",
+       "selectionId": "internal"
+      }
+     ],
+     "connectionKey": "live::gmail::default::your-connection-key",
+     "from": "sender@example.com",
+     "inReplyTo": "<CAF=abc123@mail.gmail.com>",
+     "isHtml": true,
+     "labelIds": [
+      "SENT",
+      "IMPORTANT"
+     ],
+     "references": "<CAF=abc123@mail.gmail.com>",
+     "replyTo": "reply@example.com",
+     "subject": "Re: Meeting Tomorrow",
+     "threadId": "18d3c5e2f8a91234",
+     "to": [
+      "john@example.com",
+      "jane@example.com"
+     ],
+     "userId": "me"
+    },
+    "headers": {
+     "Content-Type": "application/json",
+     "x-one-secret": "your-one-secret"
+    }
+   },
+   "output": {
+    "email": {
+     "labelIds": [
+      "SENT",
+      "IMPORTANT"
+     ],
+     "messageId": "18d3c5e2f8a91234",
+     "recipients": {
+      "bcc": [
+       "archive@example.com"
+      ],
+      "cc": [
+       "team@example.com"
+      ],
+      "to": [
+       "john@example.com",
+       "jane@example.com"
+      ]
+     },
+     "sent": true,
+     "subject": "Re: Meeting Tomorrow",
+     "threadId": "18d3c5e2f8a91234"
+    },
+    "error": "Bad Request",
+    "message": "Successfully sent email \"Re: Meeting Tomorrow\" to 4 recipients",
+    "statusCode": 400,
+    "summary": "Sent email \"Re: Meeting Tomorrow\" (18d3c5e2f8a91234) to 4 recipients"
+   }
+  }
+ }
+}

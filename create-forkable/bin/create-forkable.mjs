@@ -486,7 +486,10 @@ function nextSteps(dir, pm, args, state) {
   if (!args.demo) steps.push({ run: `cd ${dir} && ${pm} start`, why: "Run the keyless Acme Inc demo. Success is exit code 0." });
   else steps.push({ run: `cd ${dir} && ${pm} start`, why: "Run the keyless demo again. It exits 0 with no account and no keys." });
   if (existsSync(join(dir, "local", "profile.md"))) steps.push({ edit: join(dir, "local", "profile.md"), why: "Who this fork is for, and where." });
-  steps.push({ read: join(dir, "README.md"), why: "Going live needs one Connect app made in the One dashboard by a person. Ask them; never ask for, copy or write a secret yourself." });
+  const live = state.envNeededToGoLive?.length
+    ? "Going live needs one Connect app made in the One dashboard by a person. Ask them; never ask for, copy or write a secret yourself."
+    : "How to run it and what is in it.";
+  steps.push({ read: join(dir, "README.md"), why: live });
   return steps;
 }
 

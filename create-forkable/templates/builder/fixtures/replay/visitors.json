@@ -1,0 +1,100 @@
+{
+ "turns": [
+  {
+   "match": "contact form",
+   "delayMs": 30,
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-visitors-session"
+    },
+    {
+     "t": "tool_start",
+     "id": "o1",
+     "name": "mcp__builder__one_find_actions",
+     "kind": "one",
+     "detail": "gmail send an email",
+     "input": {
+      "platform": "gmail",
+      "intent": "send an email"
+     }
+    },
+    {
+     "t": "tool_end",
+     "id": "o1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "o2",
+     "name": "mcp__builder__one_add_action",
+     "kind": "one",
+     "detail": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+     "input": {
+      "actionId": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+      "platform": "gmail"
+     }
+    },
+    {
+     "t": "tool_end",
+     "id": "o2",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w1",
+     "name": "Write",
+     "kind": "write",
+     "detail": "server/contact.ts",
+     "files": [
+      "server/contact.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w2",
+     "name": "Edit",
+     "kind": "write",
+     "detail": "server/app.ts",
+     "files": [
+      "server/app.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w2",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Added POST /api/contact. Visitors are not signed in, so the form sends each message as an email from your Gmail, on your grant: Gmail \u00b7 send. That needs your OK below; until then the form answers with a refusal and nothing is sent."
+    },
+    {
+     "t": "usage",
+     "usage": {
+      "input": 8200,
+      "output": 540,
+      "cacheRead": 6100,
+      "cacheWrite": 0
+     },
+     "total": true
+    }
+   ],
+   "writes": [
+    {
+     "path": "server/contact.ts",
+     "content": "import { Hono } from \"hono\";\nimport type { AppEnv } from \"./env\";\nimport { one } from \"./one\";\nimport { gmail } from \"./one/actions.gen\";\n\n// Acme Inc contact form: a visitor who is not signed in sends a message, and\n// it reaches the owner's inbox as an email sent on the owner's grant.\nexport const contact = new Hono<AppEnv>();\n\nconst cap = (v: unknown, n: number) => (typeof v === \"string\" ? v.trim().slice(0, n) : \"\");\n\ncontact.post(\"/\", async (c) => {\n  const b = await c.req.json<{ name?: string; email?: string; message?: string }>().catch(() => ({}) as { name?: string; email?: string; message?: string });\n  const name = cap(b.name, 120);\n  const email = cap(b.email, 200);\n  const message = cap(b.message, 4000);\n  if (!name || !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(email) || !message) return c.json({ error: { code: \"bad_input\", message: \"Name, a valid email and a message, please.\" } }, 400);\n  const r = await one(c, { as: \"owner\" }).run(gmail.sendEmail, { body: { to: \"support@acme.example\", subject: `Contact form: ${name}`, body: `${message}\\n\\nFrom ${name} <${email}>` } });\n  if (!r.ok) return c.json(r, r.status as 403);\n  return c.json({ sent: true });\n});\n"
+    },
+    {
+     "path": "server/app.ts",
+     "content": "import { Hono } from \"hono\";\nimport type { AppEnv } from \"./env\";\nimport { contact } from \"./contact\";\nimport { oneRoutes } from \"./one/connect\";\n\n// The app's API. Runtime-neutral Hono: server/worker.ts runs it on Workers,\n// api/[[...route]].ts on Vercel. Add routes below the One routes.\n\nconst app = new Hono<AppEnv>();\n\napp.get(\"/api/health\", (c) => c.json({ ok: true, app: \"acme-contact\" }));\n\n// Sign in with One, the grant, and /api/one/health. Do not edit.\napp.route(\"/api/one\", oneRoutes);\n\n// App routes go here. Routes that call one(c).run start with requireUser(c).\napp.route(\"/api/contact\", contact);\n\napp.notFound((c) => c.json({ error: { code: \"not_found\", message: `No route for ${c.req.path}` } }, 404));\n\napp.onError((err, c) => {\n  console.error(err);\n  return c.json({ error: { code: \"server_error\", message: err.message } }, 500);\n});\n\nexport default app;\n"
+    }
+   ]
+  }
+ ]
+}

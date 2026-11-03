@@ -1,0 +1,26 @@
+{
+  "name": "@builder/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "builder": "./bin/builder.mjs"
+  },
+  "scripts": {
+    "demo": "tsx src/index.ts demo",
+    "doctor": "tsx src/index.ts doctor",
+    "start": "tsx src/index.ts start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@builder/core": "workspace:*",
+    "@builder/harness": "workspace:*",
+    "@builder/server": "workspace:*",
+    "@builder/template": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}

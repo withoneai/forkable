@@ -1,0 +1,453 @@
+{
+ "_id": "conn_mod_def::GGSNOTZxFUU::ZWXBuJboTpS3Q_U06pF8gA",
+ "connectionPlatform": "gmail",
+ "title": "List and View Read or Unread Emails",
+ "method": "POST",
+ "path": "/v1/gmail/get-emails",
+ "tags": [
+  "custom",
+  "human-verified"
+ ],
+ "knowledge": "# Get Emails\n\n## Endpoint\n\n`POST http://one-medley/v1/gmail/get-emails`\n\n## Description\n\nRetrieves a page of Gmail messages and returns each one with its headers, body, labels and attachment descriptions already extracted, so a reader does not have to decode MIME.\n\nTwo stages: one call lists the message ids matching the search, then each id is fetched. The second stage fetches many at once rather than one after another and retries a message Gmail rate limits, so requesting 100 emails takes a fraction of the time a serial fetch would. A message that still cannot be fetched is reported in `failures` rather than dropped, so `totalFound` never overstates what came back.\n\n## Request Body\n\n### Required Request Body Fields\n\n| Parameter       | Type   | Description                                 |\n|-----------------|--------|---------------------------------------------|\n| `connectionKey` | string | The connection key for Gmail authentication |\n\n### Optional Request Body Fields\n\n| Parameter             | Type              | Description                                                                                                                                                          |\n|-----------------------|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| `label`               | string \\| string[] | Gmail label(s) to filter by, e.g. `\"INBOX\"` or `[\"INBOX\", \"UNREAD\"]`. A list means a message must carry all of them. Folded into the search as `label:<name>`          |\n| `numberOfEmails`      | number            | How many emails to retrieve, 1–100 (default: 10)                                                                                                                       |\n| `query`               | string            | Gmail search query, e.g. `\"from:example@gmail.com is:unread\"`                                                                                                          |\n| `pageToken`           | string            | Token for the next page, from a previous response's `nextPageToken`                                                                                                    |\n| `includeSpamTrash`    | boolean           | Include messages in `SPAM` and `TRASH` (default: `false`)                                                                                                              |\n| `userId`              | string            | The mailbox to read (default: `\"me\"`, the credential's own)                                                                                                            |\n| `format`              | string            | How much of each message to fetch: `\"full\"` (default), `\"metadata\"` or `\"minimal\"`. See **Performance Considerations** - this is the single largest lever on response size |\n| `includeAttachments`  | boolean           | Also download each attachment's bytes into `attachments[].data` (default: `false`)                                                                                     |\n\n## Response\n\n### Success Response (200 OK)\n\n```json\n{\n  \"emails\": [\n    {\n      \"sender\": \"John Doe <john@example.com>\",\n      \"receiver\": \"me@gmail.com\",\n      \"time\": \"Mon, 8 Jan 2025 10:30:00 -0800\",\n      \"subject\": \"Meeting Tomorrow\",\n      \"body\": \"Hi, let's discuss the project tomorrow at 2 PM.\",\n      \"messageId\": \"18d3c5e2f8a91234\",\n      \"threadId\": \"18d3c5e2f8a91234\",\n      \"labelIds\": [\"INBOX\", \"UNREAD\"],\n      \"historyId\": \"1234567\",\n      \"internalDate\": \"1704729000000\",\n      \"snippet\": \"Hi, let's discuss the project tomorrow at 2 PM.\",\n      \"attachments\": [\n        {\n          \"filename\": \"agenda.pdf\",\n          \"mimeType\": \"application/pdf\",\n          \"size\": 20481,\n          \"attachmentId\": \"ANGjdJ_5xK...\"\n        }\n      ]\n    }\n  ],\n  \"totalFound\": 1,\n  \"requestedCount\": 10,\n  \"label\": \"INBOX\",\n  \"query\": \"from:john@example.com\",\n  \"nextPageToken\": \"abc123xyz789\",\n  \"resultSizeEstimate\": 245,\n  \"message\": \"Successfully retrieved 1 emails\",\n  \"summary\": \"Retrieved 1 Gmail emails from INBOX matching \\\"from:john@example.com\\\"\"\n}\n```\n\n### Partial Success (200 OK, some messages could not be fetched)\n\n```json\n{\n  \"emails\": [ \"…8 emails…\" ],\n  \"totalFound\": 8,\n  \"requestedCount\": 10,\n  \"label\": null,\n  \"query\": null,\n  \"failures\": [\n    {\n      \"id\": \"18d3c5e2f8a91234\",\n      \"kind\": \"message\",\n      \"error\": \"core answered 429 running `conn_mod_def::GJ3ocvMGOS8::D__3BgQSSzWtDUoOqLuX2A`\",\n      \"status\": 429,\n      \"body\": { \"error\": { \"code\": 429, \"message\": \"User-rate limit exceeded.\" } }\n    }\n  ],\n  \"message\": \"Successfully retrieved 8 emails\",\n  \"summary\": \"Retrieved 8 Gmail emails (2 could not be loaded)\"\n}\n```\n\n### Error Response (400 Bad Request)\n\nReturned when `connectionKey` is missing, or a field has the wrong type.\n\n```json\n{\n  \"type\": \"medley_error\",\n  \"key\": \"medley_error\",\n  \"status\": 400,\n  \"message\": \"The request body is not valid for `get-emails`\",\n  \"correlationId\": \"4f0a859b85d5b2f046428e7ff7b928ee\"\n}\n```\n\n### Error Response (the platform's own status)\n\nWhen the **listing** stage fails there is nothing to answer with, so the call fails carrying Gmail's own status and body rather than a status of its own. A `messages.list` refused with 429 comes back as 429.\n\nA failure to fetch an *individual* message never produces this; it appears in `failures` instead.\n\n```json\n{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"User-rate limit exceeded.\"\n  }\n}\n```\n\n## Response Fields\n\n| Field                          | Type     | Description                                                                                  |\n|--------------------------------|----------|----------------------------------------------------------------------------------------------|\n| `emails`                       | array    | The messages that were fetched, in the order Gmail listed them                                 |\n| `emails[].sender`              | string   | The `From` header; `\"\"` when absent or when `format` is `minimal`                              |\n| `emails[].receiver`            | string   | The `To` header                                                                                |\n| `emails[].time`                | string   | The `Date` header                                                                              |\n| `emails[].subject`             | string   | The `Subject` header                                                                           |\n| `emails[].body`                | string   | Decoded body text. `text/plain` when present, otherwise the HTML reduced to text. Empty when `format` is `metadata` or `minimal` |\n| `emails[].messageId`           | string   | Gmail message ID                                                                               |\n| `emails[].threadId`            | string   | Gmail thread ID                                                                                |\n| `emails[].labelIds`            | string[] | Labels applied to the message                                                                  |\n| `emails[].historyId`           | string   | Gmail history ID                                                                               |\n| `emails[].internalDate`        | string   | Gmail internal timestamp, epoch milliseconds                                                   |\n| `emails[].snippet`             | string   | Gmail's own preview, or the first 100 characters of the body if it supplies none               |\n| `emails[].attachments`         | array    | One entry per attached file. Always described, never downloaded unless `includeAttachments`    |\n| `emails[].attachments[].filename`     | string | The file's name                                                                       |\n| `emails[].attachments[].mimeType`     | string | The file's content type                                                               |\n| `emails[].attachments[].size`         | number | Size in bytes                                                                         |\n| `emails[].attachments[].attachmentId` | string | Gmail's id for the file, for fetching it separately later                             |\n| `emails[].attachments[].data`         | string | The file itself, base64url. **Only present when `includeAttachments` is `true`**       |\n| `totalFound`                   | number   | How many emails are in `emails` - the count that actually came back                            |\n| `requestedCount`               | number   | How many were asked for, after clamping to 1–100                                               |\n| `label`                        | string \\| string[] \\| null | The label filter that was applied, or `null`                                 |\n| `query`                        | string \\| null | The search query that was applied, or `null`                                             |\n| `nextPageToken`                | string   | (Optional) Token for the next page. Only present when more messages match                      |\n| `resultSizeEstimate`           | number   | (Optional) Gmail's estimate of how many messages match the search in total                     |\n| `failures`                     | array    | (Optional) Only present when a message, or one of its attachments, could not be fetched        |\n| `failures[].id`                | string   | What could not be fetched                                                                      |\n| `failures[].kind`              | string   | Which kind of thing `id` names: `message`, `thread` or `draft`                                 |\n| `failures[].attachmentId`      | string   | (Optional) Present when the message arrived but this attachment did not                        |\n| `failures[].error`             | string   | What went wrong                                                                                |\n| `failures[].status`            | number   | (Optional) The status the platform answered with                                               |\n| `failures[].body`              | object   | (Optional) The platform's own error body, unaltered                                            |\n| `message`                      | string   | Success/empty message                                                                          |\n| `summary`                      | string   | Summary of the operation                                                                       |\n\n## Sample Request\n\n```bash\ncurl -i --location --request POST 'http://one-medley/v1/gmail/get-emails' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"connectionKey\": \"live::gmail::default::<your-connection-key>\",\n    \"label\": \"INBOX\",\n    \"numberOfEmails\": 5,\n    \"query\": \"from:example@gmail.com\"\n  }'\n```\n\n## Example Usage\n\n### Example 1: Load Recent Inbox Emails\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"label\": \"INBOX\",\n    \"numberOfEmails\": 10\n  }'\n```\n\n### Example 2: Scan 100 Subjects Cheaply\n\n`format: \"metadata\"` tells Gmail to send headers and skip the body. Use it whenever the body is not going to be read.\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"label\": \"INBOX\",\n    \"numberOfEmails\": 100,\n    \"format\": \"metadata\"\n  }'\n```\n\n### Example 3: Search for Specific Emails\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"query\": \"from:john@example.com is:unread\",\n    \"numberOfEmails\": 20\n  }'\n```\n\n### Example 4: Unread Mail Carrying Attachments, With the Files\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"label\": [\"INBOX\", \"UNREAD\"],\n    \"query\": \"has:attachment\",\n    \"numberOfEmails\": 5,\n    \"includeAttachments\": true\n  }'\n```\n\n### Example 5: Minimal Request (Defaults to 10 Emails)\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\"\n  }'\n```\n\n### Example 6: Pagination - Retrieve the Next Page\n\n```bash\ncurl -X POST http://one-medley/v1/gmail/get-emails \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"connectionKey\": \"live::gmail::default::your-connection-key\",\n    \"label\": \"INBOX\",\n    \"numberOfEmails\": 10,\n    \"pageToken\": \"abc123xyz789\"\n  }'\n```\n\n## Behavior\n\n1. **Validate request**: `connectionKey` in the body.\n2. **Normalize the count**: `numberOfEmails` is clamped to 1–100, defaulting to 10.\n3. **Build the search**: each `label` becomes `label:<name>` (quoted if it contains a space) and is joined with `query`.\n4. **List message ids**: one call to `messages.list` with `maxResults`, `q`, `pageToken` and `includeSpamTrash`.\n5. **Fetch each message**: several at once, at the requested `format`. A message answered with 429, 403 `userRateLimitExceeded` or a 5xx is retried up to three times before it is recorded as a failure.\n6. **Extract**: the `From`, `To`, `Subject` and `Date` headers; the body, decoded from base64url, preferring `text/plain` and falling back to HTML reduced to text; and a description of every attached file.\n7. **Download attachments**: only when `includeAttachments` is set, one file at a time within each message.\n8. **Answer**: the emails in the order they were listed, plus the paging token, plus `failures` if any message could not be fetched.\n\n## Notes\n\n- Uses three Gmail actions: `messages.list`, `messages.get` and - only when asked - `messages.attachments.get`.\n- Message ordering matches Gmail's listing, which is newest first.\n- `label` matches by label *name*, the way Gmail's search box does. Standard labels (`INBOX`, `SENT`, `DRAFT`, `TRASH`, `SPAM`, `UNREAD`) and user labels both work.\n- Full Gmail search syntax is supported in `query` (`is:unread`, `has:attachment`, `newer_than:7d`, …).\n- The body is not truncated. The snippet is Gmail's own; it falls back to the first 100 characters of the body only when Gmail supplies none.\n- **Pagination**: when more messages match, the response carries `nextPageToken`. Pass it as `pageToken` and keep `label`, `query` and `numberOfEmails` the same across pages.\n- A message whose fetch fails does not fail the request. Check `failures`, and compare `totalFound` against `requestedCount`.\n\n## Performance Considerations\n\nListing costs one call; the messages cost one call each, which is where all the time and all the bytes are. Two levers, in order of effect:\n\n- **`format`** decides how much comes back per message. Use `metadata` for anything that reads senders, subjects and labels but not the body; use `minimal` when only ids and labels are wanted.\n- **`numberOfEmails`** decides how many calls are made. Ask for what will be read and page with `nextPageToken` rather than requesting 100 by default.\n\nBeyond those, `includeAttachments` adds one call per attached file and can add megabytes; leave it off and fetch a specific file by its `attachmentId` when one is actually wanted. Narrowing with `query` (`newer_than:7d`, `is:unread`) is cheaper than fetching a wide page and filtering afterwards.\n\nGmail's per-user rate limit is 250 quota units per second and each message fetched costs 5, so 100 emails is 500 units. How many are fetched at once is bounded per deployment to stay under that ceiling, and a throttled message is retried rather than dropped, so a large request may take longer but does not come back short.\n\n## Error Handling\n\n- **400 Bad Request**: `connectionKey` missing from the body or a field with the wrong type.\n- **The platform's own status**: the listing call failed, so there is nothing to return. Gmail's status and body come back unaltered rather than being collapsed into one of medley's.\n- **Per-message failures** never fail the request: they are retried, then recorded in `failures` with the platform's own status and body.\n- **Per-attachment failures** are the same: the message still arrives with its attachment described, and the file that could not be fetched is recorded in `failures` carrying both `id` and `attachmentId`.\n",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Retrieves a page of Gmail messages and returns each one with its headers, body, labels and attachment descriptions already extracted, so a reader does not have to decode MIME.",
+   "properties": {
+    "body": {
+     "additionalProperties": false,
+     "description": "Request payload for retrieving Gmail messages.",
+     "properties": {
+      "connectionKey": {
+       "description": "The connection key for Gmail authentication",
+       "type": "string"
+      },
+      "format": {
+       "description": "How much of each message to fetch: \"full\" (default), \"metadata\" or \"minimal\".",
+       "enum": [
+        "full",
+        "metadata",
+        "minimal"
+       ],
+       "type": "string"
+      },
+      "includeAttachments": {
+       "description": "Also download each attachment's bytes into `attachments[].data` (default: false)",
+       "type": "boolean"
+      },
+      "includeSpamTrash": {
+       "description": "Include messages in `SPAM` and `TRASH` (default: false)",
+       "type": "boolean"
+      },
+      "label": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        }
+       ],
+       "description": "Gmail label(s) to filter by, e.g. \"INBOX\" or [\"INBOX\", \"UNREAD\"]. A list means a message must carry all of them. Folded into the search as `label:<name>`"
+      },
+      "numberOfEmails": {
+       "description": "How many emails to retrieve, 1–100 (default: 10)",
+       "type": "number"
+      },
+      "pageToken": {
+       "description": "Token for the next page, from a previous response's `nextPageToken`",
+       "type": "string"
+      },
+      "query": {
+       "description": "Gmail search query, e.g. \"from:example@gmail.com is:unread\"",
+       "type": "string"
+      },
+      "userId": {
+       "description": "The mailbox to read (default: \"me\", the credential's own)",
+       "type": "string"
+      }
+     },
+     "required": [
+      "connectionKey"
+     ],
+     "title": "Request Body",
+     "type": "object"
+    },
+    "headers": {
+     "additionalProperties": true,
+     "description": "Headers required for authentication and content type.",
+     "properties": {
+      "Content-Type": {
+       "const": "application/json",
+       "description": "Content type for the request body",
+       "type": "string"
+      },
+      "x-one-secret": {
+       "description": "Internal signing key for authentication",
+       "type": "string"
+      }
+     },
+     "required": [
+      "x-one-secret",
+      "Content-Type"
+     ],
+     "title": "Request Headers",
+     "type": "object"
+    }
+   },
+   "required": [
+    "headers",
+    "body"
+   ],
+   "title": "Get Emails – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "description": "Response for retrieving Gmail messages, including success, partial success, validation errors, and unaltered platform error bodies.",
+   "oneOf": [
+    {
+     "additionalProperties": true,
+     "description": "The messages that were fetched, along with paging and optional per-message or per-attachment failures.",
+     "properties": {
+      "emails": {
+       "description": "The messages that were fetched, in the order Gmail listed them",
+       "items": {
+        "additionalProperties": true,
+        "description": "A fetched Gmail message with extracted headers, body, labels, and attachment descriptions.",
+        "properties": {
+         "attachments": {
+          "description": "One entry per attached file. Always described, never downloaded unless `includeAttachments`",
+          "items": {
+           "additionalProperties": true,
+           "description": "Attached file metadata and optional file contents.",
+           "properties": {
+            "attachmentId": {
+             "description": "Gmail's id for the file, for fetching it separately later",
+             "type": "string"
+            },
+            "data": {
+             "description": "The file itself, base64url. Only present when `includeAttachments` is `true`",
+             "type": "string"
+            },
+            "filename": {
+             "description": "The file's name",
+             "type": "string"
+            },
+            "mimeType": {
+             "description": "The file's content type",
+             "type": "string"
+            },
+            "size": {
+             "description": "Size in bytes",
+             "type": "number"
+            }
+           },
+           "title": "Attachment",
+           "type": "object"
+          },
+          "type": "array"
+         },
+         "body": {
+          "description": "Decoded body text. `text/plain` when present, otherwise the HTML reduced to text. Empty when `format` is `metadata` or `minimal`",
+          "type": "string"
+         },
+         "historyId": {
+          "description": "Gmail history ID",
+          "type": "string"
+         },
+         "internalDate": {
+          "description": "Gmail internal timestamp, epoch milliseconds",
+          "type": "string"
+         },
+         "labelIds": {
+          "description": "Labels applied to the message",
+          "items": {
+           "type": "string"
+          },
+          "type": "array"
+         },
+         "messageId": {
+          "description": "Gmail message ID",
+          "type": "string"
+         },
+         "receiver": {
+          "description": "The `To` header",
+          "type": "string"
+         },
+         "sender": {
+          "description": "The `From` header; \"\" when absent or when `format` is `minimal`",
+          "type": "string"
+         },
+         "snippet": {
+          "description": "Gmail's own preview, or the first 100 characters of the body if it supplies none",
+          "type": "string"
+         },
+         "subject": {
+          "description": "The `Subject` header",
+          "type": "string"
+         },
+         "threadId": {
+          "description": "Gmail thread ID",
+          "type": "string"
+         },
+         "time": {
+          "description": "The `Date` header",
+          "type": "string"
+         }
+        },
+        "title": "Email",
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "failures": {
+       "description": "Only present when a message, or one of its attachments, could not be fetched",
+       "items": {
+        "additionalProperties": true,
+        "description": "Per-message or per-attachment failure details.",
+        "properties": {
+         "attachmentId": {
+          "description": "Present when the message arrived but this attachment did not",
+          "type": "string"
+         },
+         "body": {
+          "additionalProperties": true,
+          "description": "The platform's own error body, unaltered",
+          "properties": {
+           "error": {
+            "additionalProperties": true,
+            "properties": {
+             "code": {
+              "description": "Platform or Gmail error code",
+              "type": "number"
+             },
+             "message": {
+              "description": "Platform or Gmail error message",
+              "type": "string"
+             }
+            },
+            "type": "object"
+           }
+          },
+          "type": "object"
+         },
+         "error": {
+          "description": "What went wrong",
+          "type": "string"
+         },
+         "id": {
+          "description": "What could not be fetched",
+          "type": "string"
+         },
+         "kind": {
+          "description": "Which kind of thing `id` names: `message`, `thread` or `draft`",
+          "enum": [
+           "message",
+           "thread",
+           "draft"
+          ],
+          "type": "string"
+         },
+         "status": {
+          "description": "The status the platform answered with",
+          "type": "number"
+         }
+        },
+        "title": "Failure",
+        "type": "object"
+       },
+       "type": "array"
+      },
+      "label": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "items": {
+          "type": "string"
+         },
+         "type": "array"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "The label filter that was applied, or `null`"
+      },
+      "message": {
+       "description": "Success/empty message",
+       "type": "string"
+      },
+      "nextPageToken": {
+       "description": "Token for the next page. Only present when more messages match",
+       "type": "string"
+      },
+      "query": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "The search query that was applied, or `null`"
+      },
+      "requestedCount": {
+       "description": "How many were asked for, after clamping to 1–100",
+       "type": "number"
+      },
+      "resultSizeEstimate": {
+       "description": "Gmail's estimate of how many messages match the search in total",
+       "type": "number"
+      },
+      "summary": {
+       "description": "Summary of the operation",
+       "type": "string"
+      },
+      "totalFound": {
+       "description": "How many emails are in `emails` - the count that actually came back",
+       "type": "number"
+      }
+     },
+     "title": "Successful or Partial Success Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "Returned when `connectionKey` is missing, `x-one-secret` is missing, or a field has the wrong type.",
+     "properties": {
+      "correlationId": {
+       "description": "Correlation identifier for tracing the error",
+       "type": "string"
+      },
+      "key": {
+       "description": "Error key",
+       "type": "string"
+      },
+      "message": {
+       "description": "Error message",
+       "type": "string"
+      },
+      "status": {
+       "description": "HTTP status code",
+       "type": "number"
+      },
+      "type": {
+       "description": "Error type",
+       "type": "string"
+      }
+     },
+     "title": "Validation Error Response",
+     "type": "object"
+    },
+    {
+     "additionalProperties": true,
+     "description": "When the listing stage fails there is nothing to answer with, so the call fails carrying Gmail's own status and body rather than a status of its own.",
+     "properties": {
+      "error": {
+       "additionalProperties": true,
+       "properties": {
+        "code": {
+         "description": "Gmail error code",
+         "type": "number"
+        },
+        "message": {
+         "description": "Gmail error message",
+         "type": "string"
+        }
+       },
+       "type": "object"
+      }
+     },
+     "title": "Platform Error Response",
+     "type": "object"
+    }
+   ],
+   "title": "Get Emails – Response"
+  },
+  "ioExample": {
+   "input": {
+    "body": {
+     "connectionKey": "live::gmail::default::your-connection-key",
+     "format": "full",
+     "includeAttachments": true,
+     "includeSpamTrash": false,
+     "label": [
+      "INBOX",
+      "UNREAD"
+     ],
+     "numberOfEmails": 5,
+     "pageToken": "abc123xyz789",
+     "query": "has:attachment from:john@example.com is:unread",
+     "userId": "me"
+    },
+    "headers": {
+     "Content-Type": "application/json",
+     "x-one-secret": "your-one-secret"
+    }
+   },
+   "output": {
+    "emails": [
+     {
+      "attachments": [
+       {
+        "attachmentId": "ANGjdJ_5xK123",
+        "data": "JVBERi0xLjQKJcTl8uXr...",
+        "filename": "agenda.pdf",
+        "mimeType": "application/pdf",
+        "size": 20481
+       }
+      ],
+      "body": "Hi, let's discuss the project tomorrow at 2 PM.",
+      "historyId": "1234567",
+      "internalDate": "1704729000000",
+      "labelIds": [
+       "INBOX",
+       "UNREAD"
+      ],
+      "messageId": "18d3c5e2f8a91234",
+      "receiver": "me@gmail.com",
+      "sender": "John Doe <john@example.com>",
+      "snippet": "Hi, let's discuss the project tomorrow at 2 PM.",
+      "subject": "Meeting Tomorrow",
+      "threadId": "18d3c5e2f8a91234",
+      "time": "Mon, 8 Jan 2025 10:30:00 -0800"
+     }
+    ],
+    "failures": [
+     {
+      "attachmentId": "ANGjdJ_failed_attachment",
+      "body": {
+       "error": {
+        "code": 429,
+        "message": "User-rate limit exceeded."
+       }
+      },
+      "error": "core answered 429 running `conn_mod_def::example`",
+      "id": "18d3c5e2f8a91235",
+      "kind": "message",
+      "status": 429
+     }
+    ],
+    "label": [
+     "INBOX",
+     "UNREAD"
+    ],
+    "message": "Successfully retrieved 1 emails",
+    "nextPageToken": "next-page-token-456",
+    "query": "has:attachment from:john@example.com is:unread",
+    "requestedCount": 5,
+    "resultSizeEstimate": 245,
+    "summary": "Retrieved 1 Gmail emails from INBOX matching \"has:attachment from:john@example.com is:unread\"",
+    "totalFound": 1
+   }
+  }
+ }
+}

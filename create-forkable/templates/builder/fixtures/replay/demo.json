@@ -1,0 +1,325 @@
+{
+ "turns": [
+  {
+   "match": "fix only these errors",
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-demo-session"
+    },
+    {
+     "t": "tool_start",
+     "id": "r3",
+     "name": "Read",
+     "kind": "read",
+     "detail": "src/App.tsx",
+     "files": [
+      "src/App.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "r3",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w5",
+     "name": "Edit",
+     "kind": "write",
+     "detail": "src/App.tsx",
+     "files": [
+      "src/App.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w5",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "c1",
+     "name": "Bash",
+     "kind": "run",
+     "detail": "pnpm typecheck"
+    },
+    {
+     "t": "tool_end",
+     "id": "c1",
+     "ok": true,
+     "preview": "No errors"
+    },
+    {
+     "t": "text",
+     "text": "countOpen returns a number, so openCount no longer claims to be a string. Typecheck passes."
+    },
+    {
+     "t": "usage",
+     "usage": {
+      "input": 6400,
+      "output": 180,
+      "cacheRead": 5200,
+      "cacheWrite": 0
+     },
+     "total": true
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/App.tsx",
+     "content": "import { useState } from \"react\";\nimport { AppShell } from \"@/components/shell/AppShell\";\nimport { TaskList } from \"@/components/tasks/TaskList\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { countOpen, newTask, SAMPLE_TASKS, type Task } from \"@/lib/tasks\";\n\n// The home page (\"/\"): Acme Inc's task list.\nexport default function App() {\n  const [tasks, setTasks] = useState<Task[]>(SAMPLE_TASKS);\n\n  const add = (title: string) => setTasks((all) => [newTask(title), ...all]);\n  const toggle = (id: string) =>\n    setTasks((all) => all.map((t) => (t.id === id ? { ...t, status: t.status === \"done\" ? \"open\" : \"done\" } : t)));\n  const remove = (id: string) => setTasks((all) => all.filter((t) => t.id !== id));\n\n  // How many tasks are still open, for the badge next to the heading.\n  const done = tasks.length - countOpen(tasks);\n  const openCount = countOpen(tasks);\n\n  return (\n    <AppShell>\n      <div className=\"mb-8 flex flex-col gap-2\">\n        <p className=\"label-caps\">Acme Inc</p>\n        <div className=\"flex items-center gap-3\">\n          <h1 className=\"text-28 font-semibold tracking-tight\">Tasks</h1>\n          <Badge>{openCount} open</Badge>\n        </div>\n        <p className=\"max-w-lg text-15 text-muted-foreground\">\n          What the Acme team is working on this week. {done} done so far.\n        </p>\n      </div>\n      <TaskList tasks={tasks} onAdd={add} onToggle={toggle} onRemove={remove} />\n    </AppShell>\n  );\n}\n"
+    }
+   ],
+   "delayMs": 60
+  },
+  {
+   "match": "task list",
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-demo-session"
+    },
+    {
+     "t": "thinking",
+     "text": "A task list: a data module with sample Acme tasks, a list component with add, toggle, filter and delete, and the home page wired to it."
+    },
+    {
+     "t": "tool_start",
+     "id": "r1",
+     "name": "Read",
+     "kind": "read",
+     "detail": "src/App.tsx",
+     "files": [
+      "src/App.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "r1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "r2",
+     "name": "Read",
+     "kind": "read",
+     "detail": "src/components/ui/card.tsx",
+     "files": [
+      "src/components/ui/card.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "r2",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w1",
+     "name": "Write",
+     "kind": "write",
+     "detail": "src/lib/tasks.ts",
+     "files": [
+      "src/lib/tasks.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w2",
+     "name": "Write",
+     "kind": "write",
+     "detail": "src/components/tasks/TaskItem.tsx",
+     "files": [
+      "src/components/tasks/TaskItem.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w2",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w3",
+     "name": "Write",
+     "kind": "write",
+     "detail": "src/components/tasks/TaskList.tsx",
+     "files": [
+      "src/components/tasks/TaskList.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w3",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w4",
+     "name": "Edit",
+     "kind": "write",
+     "detail": "src/App.tsx",
+     "files": [
+      "src/App.tsx"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w4",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Built the Acme Inc task list: sample tasks in src/lib/tasks.ts, a list with add, done, filter and delete in src/components/tasks, and the home page now shows it with an open count."
+    },
+    {
+     "t": "usage",
+     "usage": {
+      "input": 18240,
+      "output": 2310,
+      "cacheRead": 9100,
+      "cacheWrite": 0
+     },
+     "total": true
+    }
+   ],
+   "writes": [
+    {
+     "path": "src/lib/tasks.ts",
+     "content": "// Acme Inc's tasks. Sample data, made up, kept in memory for now.\n\nexport type TaskStatus = \"open\" | \"done\";\n\nexport interface Task {\n  id: string;\n  title: string;\n  owner: string;\n  /** ISO date, \"2026-10-28\" */\n  due: string;\n  status: TaskStatus;\n}\n\nexport const SAMPLE_TASKS: Task[] = [\n  { id: \"t1\", title: \"Send the Q4 pricing deck to the sales team\", owner: \"Priya\", due: \"2026-10-27\", status: \"open\" },\n  { id: \"t2\", title: \"Review the onboarding emails\", owner: \"Marco\", due: \"2026-10-28\", status: \"open\" },\n  { id: \"t3\", title: \"Book the offsite venue\", owner: \"Dana\", due: \"2026-10-30\", status: \"open\" },\n  { id: \"t4\", title: \"Close out the September invoices\", owner: \"Sam\", due: \"2026-10-24\", status: \"done\" },\n  { id: \"t5\", title: \"Draft the support handbook outline\", owner: \"Priya\", due: \"2026-11-02\", status: \"open\" },\n];\n\nlet counter = 100;\n\n/** A new open task, due in a week, owned by \"You\". */\nexport function newTask(title: string, owner = \"You\"): Task {\n  const due = new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10);\n  counter += 1;\n  return { id: `t${counter}`, title: title.trim(), owner, due, status: \"open\" };\n}\n\nexport function countOpen(tasks: Task[]): number {\n  return tasks.filter((t) => t.status === \"open\").length;\n}\n\n/** \"Oct 27\" */\nexport function formatDue(iso: string): string {\n  return new Date(`${iso}T12:00:00`).toLocaleDateString(\"en-US\", { month: \"short\", day: \"numeric\" });\n}\n"
+    },
+    {
+     "path": "src/components/tasks/TaskItem.tsx",
+     "content": "import { Check, Trash2 } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { formatDue, type Task } from \"@/lib/tasks\";\nimport { cn } from \"@/lib/utils\";\n\nexport function TaskItem({ task, onToggle, onRemove }: { task: Task; onToggle: () => void; onRemove: () => void }) {\n  const done = task.status === \"done\";\n  return (\n    <li className=\"group flex items-center gap-3 px-3 py-2.5\">\n      <button\n        type=\"button\"\n        onClick={onToggle}\n        aria-label={done ? \"Mark as open\" : \"Mark as done\"}\n        className={cn(\n          \"flex size-4 shrink-0 items-center justify-center rounded-sm border border-border-strong transition-colors\",\n          done && \"border-foreground bg-foreground text-background\",\n        )}\n      >\n        {done && <Check className=\"size-3\" strokeWidth={3} />}\n      </button>\n      <div className=\"flex min-w-0 flex-1 flex-col gap-0.5\">\n        <span className={cn(\"truncate text-13\", done && \"text-muted-foreground line-through\")}>{task.title}</span>\n        <span className=\"text-11 text-muted-foreground\">\n          {task.owner} \u00b7 due {formatDue(task.due)}\n        </span>\n      </div>\n      <Button variant=\"ghost\" size=\"icon\" aria-label=\"Delete task\" onClick={onRemove} className=\"opacity-0 group-hover:opacity-100\">\n        <Trash2 />\n      </Button>\n    </li>\n  );\n}\n"
+    },
+    {
+     "path": "src/components/tasks/TaskList.tsx",
+     "content": "import { useState, type FormEvent } from \"react\";\nimport { Plus } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Card } from \"@/components/ui/card\";\nimport { EmptyState } from \"@/components/ui/empty-state\";\nimport { Input } from \"@/components/ui/input\";\nimport type { Task } from \"@/lib/tasks\";\nimport { TaskItem } from \"./TaskItem\";\n\ntype Filter = \"all\" | \"open\" | \"done\";\n\nexport function TaskList({\n  tasks,\n  onAdd,\n  onToggle,\n  onRemove,\n}: {\n  tasks: Task[];\n  onAdd: (title: string) => void;\n  onToggle: (id: string) => void;\n  onRemove: (id: string) => void;\n}) {\n  const [title, setTitle] = useState(\"\");\n  const [filter, setFilter] = useState<Filter>(\"all\");\n  const shown = tasks.filter((t) => filter === \"all\" || t.status === filter);\n\n  const submit = (e: FormEvent) => {\n    e.preventDefault();\n    if (!title.trim()) return;\n    onAdd(title);\n    setTitle(\"\");\n  };\n\n  return (\n    <Card className=\"overflow-hidden\">\n      <form onSubmit={submit} className=\"hairline-b flex items-center gap-2 p-3\">\n        <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder=\"Add a task for the team\" aria-label=\"New task\" />\n        <Button type=\"submit\" disabled={!title.trim()}>\n          <Plus /> Add\n        </Button>\n      </form>\n      <div className=\"hairline-b flex items-center gap-1 px-3 py-2\">\n        {([\"all\", \"open\", \"done\"] as const).map((f) => (\n          <Button key={f} size=\"sm\" variant={filter === f ? \"outline\" : \"ghost\"} onClick={() => setFilter(f)}>\n            {f === \"all\" ? \"All\" : f === \"open\" ? \"Open\" : \"Done\"}\n          </Button>\n        ))}\n      </div>\n      {shown.length === 0 ? (\n        <EmptyState title=\"Nothing here\" description=\"Tasks you add show up in this list.\" />\n      ) : (\n        <ul className=\"divide-y divide-border\">\n          {shown.map((t) => (\n            <TaskItem key={t.id} task={t} onToggle={() => onToggle(t.id)} onRemove={() => onRemove(t.id)} />\n          ))}\n        </ul>\n      )}\n    </Card>\n  );\n}\n"
+    },
+    {
+     "path": "src/App.tsx",
+     "content": "import { useState } from \"react\";\nimport { AppShell } from \"@/components/shell/AppShell\";\nimport { TaskList } from \"@/components/tasks/TaskList\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { countOpen, newTask, SAMPLE_TASKS, type Task } from \"@/lib/tasks\";\n\n// The home page (\"/\"): Acme Inc's task list.\nexport default function App() {\n  const [tasks, setTasks] = useState<Task[]>(SAMPLE_TASKS);\n\n  const add = (title: string) => setTasks((all) => [newTask(title), ...all]);\n  const toggle = (id: string) =>\n    setTasks((all) => all.map((t) => (t.id === id ? { ...t, status: t.status === \"done\" ? \"open\" : \"done\" } : t)));\n  const remove = (id: string) => setTasks((all) => all.filter((t) => t.id !== id));\n\n  // How many tasks are still open, for the badge next to the heading.\n  const done = tasks.length - countOpen(tasks);\n  const openCount: string = countOpen(tasks);\n\n  return (\n    <AppShell>\n      <div className=\"mb-8 flex flex-col gap-2\">\n        <p className=\"label-caps\">Acme Inc</p>\n        <div className=\"flex items-center gap-3\">\n          <h1 className=\"text-28 font-semibold tracking-tight\">Tasks</h1>\n          <Badge>{openCount} open</Badge>\n        </div>\n        <p className=\"max-w-lg text-15 text-muted-foreground\">\n          What the Acme team is working on this week. {done} done so far.\n        </p>\n      </div>\n      <TaskList tasks={tasks} onAdd={add} onToggle={toggle} onRemove={remove} />\n    </AppShell>\n  );\n}\n"
+    }
+   ],
+   "delayMs": 90
+  },
+  {
+   "match": "inbox page",
+   "delayMs": 30,
+   "events": [
+    {
+     "t": "session",
+     "id": "replay-demo-session"
+    },
+    {
+     "t": "tool_start",
+     "id": "o1",
+     "name": "mcp__builder__one_find_actions",
+     "kind": "one",
+     "detail": "gmail list my latest email threads",
+     "input": {
+      "platform": "gmail",
+      "intent": "list my latest email threads"
+     }
+    },
+    {
+     "t": "tool_end",
+     "id": "o1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "o2",
+     "name": "mcp__builder__one_add_action",
+     "kind": "one",
+     "detail": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ",
+     "input": {
+      "actionId": "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ",
+      "platform": "gmail"
+     }
+    },
+    {
+     "t": "tool_end",
+     "id": "o2",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "o3",
+     "name": "mcp__builder__one_add_action",
+     "kind": "one",
+     "detail": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+     "input": {
+      "actionId": "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ",
+      "platform": "gmail"
+     }
+    },
+    {
+     "t": "tool_end",
+     "id": "o3",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w1",
+     "name": "Write",
+     "kind": "write",
+     "detail": "server/inbox.ts",
+     "files": [
+      "server/inbox.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w1",
+     "ok": true
+    },
+    {
+     "t": "tool_start",
+     "id": "w2",
+     "name": "Edit",
+     "kind": "write",
+     "detail": "server/app.ts",
+     "files": [
+      "server/app.ts"
+     ]
+    },
+    {
+     "t": "tool_end",
+     "id": "w2",
+     "ok": true
+    },
+    {
+     "t": "text",
+     "text": "Added /api/inbox/threads (Gmail threads) and /api/inbox/reply (send) on the signed-in user's grant. Both start with requireUser."
+    },
+    {
+     "t": "usage",
+     "usage": {
+      "input": 9100,
+      "output": 620,
+      "cacheRead": 7400,
+      "cacheWrite": 0
+     },
+     "total": true
+    }
+   ],
+   "writes": [
+    {
+     "path": "server/inbox.ts",
+     "content": "import { Hono } from \"hono\";\nimport type { AppEnv } from \"./env\";\nimport { one, requireUser } from \"./one\";\nimport { gmail } from \"./one/actions.gen\";\n\n// Acme Inc inbox: the latest Gmail threads and a reply, on the signed-in user's grant.\nexport const inbox = new Hono<AppEnv>();\n\ninbox.get(\"/threads\", async (c) => {\n  await requireUser(c);\n  const r = await one(c).run(gmail.listAndViewEmailThreads, { body: { numberOfThreads: 10, label: \"INBOX\" } });\n  if (!r.ok) return c.json(r, r.status as 403);\n  const threads = (r.data.threads ?? []).map((t) => ({\n    id: t.id ?? \"\",\n    subject: t.messages?.[0]?.subject ?? \"(no subject)\",\n    from: t.messages?.[0]?.sender ?? \"\",\n    snippet: t.snippet ?? \"\",\n  }));\n  return c.json({ threads });\n});\n\ninbox.post(\"/reply\", async (c) => {\n  await requireUser(c);\n  const { to, subject, text } = await c.req.json<{ to: string; subject: string; text: string }>();\n  const r = await one(c).run(gmail.sendEmail, { body: { to, subject, body: text } });\n  if (!r.ok) return c.json(r, r.status as 403);\n  return c.json({ sent: true });\n});\n"
+    },
+    {
+     "path": "server/app.ts",
+     "content": "import { Hono } from \"hono\";\nimport type { AppEnv } from \"./env\";\nimport { inbox } from \"./inbox\";\nimport { oneRoutes } from \"./one/connect\";\n\n// The app's API. Runtime-neutral Hono: server/worker.ts runs it on Workers,\n// api/[[...route]].ts on Vercel. Add routes below the One routes.\n\nconst app = new Hono<AppEnv>();\n\napp.get(\"/api/health\", (c) => c.json({ ok: true, app: \"acme-tasks\" }));\n\n// Sign in with One, the grant, and /api/one/health. Do not edit.\napp.route(\"/api/one\", oneRoutes);\n\n// App routes go here. Routes that call one(c).run start with requireUser(c).\napp.route(\"/api/inbox\", inbox);\n\napp.notFound((c) => c.json({ error: { code: \"not_found\", message: `No route for ${c.req.path}` } }, 404));\n\napp.onError((err, c) => {\n  console.error(err);\n  return c.json({ error: { code: \"server_error\", message: err.message } }, 500);\n});\n\nexport default app;\n"
+    }
+   ]
+  }
+ ]
+}

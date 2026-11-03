@@ -1,0 +1,278 @@
+{
+  "_note": "The stub One grant for the keyless demo, tests and smoke scripts. Everything it answers is labeled Sample. Connection keys here are made-up placeholders, not One credentials. Action docs come from fixtures/knowledge (public catalog entries).",
+  "builder": {
+    "connectUserId": "cu_sample_acme_builder",
+    "oneUserId": "0b9a1f6e-5a1d-4c41-9d3e-acme00000001",
+    "name": "Avery Chen",
+    "email": "avery@acme.example"
+  },
+  "platforms": [
+    {
+      "platform": "gmail",
+      "id": "conn_def::19QDvh",
+      "name": "Gmail",
+      "image": "https://assets.withone.ai/connectors/gmail.svg",
+      "category": "Email"
+    },
+    {
+      "platform": "google-calendar",
+      "id": "conn_def::4cRBK",
+      "name": "Google Calendar",
+      "image": "https://assets.withone.ai/connectors/google-calendar.svg",
+      "category": "Calendar"
+    },
+    {
+      "platform": "slack",
+      "id": "conn_def::1UsiO8",
+      "name": "Slack",
+      "image": "https://assets.withone.ai/connectors/slack.svg",
+      "category": "Messaging"
+    },
+    {
+      "platform": "calendly",
+      "id": "conn_def::3I5Pzu",
+      "name": "Calendly",
+      "image": "https://assets.withone.ai/connectors/calendly.svg",
+      "category": "Scheduling"
+    },
+    {
+      "platform": "stripe",
+      "id": "conn_def::XXzbh",
+      "name": "Stripe",
+      "image": "https://assets.withone.ai/connectors/stripe.svg",
+      "category": "Payments"
+    },
+    {
+      "platform": "github",
+      "id": "conn_def::3DDQ4",
+      "name": "GitHub",
+      "image": "https://assets.withone.ai/connectors/github.svg",
+      "category": "Developer Tools"
+    },
+    {
+      "platform": "vercel",
+      "id": "conn_def::4AKH4A",
+      "name": "Vercel",
+      "image": "https://assets.withone.ai/connectors/vercel.svg",
+      "category": "Developer Tools"
+    }
+  ],
+  "connections": [
+    {
+      "key": "sample::gmail::acme",
+      "platform": "gmail",
+      "title": "avery@acme.example",
+      "access": {
+        "policy": "methods",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "PATCH"
+        ]
+      }
+    },
+    {
+      "key": "sample::github::acme",
+      "platform": "github",
+      "title": "acme-inc",
+      "access": {
+        "policy": "methods",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ]
+      }
+    },
+    {
+      "key": "sample::vercel::acme",
+      "platform": "vercel",
+      "title": "acme-inc",
+      "access": {
+        "policy": "methods",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ]
+      }
+    }
+  ],
+  "deny": {
+    "_note": "One refuses these with blockedByGrant, so the receipt test has something to refuse. Every DELETE is outside this grant.",
+    "methods": [
+      "DELETE"
+    ]
+  },
+  "responses": {
+    "conn_mod_def::GGSNlnppgZ0::qk3CudDWTVKPY7hpPVCqLQ": {
+      "message": "Successfully retrieved 6 threads",
+      "summary": "Retrieved 6 Gmail threads from INBOX",
+      "label": [
+        "INBOX"
+      ],
+      "requestedCount": 10,
+      "resultSizeEstimate": 6,
+      "totalFound": 6,
+      "threads": [
+        {
+          "id": "18f1a0c0acme0001",
+          "historyId": "91001",
+          "snippet": "The signed order form for the Q4 renewal is attached.",
+          "messages": [
+            {
+              "messageId": "m-acme-0001",
+              "threadId": "18f1a0c0acme0001",
+              "subject": "Q4 renewal, signed order form",
+              "sender": "Priya Natarajan <priya@globex.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "The signed order form for the Q4 renewal is attached.",
+              "body": "Hi Avery, the signed order form for the Q4 renewal is attached. Let me know if finance needs anything else.",
+              "labelIds": [
+                "INBOX",
+                "UNREAD"
+              ],
+              "internalDate": "1792828800000",
+              "time": "Fri, 23 Oct 2026 09:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        },
+        {
+          "id": "18f1a0c0acme0002",
+          "historyId": "91002",
+          "snippet": "Can we move the design review to Tuesday at 2?",
+          "messages": [
+            {
+              "messageId": "m-acme-0002",
+              "threadId": "18f1a0c0acme0002",
+              "subject": "Design review, Tuesday?",
+              "sender": "Marco Silva <marco@acme.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "Can we move the design review to Tuesday at 2?",
+              "body": "Can we move the design review to Tuesday at 2? Two of us are out Monday.",
+              "labelIds": [
+                "INBOX",
+                "UNREAD"
+              ],
+              "internalDate": "1792821600000",
+              "time": "Fri, 23 Oct 2026 07:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        },
+        {
+          "id": "18f1a0c0acme0003",
+          "historyId": "91003",
+          "snippet": "Your invoice INV-2041 for October is ready.",
+          "messages": [
+            {
+              "messageId": "m-acme-0003",
+              "threadId": "18f1a0c0acme0003",
+              "subject": "Invoice INV-2041 is ready",
+              "sender": "Initech Billing <billing@initech.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "Your invoice INV-2041 for October is ready.",
+              "body": "Your invoice INV-2041 for October is ready. Total due: $4,280.00.",
+              "labelIds": [
+                "INBOX"
+              ],
+              "internalDate": "1792749600000",
+              "time": "Thu, 22 Oct 2026 11:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        },
+        {
+          "id": "18f1a0c0acme0004",
+          "historyId": "91004",
+          "snippet": "Notes from Thursday's onboarding call, plus next steps.",
+          "messages": [
+            {
+              "messageId": "m-acme-0004",
+              "threadId": "18f1a0c0acme0004",
+              "subject": "Onboarding call notes",
+              "sender": "Jordan Lee <jordan@umbrella.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "Notes from Thursday's onboarding call, plus next steps.",
+              "body": "Notes from Thursday's onboarding call, plus next steps for the pilot.",
+              "labelIds": [
+                "INBOX"
+              ],
+              "internalDate": "1792663200000",
+              "time": "Wed, 21 Oct 2026 11:20:00 -0700",
+              "attachments": []
+            },
+            {
+              "messageId": "m-acme-0005",
+              "threadId": "18f1a0c0acme0004",
+              "subject": "Re: Onboarding call notes",
+              "sender": "Avery Chen <avery@acme.example>",
+              "receiver": "jordan@umbrella.example",
+              "snippet": "Thanks Jordan, looping in Marco for the pilot setup.",
+              "body": "Thanks Jordan, looping in Marco for the pilot setup.",
+              "labelIds": [
+                "SENT"
+              ],
+              "internalDate": "1792670400000",
+              "time": "Wed, 21 Oct 2026 13:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        },
+        {
+          "id": "18f1a0c0acme0005",
+          "historyId": "91005",
+          "snippet": "Reminder: the team offsite form closes Friday.",
+          "messages": [
+            {
+              "messageId": "m-acme-0006",
+              "threadId": "18f1a0c0acme0005",
+              "subject": "Offsite form closes Friday",
+              "sender": "Acme People Team <people@acme.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "Reminder: the team offsite form closes Friday.",
+              "body": "Reminder: the team offsite form closes Friday. Pick your sessions.",
+              "labelIds": [
+                "INBOX"
+              ],
+              "internalDate": "1792576800000",
+              "time": "Tue, 20 Oct 2026 11:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        },
+        {
+          "id": "18f1a0c0acme0006",
+          "historyId": "91006",
+          "snippet": "Welcome to the Acme Inc partner program.",
+          "messages": [
+            {
+              "messageId": "m-acme-0007",
+              "threadId": "18f1a0c0acme0006",
+              "subject": "Welcome to the partner program",
+              "sender": "Sam Okafor <sam@hooli.example>",
+              "receiver": "avery@acme.example",
+              "snippet": "Welcome to the Acme Inc partner program.",
+              "body": "Welcome to the Acme Inc partner program. Your partner portal is live.",
+              "labelIds": [
+                "INBOX"
+              ],
+              "internalDate": "1792490400000",
+              "time": "Mon, 19 Oct 2026 11:20:00 -0700",
+              "attachments": []
+            }
+          ]
+        }
+      ]
+    },
+    "conn_mod_def::GGXAjWkZO8U::uMc1LQIHTTKzeMm3rLL5gQ": {
+      "id": "18f1a0c0acme0099",
+      "threadId": "18f1a0c0acme0099",
+      "labelIds": [
+        "SENT"
+      ]
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+ "_id": "conn_mod_def::GJ3okqXKyjA::eoDTQJA4S1OoPi2-CcYTlA",
+ "connectionPlatform": "gmail",
+ "title": "Permanently Delete a User’s Thread",
+ "method": "DELETE",
+ "path": "/gmail/v1/users/{{userId}}/threads/{{id}}",
+ "tags": [],
+ "knowledge": "# Permanently Delete a User’s Thread\n\n## Prerequisites\n\n- The caller must have Gmail access with scope `https://mail.google.com/`.\n\n## Method\n\n`DELETE`\n\n## URL\n\n`https://gmail.googleapis.com/gmail/v1/users/{{userId}}/threads/{{id}}`\n\n## Headers\n\n```json\n{\n  \"Accept\": \"application/json\"\n}\n```\n\n## Description\n\nImmediately and permanently deletes the specified thread. Any messages that belong to the thread are also deleted. This operation cannot be undone. Prefer `threads.trash` instead.\n\n## Enforcement Rules\n\n- The `userId` path parameter **must always be present**.\n- If the user provides a `userId`, use that value directly.\n- If the user does **not** provide a `userId`, default it explicitly to `\"me\"`.\n- Always construct the path as `/gmail/v1/users/{{userId}}/threads/{{id}}`, where `{{userId}}` is a **non-empty string**.\n- The `id` path parameter **must always be present** and **non-empty**.\n- Do **not** call the API with a missing or empty `userId` or `id` (e.g., avoid `/users//threads/`).\n- Do **not** infer or guess the `userId` beyond the user's input or the default `\"me\"`.\n- When executing the action, ensure to send **Path Parameters** in the **URL** and not in the body.\n- When executing the action, ensure to send **Query Parameters** in the **URL** as query parameters and not in the body.\n\n### Valid Examples\n\n```http\n/gmail/v1/users/me/threads/1789c5b9a1b2c3d4\n/gmail/v1/users/user@example.com/threads/1789c5b9a1b2c3d4\n```\n\n### Invalid Examples\n\n```http\n/gmail/v1/users//threads/1789c5b9a1b2c3d4\n/gmail/v1/users/me/threads/\n/gmail/v1/users/me/threads\n```\n\n## Required Path Parameters\n\n| Parameter | Type   | Description |\n|----------|--------|-------------|\n| `userId` | string | The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`. |\n| `id`     | string | ID of the thread to delete. |\n\n## Response\n\n### Success Response\n\nGmail returns an empty response body on success.\n\n### Error Responses\n\n(Errors were not included in the scraped content, so no specific examples/status codes are documented here.)\n\n## Sample Request\n\n```bash\ncurl -i --request DELETE \\\n  --header 'Accept: application/json' \\\n  'https://gmail.googleapis.com/gmail/v1/users/me/threads/1789c5b9a1b2c3d4'\n```\n\n## Notes\n\n- This deletion is **permanent** and **cannot be undone**.\n- The documentation recommends using `threads.trash` instead of permanent deletion.",
+ "ioSchema": {
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": false,
+   "description": "Immediately and permanently deletes the specified thread. Any messages that belong to the thread are also deleted. This operation cannot be undone. Prefer `threads.trash` instead.",
+   "properties": {
+    "headers": {
+     "additionalProperties": true,
+     "description": "HTTP headers to send with the request.",
+     "properties": {
+      "Accept": {
+       "const": "application/json",
+       "description": "Expected response media type.",
+       "type": "string"
+      }
+     },
+     "required": [
+      "Accept"
+     ],
+     "title": "Headers",
+     "type": "object"
+    },
+    "path": {
+     "additionalProperties": false,
+     "description": "Path parameters for the Gmail thread deletion endpoint.",
+     "properties": {
+      "id": {
+       "description": "ID of the thread to delete.",
+       "minLength": 1,
+       "type": "string"
+      },
+      "userId": {
+       "description": "The user's email address. The special value `me` can be used to indicate the authenticated user. Default value: `me`.",
+       "minLength": 1,
+       "type": "string"
+      }
+     },
+     "required": [
+      "userId",
+      "id"
+     ],
+     "title": "Path Parameters",
+     "type": "object"
+    }
+   },
+   "required": [
+    "path",
+    "headers"
+   ],
+   "title": "Permanently Delete a User’s Thread – Input",
+   "type": "object"
+  },
+  "outputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "description": "Gmail returns an empty response body on success.",
+   "title": "Permanently Delete a User’s Thread – Response",
+   "type": "object"
+  },
+  "ioExample": {
+   "input": {
+    "headers": {
+     "Accept": "application/json"
+    },
+    "path": {
+     "id": "1789c5b9a1b2c3d4",
+     "userId": "me"
+    }
+   },
+   "output": {}
+  }
+ }
+}
