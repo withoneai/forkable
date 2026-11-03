@@ -164,6 +164,14 @@ externalPort = 80
 - **Lovable** builds from a prompt, not a repo import. Point the prompt at
   this repo.`,
   },
+  builder: {
+    repo: "forkable-builder",
+    title: "Builder",
+    pm: "pnpm",
+    builders: `- Builder runs on your own computer, because it drives your own coding
+  agent (Claude Code or Codex) and its own Postgres. Clone it or fork it
+  with \`npm create forkable@latest builder\`. Browser sandboxes can't run it.`,
+  },
 };
 
 function parseArgs(argv) {
