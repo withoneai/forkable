@@ -4,7 +4,7 @@
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { and, asc, desc, eq } from "drizzle-orm";
-import { answerOnce, dbSchema, runChatTurn, type ChatEvent, type ChatMessage, type ChatTurnInput } from "@search/core";
+import { answerEvents, answerOnce, dbSchema, runChatTurn, type ChatEvent, type ChatMessage, type ChatTurnInput } from "@search/core";
 import type { AppEnv } from "../deps.js";
 import { badRequest, notFound } from "../errors.js";
 import { requireUser } from "../session.js";
@@ -79,9 +79,34 @@ chatRoutes.post("/chat", async (c) => {
 chatRoutes.post("/answer", async (c) => {
   need(c, "search:ask");
   const u = await requireUser(c);
-  const b = await readJson<{ q?: string; queryId?: string }>(c);
+  const b = await readJson<{ q?: string; queryId?: string; understand?: boolean; tz?: string }>(c);
   if (!b.q?.trim()) throw badRequest("q is required.");
-  return c.json(await answerOnce(c.get("deps").ctx, u.id, { q: b.q.trim(), queryId: b.queryId }, viaOf(c)));
+  const tz = typeof b.tz === "string" && /^[A-Za-z_]+(?:\/[A-Za-z0-9_+-]+){0,2}$/.test(b.tz) && b.tz.length <= 64 ? b.tz : undefined;
+  // unset `understand` follows the caller: on for the web app, off for a bearer (D48)
+  const input = { q: b.q.trim(), queryId: b.queryId, understand: typeof b.understand === "boolean" ? b.understand : undefined, tz };
+  // the web app asks for the progress as it happens (Reading N results, Writing the answer), so the
+  // strip says what it is doing from the first second; everyone else gets the one JSON answer
+  if ((c.req.header("accept") ?? "").includes("text/event-stream")) {
+    const ctx = c.get("deps").ctx;
+    const abort = new AbortController();
+    const via = viaOf(c);
+    return streamSSE(c, async (stream) => {
+      stream.onAbort(() => abort.abort());
+      const send = (e: ChatEvent) => stream.writeSSE({ event: e.type, data: JSON.stringify(e) });
+      try {
+        for await (const ev of answerEvents(ctx, u.id, input, abort.signal, via)) {
+          if (abort.signal.aborted) break;
+          await send(ev);
+        }
+      } catch (e) {
+        if (!abort.signal.aborted) {
+          await send({ type: "error", error: { code: "internal", message: (e as Error).message } });
+          await send({ type: "done" });
+        }
+      }
+    });
+  }
+  return c.json(await answerOnce(c.get("deps").ctx, u.id, input, viaOf(c)));
 });
 
 /** A bearer (OAuth client) request logs as api with its client id; the web session stays the assistant. */

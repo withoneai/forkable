@@ -2,17 +2,19 @@
 // query gets a short cited answer above the list. It loads on its own and
 // never holds the rows back. A saved answer (lib/searchCache) renders at once with no
 // call; `rev` changes on Refresh so the answer is asked again.
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import type { AnswerResponse } from "@/contract/api-types";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { isQuestion } from "@/contract/query";
-import { api, ApiError } from "@/lib/api";
+import { ApiError } from "@/lib/api";
+import { streamAnswer } from "@/lib/chatStream";
 import { useWorkspace } from "@/lib/workspace";
 import { MOD } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LogoStack } from "@/components/SourceLogo";
-import { CitedText, modelLabel, useOpenCitation } from "@/components/chat/citations";
+import { CitedText, modelDetail, modelLabel, useOpenCitation } from "@/components/chat/citations";
 
 export const answerKey = (query: string, rev: number) => ["answer", query, rev] as const;
 
@@ -22,9 +24,14 @@ export function AnswerStrip({ query, queryId, rev = 0, cached = null, onAnswer }
   const ws = useWorkspace();
   const open = useOpenCitation();
   const enabled = isQuestion(query);
+  // what the answer is doing right now, in plain words, from the first second (never a bare grey bar)
+  const [step, setStep] = useState<{ label: string; since: number }>({ label: "Reading the results", since: Date.now() });
   const q = useQuery({
     queryKey: answerKey(query, rev),
-    queryFn: () => api.answer({ q: query, queryId: queryId ?? undefined }),
+    queryFn: ({ signal }) => {
+      setStep({ label: "Reading the results", since: Date.now() });
+      return streamAnswer({ q: query, queryId: queryId ?? undefined }, (s) => { const l = progressLabel(s); if (l) setStep({ label: l, since: Date.now() }); }, signal);
+    },
     enabled,
     initialData: cached ?? undefined,
     staleTime: cached ? Infinity : 60_000,
@@ -34,8 +41,14 @@ export function AnswerStrip({ query, queryId, rev = 0, cached = null, onAnswer }
   if (!enabled) return null;
   if (q.isError) {
     const e = q.error;
+    // no answer at all, said in one plain line with the way to set it up (never pasted snippets)
     if (e instanceof ApiError && e.code === "model_unavailable") {
-      return <p className="mx-3 my-2 text-11 text-muted-foreground">{e.message} The results below are unaffected.</p>;
+      return (
+        <p className="mx-3 my-2 text-11 text-muted-foreground" data-testid="answer-unavailable">
+          {/Claude Code|Codex/.test(e.message) ? "No answer: the assistant is not set up on this computer yet." : e.message}{" "}
+          <Link to="/settings/assistant" className="font-medium text-foreground underline-offset-2 hover:underline">Set up the assistant</Link>
+        </p>
+      );
     }
     return null;
   }
@@ -44,14 +57,10 @@ export function AnswerStrip({ query, queryId, rev = 0, cached = null, onAnswer }
       <div className="flex items-center gap-1.5 text-11 text-muted-foreground">
         <Sparkles className="size-3" />
         <span className="font-medium">Answer</span>
-        {q.data && <span className="truncate">· {modelLabel(q.data.model)}</span>}
+        {q.data && modelLabel(q.data.model) && <span className="truncate" title={modelDetail(q.data.model)}>· {modelLabel(q.data.model)}</span>}
       </div>
       {!q.data ? (
-        <div className="flex flex-col gap-1.5 py-0.5" role="status" aria-label="Reading the results">
-          <Skeleton className="h-2.5 w-[92%]" />
-          <Skeleton className="h-2.5 w-[78%]" />
-          <Skeleton className="h-2.5 w-[54%]" />
-        </div>
+        <AnswerProgress label={step.label} since={step.since} />
       ) : (
         <>
           <CitedText text={q.data.text} citations={q.data.citations} onOpen={open} />
@@ -70,5 +79,27 @@ export function AnswerStrip({ query, queryId, rev = 0, cached = null, onAnswer }
         </>
       )}
     </section>
+  );
+}
+
+/** A step of the answer as the person reads it: "Reading 32 results", "Searching for ...", "Writing the answer". */
+export function progressLabel(s: { id: string; label: string; state: string; count?: number; query?: string }): string | null {
+  if (s.id === "read") return s.state === "done" ? (s.count ? `Read ${s.count} ${s.count === 1 ? "result" : "results"}, writing the answer` : "Writing the answer") : s.label;
+  if (s.id === "write") return s.state === "done" ? null : "Writing the answer";
+  if (s.query) return s.state === "done" ? "Writing the answer" : `Looking for ${s.query}`;
+  return null;
+}
+
+/** The step in words, with the seconds it has taken once it takes a while; the list stays usable meanwhile. */
+function AnswerProgress({ label, since }: { label: string; since: number }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
+  const secs = Math.max(0, Math.round((now - since) / 1000));
+  return (
+    <div className="flex flex-col gap-1.5 py-0.5" role="status" aria-label="Reading the results" aria-live="polite" data-testid="answer-progress">
+      <p className="text-xs text-muted-foreground">{label}...{secs >= 5 && <span className="tnum"> {secs} s</span>}</p>
+      <Skeleton className="h-2.5 w-[78%]" />
+      <Skeleton className="h-2.5 w-[54%]" />
+    </div>
   );
 }

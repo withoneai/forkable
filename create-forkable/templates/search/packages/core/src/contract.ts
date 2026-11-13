@@ -319,6 +319,34 @@ export interface SettingsData {
   vipEntityIds: string[];
   lanesOn: boolean;
   paused: boolean;
+  /** The One plan whose per-minute limit Search keeps to: auto reads it off One's answers (Free until one arrives). */
+  onePlan: OnePlan;
+  /** Calls a minute when onePlan is "custom" (an Enterprise limit). */
+  oneRpm: number | null;
+}
+
+export type OnePlan = "auto" | "free" | "starter" | "pro" | "custom";
+
+/** GET /api/v1/one-plan: how Search is keeping to the plan right now. */
+export interface OnePlanStatus {
+  plan: OnePlan;
+  customRpm: number | null;
+  /** One's per-minute limit as Search understands it. */
+  limit: number;
+  /** What Search actually spends a minute (a share under the limit). */
+  pace: number;
+  /** Kept free for calls a person is waiting on. */
+  reserved: number;
+  limitFrom: "one" | "chosen" | "default";
+  learnedAt: string | null;
+  lastMinute: number;
+  waiting: { now: number; background: number };
+  /** One answered 429: nothing goes until then. */
+  slowedUntil: string | null;
+  /** One answered 402 (the month's requests are used up): updates wait until then. */
+  heldUntil: string | null;
+  todayCalls: number;
+  monthCalls: number;
 }
 
 // ---------- mapper (CONTRACT 4.6) ----------
@@ -412,7 +440,11 @@ export interface GrantedConnection { key: string; platform: string; name?: strin
 
 export interface FixtureRequest { actionId: string; method: string; path: string; /** The sample connection asking; pages with match.connection answer only it. */ connectionKey?: string | null; pathParams?: Record<string, string>; query?: Record<string, string | string[]>; body?: unknown; platform?: string; fixtureKey?: string; cursor?: string | null; partition?: string | null; delta?: string | null }
 export interface FixtureAnswer { status: number; data: unknown; blockedByGrant?: boolean; refusal?: RawCallResult["refusal"] }
-export interface FixtureTransport { answer(req: FixtureRequest): Promise<FixtureAnswer> }
+export interface FixtureTransport {
+  answer(req: FixtureRequest): Promise<FixtureAnswer>;
+  /** True when a fixtureKey ("match:a|b") has an answer, so the sample asks once for a pair it knows instead of probing every pair (each probe is an Activity row). */
+  has?(fixtureKey: string): boolean;
+}
 
 export interface Capability {
   mode: "hybrid" | "keyword";

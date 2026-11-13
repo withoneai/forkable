@@ -4,10 +4,10 @@ export class SearchError extends Error {
   constructor(public code: ErrorCode, message: string, public data?: unknown) { super(message); }
 }
 export class NotConnected extends SearchError {
-  constructor(public platform: string) { super("not_connected", `${platform} is not in your grant`, { platform }); }
+  constructor(public platform: string) { super("not_connected", `Search has no access to ${platform}`, { platform }); }
 }
 export class BlockedByGrant extends SearchError {
-  constructor(public actionId: string, public row: LedgerRow | null) { super("blocked_by_grant", `One refused ${actionId}: not in the grant`, { actionId }); }
+  constructor(public actionId: string, public row: LedgerRow | null) { super("blocked_by_grant", `One said no to ${actionId}: Search does not have that access`, { actionId }); }
 }
 export class HttpError extends SearchError {
   constructor(public status: number, public body: unknown) {

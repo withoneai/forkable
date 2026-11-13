@@ -15,6 +15,7 @@ import {
   type EngineCtx, type FixtureTransport, type SampleWorld,
 } from "@search/core";
 import { createApp } from "./app.js";
+import { stopPendingLogins } from "./agents.js";
 import { applyStoredConnect, connectConfigured, loadEnv, connectEnvOf, ROOT, type ServerEnv } from "./config.js";
 import { createConnect } from "./connect.js";
 import { ConnectCreator } from "./connect-create.js";
@@ -23,7 +24,7 @@ import type { Deps } from "./deps.js";
 import { createHub } from "./events.js";
 import { createScheduler } from "./scheduler.js";
 import { askHash } from "./routes/setup.js";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 
 export const VERSION: string = (() => {
   try { return (JSON.parse(readFileSync(resolve(ROOT, "package.json"), "utf8")) as { version?: string }).version ?? "0.0.0"; } catch { return "0.0.0"; }
@@ -111,7 +112,7 @@ export async function startServer(options: StartOptions = {}): Promise<StartedSe
   deps.scheduler = createScheduler(deps);
 
   const app = createApp(deps);
-  const isApi = (p: string) => p.startsWith("/api/") || p === "/api" || p.startsWith("/mcp") || p.startsWith("/.well-known/") || p.startsWith("/oauth/") || ["/authorize", "/token", "/register", "/revoke"].includes(p);
+  const isApi = (p: string) => p.startsWith("/api/") || p === "/api" || p.startsWith("/mcp") || p.startsWith("/.well-known/") || p.startsWith("/oauth/") || ["/authorize", "/token", "/register", "/revoke", "/start.md", "/skill.md", "/llms.txt"].includes(p);
   if (env.UI_URL) {
     app.get("*", (c) => {
       if (isApi(c.req.path)) return c.json({ error: { code: "not_found", message: "No such route." } }, 404);
@@ -132,6 +133,9 @@ export async function startServer(options: StartOptions = {}): Promise<StartedSe
   if (options.startScheduler !== false) deps.scheduler.start();
 
   const url = `http://localhost:${env.PORT}`;
+  // Where this Search answers, for the CLI on the same SEARCH_HOME (`search install` and friends).
+  const runtimeFile = resolve(env.HOME, "server.json");
+  try { writeFileSync(runtimeFile, `${JSON.stringify({ url, pid: process.pid, at: new Date().toISOString() })}\n`, { mode: 0o600 }); } catch { /* a hint only */ }
   const db = database.kind === "embedded" ? `embedded Postgres ${database.serverVersion} on ${database.port}` : `external ${maskDatabaseUrl(database.url)}`;
   const cap = database.capability.mode === "hybrid" ? `hybrid (pgvector ${database.capability.pgvector})` : `keyword-only (${database.capability.reason})`;
   log(`Search · ${url} · ${db} · ${cap} · sign in: ${connectConfigured(env) ? `on (${deps.connectSetup.resolution.source === "store" ? "setup screen" : ".env + store"})` : "off, open /setup/connect"}`);
@@ -142,8 +146,10 @@ export async function startServer(options: StartOptions = {}): Promise<StartedSe
     async stop() {
       if (stopping) return;
       stopping = true;
+      try { if (JSON.parse(readFileSync(runtimeFile, "utf8")).pid === process.pid) rmSync(runtimeFile, { force: true }); } catch { /* gone */ }
       deps.scheduler.stop();
       deps.connectSetup?.creator.stop();
+      stopPendingLogins();
       hub.closeAll();
       await Promise.race([deps.scheduler.idle(), new Promise((r) => setTimeout(r, 5000))]);
       const closing = new Promise<void>((done) => server.close(() => done()));

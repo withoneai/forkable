@@ -39,6 +39,7 @@ export const LANE_OP: Record<Lane, string> = { vip: "vip", needs_you: "needs-you
 export const PLATFORM_NAME: Record<string, string> = {
   hubspot: "HubSpot", attio: "Attio", gmail: "Gmail", "outlook-mail": "Outlook Mail", "google-calendar": "Google Calendar",
   "outlook-calendar": "Outlook Calendar", notion: "Notion", linear: "Linear", slack: "Slack", teams: "Teams", granola: "Granola",
+  // copy-ok: the company's name, shown in Access under the AI helpers with what it does
   zendesk: "Zendesk", anthropic: "Anthropic", "claude-code": "Claude Code", codex: "Codex", openai: "OpenAI", typesafe: "TypeSafe", intercom: "Intercom", jira: "Jira",
   github: "GitHub", asana: "Asana", "google-drive": "Google Drive", salesforce: "Salesforce", pipedrive: "Pipedrive",
   airtable: "Airtable", clickup: "ClickUp", confluence: "Confluence", gemini: "Gemini", cohere: "Cohere", "mistral-ai": "Mistral",

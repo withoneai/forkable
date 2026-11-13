@@ -13,6 +13,8 @@ import { setupRoutes } from "./routes/setup.js";
 import { sourceRoutes } from "./routes/sources.js";
 import { apiBearer, mountOAuth } from "./oauth.js";
 import { mountMcp } from "./mcp.js";
+import { agentRoutes } from "./routes/agents.js";
+import { mountAgentDocs } from "./agent-routes.js";
 
 export function createApp(deps: Deps): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
@@ -28,6 +30,7 @@ export function createApp(deps: Deps): Hono<AppEnv> {
   app.use("/authorize", sessionMiddleware);
   const oauth = mountOAuth(app, deps);
   mountMcp(app, deps, oauth);
+  mountAgentDocs(app, deps);
 
   const v1 = new Hono<AppEnv>();
   v1.use("*", apiBearer(deps, oauth));
@@ -37,6 +40,7 @@ export function createApp(deps: Deps): Hono<AppEnv> {
   v1.route("/", sourceRoutes);
   v1.route("/", profileRoutes);
   v1.route("/", setupRoutes);
+  v1.route("/", agentRoutes);
   app.route("/api/v1", v1);
   return app;
 }

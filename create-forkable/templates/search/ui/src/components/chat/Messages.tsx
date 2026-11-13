@@ -5,7 +5,7 @@ import { useWorkspace } from "@/lib/workspace";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/Button";
 import { LogoStack } from "@/components/SourceLogo";
-import { CitedText, modelLabel } from "./citations";
+import { CitedText, modelDetail, modelLabel } from "./citations";
 import { ProposalCard } from "./ProposalCard";
 
 /** What one assistant turn has, whether it is still streaming or stored. */
@@ -91,7 +91,7 @@ export function AssistantTurn({ turn, onOpen, onSearchInChat, onShowSources, app
         <>
           <CitedText text={turn.text} citations={turn.citations} onOpen={onOpen} />
           {!turn.grounded && (
-            <p className="flex items-center gap-1.5 text-11 text-warning-text"><TriangleAlert className="size-3" /> Not grounded in your results</p>
+            <p className="flex items-center gap-1.5 text-11 text-warning-text"><TriangleAlert className="size-3" /> Not from your results</p>
           )}
           <div className="flex items-center gap-2 text-11 text-muted-foreground">
             {turn.citations.length > 0 && (
@@ -100,7 +100,7 @@ export function AssistantTurn({ turn, onOpen, onSearchInChat, onShowSources, app
                 <span className="tnum">{turn.citations.length} {turn.citations.length === 1 ? "source" : "sources"}</span>
               </button>
             )}
-            <span className="min-w-0 truncate">{modelLabel(turn.model)}</span>
+            <span className="min-w-0 truncate" title={modelDetail(turn.model)}>{modelLabel(turn.model)}</span>
             <span className="ml-auto flex shrink-0 items-center gap-0.5">
               <button type="button" onClick={copy} className="inline-flex h-6 items-center gap-1 rounded-md px-1.5 transition-colors hover:bg-card-hover hover:text-foreground">
                 {copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "Copied" : "Copy"}

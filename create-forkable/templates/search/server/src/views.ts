@@ -6,7 +6,7 @@ import {
   dbSchema, entityChips, fetchIsStale, logoUrl, platformName, profileActionIds, semanticStatus, settingsFor, sourceHealth, toResultRows, AI_PLATFORMS, RECEIPT_ACTION,
   type AccessResponse, type ApiProfile, type ApiSource, type EntityDetail, type ItemDetail, type ItemFacets, type ResultRow, type SearchProfile, type SourcesResponse,
 } from "@search/core";
-import { connectionsFor } from "@search/core";
+import { type GrantAccess, quotaHeld, collapseSame, connectionsFor, entityItemIds, entityItemStats, TIMELINE_LIMIT } from "@search/core";
 import type { Deps, UserRow } from "./deps.js";
 import { notFound } from "./errors.js";
 
@@ -79,28 +79,30 @@ export async function sourcesResponse(deps: Deps, user: UserRow): Promise<Source
   let banner: SourcesResponse["banner"] = null;
   // the embedder is not a source, but search quietly losing its semantic arm is worth the same banner (D41)
   const semantic = await semanticStatus(deps.ctx, user.id);
-  if (worst) {
+  if (quotaHeld(user.id)) {
+    banner = { level: "error", text: "This month's One calls are used up. Updates wait and try again every hour. Add more in your One plan.", sourceId: null, action: "manage_in_one" };
+  } else if (worst) {
     const st = worst.health.status;
     const at = worst.health.retryAt ? new Date(worst.health.retryAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : null;
     banner = st === "auth_needed" ? { level: "error", text: `${worst.name} needs you to sign in again.`, sourceId: worst.id, action: "reconnect" }
-      : st === "grant_blocked" ? { level: "error", text: `Search was not granted ${worst.health.lastError?.actionId ? "an action it needs" : "access"} on ${worst.name}.`, sourceId: worst.id, action: "manage_in_one" }
-      : st === "rate_limited" ? { level: "warn", text: `${worst.name} is rate limiting Search.${at ? ` Trying again at ${at}.` : ""}`, sourceId: worst.id, action: "retry" }
-      : { level: "warn", text: `${worst.name} has failed ${worst.health.consecutiveFailures} runs in a row.`, sourceId: worst.id, action: "retry" };
+      : st === "grant_blocked" ? { level: "error", text: `Search has no access to ${worst.health.lastError?.actionId ? "something it reads" : "anything"} in ${worst.name}. Allow it in One.`, sourceId: worst.id, action: "manage_in_one" }
+      : st === "rate_limited" ? { level: "warn", text: `${worst.name} asked Search to slow down.${at ? ` Trying again at ${at}.` : ""}`, sourceId: worst.id, action: "retry" }
+      : { level: "warn", text: `${worst.name} did not update the last ${worst.health.consecutiveFailures} times.`, sourceId: worst.id, action: "retry" };
   } else if (!semantic.semantic && (semantic.reason === "not_in_grant" || semantic.reason === "error")) {
     banner = { level: semantic.reason === "not_in_grant" ? "error" : "warn", text: semanticOffText(semantic), sourceId: null, action: "manage_in_one" };
   }
   return { semantic, sources: list, available, notInApp, banner };
 }
 
-/** "Semantic search is off. OpenAI is not in your grant." */
+/** "Search by meaning is off. Search has no access to OpenAI." */
 export function semanticOffText(s: { reason: string | null; message: string | null }): string {
-  return `Semantic search is off.${s.message ? ` ${s.message}` : ""}${s.reason === "error" ? " Results are keyword matches until it answers." : ""}`;
+  return `Search by meaning is off.${s.message ? ` ${s.message}` : ""}${s.reason === "error" ? " Results match your words until it answers." : ""}`;
 }
 
 export async function apiProfile(deps: Deps, profileId: string, userId: string): Promise<ApiProfile> {
   const [r] = await deps.db.select({ p: profiles, v: profileVersions }).from(profiles).innerJoin(profileVersions, eq(profileVersions.id, profiles.currentVersionId))
     .where(and(eq(profiles.id, profileId), or(isNull(profiles.userId), eq(profiles.userId, userId))));
-  if (!r) throw notFound("Profile");
+  if (!r) throw notFound("Source setup");
   return { id: r.p.id, slug: r.p.slug, platform: r.p.platform, model: r.p.model, title: r.v.json.title, origin: r.p.origin, currentVersion: r.v.version, profileHash: r.v.profileHash, verified: r.v.json.verified ?? "none", json: r.v.json };
 }
 
@@ -168,12 +170,12 @@ export async function entityDetail(deps: Deps, userId: string, id: string): Prom
   if (!e) throw notFound("Person or company");
   const keys = await deps.db.select({ key: entityKeys.key }).from(entityKeys).where(eq(entityKeys.entityId, e.id));
   const emails = keys.map((k) => k.key).filter((k) => k.startsWith("email:")).map((k) => k.slice(6)).sort((a, b) => (a === e!.primaryEmail ? -1 : b === e!.primaryEmail ? 1 : a.localeCompare(b)));
-  const linkIds = (await deps.db.select({ itemId: entityLinks.itemId }).from(entityLinks).where(eq(entityLinks.entityId, e.id))).map((r) => r.itemId);
-  // a company's timeline also has its people's items
-  const memberIds = e.type === "company" ? (await deps.db.select({ id: entities.id }).from(entities).where(and(eq(entities.companyId, e.id), isNull(entities.mergedIntoId)))).map((r) => r.id) : [];
-  const memberItems = memberIds.length ? (await deps.db.select({ itemId: entityLinks.itemId }).from(entityLinks).where(inArray(entityLinks.entityId, memberIds))).map((r) => r.itemId) : [];
-  const all = [...new Set([...linkIds, ...memberItems])];
-  const list = all.length ? await deps.db.select().from(items).where(and(inArray(items.id, all), isNull(items.deletedAt), eq(items.directory, false))).orderBy(desc(items.occurredAt)).limit(50) : [];
+  // the page's set is the card's set (entity-items.ts): its items, and for a company its people's too
+  const all = await entityItemIds(deps.ctx, e.id);
+  // its own records (Priya's HubSpot contact on Priya's page) are the page itself, not things on her timeline
+  const own = new Set((await deps.db.select({ itemId: entityLinks.itemId }).from(entityLinks).where(and(eq(entityLinks.entityId, e.id), eq(entityLinks.role, "is")))).map((r) => r.itemId));
+  const onTimeline = all.filter((x) => !own.has(x));
+  const list = onTimeline.length ? await deps.db.select().from(items).where(and(inArray(items.id, onTimeline), isNull(items.deletedAt), eq(items.directory, false))).orderBy(desc(items.occurredAt)).limit(TIMELINE_LIMIT) : [];
   const srcs = all.length ? (await deps.db.execute(sql`select platform, count(*)::int as count, max(occurred_at) as last_at from items where id in (${sql.join(all.map((x) => sql`${x}`), sql`, `)}) and deleted_at is null group by platform order by count desc`)).rows as { platform: string; count: number; last_at: Date | string }[] : [];
   const [company] = e.companyId ? await entityChips(deps.ctx, [e.companyId]) : [];
   const pend = await deps.db.select().from(entityMatches).where(and(eq(entityMatches.userId, userId), eq(entityMatches.status, "pending"), or(eq(entityMatches.aId, e.id), eq(entityMatches.bId, e.id))));
@@ -193,8 +195,10 @@ export async function entityDetail(deps: Deps, userId: string, id: string): Prom
     entity: {
       id: e.id, type: e.type, name: e.name, emails, domain: e.domain, title: e.title, company: company ?? null, avatarUrl: e.avatarUrl, isSelf: e.isSelf,
       sources: srcs.map((s) => ({ platform: s.platform, count: Number(s.count), lastAt: new Date(s.last_at).toISOString() })),
+      itemCount: (await entityItemStats(deps.ctx, [e.id])).get(e.id)?.count ?? 0,
     },
-    timeline: await rowsFor(deps, list),
+    // the same person, company or record kept in two tools is one row on its own page
+    timeline: await collapseSame(deps.ctx, userId, await rowsFor(deps, list)),
     pendingMatches: pend.map((m) => ({ matchId: m.id, other: others.find((o) => o.id === (m.aId === e!.id ? m.bId : m.aId))!, probability: m.probability ?? 0, reason: m.reason })).filter((x) => x.other),
     merged,
   };
@@ -203,6 +207,15 @@ export async function entityDetail(deps: Deps, userId: string, id: string): Prom
 const VERBS: [RegExp, string][] = [[/^search/i, "Search"], [/^list/i, "List"], [/^get|^retrieve|^read/i, "Read"], [/delta|changes|incremental/i, "Read changes in"], [/^create/i, "Create"], [/^delete/i, "Delete"], [/^update/i, "Update"], [/^send/i, "Send"]];
 
 /** The grant and what Search does with it: the manifest's actions grouped by platform. */
+/** What One lets this connection do: full, by method, or by exact action. */
+function allows(c: { access: GrantAccess } | undefined, method: string | undefined, actionId: string): boolean {
+  if (!c) return false;
+  const a = c.access;
+  if (a.policy === "full") return true;
+  if (a.policy === "methods") return !!method && a.methods.map((m) => m.toUpperCase()).includes(method.toUpperCase());
+  return a.actions.some((x) => (typeof x === "string" ? x : x.actionId) === actionId);
+}
+
 export async function accessResponse(deps: Deps, user: UserRow): Promise<AccessResponse> {
   const manifest = await manifestActions(deps.env.ROOT);
   const sample = user.isSample;
@@ -226,13 +239,15 @@ export async function accessResponse(deps: Deps, user: UserRow): Promise<AccessR
     const title = a.actionId === RECEIPT_ACTION.actionId ? "Delete a Gmail message" : a.title ?? a.reason ?? a.actionId;
     const verb = VERBS.find(([re]) => re.test(title))?.[1] ?? (a.access === "write" ? "Change" : "Read");
     const level = a.access === "write" ? "write" : "read";
-    const granted = a.grant === false ? false : sample ? true : !!c && (c.access.policy === "full" || (c.access.policy === "methods" ? !!a.method && c.access.methods.map((m) => m.toUpperCase()).includes(a.method) : c.access.actions.some((x) => (typeof x === "string" ? x : x.actionId) === a.actionId)));
+    // the sample shows the declined write; a real grant answers for itself (the app asks for everything, so a person may allow more than Search uses)
+    const granted = sample ? a.grant !== false : allows(c, a.method, a.actionId);
     const existing = entry.actions.find((x) => x.actionId === a.actionId);
     if (existing) { if (a.usedBy && !existing.usedBy.includes(a.usedBy)) existing.usedBy.push(a.usedBy); continue; }
     entry.actions.push({ actionId: a.actionId, title, verb, level, granted, usedBy: a.usedBy ? [a.usedBy] : [] });
   }
   if (!manifest.some((a) => a.actionId === RECEIPT_ACTION.actionId) && byPlatform.has("gmail")) {
-    byPlatform.get("gmail")!.actions.push({ actionId: RECEIPT_ACTION.actionId, title: "Delete a Gmail message", verb: "Delete", level: "write", granted: false, usedBy: [] });
+    const granted = sample ? false : allows(conns.find((x) => x.platform === "gmail"), RECEIPT_ACTION.method, RECEIPT_ACTION.actionId);
+    byPlatform.get("gmail")!.actions.push({ actionId: RECEIPT_ACTION.actionId, title: "Delete a Gmail message", verb: "Delete", level: "write", granted, usedBy: [] });
   }
   return {
     grantedBy: { name: user.name, email: user.email }, platforms: [...byPlatform.values()].filter((p) => p.actions.length),

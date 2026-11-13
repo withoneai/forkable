@@ -8,6 +8,7 @@ import type { Tx } from "../db/client.js";
 import { entities, entityKeys, entityLinks } from "../db/schema.js";
 import { decodeDomain, isFreeMail, nameFromEmail } from "../decode/address.js";
 import { newId } from "../ids.js";
+import { dropVocab } from "../search/vocab.js";
 
 export interface ResolveEnv {
   userId: string;
@@ -258,8 +259,10 @@ export async function markSelf(tx: Tx, userId: string, self: { emails: Set<strin
   return true;
 }
 
-/** Recounts item_count and last_seen_at for a user's entities (after a run). */
+/** Recounts item_count and last_seen_at for a user's entities (after a run, a merge, a removed source). */
 export async function recountEntities(tx: Tx, userId: string): Promise<void> {
+  // names, merges and counts change here: the next search reads the people again (D48)
+  dropVocab(userId);
   await tx.execute(sql`
     update entities e set
       item_count = coalesce(c.n, 0),

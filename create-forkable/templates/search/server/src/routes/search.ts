@@ -18,6 +18,22 @@ export const searchRoutes = new Hono<AppEnv>();
 
 const SORTS = new Set(["best", "newest", "oldest"]);
 
+/**
+ * Plain sentences (D48): read by default for the web app (a browser session), so the box
+ * understands people. A bearer caller (a script, an agent, the CLI) sends exactly what it
+ * means and gets its text searched as written unless it asks with `understand=1`.
+ * `understand=0` (also false, off, no) turns it off for anyone.
+ */
+const understandParam = (v: string | undefined, browser: boolean) => {
+  const t = v?.trim();
+  if (!t) return browser;
+  if (/^(0|false|off|no)$/i.test(t)) return false;
+  return /^(1|true|on|yes)$/i.test(t) ? true : browser;
+};
+const isBrowser = (c: { get: (k: "scopes") => unknown }) => !c.get("scopes");
+/** An IANA zone name from the browser, else none (the server's own zone). */
+const tzParam = (v: string | undefined) => (v && /^[A-Za-z_]+(?:\/[A-Za-z0-9_+-]+){0,2}$/.test(v) && v.length <= 64 ? v : undefined);
+
 /** Recently opened items (CONTRACT gap 12): kept in memory per user until core adds a table. */
 const opened = new Map<string, string[]>();
 
@@ -30,7 +46,7 @@ searchRoutes.get("/search", async (c) => {
   const scope = (c.req.query("scope") || "all") as ItemKind | "all";
   const offset = int(c.req.query("offset"), 0, 0, 10_000);
   const fresh = c.req.query("fresh") === "1";
-  const res = await hybridSearch(deps.ctx, u.id, { q, limit: int(c.req.query("limit"), 30, 1, 200), offset, sort, scope, fresh });
+  const res = await hybridSearch(deps.ctx, u.id, { q, limit: int(c.req.query("limit"), 30, 1, 200), offset, sort, scope, fresh, understand: understandParam(c.req.query("understand"), isBrowser(c)), tz: tzParam(c.req.query("tz")) });
   if (q.trim() && offset === 0 && !c.get("scopes")) {
     await deps.db.delete(recentSearches).where(and(eq(recentSearches.userId, u.id), eq(recentSearches.query, q.trim())));
     await deps.db.insert(recentSearches).values({ id: newId("rec"), userId: u.id, query: q.trim(), resultCount: res.total });
@@ -51,7 +67,7 @@ searchRoutes.post("/search/rerank", async (c) => {
 searchRoutes.get("/search/count", async (c) => {
   need(c, "search:read");
   const u = await requireUser(c);
-  return c.json({ count: await countOnly(c.get("deps").ctx, u.id, c.req.query("q") ?? "") });
+  return c.json({ count: await countOnly(c.get("deps").ctx, u.id, c.req.query("q") ?? "", { understand: understandParam(c.req.query("understand"), isBrowser(c)), tz: tzParam(c.req.query("tz")) }) });
 });
 
 searchRoutes.get("/suggest", async (c) => {
@@ -196,7 +212,12 @@ searchRoutes.delete("/saved-searches/:id", async (c) => {
 searchRoutes.get("/recent-searches", async (c) => {
   need(c, "search:read");
   const u = await requireUser(c);
-  const rows = await c.get("deps").db.select().from(recentSearches).where(eq(recentSearches.userId, u.id)).orderBy(desc(recentSearches.at)).limit(int(c.req.query("limit"), 20, 1, 50));
+  const limit = int(c.req.query("limit"), 20, 1, 50);
+  const all = await c.get("deps").db.select().from(recentSearches).where(eq(recentSearches.userId, u.id)).orderBy(desc(recentSearches.at)).limit(50);
+  // Two searches for the same words at once (a recheck beside the first read) can both
+  // insert before either deletes; show each query once, newest first.
+  const seen = new Set<string>();
+  const rows = all.filter((r) => !seen.has(r.query) && !!seen.add(r.query)).slice(0, limit);
   return c.json(rows.map((r) => ({ query: r.query, at: r.at.toISOString(), resultCount: r.resultCount })));
 });
 

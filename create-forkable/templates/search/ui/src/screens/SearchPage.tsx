@@ -1,25 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
-import { ArrowUp, ArrowUpDown, Clock, Plus, RefreshCw, Shuffle, Sparkles } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowUp, ArrowUpDown, ChevronDown, Clock, Plus, RefreshCw, Shuffle, Sparkles } from "lucide-react";
 import type { AnswerResponse, ItemKind, ResultRow, SearchResponse } from "@/contract/api-types";
-import { applyChip, freeText, isQuestion, opValues, parseQuery } from "@/contract/query";
+import { applyChip, freeText, isQuestion, keepWords, opValues, parseQuery } from "@/contract/query";
 import { api } from "@/lib/api";
 import { useKeys } from "@/lib/keys";
 import { keys as qk, useMe, useRecent, useSaveSearch, useSearch, useSources } from "@/lib/queries";
 import { toast } from "@/lib/toast";
-import { cn, fmtNum, fmtRelative, LANE_OP, platformName, SCOPES, useMedia } from "@/lib/utils";
+import { cn, fmtNum, fmtRelative, LANE_OP, MOD, platformName, SCOPES, useMedia } from "@/lib/utils";
 import { useWorkspace } from "@/lib/workspace";
 import { cacheKey, dropCached, patchAnswer, patchCached, readCached, saveSearch } from "@/lib/searchCache";
 import { SearchBox, type SearchBoxHandle } from "@/components/results/SearchBox";
 import { ChipBar } from "@/components/results/ChipBar";
+import { UnderstoodBar, understoodFor } from "@/components/results/UnderstoodBar";
+import { FirstIndex, useExamples } from "@/components/results/HomeHelp";
 import { ResultRowView } from "@/components/results/ResultRow";
 import { EntityStrip } from "@/components/results/EntityStrip";
 import { AnswerStrip, answerKey } from "@/components/results/AnswerStrip";
 import { PreviewPane } from "@/components/preview/PreviewPane";
 import { HealthDot, rollup } from "@/components/Shell";
 import { SourceLogo } from "@/components/SourceLogo";
-import { useEntityOptions } from "@/components/results/entityOptions";
 import { Menu } from "@/components/ui/Menu";
 import { Kbd } from "@/components/ui/Kbd";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -27,15 +28,7 @@ import { LoadError } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
-
-const TIPS = [
-  "from:me type:mail before:2026-10-01",
-  "with:globex.com after:30d",
-  "type:deal is:open amount:>=50000",
-  "lane:needs-you",
-  "type:event during:this-week",
-  "-in:slack \"renewal terms\"",
-];
+import { COPY, meaningOffReason, MEANING_DB_REASON } from "@/lib/copy";
 
 export function SearchPage() {
   const ws = useWorkspace();
@@ -59,29 +52,21 @@ export function SearchPage() {
 function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle | null>; onCommit: (q: string, o?: { replace?: boolean }) => void; onAsk: (q: string) => void }) {
   const recent = useRecent();
   const sources = useSources();
-  const ents = useEntityOptions();
   const me = useMe();
   const qc = useQueryClient();
   const nav = useNavigate();
-  const [tip, setTip] = useState(() => Math.floor(Math.random() * TIPS.length));
   const [shuffle, setShuffle] = useState(0);
+  const examples = useExamples();
+  const [tip, setTip] = useState(0);
   const list = sources.data?.sources ?? [];
   const total = list.reduce((n, s) => n + s.health.itemCount, 0);
   const byPlatform = new Map<string, typeof list>();
   for (const s of list) byPlatform.set(s.platform, [...(byPlatform.get(s.platform) ?? []), s]);
-  useEffect(() => { const t = setInterval(() => setTip((x) => (x + 1) % TIPS.length), 8000); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(() => setTip((x) => x + 1), 8000); return () => clearInterval(t); }, []);
 
-  const people = ents.filter((e) => e.type === "person" && !e.self);
-  const companies = ents.filter((e) => e.type === "company" && !e.self);
-  const vipIds = me.data?.settings?.vipEntityIds ?? [];
-  const pick = <T,>(arr: T[], i: number) => arr.length ? arr[(i + shuffle) % arr.length] : undefined;
-  const vip = people.find((p) => vipIds.includes(p.id)) ?? pick(people, 0);
-  const tries = [
-    vip && `from:${vip.short} after:7d`,
-    pick(people, 2) && `type:meeting with:${pick(people, 2)!.short}`,
-    "type:deal is:open",
-    pick(companies, 1) && `with:${pick(companies, 1)!.short} after:30d`,
-  ].filter(Boolean).slice(0, 3) as string[];
+  // three plain sentences from the person's own people and tools; the tip line walks the rest
+  const tries = examples.length ? [0, 1, 2].map((i) => examples[(i + shuffle * 3) % examples.length]!).filter((x, i, a) => a.indexOf(x) === i) : [];
+  const tipText = examples.length ? examples[(tip + 3) % examples.length]! : "emails from me last week";
 
   const groups = useMemo(() => {
     const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -96,8 +81,14 @@ function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle |
     <div className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto flex w-full max-w-[640px] flex-col gap-6 px-6 pb-16 pt-[14vh]">
         <div className="slide-up flex flex-col gap-2">
-          <SearchBox ref={box} value="" onCommit={onCommit} onAsk={onAsk} size="home" autoFocus />
-          <p className="px-1 text-11 text-muted-foreground">Tip: <span className="font-mono text-foreground/80">{TIPS[tip]}</span></p>
+          <SearchBox ref={box} value="" onCommit={onCommit} onAsk={onAsk} size="home" autoFocus
+            />
+          {/* one hint: how to type it and how to ask, with one example (the box itself says nothing more) */}
+          <p className="px-1 text-11 text-muted-foreground" data-testid="tip">
+            Type it the way you would say it, like{" "}
+            <button type="button" onClick={() => onCommit(tipText)} className="text-foreground/80 underline-offset-2 hover:text-foreground hover:underline">“{tipText}”</button>
+            . To ask a question instead, press {MOD} Enter.
+          </p>
         </div>
 
         {sources.isError ? (
@@ -114,6 +105,7 @@ function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle |
           </div>
         ) : (
           <>
+            <FirstIndex sources={list} />
             {groups.length > 0 && (
               <section className="flex flex-col gap-1" aria-label="Recent">
                 <div className="flex items-center justify-between px-1">
@@ -142,7 +134,7 @@ function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle |
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {tries.map((t) => (
-                    <button key={t} type="button" onClick={() => onCommit(t)} className="inline-flex h-7 items-center rounded-md border border-border bg-card px-2.5 font-mono text-xs transition-colors hover:border-border-strong hover:bg-card-hover">{t}</button>
+                    <button key={t} type="button" data-testid="try" onClick={() => onCommit(t)} className="inline-flex h-7 items-center rounded-md border border-border bg-card px-2.5 text-xs transition-colors hover:border-border-strong hover:bg-card-hover">{t}</button>
                   ))}
                 </div>
               </section>
@@ -157,7 +149,7 @@ function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle |
                   const r = rollup(l);
                   const syncing = l.find((s) => s.health.status === "syncing" && s.health.progress);
                   return (
-                    <Link key={p} to={`/sources/${l[0]!.id}`} className="relative inline-flex h-8 items-center gap-2 overflow-hidden rounded-md border border-border bg-card px-2.5 text-xs transition-colors hover:border-border-strong hover:bg-card-hover" title={syncing ? `Indexing ${platformName(p)}, ${syncing.health.progress!.done} of about ${syncing.health.progress!.estimate ?? "many"}` : undefined}>
+                    <Link key={p} to={`/sources/${l[0]!.id}`} className="relative inline-flex h-8 items-center gap-2 overflow-hidden rounded-md border border-border bg-card px-2.5 text-xs transition-colors hover:border-border-strong hover:bg-card-hover" title={syncing ? `Updating ${platformName(p)}, ${syncing.health.progress!.done} of about ${syncing.health.progress!.estimate ?? "many"}` : undefined}>
                       <SourceLogo platform={p} size={14} />
                       <span>{platformName(p)}</span>
                       <HealthDot status={r.status} />
@@ -168,7 +160,7 @@ function Home({ box, onCommit, onAsk }: { box: React.RefObject<SearchBoxHandle |
                 })}
                 <button type="button" onClick={() => nav("/settings/integrations/new")} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-dashed border-border-strong px-2.5 text-xs text-muted-foreground transition-colors hover:text-foreground"><Plus className="size-3.5" />Add a source</button>
               </div>
-              {me.data?.settings?.embedding.provider === "local" && <p className="px-1 text-11 text-muted-foreground">Sample embedder (local, not semantic). Keyword matches rank first.</p>}
+              {me.data?.settings?.embedding.provider === "local" && <p className="px-1 text-11 text-muted-foreground">{COPY.meaningSample}</p>}
             </section>
           </>
         )}
@@ -206,9 +198,22 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
   const [check, setCheck] = useState<{ k: string; at: number; res: SearchResponse; n: number } | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const tabRow = useRef<HTMLDivElement>(null);
+  const [tabRowWidth, setTabRowWidth] = useState(0);
+  useEffect(() => {
+    const el = tabRow.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setTabRowWidth(Math.round(e!.contentRect.width)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const [saving, setSaving] = useState(false);
   const [laneChord, setLaneChord] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+  // Tab from the box goes to the understood chips first (D48)
+  const focusChips = () => { const b = chipsRef.current?.querySelector<HTMLElement>("button"); if (!b) return false; b.focus(); return true; };
   const movedSince = useRef(false);
   const wide = useMedia("(min-width: 1440px)"); // list, preview and dock side by side need about 1440px; below that the preview takes over the list while the dock is open
   const takeoverMode = !wide && ws.dockOpen;
@@ -275,11 +280,20 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
   };
   const onAnswer = (a: AnswerResponse) => { if (uid) patchAnswer(uid, q, a); };
 
+  // the rows the words match best, then the rest under a divider, collapsed until opened (polish item 7)
+  const [restOpen, setRestOpen] = useState(false);
+  useEffect(() => { setRestOpen(false); }, [q]);
+  const top = data?.topRows && data.topRows < rows.length ? data.topRows : 0;
   const shown: ResultRow[] = useMemo(() => {
-    if (!order) return rows;
-    const by = new Map(rows.map((r) => [r.id, r]));
-    return [...order.map((id) => by.get(id)).filter(Boolean) as ResultRow[], ...rows.filter((r) => !order.includes(r.id))];
-  }, [rows, order]);
+    const sorted = (list: ResultRow[]) => {
+      if (!order) return list;
+      const by = new Map(list.map((r) => [r.id, r]));
+      return [...order.map((id) => by.get(id)).filter(Boolean) as ResultRow[], ...list.filter((r) => !order.includes(r.id))];
+    };
+    // the better order applies inside each part; the rows the words match stay above the divider
+    if (top) return restOpen ? [...sorted(rows.slice(0, top)), ...sorted(rows.slice(top))] : sorted(rows.slice(0, top));
+    return sorted(rows);
+  }, [rows, order, top, restOpen]);
 
   // Keep a selection: the first row by default, the deep-linked or cited one when set.
   useEffect(() => {
@@ -330,6 +344,23 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
 
   const counts = data?.counts.scope;
   const tabs = visibleScopes(data);
+  const tabCount = (k: string) => (k === "all" ? data?.total : counts?.[k as keyof typeof counts]) ?? 0;
+  // how many tabs fit: each is about its label and count wide; the active one always shows
+  const tabSplit = useMemo(() => {
+    const est = (t: (typeof tabs)[number]) => 22 + t.label.length * 7.2 + (tabCount(t.key) ? String(tabCount(t.key)).length * 6.5 + 6 : 0);
+    const room = tabRowWidth - (tabRowWidth >= 560 ? 120 : 40) - 72;
+    let used = 0;
+    const shown: typeof tabs = [];
+    const more: typeof tabs = [];
+    for (const t of tabs) {
+      const w = est(t);
+      if (used + w <= room || shown.length === 0 || !tabRowWidth) { shown.push(t); used += w; } else more.push(t);
+    }
+    if (!more.length) return { shown: tabs, more };
+    const active = more.find((t) => t.key === scope);
+    if (active) { const last = shown.pop()!; more.splice(more.indexOf(active), 1, last); shown.push(active); }
+    return { shown, more };
+  }, [tabs, tabRowWidth, scope, data]); // eslint-disable-line react-hooks/exhaustive-deps
   const capability = me.data?.capability;
   const preview = ws.previewOpen && selRow && !takeoverMode;
 
@@ -337,24 +368,33 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
     <div className="flex min-h-0 flex-1">
       <div className="relative flex min-w-0 flex-1 flex-col">
         <div className="flex shrink-0 flex-col gap-2 border-b border-border px-4 pb-2 pt-3">
-          <SearchBox ref={box} value={q} onCommit={ws.setQuery} onAsk={onAsk} onDown={() => { listRef.current?.focus(); move(0); }} />
+          <SearchBox ref={box} value={q} onCommit={ws.setQuery} onAsk={onAsk} onDown={() => { listRef.current?.focus(); move(0); }}
+            onTab={!placeholder && (() => { const u = understoodFor(q, data); return u.understood.length + u.suggestions.length > 0; })() ? focusChips : undefined} />
+          {!placeholder && <div ref={chipsRef} className="contents"><UnderstoodBar q={q} data={data} onChange={(next) => { setQ(next); box.current?.focus({ select: false }); }} /></div>}
           <ChipBar q={q} data={data} scope={scope} onChange={setQ} onSave={() => setSaving(true)} filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
-          <div className="-mb-2 flex items-center gap-0.5">
-          <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto scrollbar-none [mask-image:linear-gradient(to_right,black_calc(100%-24px),transparent)]" role="tablist" aria-label="Scope">
-            {tabs.map((t, i) => {
+          {/* tabs that do not fit go under More, so none is cut off or hidden under the sort button */}
+          <div ref={tabRow} className="@container -mb-2 flex items-center gap-0.5">
+          <div className="flex min-w-0 flex-1 items-center gap-0.5" role="tablist" aria-label="Scope">
+            {tabSplit.shown.map((t) => {
+              const i = tabs.indexOf(t);
               const active = scope === t.key;
               return (
                 <button key={t.key} type="button" role="tab" aria-selected={active} title={`${i + 1}`} onClick={() => setParam("scope", t.key === "all" ? null : t.key)}
                   className={cn("relative inline-flex h-8 shrink-0 items-center gap-1.5 px-2.5 text-13 font-medium transition-colors", active ? "text-foreground after:absolute after:inset-x-2.5 after:bottom-0 after:h-[2px] after:rounded-t-full after:bg-foreground" : "text-muted-foreground hover:text-foreground")}>
-                  {t.label}{(t.key === "all" ? data?.total : counts?.[t.key]) ? <span className="tnum text-11 text-muted-foreground">{t.key === "all" ? data!.total : counts![t.key]}</span> : null}
+                  {t.label}{tabCount(t.key) ? <span className="tnum text-11 text-muted-foreground">{tabCount(t.key)}</span> : null}
                 </button>
               );
             })}
+            {tabSplit.more.length > 0 && (
+              <Menu open={moreOpen} onClose={() => setMoreOpen(false)}
+                items={tabSplit.more.map((t) => ({ key: t.key, label: t.label, hint: tabCount(t.key) ? String(tabCount(t.key)) : undefined, onSelect: () => setParam("scope", t.key === "all" ? null : t.key) }))}
+                anchor={<button type="button" data-testid="more-tabs" onClick={() => setMoreOpen(!moreOpen)} className="inline-flex h-8 shrink-0 items-center gap-1 px-2.5 text-13 font-medium text-muted-foreground transition-colors hover:text-foreground">More<ChevronDown className="size-3.5" /></button>} />
+            )}
           </div>
             <div className="ml-auto flex shrink-0 items-center">
               <Menu open={sortOpen} onClose={() => setSortOpen(false)} align="end"
                 items={[["best", "Best match"], ["newest", "Newest"], ["oldest", "Oldest"]].map(([k, l]) => ({ key: k!, label: l!, hint: sort === k ? "on" : undefined, onSelect: () => setParam("sort", k === "best" ? null : k!) }))}
-                anchor={<button type="button" onClick={() => setSortOpen(!sortOpen)} className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground hover:bg-card-hover hover:text-foreground"><ArrowUpDown className="size-3.5" />{{ best: "Best match", newest: "Newest", oldest: "Oldest" }[sort] ?? "Best match"}</button>} />
+                anchor={<button type="button" onClick={() => setSortOpen(!sortOpen)} title="Sort" className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground hover:bg-card-hover hover:text-foreground"><ArrowUpDown className="size-3.5" /><span className="hidden @[560px]:inline">{{ best: "Best match", newest: "Newest", oldest: "Oldest" }[sort] ?? "Best match"}</span></button>} />
             </div>
           </div>
         </div>
@@ -362,7 +402,7 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
         {capability?.mode === "keyword" && <KeywordBanner reason={capability.reason} />}
         {data && <SemanticBanner status={data.embedder} />}
 
-        <div ref={listRef} tabIndex={-1} role="listbox" aria-label="Results" className="min-h-0 flex-1 overflow-y-auto outline-none" data-testid="results">
+        <div ref={listRef} tabIndex={-1} role="listbox" aria-label="Results" className="min-h-0 flex-1 overflow-y-auto outline-none" data-testid="results" data-loading={!data || placeholder ? "1" : "0"}>
           {data?.parsed.errors.length ? <p className="px-4 pt-2 text-11 text-warning-text">{data.parsed.errors[0]!.message}.</p> : null}
           {isQuestion(q) && <div className="px-3 pt-3"><AnswerStrip query={q} queryId={data?.queryId ?? null} rev={rev} cached={cached?.answer ?? null} onAnswer={onAnswer} /></div>}
           {data?.entities.length ? <EntityStrip chips={data.entities} onSearch={(name) => setQ(`with:"${name}"`)} /> : null}
@@ -372,9 +412,9 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
             <ResultSkeleton />
           ) : (
             <>
-              <div className="flex h-8 items-center gap-2 whitespace-nowrap px-4 text-11 text-muted-foreground">
+              <div className="flex min-h-8 flex-wrap items-center gap-x-2 gap-y-1 whitespace-nowrap px-4 py-1 text-11 text-muted-foreground">
                 <span className="label-caps">{fmtNum(data.total)} {data.total === 1 ? "result" : "results"}</span>
-                {data.hiddenByFilters > 0 && <><span>·</span><span><span className="font-medium text-foreground">{data.hiddenByFilters} hidden by filters</span></span><button type="button" className="underline-offset-2 hover:text-foreground hover:underline" onClick={() => setQ(freeText(parsed))}>Clear</button></>}
+                {(data.hiddenBy?.length || data.hiddenByFilters > 0) ? <><span>·</span><HiddenBy q={q} data={data} setQ={setQ} /></> : null}
                 {fromCache && cached && <SavedNote at={cached.at} onRefresh={refresh} />}
                 {newResults && (
                   <button type="button" data-testid="new-results" onClick={applyNew}
@@ -382,18 +422,23 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
                     <ArrowUp className="size-3" />{newResults.n} new {newResults.n === 1 ? "result" : "results"}
                   </button>
                 )}
-                <span className="ml-auto min-w-0 truncate tnum" title={`${data.ms} ms${order ? ", reranked by Jev" : ""}${!data.embedder.semantic ? ", keyword and sample embedder" : ""}`}>{order ? "Reranked by Jev" : ""}<span className="hidden 2xl:inline">{order ? " · " : ""}{data.ms} ms{!data.embedder.semantic ? " · keyword and sample embedder" : ""}</span></span>
+                <span className="ml-auto min-w-0 truncate tnum" data-testid="order-note" title={`${order ? `${COPY.judgeOrdered}. ` : ""}${data.ms} ms${!data.embedder.semantic ? ", matched by words" : ""}`}>{order ? COPY.bestFirst : ""}<span className="hidden 2xl:inline">{order ? " · " : ""}{data.ms} ms{!data.embedder.semantic ? " · matched by words" : ""}</span></span>
               </div>
               <QueryNotes data={data} q={q} setQ={setQ} />
+              {data.fallback === "filters" && !data.matchedWords && shown.length > 0 && <div className="px-4 pb-2"><Nearby q={q} data={data} setQ={setQ} /></div>}
               {shown.length === 0 ? (
                 <Empty q={q} data={data} setQ={setQ} onAsk={() => onAsk(q)} />
               ) : (
                 <div className={cn("flex flex-col pb-6 transition-opacity", placeholder && "opacity-60")}>
                   {shown.map((r, i) => (
-                    <ResultRowView key={r.id} row={r} index={i} selected={r.id === ws.selectedId}
-                      onSelect={() => { movedSince.current = true; ws.select(r.id, { open: true }); listRef.current?.focus(); }}
-                      onOpen={() => { if (r.url) window.open(r.url, "_blank", "noopener"); }} />
+                    <div key={r.id} className="contents">
+                      {top > 0 && i === top && <RestDivider label={data.restLabel ?? "Other results"} n={data.total - top} open onToggle={() => setRestOpen(false)} />}
+                      <ResultRowView row={r} index={i} selected={r.id === ws.selectedId}
+                        onSelect={() => { movedSince.current = true; ws.select(r.id, { open: true }); listRef.current?.focus(); }}
+                        onOpen={() => { if (r.url) window.open(r.url, "_blank", "noopener"); }} />
+                    </div>
                   ))}
+                  {top > 0 && !restOpen && <RestDivider label={data.restLabel ?? "Other results"} n={data.total - top} open={false} onToggle={() => setRestOpen(true)} />}
                 </div>
               )}
             </>
@@ -418,13 +463,25 @@ function Results({ box, q, scope, sort, setParam, onAsk }: {
   }
 }
 
+/** The line between the rows the words match best and the rest: "Other messages in Slack, 53", collapsed by default. */
+function RestDivider({ label, n, open, onToggle }: { label: string; n: number; open: boolean; onToggle: () => void }) {
+  return (
+    <button type="button" data-testid="rest-divider" aria-expanded={open} onClick={onToggle}
+      className="mx-4 my-1 flex items-center gap-2 border-t border-border pt-2 text-left text-11 text-muted-foreground transition-colors hover:text-foreground">
+      <ChevronDown className={cn("size-3.5 transition-transform", !open && "-rotate-90")} />
+      <span className="font-medium">{label}</span><span className="tnum">{fmtNum(n)}</span>
+      <span className="ml-auto">{open ? "Hide" : "Show"}</span>
+    </button>
+  );
+}
+
 /** "Saved results from 4 min ago · Refresh ⇧R": the page came from the browser store. */
 function SavedNote({ at, onRefresh }: { at: number; onRefresh: () => void }) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 30_000); return () => clearInterval(t); }, []);
   const min = Math.floor((now - at) / 60_000);
   return (
-    <span className="flex items-center gap-1.5" data-testid="saved-note" title={`Saved in this browser at ${new Date(at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}. Refresh runs the search, the Jev order and the answer again.`}>
+    <span className="flex items-center gap-1.5" data-testid="saved-note" title={`Saved in this browser at ${new Date(at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}. Refresh runs the search, the order and the answer again.`}>
       <span>·</span>
       <span>Saved results from {min < 1 ? "just now" : `${min} min ago`}</span>
       <button type="button" data-testid="refresh-results" onClick={onRefresh} className="inline-flex h-6 items-center gap-1 rounded-md px-1.5 font-medium text-foreground transition-colors hover:bg-card-hover">
@@ -447,23 +504,95 @@ function ResultSkeleton() {
   );
 }
 
+/** The box without one filter: a read phrase is kept as its words, a typed filter comes out. */
+function dropFilter(q: string, h: NonNullable<SearchResponse["hiddenBy"]>[number]): string {
+  if (h.phrase !== null && h.start !== null && h.end !== null) return keepWords(q, [{ phrase: h.phrase, start: h.start, end: h.end }]);
+  return q.split(/(\s+)/).filter((w) => w.trim() !== h.filter).join("").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Which filter hides how many, each with a one-click drop, right by the count. "Hides N" always
+ * means the same thing: dropping that filter adds N results. With two filters or more, "All
+ * filters hide N" is what clearing them all adds; with one, its own button says it.
+ */
+function HiddenBy({ q, data, setQ }: { q: string; data: SearchResponse; setQ: (q: string) => void }) {
+  const list = (data.hiddenBy ?? []).slice(0, 3);
+  const all = (data.hiddenBy?.length ?? 0) !== 1 && data.hiddenByFilters > 0;
+  if (!list.length && !all) return null;
+  const pill = "inline-flex h-6 items-center gap-1 rounded-md border border-border px-1.5 text-11 text-foreground transition-colors hover:border-border-strong hover:bg-card-hover";
+  return (
+    <span className="flex flex-wrap items-center gap-1" data-testid="hidden-by">
+      {list.map((h) => (
+        <button key={h.filter} type="button" onClick={() => setQ(dropFilter(q, h))} title={`Search again without ${h.label}: ${h.n} more ${h.n === 1 ? "result" : "results"}`} className={pill}>
+          <span className="text-muted-foreground">{h.label} hides {h.n}</span><span className="font-medium">Drop</span>
+        </button>
+      ))}
+      {all && (
+        <button type="button" data-testid="hidden-all" onClick={() => setQ(wordsOnly(q, data))} title={`Search again without any filter: ${data.hiddenByFilters} more ${data.hiddenByFilters === 1 ? "result" : "results"}`} className={pill}>
+          <span className="text-muted-foreground">All filters hide {data.hiddenByFilters}</span><span className="font-medium">Clear all</span>
+        </button>
+      )}
+    </span>
+  );
+}
+
+/** The box with every filter gone: typed ones dropped, read ones kept as their words. */
+function wordsOnly(q: string, data: SearchResponse | undefined): string {
+  return freeText(parseQuery(keepWords(q, data?.understood ?? [])));
+}
+
 function Empty({ q, data, setQ, onAsk }: { q: string; data: SearchResponse; setQ: (q: string) => void; onAsk: () => void }) {
   const sources = useSources();
-  const n = new Set((sources.data?.sources ?? []).map((s) => s.platform)).size;
-  const p = data.parsed;
+  // the tools the sidebar lists with something in them: the same number, never a source still getting ready
+  const n = sources.data ? new Set(sources.data.sources.filter((s) => s.health.itemCount > 0).map((s) => s.platform)).size : 0;
+  // the buttons below edit filters typed in the box; filters read from the sentence come off as words
+  const p = parseQuery(q);
+  const read = data.understood ?? [];
   const from = opValues(p, "from");
   const srcs = opValues(p, "source");
   const dated = ["after", "before", "on", "updated", "during"].some((k) => opValues(p, k as never).length);
   return (
     <div className="fade-in flex flex-col gap-3 px-4 py-8" data-testid="empty">
-      <p className="text-13">Nothing matched <span className="rounded-sm bg-muted px-1 font-mono text-xs">{q}</span> {srcs.length ? <>in {srcs.map(platformName).join(", ")}</> : <>in {n} sources</>}.</p>
+      <p className="text-13">Nothing matched <span className="font-medium">“{q}”</span> {srcs.length ? <>in {srcs.map(platformName).join(", ")}</> : <>{n ? `in your ${n} sources` : "in your sources"}</>}.</p>
       <div className="flex flex-wrap gap-1.5">
+        {read.map((u) => <Button key={`${u.start}-${u.filter}`} size="sm" onClick={() => setQ(keepWords(q, [u]))}>Remove {u.label}</Button>)}
         {from.length > 0 && <Button size="sm" onClick={() => setQ(applyChip(q, { key: "from", values: null }))}>Remove From: {from.map((f) => data.entities.find((e) => e.name.toLowerCase().startsWith(f.toLowerCase()))?.name ?? f).join(", ")}</Button>}
         {srcs.length > 0 && <Button size="sm" onClick={() => setQ(applyChip(q, { key: "source", values: null }))}>Search all sources</Button>}
         {dated && <Button size="sm" onClick={() => setQ(["after", "before", "on", "updated", "during"].reduce((acc, k) => applyChip(acc, { key: k as never, values: null }), q))}>Search all time</Button>}
-        {data.hiddenByFilters > 0 && <Button size="sm" onClick={() => setQ(freeText(p))}>Show {data.hiddenByFilters} hidden by filters</Button>}
+        {(data.hiddenBy ?? []).map((h) => <Button key={h.filter} size="sm" onClick={() => setQ(dropFilter(q, h))}>Without {h.label}, {h.n} {h.n === 1 ? "result" : "results"}</Button>)}
+        {data.hiddenByFilters > 0 && (data.hiddenBy?.length ?? 0) !== 1 && <Button size="sm" onClick={() => setQ(wordsOnly(q, data))}>Without any filter, {data.hiddenByFilters} {data.hiddenByFilters === 1 ? "result" : "results"}</Button>}
         <Button size="sm" icon={<Sparkles />} onClick={onAsk}>Ask the assistant</Button>
       </div>
+      <Nearby q={q} data={data} setQ={setQ} />
+    </div>
+  );
+}
+
+/**
+ * Nothing in that time, but there is outside it ("mail from Felix Wagner last month", "emails with
+ * attachments from Anika"): the closest rows without the date or the state, under a line that says
+ * so, instead of an empty page.
+ */
+function Nearby({ q, data, setQ }: { q: string; data: SearchResponse; setQ: (q: string) => void }) {
+  const ws = useWorkspace();
+  // a time or a state ("with an attachment", "unread") is the filter to look past; never a person or a kind of item
+  const hb: { label: string; filter: string; phrase: string | null; start: number | null; end: number | null }[] = [...(data.hiddenBy ?? []), ...(data.understood ?? [])];
+  const date = hb.find((h) => /^(after|before|on|during|updated):/.test(h.filter)) ?? hb.find((h) => /^(has|is|lane|status):/.test(h.filter));
+  // the phrase goes away entirely here (not kept as words): "receipts last month" looks at "receipts" any time
+  const dropped = !date ? null : date.phrase !== null && date.start !== null && date.end !== null && q.slice(date.start, date.end) === date.phrase
+    ? `${q.slice(0, date.start)} ${q.slice(date.end)}`.replace(/\s+/g, " ").trim() || null
+    : dropFilter(q, { ...date, n: 0 });
+  const near = useQuery({ queryKey: ["nearby", dropped], queryFn: () => api.search({ q: dropped!, limit: 5 }), enabled: !!dropped, staleTime: 60_000 });
+  if (!date || !near.data?.results.length) return null;
+  return (
+    <div className="flex flex-col gap-1 pt-2" data-testid="nearby">
+      <p className="text-xs text-muted-foreground">Without {date.label}, {near.data.total} {near.data.total === 1 ? "result" : "results"}:</p>
+      <div className="-mx-4 flex flex-col">
+        {near.data.results.map((r, i) => (
+          <ResultRowView key={r.id} row={r} index={i} selected={r.id === ws.selectedId} onSelect={() => ws.select(r.id, { open: true })} onOpen={() => { if (r.url) window.open(r.url, "_blank", "noopener"); }} />
+        ))}
+      </div>
+      {near.data.total > near.data.results.length && <button type="button" className="w-fit text-xs font-medium text-foreground underline-offset-2 hover:underline" onClick={() => setQ(dropped!)}>Show all {near.data.total}</button>}
     </div>
   );
 }
@@ -471,10 +600,10 @@ function Empty({ q, data, setQ, onAsk }: { q: string; data: SearchResponse; setQ
 function KeywordBanner({ reason }: { reason?: string }) {
   const [hidden, setHidden] = useState(() => sessionStorage.getItem("search.kwbanner") === "1");
   if (hidden) return null;
-  const why = reason === "forced" ? "Keyword-only was forced for this run" : reason === "embedding_not_granted" ? "No embedding model is in your grant" : reason === "cannot_create_extension" ? "This database does not allow the vector extension" : "pgvector is not available here";
+  const why = reason && reason in MEANING_DB_REASON ? MEANING_DB_REASON[reason as keyof typeof MEANING_DB_REASON] : MEANING_DB_REASON.extension_unavailable;
   return (
     <div role="status" className="flex h-9 shrink-0 items-center gap-3 border-b border-border bg-warning-text/[0.07] px-4 text-xs">
-      <span className="flex-1">Semantic search is off. {why}. Results are keyword matches.</span>
+      <span className="flex-1">{COPY.meaningOff} {why}. {COPY.meaningOffResults}</span>
       <Link to="/settings/search" className="font-medium underline-offset-2 hover:underline">Settings</Link>
       <button type="button" className="text-muted-foreground hover:text-foreground" onClick={() => { sessionStorage.setItem("search.kwbanner", "1"); setHidden(true); }}>Dismiss</button>
     </div>
@@ -488,9 +617,9 @@ function SemanticBanner({ status }: { status: SearchResponse["embedder"] }) {
   if (status.semantic || (status.reason !== "not_in_grant" && status.reason !== "error") || hidden) return null;
   return (
     <div role="status" data-testid="semantic-banner" className="flex h-9 shrink-0 items-center gap-3 border-b border-border bg-warning-text/[0.07] px-4 text-xs">
-      <span className="min-w-0 flex-1 truncate">Semantic search is off. {status.message ?? "The embedding model did not answer."}{status.reason === "error" ? " Results are keyword matches." : ""}</span>
+      <span className="min-w-0 flex-1 truncate">{COPY.meaningOff} {meaningOffReason(status.reason, status.message)}{status.reason === "error" ? ` ${COPY.meaningOffResults}` : ""}</span>
       {status.reason === "not_in_grant"
-        ? <a href="https://app.withone.ai/connections" target="_blank" rel="noreferrer" className="shrink-0 font-medium underline-offset-2 hover:underline">Manage in One</a>
+        ? <a href="https://app.withone.ai/connections" target="_blank" rel="noreferrer" className="shrink-0 font-medium underline-offset-2 hover:underline">{COPY.manageInOne}</a>
         : <Link to="/settings/search" className="shrink-0 font-medium underline-offset-2 hover:underline">Settings</Link>}
       <button type="button" className="shrink-0 text-muted-foreground hover:text-foreground" onClick={() => { sessionStorage.setItem(key, "1"); setHidden(true); }}>Dismiss</button>
     </div>
@@ -501,7 +630,9 @@ function SemanticBanner({ status }: { status: SearchResponse["embedder"] }) {
 function QueryNotes({ data, q, setQ }: { data: SearchResponse; q: string; setQ: (q: string) => void }) {
   const dym = data.didYouMean;
   const dates = data.dateProposals ?? [];
-  if (!dym && !data.fallback && !dates.length) return null;
+  const und = data.undated;
+  const undatedLine = und && (und.deals || und.tasks) ? [und.deals ? `${und.deals} ${und.deals === 1 ? "deal has" : "deals have"} no close date` : "", und.tasks ? `${und.tasks} ${und.tasks === 1 ? "task has" : "tasks have"} no due date` : ""].filter(Boolean).join(" and ") : "";
+  if (!dym && !data.fallback && !dates.length && !undatedLine) return null;
   const useDates = (d: (typeof dates)[number]) => {
     const i = q.toLowerCase().indexOf(d.remove.toLowerCase());
     const rest = i >= 0 ? `${q.slice(0, i)}${q.slice(i + d.remove.length)}` : q;
@@ -516,8 +647,17 @@ function QueryNotes({ data, q, setQ }: { data: SearchResponse; q: string; setQ: 
           <span className="text-muted-foreground">?</span>
         </p>
       )}
+      {undatedLine && <p className="text-muted-foreground" data-testid="undated">{undatedLine}, so {(und!.deals || 0) + (und!.tasks || 0) === 1 ? "it is" : "they are"} not listed.</p>}
       {data.fallback === "or" && (
         <p className="text-muted-foreground" data-testid="or-fallback">No result had every word, so these match any of them.</p>
+      )}
+      {data.fallback === "filters" && (
+        <p className="flex flex-wrap items-center gap-x-2 text-muted-foreground" data-testid="filters-fallback">
+          <span>{data.matchedWords
+            ? <>Only {data.matchedWords} {data.matchedWords === 1 ? "result" : "results"} also had “{data.unmatched}”, so {data.matchedWords === 1 ? "it comes" : "they come"} first, then everything else that matches the filters.</>
+            : <>No result also had “{data.unmatched}”, so these are everything that matches the filters.</>}</span>
+          <button type="button" className="font-medium text-foreground underline-offset-2 hover:underline" onClick={() => setQ(keepWords(q, data.understood ?? []))}>Search the exact words instead</button>
+        </p>
       )}
       {dates.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5" data-testid="date-proposals">

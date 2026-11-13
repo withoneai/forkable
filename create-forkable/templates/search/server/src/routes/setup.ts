@@ -9,7 +9,7 @@ import { resolve } from "node:path";
 import { Hono, type Context } from "hono";
 import type { ConnectSetupResponse } from "@search/core";
 import { CONNECT_FIELDS, checkConnectField, type ConnectFieldName } from "../connect-fields.js";
-import { connectConfigured, connectExtraFile, localRedirectUri, connectEnvOf, type ServerEnv } from "../config.js";
+import { connectConfigured, localRedirectUri, connectEnvOf, type ServerEnv } from "../config.js";
 import type { ConnectName } from "../connect-store.js";
 import type { AppEnv, Deps } from "../deps.js";
 import { ApiError, badRequest } from "../errors.js";
@@ -20,14 +20,14 @@ export const setupRoutes = new Hono<AppEnv>();
 const LOCAL_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
 
 /** Answers only this machine's own pages: no other Host, no other Origin on a write. */
-export function localOnly(c: Context<AppEnv>): void {
+export function localOnly(c: Context<AppEnv>, message = "Connect setup answers only on this computer."): void {
   const host = (c.req.header("host") ?? "").replace(/:\d+$/, "");
-  if (!LOCAL_HOSTS.has(host)) throw new ApiError(403, "local_only", "Connect setup answers only on this computer.");
+  if (!LOCAL_HOSTS.has(host)) throw new ApiError(403, "local_only", message);
   const origin = c.req.header("origin");
   if (origin && c.req.method !== "GET") {
     let ok = false;
     try { ok = LOCAL_HOSTS.has(new URL(origin).hostname); } catch { ok = false; }
-    if (!ok) throw new ApiError(403, "local_only", "Connect setup answers only on this computer.");
+    if (!ok) throw new ApiError(403, "local_only", message);
   }
 }
 
@@ -39,18 +39,14 @@ function guard(c: Context<AppEnv>) {
   return setup;
 }
 
-/** The ask Search would send: connect.manifest.json plus connect.extra.json (D26). */
+/** The Connect app as code: one.connect.ts (its ask is "everything", so a new source never changes it). */
 export function askHash(env: Pick<ServerEnv, "ROOT" | "ENV_DIR">): string {
   const read = (f: string) => (existsSync(f) ? readFileSync(f, "utf8") : "");
-  return createHash("sha256").update(read(resolve(env.ROOT, "connect.manifest.json"))).update("\u0000").update(read(connectExtraFile(env))).digest("hex").slice(0, 16);
+  return createHash("sha256").update(read(resolve(env.ROOT, "one.connect.ts"))).digest("hex").slice(0, 16);
 }
 
 function storedAsk(deps: Deps): string | null {
   try { return (JSON.parse(readFileSync(resolve(deps.env.HOME, "connect-ask.json"), "utf8")) as { hash?: string }).hash ?? null; } catch { return null; }
-}
-
-function extraPlatforms(env: Pick<ServerEnv, "ROOT" | "ENV_DIR">): number {
-  try { return Object.keys((JSON.parse(readFileSync(connectExtraFile(env), "utf8")) as { platforms?: object }).platforms ?? {}).length; } catch { return 0; }
 }
 
 export function setupStatus(deps: Deps): ConnectSetupResponse {
@@ -60,7 +56,8 @@ export function setupStatus(deps: Deps): ConnectSetupResponse {
   const cr = setup.creator.get();
   const configured = connectConfigured(env);
   const prev = storedAsk(deps);
-  const askChanged = !!env.ONE_CLIENT_ID && (prev ? prev !== askHash(env) : extraPlatforms(env) > 0);
+  // An app made before the ask became "everything" still has a permission set (the CLI removes it on update).
+  const askChanged = !!env.ONE_CLIENT_ID && (prev ? prev !== askHash(env) : !!env.ONE_PERMISSION_SET);
   const fromEnv = connectEnvOf(env);
   return {
     available: true, configured, source: setup.resolution.source,
@@ -122,6 +119,7 @@ setupRoutes.post("/setup/connect", async (c) => {
     if (values.ONE_CLIENT_ID && values.ONE_CLIENT_ID !== fromEnv.ONE_CLIENT_ID) throw new ApiError(409, "conflict", "Your .env names a different Connect app, and that one wins. Remove ONE_CLIENT_ID from .env to use this one.");
     toStore.ONE_CLIENT_ID = fromEnv.ONE_CLIENT_ID;
     if (fromEnv.ONE_PERMISSION_SET && !values.ONE_PERMISSION_SET) toStore.ONE_PERMISSION_SET = fromEnv.ONE_PERMISSION_SET;
+    else if (!fromEnv.ONE_PERMISSION_SET && !values.ONE_PERMISSION_SET && (await setup.store.values()).ONE_PERMISSION_SET) await setup.store.remove(["ONE_PERMISSION_SET"]);
     toStore.ONE_REDIRECT_URI = fromEnv.ONE_REDIRECT_URI ?? localRedirectUri(deps.env.PORT);
   } else {
     toStore.ONE_REDIRECT_URI = localRedirectUri(deps.env.PORT);

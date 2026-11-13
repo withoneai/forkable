@@ -39,7 +39,8 @@ export const PENDING_COOKIE = "search_oauth_pending";
 
 const PENDING_TTL = 10 * 60_000;
 const CODE_TTL = 60_000;
-const ACCESS_TTL = 60 * 60_000;
+// SEARCH_OAUTH_ACCESS_TTL_S only shortens it for the refresh stress test.
+const ACCESS_TTL = Number(process.env.SEARCH_OAUTH_ACCESS_TTL_S || 3600) * 1000;
 const REFRESH_TTL = 30 * 24 * 60 * 60_000;
 
 export const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");
@@ -109,6 +110,25 @@ function redirectAllowed(uri: string): boolean {
 }
 
 export interface IssuedTokens extends OAuthTokens { refresh_token: string }
+
+/**
+ * Refresh grace (SPEC 16.5). Several local processes (agent bridges, the CLI) share
+ * one token file. They take a file lock before refreshing, but a process can die, or
+ * time out on a hung request, after this server rotated the refresh token and before
+ * the new pair reached the file. Then the next process presents the old token again.
+ * Within ROTATION_GRACE_MS of its rotation, from the same client, while the pair it
+ * was rotated into has not itself been used or revoked, the server answers that same
+ * pair again instead of calling it theft. The pair is kept only in this process's
+ * memory for the window (never on disk), so after a restart or after the window every
+ * second use of a rotated token still revokes the whole sign-in.
+ */
+export const ROTATION_GRACE_MS = 30_000;
+const recentRotations = new Map<string, { clientId: string; at: number; successor: string; issued: IssuedTokens }>();
+function rememberRotation(oldHash: string, entry: { clientId: string; successor: string; issued: IssuedTokens }): void {
+  const now = Date.now();
+  for (const [k, v] of recentRotations) if (now - v.at > ROTATION_GRACE_MS) recentRotations.delete(k);
+  recentRotations.set(oldHash, { ...entry, at: now });
+}
 
 export class PgOAuthProvider implements OAuthServerProvider {
   constructor(private deps: Deps) {}
@@ -192,7 +212,16 @@ export class PgOAuthProvider implements OAuthServerProvider {
       const r = found.rows[0] as { client_id: string; user_id: string; family_id: string; scopes: string[]; resource: string | null; expires_at: Date; revoked_at: Date | null; replaced_by: string | null } | undefined;
       if (!r) return { error: new InvalidGrantError("Unknown refresh token.") };
       if (r.client_id !== client.client_id) return { error: new InvalidGrantError("The refresh token belongs to another client.") };
+      if (r.replaced_by) {
+        const g = recentRotations.get(hash);
+        if (g && g.clientId === client.client_id && g.successor === r.replaced_by && Date.now() - g.at <= ROTATION_GRACE_MS) {
+          const next = await tx.execute(sql`select replaced_by, revoked_at from oauth_tokens where token_hash = ${g.successor} and kind = 'refresh' for update`);
+          const s = next.rows[0] as { replaced_by: string | null; revoked_at: Date | null } | undefined;
+          if (s && !s.replaced_by && !s.revoked_at) return { tokens: g.issued };
+        }
+      }
       if (r.replaced_by || r.revoked_at) {
+        recentRotations.delete(hash);
         // Reuse of a rotated (or revoked) refresh token: someone else may hold it. Kill the family.
         await tx.update(oauthTokens).set({ revokedAt: new Date() }).where(and(eq(oauthTokens.familyId, r.family_id), isNull(oauthTokens.revokedAt)));
         return { error: new InvalidGrantError(r.replaced_by ? "Refresh token reuse detected; every token of this sign-in is revoked. Sign in again." : "Refresh token revoked.") };
@@ -202,11 +231,17 @@ export class PgOAuthProvider implements OAuthServerProvider {
       if (want.some((s) => !r.scopes.includes(s))) return { error: new InvalidScopeError("A refresh cannot widen the scopes.") };
       if (resource && r.resource && resource.href !== r.resource) return { error: new InvalidTargetError("resource does not match the original grant.") };
       const issued = await this.issue(client.client_id, r.user_id, want, r.resource, r.family_id, tx as unknown as Db);
-      await tx.update(oauthTokens).set({ replacedBy: sha256(issued.refresh_token), revokedAt: new Date(), lastUsedAt: new Date() }).where(eq(oauthTokens.tokenHash, hash));
+      const successor = sha256(issued.refresh_token);
+      await tx.update(oauthTokens).set({ replacedBy: successor, revokedAt: new Date(), lastUsedAt: new Date() }).where(eq(oauthTokens.tokenHash, hash));
+      // remembered before commit, so a second request waiting on this row's lock finds it
+      rememberRotation(hash, { clientId: client.client_id, successor, issued });
       return { tokens: issued };
     });
     if ("error" in out) throw out.error;
     await this.touchClient(client.client_id);
+    // tests only (cli/scripts/stress-refresh.ts): a slow answer after the rotation committed
+    const slow = Number(process.env.SEARCH_TEST_TOKEN_DELAY_MS ?? 0);
+    if (slow > 0) await new Promise((r) => setTimeout(r, slow * (0.5 + Math.random() * 0.5)));
     return out.tokens!;
   }
 
@@ -466,4 +501,33 @@ export function apiBearer(deps: Deps, provider: PgOAuthProvider): MiddlewareHand
     }
     return next();
   };
+}
+
+// ---------- agent sign-ins (SPEC 16.5) ----------
+
+/**
+ * A sign-in for one of the person's coding agents, issued when they click Connect
+ * on the Agents screen: the click in their own signed-in session, on this computer,
+ * with an exact same-origin check, is the consent. It is a normal OAuth client
+ * ("Search for Claude Code") with a rotating token pair bound to /mcp and the read
+ * and ask scopes only, listed under Signed-in apps and revocable like any other.
+ * The tokens go to SEARCH_HOME/agents/<agent>-token.json (0600) for the stdio
+ * bridge, never into the agent's own config.
+ */
+export async function issueAgentSignIn(deps: Deps, userId: string, o: { agentId: string; clientName: string; resource: string }): Promise<{ clientId: string; tokens: IssuedTokens }> {
+  const provider = new PgOAuthProvider(deps);
+  const software = `withone-search-agent:${o.agentId}`;
+  const rows = await deps.db.select().from(oauthClients).where(eq(oauthClients.clientName, o.clientName));
+  let clientId = rows.find((r) => (r.metadata as Record<string, unknown>)?.software_id === software)?.clientId;
+  if (!clientId) {
+    clientId = localId("agc");
+    await provider.clientsStore.registerClient({
+      client_id: clientId, client_name: o.clientName, redirect_uris: ["http://127.0.0.1/callback"], token_endpoint_auth_method: "none",
+      grant_types: ["authorization_code", "refresh_token"], response_types: ["code"], scope: "search:read search:ask", software_id: software,
+    } as unknown as OAuthClientInformationFull);
+  }
+  // one live sign-in per agent: a new Connect replaces the old one
+  await deps.db.update(oauthTokens).set({ revokedAt: new Date() }).where(and(eq(oauthTokens.userId, userId), eq(oauthTokens.clientId, clientId), isNull(oauthTokens.revokedAt)));
+  const tokens = await provider.issue(clientId, userId, ["search:read", "search:ask"], o.resource, localId("fam"));
+  return { clientId, tokens };
 }

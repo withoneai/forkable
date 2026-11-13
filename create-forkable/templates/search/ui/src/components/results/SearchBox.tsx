@@ -8,7 +8,11 @@ import { SourceLogo } from "@/components/SourceLogo";
 import { Avatar } from "@/components/ui/Avatar";
 import { Kbd } from "@/components/ui/Kbd";
 
-export interface SearchBoxHandle { focus: () => void; blur: () => void }
+export interface SearchBoxHandle {
+  /** Focuses the box; selects its text unless `select` is false (then the caret goes to the end). */
+  focus: (opts?: { select?: boolean }) => void;
+  blur: () => void;
+}
 
 // Home and the results page each render their own box; the first keystroke on
 // home swaps one for the other. This carries focus (and the caret) across.
@@ -18,7 +22,8 @@ let hadFocus = false;
  * The box. Typing writes the URL after 120 ms (replace, so history keeps one
  * entry per search); Enter commits. While an operator is half typed, up to five
  * completions show under it; Tab accepts the first. On an empty suggestion,
- * Tab asks the assistant.
+ * Tab asks the assistant, unless `onTab` takes focus first (the understood chips
+ * right under the box are next in the Tab order; then Cmd+Enter asks).
  */
 export const SearchBox = forwardRef<SearchBoxHandle, {
   value: string;
@@ -27,7 +32,11 @@ export const SearchBox = forwardRef<SearchBoxHandle, {
   onDown?: () => void;
   size?: "home" | "bar";
   autoFocus?: boolean;
-}>(function SearchBox({ value, onCommit, onAsk, onDown, size = "bar", autoFocus }, ref) {
+  /** Plain words, ideally a sentence from the person's own data ("Try “emails from Priya last week”"). */
+  placeholder?: string;
+  /** Tab: move focus to what comes next (the understood chips). Returns true when it did. */
+  onTab?: () => boolean;
+}>(function SearchBox({ value, onCommit, onAsk, onDown, size = "bar", autoFocus, placeholder = "Search everything, or ask a question", onTab }, ref) {
   const [text, setText] = useState(value);
   const [focused, setFocused] = useState(false);
   const [sug, setSug] = useState<SuggestResponse | null>(null);
@@ -39,7 +48,18 @@ export const SearchBox = forwardRef<SearchBoxHandle, {
   const [edited, setEdited] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const typed = useRef(false);
-  useImperativeHandle(ref, () => ({ focus: () => { input.current?.focus(); input.current?.select(); }, blur: () => input.current?.blur() }), []);
+  useImperativeHandle(ref, () => ({
+    focus: (opts) => {
+      const el = input.current;
+      if (!el) return;
+      el.focus();
+      if (opts?.select === false) {
+        // after a chip changed the text, the value lands on the next render
+        requestAnimationFrame(() => { const n = el.value.length; el.setSelectionRange(n, n); });
+      } else el.select();
+    },
+    blur: () => input.current?.blur(),
+  }), []);
   useEffect(() => {
     if (!hadFocus || !input.current) return;
     const el = input.current;
@@ -109,7 +129,7 @@ export const SearchBox = forwardRef<SearchBoxHandle, {
           autoComplete="off"
           aria-label="Search"
           data-testid="search-box"
-          placeholder="Search everything, or ask a question"
+          placeholder={placeholder}
           onFocus={() => { hadFocus = true; setFocused(true); }}
           onBlur={() => { hadFocus = false; setTimeout(() => setFocused(false), 120); }}
           onChange={(e) => { typed.current = true; setText(e.target.value); setEdited(e.target.value); }}
@@ -118,6 +138,7 @@ export const SearchBox = forwardRef<SearchBoxHandle, {
             if (e.key === "ArrowUp" && showSug) { setSi((v) => Math.max(0, v - 1)); e.preventDefault(); return; }
             if (e.key === "Tab" && !e.shiftKey) {
               if (showSug && useful[si]) { accept(useful[si]!.insert); e.preventDefault(); return; }
+              if (onTab?.()) { e.preventDefault(); return; }
               if (text.trim()) { onAsk(text.trim()); e.preventDefault(); }
               return;
             }
@@ -148,7 +169,8 @@ export const SearchBox = forwardRef<SearchBoxHandle, {
           </button>
         )}
         <span className="flex shrink-0 items-center gap-1.5 text-11 text-muted-foreground">
-          {focused ? (<><Kbd>Tab</Kbd><span>Ask</span></>) : (<><Kbd>/</Kbd>{home && <span className="ml-1.5 flex items-center gap-1"><Kbd>{MOD}</Kbd><Kbd>K</Kbd></span>}</>)}
+          {/* one hint for asking, whatever Tab does at the moment (Tab moves to the chips when there are some) */}
+          {focused ? (<><Kbd>{MOD}</Kbd><Kbd>Enter</Kbd><span>Ask</span></>) : (<><Kbd>/</Kbd>{home && <span className="ml-1.5 flex items-center gap-1"><Kbd>{MOD}</Kbd><Kbd>K</Kbd></span>}</>)}
         </span>
       </div>
       {showSug && (

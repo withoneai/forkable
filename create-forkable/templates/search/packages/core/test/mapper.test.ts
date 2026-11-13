@@ -157,7 +157,7 @@ describe("New profile on the sample (Zendesk)", () => {
     assert.equal(same.diff[0]!.status, "same");
     const ids = await acceptImport(b.db, "usr_other", pv.importId);
     assert.equal(ids.length, 1);
-    await assert.rejects(importPack(b.db, userId, { nope: true }), /not a Search profile pack/);
+    await assert.rejects(importPack(b.db, userId, { nope: true }), /not a Search source file/);
     await assert.rejects(acceptImport(b.db, userId, pv.importId), /expired/);
   });
   it("suggests operators, platforms and recent searches", async () => {

@@ -16,6 +16,7 @@ export const keys = {
   draft: (id: string) => ["draft", id] as const,
   settings: ["settings"] as const,
   engine: ["engine"] as const,
+  onePlan: ["one-plan"] as const,
   access: ["access"] as const,
   ledger: (filters: Record<string, unknown>) => ["ledger", filters] as const,
   saved: ["saved"] as const,
@@ -25,6 +26,7 @@ export const keys = {
   chat: (id: string) => ["chat", id] as const,
   setup: ["setup", "connect"] as const,
   oauthClients: ["oauth-clients"] as const,
+  agents: ["agents"] as const,
   connections: ["connections"] as const,
 };
 
@@ -44,12 +46,15 @@ export function useSearch(q: string, sort: string, scope: ItemKind | "all", enab
 
 export const useItem = (id: string | null) => useQuery({ queryKey: keys.item(id ?? ""), queryFn: () => api.item(id!), enabled: !!id, staleTime: 30_000 });
 export const useEntity = (id: string | null) => useQuery({ queryKey: keys.entity(id ?? ""), queryFn: () => api.entity(id!), enabled: !!id });
-export const useSources = () => useQuery({ queryKey: keys.sources, queryFn: api.sources });
+/** `poll` (ms) rereads while something is moving, like a first index on home. */
+export const useSources = (o: { poll?: number | false } = {}) => useQuery({ queryKey: keys.sources, queryFn: api.sources, refetchInterval: o.poll ?? false });
 export const useSource = (id: string | null) => useQuery({ queryKey: keys.source(id ?? ""), queryFn: () => api.source(id!), enabled: !!id });
 export const useRuns = (id: string | null) => useQuery({ queryKey: keys.runs(id ?? ""), queryFn: () => api.runs(id!), enabled: !!id });
 export const useErrors = (id: string | null) => useQuery({ queryKey: keys.errors(id ?? ""), queryFn: () => api.errors(id!), enabled: !!id });
 export const useProfiles = () => useQuery({ queryKey: keys.profiles, queryFn: api.profiles });
 export const useSettings = () => useQuery({ queryKey: keys.settings, queryFn: api.settings });
+/** Refreshes every 5 s while Settings is open: the count of the last minute moves. */
+export const useOnePlan = () => useQuery({ queryKey: keys.onePlan, queryFn: api.onePlan, refetchInterval: 5_000 });
 export const useEngine = () => useQuery({ queryKey: keys.engine, queryFn: api.engine, staleTime: 60_000 });
 export const useAccess = () => useQuery({ queryKey: keys.access, queryFn: api.access });
 export const useLedger = (filters: { limit?: number; actor?: string; sourceId?: string } = {}) =>
@@ -59,6 +64,11 @@ export const useRecent = () => useQuery({ queryKey: keys.recent, queryFn: api.re
 export const useCatalog = (q: string) => useQuery({ queryKey: keys.catalog(q), queryFn: () => api.catalog(q), placeholderData: keepPreviousData });
 export const useChats = () => useQuery({ queryKey: keys.chats, queryFn: api.chats });
 export const useOAuthClients = () => useQuery({ queryKey: keys.oauthClients, queryFn: api.oauthClients });
+/** The Agents screen. While an agent waits for its sign-in, check every 3 s so the card flips to Connected by itself. */
+export const useAgents = () => useQuery({
+  queryKey: keys.agents, queryFn: api.agents,
+  refetchInterval: (q) => (q.state.data?.agents.some((a) => a.state === "added") ? 3000 : false),
+});
 export const useConnections = () => useQuery({ queryKey: keys.connections, queryFn: api.connections });
 
 export function useSettingsMutation() {

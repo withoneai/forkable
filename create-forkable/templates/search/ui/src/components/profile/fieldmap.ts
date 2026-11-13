@@ -22,12 +22,12 @@ export const TARGETS: TargetSpec[] = [
   { key: "status", label: "Status" },
   { key: "priority", label: "Priority" },
   { key: "labels", label: "Labels" },
-  { key: "container", label: "Container" },
+  { key: "container", label: "Where it lives" },
   { key: "from", label: "Person, from" },
   { key: "assignee", label: "Person, assignee" },
   { key: "email", label: "Email" },
   { key: "company", label: "Company" },
-  { key: "property", label: "Keep as property" },
+  { key: "property", label: "Keep as a detail" },
 ];
 export const targetLabel = (t: Target) => TARGETS.find((x) => x.key === t)?.label ?? t;
 export const REQUIRED: Target[] = ["title", "id", "occurredAt"];
@@ -121,11 +121,11 @@ export function rowsFromProposal(model: ProposalOutput["models"][number] | undef
     if (!path || [...rows.values()].some((r) => r.target === t && r.path)) continue;
     const cur = rows.get(path);
     if (cur && cur.target !== "skip") continue;
-    rows.set(path, { path, target: t, confidence: 0.8, reason: "From the proposal", by: "ai" });
+    rows.set(path, { path, target: t, confidence: 0.8, reason: "Suggested by the AI", by: "ai" });
   }
   // The id lives in list.idPath, which a proposal may not repeat in its notes.
   const idPath = model?.profile.list.idPath;
-  if (idPath && ![...rows.values()].some((r) => r.target === "id")) rows.set(idPath, { path: idPath, target: "id", confidence: 0.9, reason: "The proposal's unique id", by: "ai" });
+  if (idPath && ![...rows.values()].some((r) => r.target === "id")) rows.set(idPath, { path: idPath, target: "id", confidence: 0.9, reason: "The AI's pick for the unique id", by: "ai" });
   return [...rows.values()];
 }
 
@@ -222,13 +222,13 @@ export function humanizeIssue(i: { check: string; level: string; message: string
   if (i.check === "schema" && field === "title") return { level, fixAt: "fields", target: "title", text: `Each ${o.noun} needs a title. Pick the field that names it.` };
   if (i.check === "schema" && /idPath/.test(m)) return { level, fixAt: "advanced", target: "id", text: `Pick the field that tells ${o.noun}s apart.` };
   if (i.check === "schema" && /facets/.test(m)) return { level, fixAt: "fields", text: "One kept field has no name. Skip it or pick it again in Edit fields." };
-  if (i.check === "schema") return { level, fixAt: "fields", text: `Something in the map is incomplete. Open Edit fields and check the fields marked as required.` };
+  if (i.check === "schema") return { level, fixAt: "fields", text: `Something in the fields is incomplete. Open Edit fields and check the fields marked as required.` };
   if (i.check === "title") return { level, fixAt: "fields", target: "title", text: /needs a field/.test(m) ? `Each ${o.noun} needs a title. Pick the field that names it.` : `Some ${o.noun}s have no title. ${m}.` };
   if (i.check === "dates") return { level, fixAt: "fields", target: "occurredAt", text: `Some ${o.noun}s have no readable date (${m.replace(/^Dates parse on /, "")} do). Pick another date field.` };
   if (i.check === "id") return { level, fixAt: "advanced", target: "id", text: `The record id is not unique or is missing (${m}). Pick another one.` };
   if (i.check === "link" && /API/.test(m)) return { level, fixAt: "advanced", target: "url", text: `Open in ${o.platform} would show raw API data, not the ${o.noun}. Clear the link or use the app's address.` };
   if (i.check === "link") return { level, fixAt: "advanced", target: "url", text: /No link/.test(m) ? `Results will not open in ${o.platform}. Add a link in Advanced if you want that.` : m };
-  if (i.check === "pagination" && /more pages/.test(m)) return { level, fixAt: null, text: `${o.platform} lists ${o.noun}s in pages, and this map reads only the first one. Ask AI to fix to read every page.` };
+  if (i.check === "pagination" && /more pages/.test(m)) return { level, fixAt: null, text: `${o.platform} lists ${o.noun}s in pages, and Search reads only the first one now. Ask AI to fix to read every page.` };
   if (i.check === "actions" && /grant/.test(m)) return { level, fixAt: null, text: m };
   if (i.check === "fetch") return { level, fixAt: null, text: m };
   return { level, fixAt: null, text: m };

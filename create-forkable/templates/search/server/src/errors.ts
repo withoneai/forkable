@@ -36,7 +36,7 @@ export function errorBody(err: unknown): { status: ContentfulStatusCode; body: {
   if (err instanceof BlockedByGrant) return { status: 403, body: { error: { code: "blocked_by_grant", message: err.message, data: { actionId: err.actionId, ledger: err.row } } } };
   if (err instanceof SearchError) return { status: statusFor(err.code), body: { error: { code: err.code, message: err.message, ...(err.data !== undefined ? { data: err.data } : {}) } } };
   if (err instanceof OneConnectError) {
-    if (err.code === "reconnect_required") return { status: 409, body: { error: { code: "reconnect_required", message: "Your One grant is gone. Sign in with One again to keep going." } } };
+    if (err.code === "reconnect_required") return { status: 409, body: { error: { code: "reconnect_required", message: "Search lost its access in One. Sign in with One again to keep going." } } };
     if (err.code === "not_connected") return { status: 409, body: { error: { code: "not_connected", message: "Sign in with One first." } } };
     return { status: 502, body: { error: { code: "upstream_error", message: "One did not answer. Try again in a moment." } } };
   }

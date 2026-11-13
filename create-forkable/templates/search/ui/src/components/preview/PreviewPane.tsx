@@ -1,3 +1,6 @@
+import { attendeesOf, eventWhen, eventZoneNote, RSVP_LABEL } from "@/components/results/eventTime";
+import { COPY, PRIORITY } from "@/lib/copy";
+import { Tooltip } from "@/components/ui/Tooltip";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, ChevronDown, ChevronRight, Copy, MapPin, Paperclip, Search as SearchIcon, Sparkles, Video, X } from "lucide-react";
@@ -60,12 +63,13 @@ export function PreviewPane({ row: given, words, quote, onClose, onNext, onAsk, 
 
   return (
     <section aria-label="Preview" data-testid="preview" className={cn("flex min-h-0 flex-col bg-card", takeover ? "absolute inset-0 z-20" : "h-full")}>
-      <header className="flex h-10 shrink-0 items-center gap-2 border-b border-border px-3">
+      {/* the header reads whole at any width: below 480px "Found in" and the tool name on Open step back */}
+      <header className="@container flex h-10 shrink-0 items-center gap-2 border-b border-border px-3">
         {known ? <SourceLogo platform={row.platform} size={16} /> : <Skeleton className="size-4 shrink-0 rounded-sm" />}
-        <span className="flex min-w-0 flex-1 items-center gap-1.5 truncate text-xs text-muted-foreground">{known ? <>Found in <span className="text-foreground">{row.sourceName.split(" · ")[0]}</span>{acctLabel ? <AccountChip short={acct?.short ?? acctLabel} mark={acct?.mark} label={acctLabel} /> : <span>· {KIND_LABEL[row.kind]}</span>}</> : "Loading"}</span>
+        <span className="flex min-w-0 flex-1 items-center gap-1.5 text-xs text-muted-foreground" title={known ? `Found in ${row.sourceName}` : undefined}>{known ? <><span className="hidden shrink-0 @[480px]:inline">Found in</span><span className="min-w-0 truncate text-foreground">{row.sourceName.split(" · ")[0]}</span>{acctLabel ? <AccountChip short={acct?.short ?? acctLabel} mark={acct?.mark} label={acctLabel} /> : <span className="shrink-0">· {KIND_LABEL[row.kind]}</span>}</> : "Loading"}</span>
         {row.url && (
-          <a href={row.url} target="_blank" rel="noreferrer" className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs font-medium text-foreground transition-colors hover:bg-card-hover" title="Open in the source app (O)">
-            Open in {row.sourceName.split(" · ")[0]}<ArrowUpRight className="size-3.5" />
+          <a href={row.url} target="_blank" rel="noreferrer" className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-medium text-foreground transition-colors hover:bg-card-hover" title={`Open in ${row.sourceName.split(" · ")[0]} (O)`}>
+            Open<span className="hidden @[480px]:inline"> in {row.sourceName.split(" · ")[0]}</span><ArrowUpRight className="size-3.5" />
           </a>
         )}
         <IconButton label={copied ? "Copied" : "Copy link"} hint="Y" size="sm" onClick={copy} disabled={!row.url}><Copy /></IconButton>
@@ -92,13 +96,17 @@ export function PreviewPane({ row: given, words, quote, onClose, onNext, onAsk, 
 function Classification({ d }: { d: ItemDetail }) {
   const c = d.classification;
   if (!c.lane && c.importance == null) return null;
-  const by = c.by === "jev" ? "by Jev" : c.by === "rules" ? "by rules" : c.by === "fixture" ? "by Jev (sample)" : "";
+  // Jev's name sits in the tooltip; the face says what happened (the sample's fixture answers are Jev's shape)
+  const auto = c.by === "jev" || c.by === "fixture";
+  const by = auto ? COPY.markedAuto : c.by === "rules" ? "by rules" : "";
   const level = c.importance == null ? null : c.importance >= 0.75 ? "important" : c.importance >= 0.5 ? "useful" : c.importance >= 0.25 ? "routine" : "noise";
   return (
     <p className="text-11 text-muted-foreground" data-testid="classification">
-      {c.lane && <>Lane <span className="font-medium text-foreground">{LANE_LABEL[c.lane]}</span></>}
+      {c.lane && <>{PRIORITY} <span className="font-medium text-foreground">{LANE_LABEL[c.lane]}</span></>}
       {level && <>{c.lane ? " · " : ""}{level}</>}
-      {by && <> · {by}</>}
+      {by && <> · {auto
+        ? <Tooltip label={COPY.judgeSorted}><span tabIndex={0} className="underline decoration-dotted underline-offset-2">{by}</span></Tooltip>
+        : by}</>}
     </p>
   );
 }
@@ -222,19 +230,22 @@ function Body({ d, words, quote }: { d: ItemDetail; words: string[]; quote: stri
       </>);
     case "event":
       return wrap(<>
-        {head(<span className="tnum">{fmtRange(f.start, f.end)}</span>)}
+        {head(<span className="tnum">{eventWhen(f)}{eventZoneNote(f) && <span className="text-muted-foreground"> · {eventZoneNote(f)}</span>}</span>)}
         <div className="flex flex-col gap-1.5 text-13">
           {f.location && !(f.joinUrl && /^(microsoft teams meeting|google meet|zoom( meeting)?)$/i.test(f.location.trim())) && <span className="inline-flex items-center gap-2"><MapPin className="size-3.5 text-muted-foreground" />{f.location}</span>}
           {f.joinUrl && <a href={f.joinUrl} target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 font-medium underline-offset-2 hover:underline"><Video className="size-3.5 text-muted-foreground" />Join the call</a>}
         </div>
-        {(f.attendees ?? []).some((a) => a.name || a.email) && <div className="flex flex-col gap-1">
+        {attendeesOf(f).some((a) => a.name || a.email) && <div className="flex flex-col gap-1">
           <p className="label-caps">Attendees</p>
-          {(f.attendees ?? []).filter((a) => a.name || a.email).map((a) => (
-            <div key={a.email ?? a.name} className="flex h-7 items-center gap-2 text-13">
-              <Avatar name={a.name ?? nameForAddress(r.people, a.email) ?? a.email ?? "?"} size="sm" /><span>{a.name ?? nameForAddress(r.people, a.email) ?? a.email}</span>{!a.name && nameForAddress(r.people, a.email) && <span className="truncate text-11 text-muted-foreground">{a.email}</span>}
-              <span className="ml-auto text-11 text-muted-foreground">{{ accepted: "Going", tentative: "Maybe", declined: "No", needsAction: "Invited" }[a.response ?? "needsAction"] ?? a.response}</span>
-            </div>
-          ))}
+          {attendeesOf(f).filter((a) => a.name || a.email).map((a) => {
+            const known = nameForAddress(r.people, a.email ?? undefined);
+            return (
+              <div key={a.email ?? a.name} className="flex h-7 items-center gap-2 text-13">
+                <Avatar name={a.name ?? known ?? a.email ?? "?"} size="sm" /><span>{a.name ?? known ?? a.email}</span>{!a.name && known && <span className="truncate text-11 text-muted-foreground">{a.email}</span>}
+                <span className="ml-auto text-11 text-muted-foreground">{RSVP_LABEL[a.rsvp]}</span>
+              </div>
+            );
+          })}
         </div>}
         {d.body && <div className="flex flex-col gap-1"><p className="label-caps">Description</p><p className="whitespace-pre-wrap text-13 leading-relaxed text-foreground/90"><Marked text={d.body} words={words} quote={quote} /></p></div>}
       </>);

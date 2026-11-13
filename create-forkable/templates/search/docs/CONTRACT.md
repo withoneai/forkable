@@ -649,7 +649,7 @@ export interface CreateDraftInput { platform: string; connectionKey?: string }  
 export interface ProfileDraft {
   id: string; platform: string; step: DraftStep; status: "open" | "saved" | "discarded";
   connection: { key: string; label: string } | null;
-  inGrant: boolean;                          // false: show the widen-the-ask path (SPEC D26)
+  inGrant: boolean;                          // false: save waits for the person to connect it in One (SPEC D50)
   candidates: CatalogAction[];
   samples: Record<string, DryRunResult>;     // by actionId
   proposal: ProposalOutput | null;
@@ -800,7 +800,9 @@ All JSON. Prefix `/api/v1` unless shown. Auth: `search_sid` cookie or
 
 ```ts
 export interface ApiUser { id: string; name: string | null; email: string | null; avatarUrl: string | null; isSample: boolean }
-export interface MeResponse { user: ApiUser | null; signedIn: boolean; connect: { configured: boolean; signInUrl: string | null }; capability: Capability; settings: SettingsData | null }
+export interface MeResponse { user: ApiUser | null; signedIn: boolean; connect: { configured: boolean; signInUrl: string | null }; capability: Capability; settings: SettingsData | null; database?: DatabaseInfo | null }
+/** Settings, Your data: what the running server booted (signed-in callers only); dataDir shows the home folder as ~. */
+export interface DatabaseInfo { kind: "embedded" | "external"; url: string /* password masked */; dataDir: string | null; port: number | null; version: string }
 
 export interface ResultRow {
   id: string; kind: ItemKind; platform: string; sourceId: string; sourceName: string; logoUrl: string;
@@ -835,10 +837,18 @@ export type OpValue =
   | { t: "cmp"; op: ">" | ">=" | "<" | "<="; v: string | number; resolved?: string };
 export interface ChipEdit { key: OperatorKey; values: string[] | null; negate?: boolean }   // null removes the chip
 
-export interface SearchRequest { q: string; fresh?: boolean; limit?: number; offset?: number; sort?: "best" | "newest" | "oldest"; scope?: ItemKind | "all"; selectedEntityIds?: string[] }
+export interface SearchRequest {
+  q: string; fresh?: boolean; limit?: number; offset?: number; sort?: "best" | "newest" | "oldest"; scope?: ItemKind | "all"; selectedEntityIds?: string[];
+  understand?: boolean;   // read plain sentences (D48); unset = off in core; the REST route sets it from ?understand (default on for a browser session, off for a bearer token)
+  tz?: string;            // IANA zone for date words and dates ("Asia/Qatar"); else the server's
+}
 export interface SearchResponse {
   queryId: string;                           // for rerank and chat context
-  parsed: ParsedQuery;
+  parsed: ParsedQuery;                       // what was searched: searchedAs parsed (the box itself when nothing was read)
+  understanding: boolean;                    // whether sentences were read (D48)
+  understood: Understood[];                  // phrases applied as filters, in text order
+  suggestions: UnderstandSuggestion[];       // phrases with more than one meaning, offered with choices, never applied
+  searchedAs: string;                        // the query run, as filter text; equals q when nothing was read
   total: number;                             // after filters, before limit
   hiddenByFilters: number;                   // matches the text alone would add
   counts: { scope: Record<ItemKind | "all", number>; source: Record<string, number> };
@@ -846,12 +856,32 @@ export interface SearchResponse {
   results: ResultRow[];
   mode: "hybrid" | "keyword";
   embedder: EmbedderStatus;
-  fallback: "or" | null;           // the keyword arm found nothing with every word, so it ran with OR (D44)
-  dateProposals: DateProposal[];   // plain dates read from the text, offered as chips, never applied (D44)
+  fallback: "or" | "filters" | null; // "or": nothing had every word, so it ran with OR (D44); "filters": a read
+                                   // sentence's leftover words matched nothing under its filters, so the filters list on their own (D48)
+  unmatched?: string | null;       // with "filters": the words no result had (or, with matchedWords, only that many had)
+  matchedWords?: number;           // with "filters": how many items had the words; they come first
+  undated?: { deals: number; tasks: number }; // with during: (closing, due), the deals with no close date and tasks with no due date left out
+  topRows?: number;                // the first topRows rows match the words best; the rest follow under a divider
+  restLabel?: string;              // that divider's words ("Other messages in Slack"); the web app shows the rest collapsed
+  hiddenBy?: { label: string; filter: string; phrase: string | null; start: number | null; end: number | null; n: number }[];
+                                   // which filter hides how many items that have the words ("X hides N", with Drop)
+  dateProposals: DateProposal[];   // plain dates read from the text, offered as chips (D44); only when understanding is off
   didYouMean: EntityChip | null;   // the closest entity name when every word together found nothing (D43)
   ms: number;
 }
-export interface EntityChip { id: string; type: "person" | "company"; name: string; subtitle: string | null; avatarUrl: string | null; logoUrl: string | null; itemCount: number; sources: string[]; isSelf: boolean; email: string | null }
+export interface EntityChip { id: string; type: "person" | "company"; name: string; subtitle: string | null; avatarUrl: string | null; logoUrl: string | null; itemCount: number; sources: string[]; isSelf: boolean; email: string | null }   // itemCount and sources: entityItemStats, the same as EntityDetail.entity
+
+// Plain sentences (D48), core query/understand.ts. Offsets are into q as sent.
+export interface Understood { phrase: string; start: number; end: number; filter: string; keys: OperatorKey[]; label: string; kind: "person" | "company" | "source" | "type" | "state" | "date" }
+export interface UnderstandChoice { label: string; filter: string; detail: string | null; kind: Understood["kind"] }   // detail: the address or domain that tells two apart
+export interface UnderstandSuggestion { phrase: string; start: number; end: number; why: "same_name" | "name_or_tool" | "name_or_date" | "last_name" | "common_word" | "maybe_tool" | "negated" | "list" | "which_year"; choices: UnderstandChoice[] }
+// why: same_name two people; name_or_tool, name_or_date a name or a tool or a month; last_name a last name alone;
+// common_word a first name that is a word ("grace"); maybe_tool a tool name in an everyday phrase ("linear algebra");
+// negated "not from Priya" offered as the exclusion (choice filter "-from:..."); list "with A and B" offered as
+// "with A or B" (several values of one key match any); which_year a month still ahead this year (last year's or this year's).
+// Box rewrites (browser-safe, same module): keepWords(q, spans) quotes phrases (a removed chip, "exact words"),
+// takeChoice(q, suggestion, filter) puts a choice's filter in place of its phrase,
+// writeUnderstood(q, understood, keys) writes read phrases of those keys as filters (a chip edited by hand).
 
 export interface RerankRequest { queryId: string; fresh?: boolean }   // fresh: ask Jev about every candidate again (Refresh)
 export interface RerankResponse { queryId: string; order: string[]; reranked: boolean; ms: number; reason?: "off" | "short_query" | "timeout" | "jev_missing" | "sample_no_fixture"; stored?: number; asked?: number }
@@ -869,18 +899,24 @@ export interface ItemDetail {
 }
 
 export interface EntityDetail {
-  entity: { id: string; type: "person" | "company"; name: string; emails: string[]; domain: string | null; title: string | null; company: EntityChip | null; avatarUrl: string | null; isSelf: boolean; sources: { platform: string; count: number; lastAt: string }[] };
-  timeline: ResultRow[];                     // newest first, 50
+  entity: { id: string; type: "person" | "company"; name: string; emails: string[]; domain: string | null; title: string | null; company: EntityChip | null; avatarUrl: string | null; isSelf: boolean; sources: { platform: string; count: number; lastAt: string }[];
+    itemCount: number };                     // the card's number too: both come from entityItemStats (core search/entity-items.ts),
+                                             // the live items linked to it, its own records included, a company's people's items too
+  timeline: ResultRow[];                     // newest first, 50; its own records left out, two tools' copies shown once,
+                                             // so it can be shorter than itemCount (the page says why)
   pendingMatches: { matchId: string; other: EntityChip; probability: number; reason: string }[];
 }
 
 export interface Citation { n: number; itemId: string; chunkId: string | null; kind: ItemKind; title: string; platform: string; url: string | null; quote: string; occurredAt: string }
 export interface QueryProposal { query: string; diff: { op: "+" | "-"; clause: string }[]; count: number; reason: string }
 export type ChatStep = { id: string; label: string; state: "running" | "done" | "error"; query?: string; count?: number }
-export interface ChatContext { query?: string; queryId?: string; itemIds?: string[]; selectedItemId?: string }
+export interface ChatContext { query?: string; queryId?: string; itemIds?: string[]; selectedItemId?: string; understand?: boolean; tz?: string }
+// The answer reads the page at queryId as the person sees it, even an empty one; only with no queryId page is
+// `query` searched again, read the way the caller's list reads (understand unset: on for the web app's browser session, off for MCP and bearer callers).
+// Proposal counts read the proposed query the same way.
 export interface ChatMessage { id: string; role: "user" | "assistant"; content: string; citations: Citation[]; steps: ChatStep[]; proposal: QueryProposal | null; followups: string[]; grounded: boolean; model: string; createdAt: string }
 export interface ChatTurnInput { chatId?: string; message: string; context: ChatContext }
-export interface AnswerRequest { q: string; queryId?: string }
+export interface AnswerRequest { q: string; queryId?: string; understand?: boolean; tz?: string }
 export interface AnswerResponse { text: string; citations: Citation[]; grounded: boolean; model: string }
 
 export interface ApiSource {
@@ -921,9 +957,9 @@ GET    /api/one/authorize                           -> 302 to One (Connect sign-
 GET    /api/one/callback                            -> 302 (web sign-in, or OAuth code when search_oauth_pending is set)
 POST   /connect/disconnect                          -> 204 (local only; revoke is in One)
 
-GET    /search?q=&limit=30&offset=0&sort=best&scope=all     [search:read]  -> SearchResponse   (&fresh=1 skips the query vector cache)
+GET    /search?q=&limit=30&offset=0&sort=best&scope=all     [search:read]  -> SearchResponse   (&fresh=1 skips the query vector cache; &understand=1 reads plain sentences (D48), &understand=0 searches the words as typed; unset: on for the web app's browser session, off for a bearer token; &tz=Asia/Qatar sets the zone for dates)
 POST   /search/rerank   body RerankRequest                  [search:read]  -> RerankResponse
-GET    /search/count?q=                                     [search:read]  -> { count: number }
+GET    /search/count?q=&understand=&tz=                     [search:read]  -> { count: number }   (same reading as /search)
 GET    /suggest?prefix=                                     [search:read]  -> SuggestResponse
 GET    /items/:id                                           [search:read]  -> ItemDetail
 GET    /recent-items?limit=8                               [search:read]  -> ResultRow[] (items whose preview was opened, newest first)
@@ -973,7 +1009,6 @@ POST   /profile-drafts/:id/repropose body { hint? }         [sources:write] -> P
 POST   /profile-drafts/:id/preview   body { profileId }     [sources:write] -> DraftPreview
 POST   /profile-drafts/:id/validate                         [sources:write] -> ValidationReport
 POST   /profile-drafts/:id/save      body SaveDraftInput    [sources:write] -> SaveDraftResult (one source per account in `connectionKeys`, every account of the platform when it is left out; ProfileDraft.accounts lists them)
-POST   /profile-drafts/:id/widen-ask body { profiles }       cookie, local  -> { written: "connect.extra.json" | null, next: "update_connect_app" | "none" | "sample", added: string[] } (the UI calls it on Save: the profiles' exact action ids not yet in the ask; no profiles adds the platform read-only, the old shape)
 DELETE /profile-drafts/:id                                  [sources:write] -> 204
 
 GET    /settings                                            [account:read] -> SettingsData
@@ -998,6 +1033,10 @@ POST   /setup/connect/create                                cookie, localhost ->
 GET    /setup/connect/create                                cookie, localhost -> ConnectSetupResponse (poll)
 DELETE /setup/connect/create                                cookie, localhost -> ConnectSetupResponse (stops a run in flight)
 
+GET    /agents                                              cookie, local  -> AgentsResponse (section 18)
+POST   /agents/:id/connect                                  cookie, local  -> AgentActionResult (409 invalid_config, 404 not_found, 500 agent_failed)
+DELETE /agents/:id                                          cookie, local  -> AgentActionResult (also revokes that agent's OAuth clients for this user)
+
 GET    /oauth-clients                                       cookie         -> OAuthClientRow[]
 DELETE /oauth-clients/:clientId                             cookie         -> 204 (revokes every token family of that client for this user)
 
@@ -1016,6 +1055,8 @@ GET  /authorize                                  validates, stores oauth_pending
 POST /oauth/consent  form { pending, action: allow | one | sample | deny }   the consent page's buttons (see section 15)
 POST /token                                      form or JSON: authorization_code (PKCE S256) | refresh_token
 POST /revoke                                     form or JSON (RFC 7009); revokes the token's whole family; 200 for unknown tokens
+GET  /start.md, /skill.md, /llms.txt            agent files, public, built from the request's origin (section 18)
+GET  /.well-known/agent-skills/index.json        the skill index (sha256 digest); /.well-known/agent-skills/search/SKILL.md is /skill.md
 POST /mcp                                        Streamable HTTP (stateless JSON responses); 401 + WWW-Authenticate resource_metadata=".../.well-known/oauth-protected-resource/mcp" when no token; GET and DELETE answer 405
 ```
 
@@ -1111,6 +1152,13 @@ The UI invalidates TanStack Query keys per event (`["sources"]`,
   `["ledger", filters]`, `["saved"]`, `["recent"]`, `["catalog", q]`.
 - Search box state is the URL (`/?q=`). Chips are derived from
   `parseQuery(q)` and edited with `applyChip(q, edit)`; never a second state.
+  Read phrases (D48) are a view over the response: the "Understood as" chips
+  show `understood` only when each phrase still sits at its offsets in `q`;
+  removing one is `keepWords(q, [u])`, "Search the exact words instead" is
+  `keepWords(q, understood)`, a "Did you mean" choice is `takeChoice`. A chip
+  in the chip bar whose key was read is hidden; editing a read key from a
+  type chip or `+ Filter` runs `writeUnderstood` first. `api.search` and
+  `api.count` send the browser's zone as `tz`.
 - Debounce: 120 ms on typing; `GET /search` aborts the previous request.
   After results, `POST /search/rerank` once; apply `order` only when the
   selected row is still the first row and the user has not pressed a key in
@@ -1146,7 +1194,12 @@ SPEC 16.3. Remote commands read `~/.search/cli-token.json`:
 ```
 
 File mode 0600, refreshed on 401 `token_expired`. `search demo` imports
-`runDemo` and never needs the file.
+`runDemo` and never needs the file. Since 2026-11-12 `search login` asks for
+the bare origin as its resource (`<server>/`), so the one token works on
+`/api/v1` and on `/mcp` (the stdio bridge). `search mcp --as <agent>` keeps
+that agent's own token in `SEARCH_HOME/agents/<agent>-token.json` (0600). A
+root script runs the bin in a fork: `pnpm run search <args>` (`pnpm search`
+is pnpm's pass-through to `npm search`, so it cannot be the name).
 
 ## 11. MCP contract
 
@@ -1154,10 +1207,17 @@ Tool input schemas (zod), outputs as `content: [{ type: "text", text }]` plus
 `structuredContent` on success only:
 
 ```ts
-search:       { query: z.string().min(1).max(500), limit: z.number().int().min(1).max(50).default(10) }
-              -> { results: { id: string; title: string; url: string | null; source: string; kind: ItemKind; date: string; snippet: string | null }[] }
-fetch:        { id: z.string() }
-              -> { id: string; title: string; url: string | null; text: string; metadata: { source: string; kind: ItemKind; date: string; people: string[]; facets: ItemFacets } }
+search:       { query?: string (max 500), source?, type?, container?, from?, with?, after?, before?: string, limit: 1..50 (10), offset: 0..1000 (0), understand: boolean (false) }
+              // container is the typed container: filter (a channel, folder, project or list; a leading # is dropped).
+              // In query, in:#name reads as container:name (in: alone is the source). An unknown type or source
+              // (type:spaceship, source:myspace) is an error listing the types or the person's connected sources.
+              -> { query: string; total: number; offset: number; nextOffset: number | null;
+                   results: { id: string; title: string; url: string; source: string; kind: ItemKind; date: string; snippet: string | null;
+                              people: { name: string; email: string | null; role: EntityRole }[] }[];
+                   understood?: { phrase: string; filter: string; label: string }[]; searchedAs?: string; suggestions?: { phrase: string; choices: string[] }[] }  // the last three only when understand is true
+fetch:        { id: string, offset: int >= 0 (0), max_chars: 100..50000 (20000) }
+              -> { id: string; title: string; url: string; text: string; truncated: boolean; offset: number; totalChars: number; nextOffset: number | null;
+                   metadata: { source: string; kind: ItemKind; date: string; people: string[]; facets: ItemFacets } }
 get_entity:   { query: z.string().min(1) }
               -> { entity: EntityDetail["entity"]; recent: { id: string; title: string; source: string; date: string }[] }
 list_sources: {}
@@ -1168,6 +1228,28 @@ ask:          { question: z.string().min(1).max(2000), query: z.string().optiona
 
 Every tool resolves the user from `authInfo.extra.userId` and calls the same
 core function as the REST route. Ledger actor `mcp`, `client_id` set.
+
+`search` builds its query from `query` plus the filters (`composeQuery` in
+`server/src/mcp.ts`: `source:x type:y from:z with:w after:a before:b`, a value
+with a space is quoted) and needs at least one of them. One rule for a filter
+given twice: the same value in `query` and in its field is used once;
+different values are an error that names both (never a silent pick). `after`
+and `before` take the query's date words, with spaces read as dashes
+(`yesterday`, `last week`, `14d`, `2026-10-01`); a value Search cannot read, in
+a field or typed in `query`, is an error. `people` are the item's people other
+than its subject (at most 8), with their primary address, so an agent can tell
+who sent what. `understand` is off for agents: an agent's query is searched as
+written, never reinterpreted; it turns it on for the person's own words and
+then gets `understood` and `searchedAs` (also a first text line). The CLI, a
+person typing, turns it on and sends the machine's time zone as `tz`;
+`--exact` sends `understand=0`; it prints the choices offered for a phrase that could mean more than one thing, and `--json` keeps `understood` and `suggestions`. REST gives understanding to bearer callers only when they send `understand=1`, so the CLI always sends it. `url` is never empty:
+the item's own link, else Search's page for it (`<origin>/item/<id>`), because
+ChatGPT makes citations only from a non-empty url. Results are still sent as
+text and as `structuredContent`: the MCP spec asks tools that return
+structured content to also return it as text for older clients, and OpenAI's
+connector docs ask for both on `search` and `fetch`; Claude Code reads the
+structured copy, so the text is for the rest. Not verified against ChatGPT
+itself (a remote chat app cannot reach localhost).
 
 ## 12. Fixtures and tests
 
@@ -1234,7 +1316,7 @@ mapper. Mock (`ui/src/mock`) and server answer the same shapes.
 | 10 | `/entities` capped at 10 | `limit` 1 to 200. Without `q`, the UI asks for 200. |
 | 11 | Scope and sort not in the URL contract | The results URL is `/?q=...&scope=<kind>&sort=<best|newest|oldest>`; `GET /search` takes the same three. |
 | 12 | No recently opened items | `GET /recent-items` (ResultRow[], newest first). Opening an item's preview (`GET /items/:id`) records it. Kept in server memory per user (lost on restart) until a `recent_items` table lands. |
-| 13 | Rerank on the sample | `POST /search/rerank` replays `fixtures/sample/rerank.json` for sample users (fixture key `rerank:<query>`, any word count) and answers `reranked: false, reason: "sample_no_fixture"` for other queries. Live: one Jev call, 2.5 s budget, `jev_missing` when TypeSafe is not granted. |
+| 13 | Rerank on the sample | `POST /search/rerank` replays `fixtures/sample/rerank.json` for sample users (fixture key `rerank:<query>`, any word count); a query it does not list gets an empty score set, so the order stands and Activity records an ordinary read instead of a failure (`sample_no_fixture` stays for a sample with no transport). Live: one Jev call, 2.5 s budget, `jev_missing` when TypeSafe is not granted. |
 
 Other interface facts from Phase 2:
 
@@ -1264,7 +1346,7 @@ dance itself), `cli/scripts/smoke-cli.ts` (27, the real `search` bin as a child 
 | Consent POST | `POST /oauth/consent`, not `POST /authorize` (that path belongs to `authorizeHandler`, which parses JSON). The form's `pending` must equal the httpOnly, SameSite=Lax `search_oauth_pending` cookie; a foreign `Origin` is refused. Actions: `allow` (the browser's signed-in user, straight to a code), `one` (302 to `/api/one/authorize?oauth=1`), `sample` (the shared Acme sample user, bootstrapped like `POST /sources/sample`, then a code), `deny` (`error=access_denied`). |
 | Callback | `/api/one/callback` with a live pending cookie mints the code for the account `onConnected` returns (after the merge) and 302s to the client; a Connect outcome other than connected answers the client `error=access_denied`. A plain `/api/one/authorize` (no `oauth=1`) clears a stale pending cookie so an abandoned CLI login never hijacks a web sign-in. The browser's `search_sid` is signed in as well. |
 | Codes and tokens | Opaque, prefixed: codes `sac_`, access `sat_` (1 h), refresh `srt_` (30 d); only SHA-256 stored. A code is burned by its first exchange that passes PKCE, even if the redirect URI then mismatches. Redirects carry `iss` (RFC 9207), the origin of the request's resource. |
-| Refresh | Rotation under `select ... for update`: the old refresh row gets `replaced_by` and `revoked_at`. Presenting a rotated or revoked refresh token revokes every token of the family. A refresh may narrow scopes, never widen them. |
+| Refresh | Rotation under `select ... for update`: the old refresh row gets `replaced_by` and `revoked_at`. Presenting a rotated or revoked refresh token revokes every token of the family, except the refresh grace: the same client presenting a token within 30 s (`ROTATION_GRACE_MS`) of its rotation, while the pair it became is unused, gets that pair again (memory only, so a restart ends the window). A refresh may narrow scopes, never widen them. |
 | Resources | Tokens are bound to their resource: `<origin>/mcp` tokens work only on `/mcp`, `<origin>/api/v1` tokens only on `/api/v1`; a token with no resource (or the bare origin) works on both. Origins are `SEARCH_PUBLIC_URL` plus `http://localhost:<port>` and `http://127.0.0.1:<port>`; metadata answers with the origin the request came in on. |
 | Scopes | A request with no `scope` gets `search:read search:ask` for `/mcp` and all four for `/api/v1` (intersected with the client's registered scopes). DCR with no `scope` registers all four. `/mcp` metadata advertises only read and ask because SDK clients request whatever `scopes_supported` lists. |
 | Redirect URIs | DCR accepts https, http on loopback only, and app schemes. |
@@ -1330,3 +1412,158 @@ Rules that follow:
   platform to Read only keeps only its GET actions.
 - `stripLarge` keeps the base64url body of MIME `text/*` parts (the message
   text), and still strips attachments.
+
+## 18. Agents (2026-11-12, revised the same day after an independent review)
+
+Connecting a coding agent takes one click (Settings, Agents) or one pasted
+sentence (`Set up Search for me with <origin>/start.md`).
+
+Files: `server/src/agents.ts` (detection, connect, disconnect, status; also
+what `search install` runs), `server/src/agent-config.ts` (paths, the test
+guard, safe JSON writes, backups, Codex TOML read), `server/src/agent-docs.ts`
+(start.md, skill.md, llms.txt, the skills index), `server/src/agent-routes.ts`,
+`server/src/routes/agents.ts`, `server/src/agent-signins.ts` (sign-ins that end with the account), `issueAgentSignIn` in `server/src/oauth.ts`,
+`cli/src/bridge.ts`, `cli/bin/search-mcp` (the launcher), UI
+`ui/src/screens/settings/AgentsSettings.tsx`.
+
+```ts
+type AgentId = "claude-code" | "codex" | "cursor" | "claude-desktop";
+type AgentState = "not_found" | "not_connected" | "added" | "connected";
+interface AgentRow { id; name; found; foundWhere: string | null; added; state; lastUsedAt: string | null; nextStep: string | null; configPath; clientIds: string[]; entryName: string | null; note: string | null; skillInstalled?: boolean; needsConnect?: boolean }
+// needsConnect: a bridged agent (Claude Code, Cursor, Claude Desktop) is in its settings with no live sign-in. An agent
+// sign-in belongs to the account that pressed Connect: sign-out, /connect/disconnect, or another account signing in
+// (bindSid, onConnected) ends it (server/src/agent-signins.ts). Remove deletes its tokens, so it leaves Signed-in apps.
+// Token files are shared by every bridge and CLI process: refresh under <file>.lock, re-read first, atomic write, a
+// <file>.refreshing note while in flight; the server answers a just-rotated refresh token presented again by the same
+// client within 30 s with the same pair while that pair is unused (memory only). The server writes SEARCH_HOME/server.json
+// ({ url, pid }) while it runs; the CLI finds it after --server and SEARCH_SERVER.
+interface AgentsResponse { local: true; mcpUrl; startUrl; setupSentence; genericJson; agents: AgentRow[] }
+interface AgentActionResult { agent: AgentRow; changed: boolean; message: string; backup: string | null }
+```
+
+| Agent | Found when | Connect | Config | Signed in by |
+|---|---|---|---|---|
+| Claude Code | `claude` on PATH (plus the usual install dirs) | `claude mcp add --scope user <name> -- <launcher> --server <origin> --as claude-code --home <SEARCH_HOME>`, plus the skill | `$CLAUDE_CONFIG_DIR/.claude.json`, else `~/.claude.json` | the Connect click (client "Search for Claude Code") |
+| Codex | `codex` on PATH | `codex mcp add <name> --url <origin>/mcp`; Codex starts its own OAuth at once (a browser tab), the route returns when the entry is written and the login runs on for up to 5 min | `$CODEX_HOME/config.toml`, else `~/.codex/config.toml` | Codex's own OAuth (client name contains "codex", seen on a real run) |
+| Cursor | `Cursor.app`, `cursor` on PATH or `~/.cursor` | JSON merge `mcpServers.<name> = { command: <launcher>, args }` | `~/.cursor/mcp.json` | the Connect click ("Search for Cursor") |
+| Claude Desktop | `Claude.app` or its config folder | the same JSON merge | `~/Library/Application Support/Claude/claude_desktop_config.json` (Windows `%APPDATA%\Claude`, Linux `~/.config/Claude`) | the Connect click ("Search for Claude Desktop"); Desktop loads it on its next start |
+
+**One click.** For the three bridge agents, the Connect click issues the
+agent's own OAuth sign-in on the spot (`issueAgentSignIn`): a public client per
+agent, a rotating token pair with `search:read search:ask`, bound to `/mcp`,
+written to `SEARCH_HOME/agents/<agent>-token.json` (0600), never into the agent's
+config. The consent is the click itself: the person's signed-in session, on this
+computer, from Search's own page (exact Origin, below). A second Connect keeps a
+live sign-in; Remove revokes it and deletes the file. From `search install`
+(no session) the bridge signs in through the browser the first time it starts.
+Verified: the real Claude Code's own `mcp get` reports the bridge Connected on a
+temp config. Not verified: a real Cursor or Claude Desktop session.
+
+**The launcher.** `cli/bin/search-mcp` (POSIX sh) looks for a Node 22+ each time
+an agent starts it: `SEARCH_NODE`, PATH, Homebrew, /usr/local, /usr/bin, Volta,
+fnm, nvm. Agents start servers with a short PATH, and the node the server runs
+on can be inside another app or change with an upgrade, so no node path is ever
+written into an agent config. Windows (unverified) uses `node` from PATH with the
+absolute `search.mjs`.
+
+**Only what is Search's.** An entry is Search's when it points at this server:
+its `/mcp` address on localhost or 127.0.0.1 at its port, or a bridge (the
+launcher, or `search.mjs mcp`) with `--server` at this server. Search adds
+itself as `search`; when `search` is someone else's it uses `search-local` and
+the card says so; when both are taken it stops with 409 `name_taken`. Status,
+Connect and Remove only ever look at Search's own entries. The Claude Code skill
+goes to `skills/search/` or, when a skill Search did not write is there,
+`skills/search-local/` (its frontmatter name follows); Search never overwrites or
+removes a skill without its marker.
+
+State: `added` = Search's entry is in the agent's config; `connected` = added
+and a client of that agent has a live sign-in; `nextStep` is the step left when
+added, or how to start when connected but never used; `found` also counts an
+agent that has a sign-in, with a `note` when its entry is gone. The screen polls
+every 3 s while a card is `added`.
+
+Rules:
+- `GET /agents` needs the browser session. Writes need the exact Origin of this
+  server or its UI (`SEARCH_UI_URL`): a missing Origin, another localhost port,
+  or `Sec-Fetch-Site` other than `same-origin` is 403 `forbidden_origin` (every
+  localhost port is one site, so the SameSite cookie alone is not enough). All
+  routes are `localOnly` and 404 under `SEARCH_HOSTED=1`.
+- JSON edits keep every other key, write a temp file beside the real file then
+  rename it (a symlinked config is written through to its target), keep the
+  file's mode and a byte-order mark, refuse a read-only file (409 `read_only`)
+  and a file that is not a JSON object (409 `invalid_config`), copy the old file
+  to `SEARCH_HOME/backups/agents/<agent>-<time>` (newest 10 kept), and write
+  nothing when the entry is already right. `SEARCH_HOME/agents.json` remembers
+  whether Search made the file, its folder, the `mcpServers` key, or found the
+  file empty, so Remove puts it back as it was.
+- `/start.md`, `/skill.md` and `/llms.txt` are public and name no folder,
+  program path or person.
+- `SEARCH_AGENT_HOME` moves every agent path under one folder, looks for
+  binaries on PATH only, ignores a `CLAUDE_CONFIG_DIR` or `CODEX_HOME` outside
+  it, and pins both (plus `HOME`) for the CLIs it runs. Under `SEARCH_SMOKE=1`
+  any agent path (or a symlink's target) outside it, or no `SEARCH_AGENT_HOME`,
+  throws.
+- Windows, from reading only (unverified): `where` output is read for the
+  `.exe`, then a `.cmd` shim, never the extensionless npm shim; a `.cmd` runs
+  through the shell.
+
+Tests: `server/scripts/smoke-agents.ts` (fake `claude` and `codex` and a no-op
+`open` on PATH, a temp agent home; `SMOKE_REAL_AGENTS=1` also runs the real CLIs
+on the temp folder: Claude Code's own `mcp get` sees the bridge Connected, Codex
+is added on an address with no OAuth so it opens nothing),
+`server/scripts/smoke-oauth.ts` (bare-origin, `/mcp` and `/api/v1` tokens each
+only where they belong), `server/scripts/smoke-mcp.ts`, `cli/scripts/smoke-cli.ts`
+(fetch, install, the launcher, `search mcp` over stdio, `--as` signing itself
+in bound to `/mcp`, the bridge recovering when Search comes up),
+`ui/scripts/smoke-agents.mjs` (light and dark, mock or a real server; it refuses
+a real server whose agent config paths are not in a temp folder),
+`packages/core/test/find-binary.test.ts`.
+
+## 19. Keeping to the One plan (2026-11-13)
+
+One limits calls per Connect user per minute, sized by the plan of the One
+account that owns this Search's Connect app (`plans.connect_user_rate_limit_per_minute`
+in core, seeded from the plan's passthrough rate: Free 20, Starter 100, Pro 500,
+Enterprise custom), and a Free account past its monthly requests gets 402 on
+every call. Every call through `one.ts` now takes a token from one budget per
+user (`packages/core/src/one-budget.ts`) before it reaches One.
+
+- **Pace.** 90% of the limit. The limit is `settings.onePlan` (`auto`, `free`,
+  `starter`, `pro`, `custom` with `settings.oneRpm`); `auto` reads One's
+  `X-RateLimit-Limit` off each answer and assumes Free until one arrives. A
+  picked plan never runs above what One reports.
+- **The person first.** `indexer`, `embedder` and `classifier` calls are
+  background; everything else (`user`, `assistant`, `mcp`, `api`, `mapper`) is
+  served first, and background never takes the last 25% of the bucket.
+- **429 from One** (`refusal: "rate_limit"`, not a provider's own 429): every
+  call for that user waits for `Retry-After` (else the reset, else 60 s), and
+  `RawCallResult.retryAfterMs` carries it to the engine's retry.
+- **402** (`refusal: "plan_limit"`): background calls answer a local 402
+  without reaching One for an hour, the scheduler skips the user's runs and
+  workers, `GET /sources` shows a banner. Calls a person makes still go, and any
+  call that goes through ends the hold.
+- **Headers.** `runAction` (0.19 to 0.23) returns no headers, so
+  `withOneObserver` wraps the global fetch and reads `X-RateLimit-*` and
+  `Retry-After` for the passthrough call in flight only. Remove it when
+  `@withone/connect` returns them.
+- **Counts.** `one_usage` (migration 0004) keeps calls per user per UTC day,
+  written every 5 s. `GET /api/v1/one-plan` answers `OnePlanStatus`; Settings,
+  General shows it (signed-in users only, not the sample).
+
+## 20. The Connect app asks for everything (2026-11-13, SPEC D50)
+
+- `one.connect.ts` is `ask: "everything"`; `pnpm connect` (and the setup
+  screen's button) run `one connect create` on it. A new app writes
+  `ONE_CLIENT_ID` and `ONE_REDIRECT_URI`; an update to everything removes
+  `ONE_PERMISSION_SET` from `.env`.
+- With a client id in `.env`, the permission set comes from `.env` only (never
+  a copy in the store), and saving secrets drops a stored one `.env` no longer
+  has. `ConnectSetupResponse.create.askChanged` is true when `one.connect.ts`
+  changed since the last approval here, or, with no approval recorded, when
+  `.env` still has a permission set (an app from before D50).
+- `POST /profile-drafts/:id/widen-ask` and `connect.extra.json` are gone. Save
+  on a tool the person has not connected answers `awaitingGrant` and the sheet
+  shows two steps: connect it (Sign in with One in a popup), getting ready.
+- `POST /access/receipt-demo` answers 400 for anyone but the Acme sample.
+  `GET /access` reports a real grant's `granted` from the connection's access
+  (full, by method, by action), so a write the grant allows reads Allowed.

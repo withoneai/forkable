@@ -112,7 +112,7 @@ const steps = [
     [
       lime(`${cd}${pm} dev`),
       `Open ${bold(ui)} and pick ${bold("Try the Acme sample")}.`,
-      dim("Sample data, no account: a week of Acme Inc in 11 tools."),
+      dim("Sample data, no account: a week at Acme Inc, made up."),
     ],
   ],
   [

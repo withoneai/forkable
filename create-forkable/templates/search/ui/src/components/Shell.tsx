@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { STATUS_WORD } from "@/lib/copy";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Bookmark, MessageCircle, Search as SearchIcon, Settings, ShieldCheck } from "lucide-react";
+import { Bookmark, Bot, MessageCircle, PanelLeftClose, PanelLeftOpen, Search as SearchIcon, Settings, ShieldCheck } from "lucide-react";
 import type { ApiSource, SourceStatus } from "@/contract/api-types";
 import { EventsProvider } from "@/lib/events";
 import { useKeys } from "@/lib/keys";
-import { usePersistedBoolean, usePersistedNumber } from "@/lib/persist";
+import { usePersistedBoolean, usePersistedChoice, usePersistedNumber } from "@/lib/persist";
 import { useMe, useSaved, useSources } from "@/lib/queries";
 import { useAccounts } from "@/lib/accounts";
-import { AccountMark } from "@/components/AccountChip";
 import { toggleTheme } from "@/lib/theme";
 import { cn, fmtNum, MOD, platformName, useMedia } from "@/lib/utils";
 import { WorkspaceProvider, useWorkspace } from "@/lib/workspace";
@@ -15,6 +15,7 @@ import { Logo } from "./Logo";
 import { SourceLogo } from "./SourceLogo";
 import { Avatar } from "./ui/Avatar";
 import { Kbd } from "./ui/Kbd";
+import { Tooltip } from "./ui/Tooltip";
 import { CommandPalette } from "./CommandPalette";
 import { Cheatsheet } from "./Cheatsheet";
 import { ChatDock } from "./chat/ChatDock";
@@ -38,8 +39,31 @@ export function Splash() {
   );
 }
 
+const SIDEBAR_W = 220;
+const DOCK_MIN = 300;
+/** The narrowest the page between the sidebar and the assistant may get before the sidebar folds to icons. */
+const PAGE_MIN = 560;
+
+function useViewportWidth(): number {
+  const [w, setW] = useState(() => window.innerWidth);
+  useEffect(() => { const on = () => setW(window.innerWidth); window.addEventListener("resize", on); return () => window.removeEventListener("resize", on); }, []);
+  return w;
+}
+
+/** Where the assistant helps: searching and reading (results, an item, a person or company page). */
+const readingPath = (p: string) => p === "/" || p.startsWith("/item/") || p.startsWith("/people/") || p.startsWith("/companies/");
+
 function ShellFrame() {
-  const [dockOpen, setDockOpen] = usePersistedBoolean("search.dock.open", false);
+  // The assistant stays as she left it while searching and reading (remembered), and is
+  // closed everywhere else: on Settings, Access and sources it opens only when she asks,
+  // and closes again when she moves to another page there.
+  const loc = useLocation();
+  const [readOpen, setReadOpen] = usePersistedBoolean("search.dock.open", false);
+  const [elseOpen, setElseOpen] = useState(false);
+  useEffect(() => { setElseOpen(false); }, [loc.pathname]);
+  const reading = readingPath(loc.pathname);
+  const dockOpen = reading ? readOpen : elseOpen;
+  const setDockOpen = reading ? setReadOpen : setElseOpen;
   return (
     <WorkspaceProvider dockOpen={dockOpen} setDockOpen={setDockOpen}>
       <ShellInner />
@@ -75,8 +99,22 @@ function ShellInner() {
   const [cheat, setCheat] = useState(false);
   const [dockWidth, setDockWidth] = usePersistedNumber("search.dock.width", 360);
   const large = useMedia("(min-width: 1024px)");
-  const roomy = useMedia("(min-width: 1536px)");
-  const rail = !large || (ws.dockOpen && !roomy);
+  const viewport = useViewportWidth();
+  // "auto" keeps the names whenever the page still has room: with the assistant open it
+  // first narrows the assistant (down to DOCK_MIN), and folds to icons only when even
+  // then the page would be narrower than PAGE_MIN. She can pin names or icons.
+  const [sidebar, setSidebar] = usePersistedChoice("search.sidebar", ["auto", "labels", "icons"] as const, "auto");
+  const dockFit = ws.dockOpen && large ? Math.max(DOCK_MIN, Math.min(dockWidth, viewport - SIDEBAR_W - PAGE_MIN)) : dockWidth;
+  const roomForNames = viewport - SIDEBAR_W - (ws.dockOpen && large ? dockFit : 0) >= PAGE_MIN;
+  const rail = sidebar === "icons" ? true : sidebar === "labels" ? false : !large || !roomForNames;
+  // with icons only, names show on hover or keyboard focus, over the page, without moving it
+  const [peek, setPeek] = useState(false);
+  const peekTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startPeek = () => { if (!rail) return; if (peekTimer.current) clearTimeout(peekTimer.current); peekTimer.current = setTimeout(() => setPeek(true), 350); };
+  const endPeek = () => { if (peekTimer.current) clearTimeout(peekTimer.current); setPeek(false); };
+  useEffect(() => { if (!rail) setPeek(false); }, [rail]);
+  useEffect(() => { setPeek(false); }, [loc.pathname]);
+  const folded = rail && !peek;
 
   const user = me.data?.user ?? null;
   const goHome = () => { nav("/"); setTimeout(() => ws.boxFocus.current?.(), 0); };
@@ -105,40 +143,54 @@ function ShellInner() {
 
   return (
     <div className="flex h-full min-h-0 w-full overflow-hidden bg-background text-foreground">
-      <aside className={cn("flex shrink-0 flex-col border-r border-border bg-faint transition-[width] duration-150 ease-out-quart", rail ? "w-[52px]" : "w-[220px]")} aria-label="Sidebar">
-        <div className={cn("flex h-11 shrink-0 items-center gap-2", rail ? "justify-center" : "px-4")}>
+      <div className={cn("relative shrink-0 transition-[width] duration-150 ease-out-quart", rail ? "w-[52px]" : "w-[220px]")} data-testid="sidebar-slot">
+      <aside
+        className={cn("absolute inset-y-0 left-0 flex flex-col border-r border-border bg-faint transition-[width] duration-150 ease-out-quart", folded ? "w-[52px]" : "w-[220px]", rail && peek && "z-40 shadow-[4px_0_24px_rgb(0_0_0/0.12)]")}
+        aria-label="Sidebar" data-folded={folded ? "1" : undefined} data-peek={rail && peek ? "1" : undefined}
+        onMouseEnter={startPeek} onMouseLeave={endPeek}
+        onFocus={(e) => { if (rail && e.target instanceof HTMLElement && e.target.matches(":focus-visible")) setPeek(true); }}
+        onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) endPeek(); }}
+      >
+        <div className={cn("flex shrink-0 items-center gap-2", folded ? "h-auto flex-col justify-center gap-1 pb-1 pt-3" : "h-11 pl-4 pr-2")}>
           <Logo size={18} />
-          {!rail && <span className="text-13 font-semibold tracking-tight">Search</span>}
+          {!folded && <span className="flex-1 text-13 font-semibold tracking-tight">Search</span>}
+          <Tooltip label={rail ? "Keep the names showing" : "Show icons only"}>
+            <button type="button" onClick={() => { endPeek(); setSidebar(rail ? "labels" : "icons"); }} aria-label={rail ? "Keep the names showing" : "Show icons only"} aria-expanded={!folded} data-testid="sidebar-toggle"
+              className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground [&>svg]:size-4 [&>svg]:stroke-[1.75]">
+              {rail ? <PanelLeftOpen /> : <PanelLeftClose />}
+            </button>
+          </Tooltip>
         </div>
-        <div className={cn("flex flex-col gap-px pb-2", rail ? "items-center px-1.5" : "px-2")}>
-          <RailButton rail={rail} icon={<SearchIcon />} label="Search" hint="/" onClick={goHome} active={loc.pathname === "/" || loc.pathname.startsWith("/item/")} />
-          <RailButton rail={rail} icon={<MessageCircle />} label="Ask" hint={`${MOD}J`} onClick={() => ws.setDockOpen(!ws.dockOpen)} active={ws.dockOpen} pressed={ws.dockOpen} />
+        <div className={cn("flex flex-col gap-px pb-2", folded ? "items-center px-1.5" : "px-2")}>
+          <RailButton rail={folded} icon={<SearchIcon />} label="Search" hint="/" onClick={goHome} active={loc.pathname === "/" || loc.pathname.startsWith("/item/")} />
+          <RailButton rail={folded} icon={<MessageCircle />} label="Ask" hint={`${MOD}J`} onClick={() => ws.setDockOpen(!ws.dockOpen)} active={ws.dockOpen} pressed={ws.dockOpen} />
         </div>
-        <nav className={cn("flex min-h-0 flex-1 flex-col gap-px overflow-y-auto pt-1 scrollbar-none", rail ? "items-center px-1.5" : "px-2")} aria-label="Saved searches and sources">
+        <nav className={cn("flex min-h-0 flex-1 flex-col gap-px overflow-y-auto pt-1 scrollbar-none", folded ? "items-center px-1.5" : "px-2")} aria-label="Saved searches and sources">
           {savedList.length > 0 && (
             <>
-              {!rail && <p className="label-caps px-2 pb-1 pt-1">Saved searches</p>}
+              {!folded && <p className="label-caps px-2 pb-1 pt-1">Saved searches</p>}
               {savedList.map((s, i) => (
-                <button key={s.id} type="button" onClick={() => ws.setQuery(s.query)} title={rail ? `${s.name}  (G ${i + 1})` : s.query} aria-label={s.name}
-                  className={cn("group flex h-8 shrink-0 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", rail ? "w-10 justify-center" : "px-2",
+                <button key={s.id} type="button" onClick={() => ws.setQuery(s.query)} title={folded ? `${s.name}  (G ${i + 1})` : s.query} aria-label={s.name}
+                  className={cn("group flex h-8 shrink-0 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", folded ? "w-10 justify-center" : "px-2",
                     ws.query === s.query && loc.pathname === "/" ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
                   <Bookmark className="size-4 shrink-0 stroke-[1.75]" />
-                  {!rail && <><span className="min-w-0 flex-1 truncate text-left">{s.name}</span>{i < 9 && <span className="hidden text-11 text-muted-foreground/70 group-hover:inline">G {i + 1}</span>}</>}
+                  {!folded && <><span className="min-w-0 flex-1 truncate text-left">{s.name}</span>{i < 9 && <span className="hidden text-11 text-muted-foreground/70 group-hover:inline">G {i + 1}</span>}</>}
                 </button>
               ))}
-              <div className={cn("my-2 h-px shrink-0 bg-border", rail ? "w-6" : "mx-2")} />
+              <div className={cn("my-2 h-px shrink-0 bg-border", folded ? "w-6" : "mx-2")} />
             </>
           )}
-          {!rail && <p className="label-caps px-2 pb-1 pt-1">Sources</p>}
+          {!folded && <p className="label-caps px-2 pb-1 pt-1">Sources</p>}
           {[...byPlatform.entries()].map(([platform, list]) => {
             const r = rollup(list);
             const to = `/sources/${list[0]!.id}`;
             return (
-              <NavLink key={platform} to={to} title={rail ? `${platformName(platform)} · ${fmtNum(r.items)}` : undefined} aria-label={`${platformName(platform)}, ${r.status}, ${r.items} items`}
-                className={() => cn("group flex h-8 shrink-0 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", rail ? "relative w-10 justify-center" : "px-2",
+              <RailTip key={platform} rail={folded} label={`${platformName(platform)}, ${STATUS_WORD[r.status].toLowerCase()}, ${fmtNum(r.items)} items`}>
+              <NavLink to={to} aria-label={`${platformName(platform)}, ${STATUS_WORD[r.status]}, ${r.items} items`}
+                className={() => cn("group flex h-8 shrink-0 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", folded ? "relative w-10 justify-center" : "px-2",
                   !accounts.isMulti(platform) && list.some((s) => loc.pathname === `/sources/${s.id}`) ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
                 <SourceLogo platform={platform} size={16} />
-                {rail ? (r.status !== "healthy" && <HealthDot status={r.status} className="absolute right-1.5 top-1.5" />) : (
+                {folded ? (r.status !== "healthy" && <HealthDot status={r.status} className="absolute right-1.5 top-1.5" />) : (
                   <>
                     <span className="min-w-0 flex-1 truncate">{platformName(platform)}</span>
                     <HealthDot status={r.status} />
@@ -146,42 +198,43 @@ function ShellInner() {
                   </>
                 )}
               </NavLink>
+              </RailTip>
             );
           }).flatMap((link, idx) => {
             // two accounts on one platform: each one under it, with its own count
             const platform = [...byPlatform.keys()][idx]!;
-            const accts = rail ? [] : accounts.byPlatform.get(platform) ?? [];
+            const accts = folded ? [] : accounts.byPlatform.get(platform) ?? [];
             if (accts.length < 2) return [link];
             return [link, ...accts.map((a) => (
               <NavLink key={`${platform}|${a.label}`} to={`/sources/${a.sourceIds[0]}`} title={a.label} aria-label={`${platformName(platform)}, ${a.label}, ${a.items} items`} data-testid={`sidebar-account-${a.short}`}
-                className={() => cn("flex h-7 shrink-0 items-center gap-2 rounded-md pl-7 pr-2 text-xs transition-colors duration-100",
+                className={() => cn("flex h-7 shrink-0 items-center gap-2 rounded-md pl-9 pr-2 text-xs transition-colors duration-100",
                   a.sourceIds.some((id) => loc.pathname === `/sources/${id}`) ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
-                <AccountMark text={a.mark} />
-                <span className="min-w-0 flex-1 truncate">{a.short}</span>
+                <span className="min-w-0 flex-1 truncate">{a.label}</span>
                 <span className="tnum w-9 text-right text-11 text-muted-foreground">{fmtNum(a.items)}</span>
               </NavLink>
             ))];
           })}
-          <div className={cn("my-2 h-px shrink-0 bg-border", rail ? "w-6" : "mx-2")} />
-          <RailLink rail={rail} to="/settings" label="Settings" icon={<Settings />} keyHint="G ," />
-          <RailLink rail={rail} to="/access" label="Access" icon={<ShieldCheck />} keyHint="G A" />
+          <div className={cn("my-2 h-px shrink-0 bg-border", folded ? "w-6" : "mx-2")} />
+          <RailLink rail={folded} to="/settings/agents" label="Agents" icon={<Bot />} />
+          <RailLink rail={folded} to="/settings" label="Settings" icon={<Settings />} keyHint="G ," notUnder="/settings/agents" />
+          <RailLink rail={folded} to="/access" label="Access" icon={<ShieldCheck />} keyHint="G A" />
         </nav>
-        <div className={cn("flex shrink-0 flex-col gap-1.5 p-2", rail && "items-center px-1.5")}>
-          {!rail && (
+        <div className={cn("flex shrink-0 flex-col gap-1.5 p-2", folded && "items-center px-1.5")}>
+          {!folded && (
             <NavLink to={indexing ? `/sources/${indexing.id}` : "/settings/integrations"} className="flex h-7 items-center gap-2 rounded-md px-2 text-11 text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground" data-testid="indexing-chip">
               <HealthDot status={indexing ? "syncing" : rollup(sources.data?.sources ?? []).status === "healthy" ? "healthy" : "degraded"} />
               <span className="truncate">
                 {indexing
-                  ? `Indexing ${indexing.name} ${indexing.health.progress?.estimate ? `${Math.round(((indexing.health.progress.done ?? 0) / indexing.health.progress.estimate) * 100)}%` : ""}`
-                  : `${fmtNum((sources.data?.sources ?? []).reduce((n, s) => n + s.health.itemCount, 0))} items indexed`}
+                  ? `Updating ${indexing.name} ${indexing.health.progress?.estimate ? `${Math.round(((indexing.health.progress.done ?? 0) / indexing.health.progress.estimate) * 100)}%` : ""}`
+                  : `${fmtNum((sources.data?.sources ?? []).reduce((n, s) => n + s.health.itemCount, 0))} items found`}
               </span>
             </NavLink>
           )}
           {user && (
-            <NavLink to="/settings/general" aria-label={`Signed in as ${user.name ?? user.email}`} title={rail ? `${user.name} · ${user.email}` : undefined}
-              className={cn("flex h-10 items-center gap-2.5 rounded-md text-left transition-colors hover:bg-card-hover", rail ? "w-10 justify-center" : "px-2")}>
+            <NavLink to="/settings/general" aria-label={`Signed in as ${user.name ?? user.email}`} title={folded ? `${user.name} · ${user.email}` : undefined}
+              className={cn("flex h-10 items-center gap-2.5 rounded-md text-left transition-colors hover:bg-card-hover", folded ? "w-10 justify-center" : "px-2")}>
               <Avatar name={user.name ?? user.email ?? "You"} src={user.avatarUrl} size="md" />
-              {!rail && (
+              {!folded && (
                 <span className="flex min-w-0 flex-1 flex-col leading-none">
                   <span className="truncate text-xs font-medium">{user.name ?? user.email}</span>
                   <span className="mt-0.5 truncate text-11 text-muted-foreground">{user.isSample ? "Acme sample" : user.email}</span>
@@ -191,13 +244,14 @@ function ShellInner() {
           )}
         </div>
       </aside>
+      </div>
 
       <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
         <Outlet />
       </main>
 
       {ws.dockOpen && !large && <div className="fade-in fixed inset-0 z-30 bg-foreground/15 dark:bg-background/70" onMouseDown={() => ws.setDockOpen(false)} aria-hidden />}
-      {ws.dockOpen && <ChatDock overlay={!large} width={dockWidth} onWidthChange={setDockWidth} onClose={() => ws.setDockOpen(false)} />}
+      {ws.dockOpen && <ChatDock overlay={!large} width={dockFit} onWidthChange={setDockWidth} onClose={() => ws.setDockOpen(false)} />}
 
       <CommandPalette open={palette} onClose={() => setPalette(false)} onToggleTheme={toggleTheme} onCheatsheet={() => setCheat(true)} />
       <Cheatsheet open={cheat} onClose={() => setCheat(false)} />
@@ -205,11 +259,14 @@ function ShellInner() {
   );
 }
 
-function RailLink({ to, label, icon, keyHint, rail }: { to: string; label: string; icon: React.ReactNode; keyHint?: string; rail: boolean }) {
+function RailLink({ to, label, icon, keyHint, rail, notUnder }: { to: string; label: string; icon: React.ReactNode; keyHint?: string; rail: boolean; notUnder?: string }) {
+  const loc = useLocation();
+  const excluded = !!notUnder && loc.pathname.startsWith(notUnder);
   return (
-    <NavLink to={to} aria-label={rail ? label : undefined} title={rail ? `${label}${keyHint ? `  (${keyHint})` : ""}` : undefined}
+    <RailTip rail={rail} label={`${label}${keyHint ? `  (${keyHint})` : ""}`}>
+    <NavLink to={to} aria-label={rail ? label : undefined}
       className={({ isActive }) => cn("group flex h-8 shrink-0 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", rail ? "w-10 justify-center" : "px-2",
-        isActive ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
+        isActive && !excluded ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
       <span className="[&>svg]:size-4 [&>svg]:stroke-[1.75]">{icon}</span>
       {!rail && (
         <>
@@ -218,12 +275,14 @@ function RailLink({ to, label, icon, keyHint, rail }: { to: string; label: strin
         </>
       )}
     </NavLink>
+    </RailTip>
   );
 }
 
 function RailButton({ icon, label, hint, onClick, active, pressed, rail }: { icon: React.ReactNode; label: string; hint: string; onClick: () => void; active?: boolean; pressed?: boolean; rail: boolean }) {
   return (
-    <button type="button" onClick={onClick} aria-pressed={pressed} aria-label={label} title={rail ? `${label}  (${hint})` : undefined}
+    <RailTip rail={rail} label={`${label}  (${hint})`}>
+    <button type="button" onClick={onClick} aria-pressed={pressed} aria-label={label}
       className={cn("group flex h-8 items-center gap-2.5 rounded-md text-13 transition-colors duration-100", rail ? "w-10 justify-center" : "px-2",
         active ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-card-hover hover:text-foreground")}>
       <span className="[&>svg]:size-4 [&>svg]:stroke-[1.75]">{icon}</span>
@@ -234,5 +293,11 @@ function RailButton({ icon, label, hint, onClick, active, pressed, rail }: { ico
         </>
       )}
     </button>
+    </RailTip>
   );
+}
+
+/** In the icon rail every item names itself on hover and focus; with labels showing it needs nothing. */
+function RailTip({ rail, label, children }: { rail: boolean; label: string; children: React.ReactElement<Record<string, unknown>> }) {
+  return rail ? <Tooltip label={label}>{children}</Tooltip> : children;
 }

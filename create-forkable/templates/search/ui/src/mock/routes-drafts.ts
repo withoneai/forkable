@@ -126,8 +126,8 @@ route("GET", "/connections", (): GrantedConnection[] => CATALOG.filter((c) => c.
 // ---- drafts ---------------------------------------------------------------------
 const stages = ["actions", "docs", "dry_run", "propose", "validate", "ready"] as const;
 const stageMsg: Record<(typeof stages)[number], string> = {
-  actions: "Reading Zendesk's list actions", docs: "Loading the docs for 4 actions", dry_run: "Dry run on your grant, one page each",
-  propose: "Claude Haiku is proposing a map", validate: "Checking ids, dates and links", ready: "Ready",
+  actions: "Finding what you can search in Zendesk", docs: "Reading the docs for 4 picks", dry_run: "Reading one page of each",
+  propose: "Claude Haiku is matching the fields", validate: "Checking ids, dates and links", ready: "Ready",
 };
 
 // the Zendesk sample's models, as core's groupModels would make them
@@ -216,7 +216,7 @@ route("POST", "/profile-drafts/:id/repropose", async ({ params }) => {
 route("POST", "/profile-drafts/:id/preview", async ({ params, body }) => {
   const d = draftOf(params.id!);
   const pid = (body as { profileId: string }).profileId;
-  const p = draftProfile(d, pid) ?? fail(404, "not_found", "No such model in this draft.");
+  const p = draftProfile(d, pid) ?? fail(404, "not_found", "That pick is not in this setup.");
   await sleep(60);
   const rows = ZD_DATA[p.list.actionId]?.rows.slice(0, 5) ?? [];
   const out: DraftPreview = { profileId: pid, samples: rows.map((r) => { const n = normalize(p, r); return { externalId: n.item.externalId, ...n }; }) };
@@ -227,11 +227,6 @@ route("POST", "/profile-drafts/:id/validate", async ({ params }) => {
   await sleep(250);
   d.validation = validate(d);
   return d.validation;
-});
-route("POST", "/profile-drafts/:id/widen-ask", async ({ params }) => {
-  draftOf(params.id!);
-  await sleep(300);
-  return { written: null, next: "sample", added: [] as string[] };
 });
 route("DELETE", "/profile-drafts/:id", ({ params }) => { drafts.delete(params.id!); return noContent(); });
 
@@ -281,7 +276,7 @@ route("POST", "/sources", ({ body }) => {
   const b = body as { platform: string; connectionKey: string; profileId: string };
   const ex = [...sources.values()].find((s) => `prf_${s.def.platform}_${s.def.model}` === b.profileId);
   if (ex) return apiSource(ex);
-  return fail(404, "not_found", "No such profile.");
+  return fail(404, "not_found", "No such source setup.");
 });
 
 // ---- profiles: give GET /profiles real JSON (routes-core leaves it null) ----------------
@@ -309,7 +304,7 @@ if (listRoute) {
     return rows.map((r) => ({ ...r, json: r.json ?? profileJson(r.id), origin: userProfiles.has(r.id) ? "user" : r.origin }));
   };
 }
-const profileOf = (id: string) => profileJson(id) ?? fail(404, "not_found", "No such profile.");
+const profileOf = (id: string) => profileJson(id) ?? fail(404, "not_found", "No such source setup.");
 const apiProfile = (id: string, p: SearchProfile, origin = "user"): ApiProfile => ({ id, slug: p.id, platform: p.platform, model: p.model, title: p.title, origin, currentVersion: (p.revision ?? 1), profileHash: "7d02e9a14c3b8f50", verified: p.verified ?? "fixture", json: p });
 
 route("GET", "/profiles/:id", ({ params }) => { const p = profileOf(params.id!); return apiProfile(params.id!, p, userProfiles.has(params.id!) ? "user" : "builtin"); });

@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { ExternalLink, Link2, X } from "lucide-react";
+import { ChevronDown, ExternalLink, Link2, X } from "lucide-react";
 import { useConnectMore } from "@/lib/connectMore";
 import type { AccessResponse, LedgerRow } from "@/contract/api-types";
 import { api } from "@/lib/api";
-import { keys, useAccess, useLedger } from "@/lib/queries";
+import { keys, useAccess, useLedger, useSources } from "@/lib/queries";
 import { toast } from "@/lib/toast";
 import { cn, fmtClock, fmtDateTime, platformName } from "@/lib/utils";
 import { SourceLogo } from "@/components/SourceLogo";
@@ -17,10 +17,11 @@ import { ConfirmButton } from "@/components/ui/ConfirmButton";
 import { IconButton } from "@/components/ui/IconButton";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LoadError } from "@/components/ui/EmptyState";
+import { COPY, HELPER_TEXT } from "@/lib/copy";
 
 const ACTORS: { key: string; label: string }[] = [
-  { key: "", label: "All" }, { key: "indexer", label: "Indexer" }, { key: "assistant", label: "Assistant" },
-  { key: "classifier", label: "Jev" }, { key: "mapper", label: "New profile" }, { key: "user", label: "You" },
+  { key: "", label: "All" }, { key: "indexer", label: "Updates" }, { key: "assistant", label: "Assistant" },
+  { key: "classifier", label: COPY.judgeActivity }, { key: "mapper", label: "New source" }, { key: "user", label: "You" },
 ];
 
 export function Access() {
@@ -30,9 +31,11 @@ export function Access() {
   const qc = useQueryClient();
   const nav = useNavigate();
   const [detail, setDetail] = useState<LedgerRow | null>(null);
+  const [requestOpen, setRequestOpen] = useState(false);
   const [receipt, setReceipt] = useState<LedgerRow | null>(null);
   const [busy, setBusy] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const a = q.data;
   const connect = useConnectMore();
 
@@ -59,16 +62,21 @@ export function Access() {
     try {
       await api.disconnect();
       await qc.resetQueries();
-      toast({ title: "Search is disconnected", detail: "The grant still exists in your One account. Revoke it there to end access." });
+      toast({ title: "Search is disconnected", detail: "Your access still exists in your One account. Remove it there to end it everywhere." });
       nav("/start");
     } catch (e) {
       toast({ title: "Could not disconnect", detail: (e as Error).message, tone: "destructive" });
     } finally { setDisconnecting(false); }
   };
 
-  const counts = useMemo(() => {
-    const all = a?.platforms.flatMap((p) => p.actions) ?? [];
-    return { granted: all.filter((x) => x.granted).length, platforms: a?.platforms.filter((p) => p.actions.some((x) => x.granted)).length ?? 0 };
+  // her tools (what Search reads) and the AI helpers it calls behind the scenes, kept apart
+  // the same count as the sidebar's Sources: every tool Search reads, a source added by hand included
+  const sourceList = useSources().data?.sources;
+  const readCount = sourceList?.length ? new Set(sourceList.map((x) => x.platform)).size : null;
+  const groups = useMemo(() => {
+    const ps = a?.platforms ?? [];
+    const helper = (p: AccessResponse["platforms"][number]) => p.platform in HELPER_TEXT || p.actions.every((x) => !x.usedBy.some((u) => u.startsWith("profiles/")) && x.granted);
+    return { tools: ps.filter((p) => !helper(p)), helpers: ps.filter(helper) };
   }, [a]);
 
   return (
@@ -77,7 +85,7 @@ export function Access() {
         <div className="mx-auto flex w-full max-w-[880px] flex-col gap-5 px-6 pb-12 pt-7">
           <header>
             <h1 className="text-xl font-semibold tracking-tight">Access</h1>
-            <p className="mt-0.5 text-13 text-muted-foreground">The accounts you connected and what Search can do with them. Secured by One.</p>
+            <p className="mt-0.5 text-13 text-muted-foreground">The accounts you connected and what Search can do with them. {COPY.securedByOne}.</p>
           </header>
 
           {q.isError && !a ? (
@@ -85,22 +93,22 @@ export function Access() {
           ) : !a ? (
             <Skeleton className="h-[92px] w-full rounded-lg" />
           ) : (
-            <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4" data-testid="grant-card">
-              <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <div className="flex flex-wrap items-start gap-x-4 gap-y-3 rounded-lg border border-border bg-card p-4" data-testid="grant-card">
+              <div className="flex min-w-[16rem] flex-1 flex-col gap-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-13 font-semibold">Your grant</span>
+                  <span className="text-13 font-semibold">{COPY.yourAccess}</span>
                   <Badge tone="success">Active</Badge>
                   {a.readOnly && <Badge tone="outline">Read only</Badge>}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Granted by <span className="text-foreground">{a.grantedBy.name ?? a.grantedBy.email ?? "you"}</span> · <span className="tnum">{counts.granted}</span> actions across <span className="tnum">{counts.platforms}</span> platforms · owned in your One account
+                  Connected by <span className="text-foreground">{a.grantedBy.name ?? a.grantedBy.email ?? "you"}</span>. Search reads <span className="tnum" data-testid="tools-count">{readCount ?? groups.tools.length}</span> of your tools{groups.helpers.length > 0 && <> and uses <span className="tnum">{groups.helpers.length}</span> AI helpers behind the scenes</>}. Kept in your One account.
                 </p>
-                <p className="text-11 text-muted-foreground">Disconnect stops Search from using the grant on this computer. To end access everywhere, revoke it in your One account.</p>
+                <p className="text-11 text-muted-foreground">Disconnect stops Search from using your access on this computer. To end it everywhere, remove it in your One account.</p>
               </div>
-              <div className="flex shrink-0 items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <Button size="sm" icon={<Link2 />} loading={connect.open} onClick={connect.start} data-testid="connect-more">Connect accounts</Button>
                 <a href={a.manageUrl} target="_blank" rel="noreferrer" className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground">
-                  Manage in One <ExternalLink className="size-3" />
+                  {COPY.manageInOne} <ExternalLink className="size-3" />
                 </a>
                 <ConfirmButton size="sm" onConfirm={() => void disconnect()} loading={disconnecting} confirmLabel="Click again to disconnect">Disconnect</ConfirmButton>
               </div>
@@ -109,37 +117,51 @@ export function Access() {
 
           {a && (
             <section className="flex flex-col gap-2">
-              <div className="flex items-baseline justify-between gap-3">
-                <h2 className="text-13 font-semibold">Available actions</h2>
-                <p className="text-xs text-muted-foreground">Search can read. It has no action that sends, edits or deletes.</p>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                <h2 className="text-13 font-semibold">What Search can read</h2>
+                <p className="text-xs text-muted-foreground">{a.mode === "fixture" ? "Search can read. It has no action that sends, edits or deletes." : "Search only reads, whatever your access in One allows. You can narrow it there."}</p>
               </div>
-              <Actions platforms={a.platforms} onReceipt={() => void showReceipt()} busy={busy} />
+              <Actions platforms={groups.tools} onReceipt={a.mode === "fixture" ? () => void showReceipt() : null} busy={busy} />
+            </section>
+          )}
+
+          {a && groups.helpers.length > 0 && (
+            <section className="flex flex-col gap-2" data-testid="helpers">
+              <div className="flex flex-col gap-0.5">
+                <h2 className="text-13 font-semibold">AI helpers Search uses</h2>
+                <p className="text-xs text-muted-foreground">These work behind the scenes on what Search already read. They are not places Search reads from.</p>
+              </div>
+              <Helpers platforms={groups.helpers} />
             </section>
           )}
 
           {!(q.isError && !a) && (
             <>
-              <div className="mt-2 flex items-center justify-between gap-3">
-                <h2 className="text-13 font-semibold">Activity</h2>
-                <div className="flex items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                <div className="flex flex-col gap-0.5">
+                  <h2 className="text-13 font-semibold">Activity</h2>
+                  <p className="text-xs text-muted-foreground">Every call Search made, newest first. Repeats are grouped.</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
                   <div role="radiogroup" aria-label="Who made the call" className="inline-flex h-7 items-center rounded-md border border-border bg-faint p-0.5">
                     {ACTORS.map((o) => (
                       <button key={o.key} type="button" role="radio" aria-checked={actor === o.key} onClick={() => setActor(o.key)}
                         className={cn("h-full rounded-sm px-2 text-11 font-medium transition-colors", actor === o.key ? "bg-card text-foreground shadow-[0_1px_2px_rgb(0_0_0/0.08)]" : "text-muted-foreground hover:text-foreground")}>{o.label}</button>
                     ))}
                   </div>
-                  <Button size="sm" onClick={() => void showReceipt()} loading={busy}>Test a declined call</Button>
+                  <Button size="sm" onClick={() => setShowDetails((v) => !v)} aria-pressed={showDetails} data-testid="ledger-details">{showDetails ? "Hide details" : "Show details"}</Button>
+                  {a?.mode === "fixture" && <Button size="sm" onClick={() => void showReceipt()} loading={busy}>Test a declined call</Button>}
                 </div>
               </div>
 
               {receipt && (
                 <div role="status" className="fade-in flex flex-col gap-2 rounded-lg border border-border bg-faint p-3" data-testid="receipt">
-                  <div className="flex items-center gap-3 font-mono text-xs">
-                    <span className="text-foreground">{platformName(receipt.platform)} · delete</span>
+                  <div className="flex items-center gap-3 text-xs">
+                    <span className="font-medium text-foreground">{callSentence(receipt).split(". ")[0]}.</span>
                     <span className="flex-1 border-b border-dotted border-border-strong" aria-hidden />
-                    <span className="font-medium text-destructive-text">declined, {receipt.status}</span>
+                    <span className="font-medium text-destructive-text">{outcome(receipt)}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">Delete is not in the grant, so One refused the call and {platformName(receipt.platform)} was never called. The line below is the record.</p>
+                  <p className="text-xs text-muted-foreground">One said no, because Search may only read, and {platformName(receipt.platform)} was never asked. The highlighted line below is the record.</p>
                 </div>
               )}
 
@@ -147,7 +169,7 @@ export function Access() {
               {ledger.isError ? (
                 <LoadError what="Activity" error={ledger.error} onRetry={() => void ledger.refetch()} retrying={ledger.isFetching} className="rounded-lg border border-border bg-card py-8" />
               ) : (
-                <Ledger rows={ledger.data ?? []} loading={ledger.isPending} onPick={setDetail} picked={detail?.id ?? null} highlight={receipt?.id ?? null} />
+                <Ledger rows={ledger.data ?? []} loading={ledger.isPending} onPick={setDetail} picked={detail?.id ?? null} highlight={receipt?.id ?? null} details={showDetails} />
               )}
             </>
           )}
@@ -157,38 +179,54 @@ export function Access() {
       {detail && (
         <aside className="slide-in-right flex w-[320px] shrink-0 flex-col gap-4 overflow-y-auto overflow-x-hidden border-l border-border bg-faint p-4" aria-label="Call detail" data-testid="call-detail">
           <div className="flex items-center justify-between gap-2">
-            <span className="flex min-w-0 items-center gap-2 text-xs font-medium"><SourceLogo platform={detail.platform} size={14} /><span className="truncate">{detail.action}</span></span>
+            <span className="flex min-w-0 items-center gap-2 text-xs font-medium"><SourceLogo platform={detail.platform} size={14} /><span className="truncate">{platformName(detail.platform)}</span></span>
             <IconButton label="Close" size="sm" onClick={() => setDetail(null)}><X /></IconButton>
           </div>
-          <p className="text-13">{detail.sentence}</p>
+          <p className="text-13" data-testid="call-sentence">{callSentence(detail)}</p>
           <div className="flex flex-wrap items-center gap-1.5">
-            <Badge tone={detail.blockedByGrant ? "destructive" : detail.ok ? "success" : "warning"} mono>{detail.blockedByGrant ? `declined, ${detail.status}` : detail.status}</Badge>
-            <Badge tone="outline" mono>{detail.level}</Badge>
-            <Badge tone="outline" mono>{detail.mode === "fixture" ? "sample" : "live"}</Badge>
-            <Badge tone="outline">{actorLabel(detail.actor)}</Badge>
+            <Badge tone={detail.blockedByGrant ? "destructive" : detail.ok ? "success" : "warning"}>{outcome(detail)}</Badge>
+            {detail.mode === "fixture" && <Badge tone="outline">Sample</Badge>}
           </div>
-          {detail.blockedByGrant && (
-            <p className="rounded-md border border-destructive-text/30 bg-destructive-text/[0.06] px-3 py-2 text-xs">Blocked by the grant. The provider was never called.</p>
-          )}
           <dl className="grid min-w-0 grid-cols-[72px_minmax(0,1fr)] gap-x-3 gap-y-2 text-xs">
             {([
               ["When", fmtDateTime(detail.at)],
-              ["Platform", platformName(detail.platform)],
-              ["Action", detail.actionId],
-              ["Method", detail.method],
-              ["Path", detail.path],
-              ["Took", `${detail.ms} ms`],
-              ["Summary", detail.summary],
-              ["Client", detail.clientName ?? "this app"],
-              ["Refusal", detail.refusal ?? "none"],
-              ["Note", detail.note ?? "none"],
+              ["Tool", platformName(detail.platform)],
+              ["Asked by", detail.clientName ?? actorLabel(detail.actor)],
             ] as const).map(([k, v]) => (
               <div key={k} className="contents">
                 <dt className="text-muted-foreground">{k}</dt>
-                <dd className={cn("min-w-0 break-words", (k === "Path" || k === "Method" || k === "Action") && "break-all font-mono text-11")}>{v}</dd>
+                <dd className="min-w-0 break-words">{v}</dd>
               </div>
             ))}
           </dl>
+          <div className="flex flex-col gap-2">
+            <button type="button" className="flex items-center gap-1 self-start text-11 text-muted-foreground underline-offset-2 hover:text-foreground hover:underline" aria-expanded={requestOpen} onClick={() => setRequestOpen((v) => !v)} data-testid="call-request-toggle">
+              <ChevronDown className={cn("size-3 transition-transform", !requestOpen && "-rotate-90")} />{requestOpen ? "Hide the request" : "Show the request"}
+            </button>
+            {requestOpen && (
+              <div className="flex flex-col gap-2 rounded-md bg-card p-2.5" data-copy="advanced" data-testid="call-request">
+                <p className="font-mono text-11 text-muted-foreground">{detail.sentence}</p>
+                <dl className="grid min-w-0 grid-cols-[72px_minmax(0,1fr)] gap-x-3 gap-y-2 text-xs">
+                  {([
+                    ["Status", detail.blockedByGrant ? `declined, ${detail.status}` : String(detail.status)],
+                    ["Access", detail.level],
+                    ["Action", detail.actionId],
+                    ["Method", detail.method],
+                    ["Path", detail.path],
+                    ["Took", `${detail.ms} ms`],
+                    ["Summary", detail.summary],
+                    ["Refusal", detail.refusal ?? "none"],
+                    ["Note", detail.note ?? "none"],
+                  ] as const).map(([k, v]) => (
+                    <div key={k} className="contents">
+                      <dt className="text-muted-foreground">{k}</dt>
+                      <dd className={cn("min-w-0 break-words", (k === "Path" || k === "Method" || k === "Action" || k === "Status") && "break-all font-mono text-11")}>{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
+          </div>
         </aside>
       )}
     </div>
@@ -196,15 +234,15 @@ export function Access() {
 }
 
 function actorLabel(a: LedgerRow["actor"]): string {
-  return ({ indexer: "Indexer", assistant: "Assistant", mapper: "New profile", classifier: "Jev", embedder: "Embedder", user: "You", api: "API", mcp: "MCP" } as const)[a] ?? a;
+  return ({ indexer: "Updates", assistant: "Assistant", mapper: "New source", classifier: COPY.judgeActivity, embedder: "Search by meaning", user: "You", api: "Apps you connected", mcp: "Agents" } as const)[a] ?? a;
 }
 
-function Actions({ platforms, onReceipt, busy }: { platforms: AccessResponse["platforms"]; onReceipt: () => void; busy: boolean }) {
+function Actions({ platforms, onReceipt, busy }: { platforms: AccessResponse["platforms"]; onReceipt: (() => void) | null; busy: boolean }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card" data-testid="actions">
+    <div className="@container overflow-hidden rounded-lg border border-border bg-card" data-testid="actions">
       {platforms.map((p) => (
-        <div key={p.platform} className="flex gap-3 border-b border-border px-3 py-2.5 last:border-b-0">
-          <div className="flex w-[200px] shrink-0 items-start gap-2 pt-1">
+        <div key={p.platform} className="flex flex-col gap-1.5 border-b border-border px-3 py-2.5 last:border-b-0 @xl:flex-row @xl:gap-3">
+          <div className="flex shrink-0 items-start gap-2 pt-1 @xl:w-[13rem]">
             <SourceLogo platform={p.platform} size={16} />
             <span className="flex min-w-0 flex-col">
               <span className="truncate text-13 font-medium">{p.name}</span>
@@ -216,22 +254,21 @@ function Actions({ platforms, onReceipt, busy }: { platforms: AccessResponse["pl
             {groupActions(p.actions).map(({ x, ids }) => {
               const line = (
                 <>
-                  <span className={cn("min-w-0 flex-1 truncate text-xs", !x.granted && "text-muted-foreground")}>
-                    <span className="font-semibold text-foreground">{x.verb}</span> {actionText(x.title)}
-                    {ids.length > 1 && <span className="text-muted-foreground"> · {ids.length} actions</span>}
+                  <span className={cn("min-w-0 flex-1 text-xs", !x.granted && "text-muted-foreground")}>
+                    <span className="font-semibold text-foreground">{x.verb}</span> {actionText(x.title, x.verb)}
                   </span>
-                  {x.granted ? <Badge tone="success">Granted</Badge> : <Badge tone="outline">Not granted</Badge>}
+                  {x.granted ? <Badge tone="success">{COPY.allowed}</Badge> : <Badge tone="outline">{COPY.notAllowed}</Badge>}
                 </>
               );
               return (
                 <li key={x.actionId}>
-                  {!x.granted && x.level === "write" ? (
-                    <button type="button" onClick={onReceipt} disabled={busy} className="group flex h-7 w-full items-center gap-3 rounded-md bg-faint px-2 text-left transition-colors hover:bg-card-hover" title="Try it and see the receipt" data-testid="write-row">
+                  {onReceipt && !x.granted && x.level === "write" ? (
+                    <button type="button" onClick={onReceipt} disabled={busy} className="group flex min-h-7 w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-md bg-faint px-2 py-1 text-left transition-colors hover:bg-card-hover" title="Try it and see the receipt" data-testid="write-row">
                       {line}
                       <span className="text-11 font-medium underline-offset-2 group-hover:underline">See the receipt</span>
                     </button>
                   ) : (
-                    <div className="flex h-7 items-center gap-3 px-2" title={ids.join("\n")}>{line}</div>
+                    <div className="flex min-h-7 items-center gap-3 px-2 py-1" title={ids.length > 1 ? `${ids.length} calls behind this` : undefined}>{line}</div>
                   )}
                 </li>
               );
@@ -239,6 +276,37 @@ function Actions({ platforms, onReceipt, busy }: { platforms: AccessResponse["pl
           </ul>
         </div>
       ))}
+    </div>
+  );
+}
+
+function Helpers({ platforms }: { platforms: AccessResponse["platforms"] }) {
+  // the AIs that do the same job (reading for meaning) share one row
+  const rows = new Map<string, AccessResponse["platforms"]>();
+  for (const p of platforms) {
+    const k = HELPER_TEXT[p.platform] ?? actionText(p.actions[0]?.title ?? p.name, p.actions[0]?.verb ?? "");
+    rows.set(k, [...(rows.get(k) ?? []), p]);
+  }
+  return (
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
+      {[...rows].map(([text, ps]) => {
+        const granted = ps.some((p) => p.actions.some((x) => x.granted));
+        return (
+          <div key={text} className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-border px-3 py-2.5 last:border-b-0" data-testid="helper-row">
+            {/* what it does first, then who does it */}
+            <span className="flex min-w-[12rem] flex-1 flex-col gap-1">
+              <span className="text-13 font-medium">{text}</span>
+              <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-11 text-muted-foreground">
+                {ps.length > 1 ? "One of " : "By "}
+                {ps.map((p) => (
+                  <span key={p.platform} className="flex items-center gap-1"><SourceLogo platform={p.platform} size={12} />{p.name}</span>
+                ))}
+              </span>
+            </span>
+            {granted ? <Badge tone="success">{COPY.allowed}</Badge> : <Badge tone="outline">{COPY.notAllowed}</Badge>}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -255,6 +323,7 @@ function TickStrip({ rows }: { rows: LedgerRow[] }) {
   });
   const total = rows.filter((r) => now - new Date(r.at).getTime() < 24 * H);
   const declined = total.filter((r) => r.blockedByGrant).length;
+  const failed = total.filter((r) => !r.ok && !r.blockedByGrant).length;
   return (
     <div className="flex items-center gap-3" data-testid="tick-strip">
       <div className="flex h-6 flex-1 items-end gap-0.5" aria-label={`${total.length} calls in the last 24 hours`}>
@@ -263,22 +332,65 @@ function TickStrip({ rows }: { rows: LedgerRow[] }) {
             className={cn("flex-1 rounded-sm", t.n === 0 ? "h-1.5 bg-muted" : t.bad ? "h-full bg-destructive-text/70" : "h-full bg-success-text/60")} />
         ))}
       </div>
-      <span className="tnum shrink-0 text-11 text-muted-foreground">{total.length} calls in 24h · <span className={cn(declined > 0 && "font-medium text-destructive-text")}>{declined} declined</span></span>
+      <span className="tnum shrink-0 text-11 text-muted-foreground">{total.length}{total.length === rows.length && rows.length >= 100 ? "+" : ""} calls in 24h · {declined || failed
+        ? <span className="font-medium text-destructive-text" data-testid="tick-problems">{[declined && `${declined} not allowed`, failed && `${failed} did not work`].filter(Boolean).join(" · ")}</span>
+        : <span data-testid="tick-problems">all worked</span>}</span>
     </div>
   );
 }
 
-function Ledger({ rows, loading, onPick, picked, highlight }: { rows: LedgerRow[]; loading: boolean; onPick: (r: LedgerRow) => void; picked: string | null; highlight: string | null }) {
+/** A call in plain words: "Read Slack messages", "Check whether two people are the same". */
+function plainLine(r: LedgerRow): string {
+  const m = /^(\w+) (.+) for search$/.exec(r.summary);
+  if (r.actor === "indexer" && m) {
+    const [, step, what] = m;
+    if (step === "partitions") return `Checked which ${what} to read`;
+    if (step === "hydrate") return `Read ${what} in full`;
+    return `Read ${what}`;
+  }
+  return r.summary || r.sentence;
+}
+/** What Search asked for, in words: "delete a Gmail message". */
+function askedFor(r: LedgerRow): string {
+  const verb = ({ DELETE: "delete", POST: "create", PUT: "change", PATCH: "change", GET: "read" } as Record<string, string>)[r.method.toUpperCase()] ?? "use";
+  const noun = r.path.split("/").filter((p) => p && !p.includes("{") && !p.startsWith(":")).pop()?.replace(/[-_]/g, " ") ?? "";
+  const one = noun.endsWith("ies") ? `${noun.slice(0, -3)}y` : noun.endsWith("s") ? noun.slice(0, -1) : noun;
+  return one ? `${verb} a ${platformName(r.platform)} ${one}` : `${verb} something in ${platformName(r.platform)}`;
+}
+
+/** The detail's lead sentence: what happened, in one line a person reads first. */
+function callSentence(r: LedgerRow): string {
+  if (r.blockedByGrant) return `Search asked to ${askedFor(r)}. One said no, because Search may only read. ${platformName(r.platform)} was never asked.`;
+  if (!r.ok) return `${plainLine(r)}. It did not work this time (${platformName(r.platform)} answered with an error).`;
+  return `${plainLine(r)}.`;
+}
+
+const outcome = (r: LedgerRow) => (r.blockedByGrant ? "Not allowed" : r.ok ? "Done" : "Did not work");
+
+type Group = { r: LedgerRow; n: number };
+/** Neighbouring calls that read the same and ended the same way become one line with a count. */
+function collapse(rows: LedgerRow[]): Group[] {
+  const out: Group[] = [];
+  for (const r of rows) {
+    const last = out[out.length - 1];
+    if (last && last.r.platform === r.platform && last.r.actor === r.actor && plainLine(last.r) === plainLine(r) && outcome(last.r) === outcome(r) && last.r.status === r.status) last.n++;
+    else out.push({ r, n: 1 });
+  }
+  return out;
+}
+
+function Ledger({ rows, loading, onPick, picked, highlight, details }: { rows: LedgerRow[]; loading: boolean; onPick: (r: LedgerRow) => void; picked: string | null; highlight: string | null; details: boolean }) {
+  const groups = useMemo(() => collapse(rows), [rows]);
   if (loading) return <Skeleton className="h-64 w-full rounded-lg" />;
   if (rows.length === 0) return <p className="text-13 text-muted-foreground">No calls yet.</p>;
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-card text-xs" role="list" aria-label="Activity" data-testid="ledger">
-      {rows.map((r) => (
+      {groups.map(({ r, n }) => (
         <button
           key={r.id}
           type="button"
           role="listitem"
-          aria-label={`${fmtClock(r.at)}, ${r.sentence}, ${r.blockedByGrant ? `declined, ${r.status}` : r.status}`}
+          aria-label={`${fmtClock(r.at)}, ${plainLine(r)}, ${outcome(r)}${n > 1 ? `, ${n} times` : ""}`}
           aria-pressed={picked === r.id}
           onClick={() => onPick(r)}
           className={cn(
@@ -287,18 +399,21 @@ function Ledger({ rows, loading, onPick, picked, highlight }: { rows: LedgerRow[
             highlight === r.id && "bg-destructive-text/[0.07] hover:bg-destructive-text/[0.09]",
           )}
         >
-          <span className="tnum w-[60px] shrink-0 font-mono text-11 text-muted-foreground">{fmtClock(r.at)}</span>
+          <span className="tnum w-[3.75rem] shrink-0 text-11 text-muted-foreground">{fmtClock(r.at)}</span>
           <SourceLogo platform={r.platform} size={14} />
           <span className="flex min-w-0 flex-1 flex-col">
-            <span className="flex items-center gap-1.5 truncate">
+            <span className="flex min-w-0 items-center gap-1.5">
               {r.actor === "assistant" && <Badge>Assistant</Badge>}
-              <span className="truncate">{r.sentence}</span>
+              <span className="truncate" title={plainLine(r)}>{plainLine(r)}</span>
+              {n > 1 && <span className="tnum shrink-0 text-muted-foreground" data-testid="ledger-count">{n} times</span>}
             </span>
-            <span className="truncate font-mono text-11 text-muted-foreground">{r.actionId.replace("conn_mod_def::", "")}</span>
+            {details && <span className="truncate font-mono text-11 text-muted-foreground" data-copy="advanced">{r.sentence} · {r.actionId.replace("conn_mod_def::", "")}</span>}
           </span>
-          <span className="tnum w-[64px] shrink-0 text-right text-11 text-muted-foreground">{r.ms} ms</span>
-          <span className="flex w-[96px] shrink-0 justify-end">
-            <Badge tone={r.blockedByGrant ? "destructive" : r.ok ? "success" : "warning"} mono>{r.blockedByGrant ? `declined, ${r.status}` : r.status}</Badge>
+          {details && <span className="tnum hidden w-[4rem] shrink-0 text-right text-11 text-muted-foreground sm:block">{r.ms} ms</span>}
+          <span className="flex shrink-0 justify-end">
+            {details
+              ? <Badge tone={r.blockedByGrant ? "destructive" : r.ok ? "success" : "warning"} mono>{r.blockedByGrant ? `declined, ${r.status}` : r.status}</Badge>
+              : <Badge tone={r.blockedByGrant ? "destructive" : r.ok ? "success" : "warning"}>{outcome(r)}</Badge>}
           </span>
         </button>
       ))}
@@ -316,5 +431,9 @@ function groupActions<T extends { actionId: string; title: string; verb: string;
   }
   return [...out.values()];
 }
-/** "Index Gmail threads for search" under the verb Read reads "Read Gmail threads, to index them". */
-const actionText = (t: string) => (/^Index (.+) for search$/.test(t) ? t.replace(/^Index (.+) for search$/, "$1, to index them") : t);
+/** "Index Gmail threads for search" under the verb Read reads "Read Gmail threads, to make them searchable"; a title that starts with its verb ("Delete a Gmail message" under Delete) drops it. */
+function actionText(t: string, verb: string): string {
+  if (/^Index (.+) for search$/.test(t)) return t.replace(/^Index (.+) for search$/, "$1, to make them searchable");
+  if (verb && t.toLowerCase().startsWith(verb.toLowerCase() + " ")) return t.slice(verb.length + 1);
+  return t;
+}

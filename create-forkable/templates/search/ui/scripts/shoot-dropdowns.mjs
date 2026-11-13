@@ -23,8 +23,8 @@ if (!base) {
 }
 
 const shots = [
-  { name: "assistant-chat-model", path: "/settings/assistant", trigger: { label: "Chat model" } },
-  { name: "search-embedding-model", path: "/settings/search", trigger: { label: "Embedding model" } },
+  { name: "assistant-chat-model", path: "/settings/assistant", trigger: { label: "Chat AI model" } },
+  { name: "search-embedding-model", path: "/settings/search", trigger: { label: "AI that reads for meaning" } },
   { name: "search-add-vip", path: "/settings/search", trigger: { label: "Add a VIP" } },
 ];
 

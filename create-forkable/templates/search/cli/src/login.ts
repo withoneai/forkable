@@ -26,14 +26,14 @@ async function knownClient(server: string, clientId: string): Promise<boolean> {
   return r.json.error !== "invalid_client";
 }
 
-async function register(server: string, endpoint: string): Promise<string> {
+async function register(server: string, endpoint: string, clientName: string, scopes: string[]): Promise<string> {
   const res = await reach(endpoint, {
     method: "POST", headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      client_name: `Search CLI on ${hostname().replace(/\.local$/, "")}`,
+      client_name: clientName,
       redirect_uris: ["http://127.0.0.1/callback"],
       token_endpoint_auth_method: "none", grant_types: ["authorization_code", "refresh_token"], response_types: ["code"],
-      scope: ALL_SCOPES.join(" "), software_id: "withone-search-cli",
+      scope: scopes.join(" "), software_id: "withone-search-cli",
     }),
   });
   const j = (await res.json().catch(() => ({}))) as { client_id?: string; error_description?: string };
@@ -41,7 +41,20 @@ async function register(server: string, endpoint: string): Promise<string> {
   return j.client_id;
 }
 
-export interface LoginOptions { server: string; open: boolean; log: (line: string) => void; timeoutMs?: number }
+export interface LoginOptions {
+  server: string; open: boolean; log: (line: string) => void; timeoutMs?: number;
+  /** The name this sign-in shows under in Search (Settings, Agents). Default "Search CLI on <host>". */
+  clientName?: string;
+  scopes?: string[];
+  /** What the browser says once it worked. */
+  doneText?: string;
+  /**
+   * The resource the token is bound to. The person's own CLI asks for the bare
+   * origin, so one token works for the REST API and for `search mcp`; an agent's
+   * bridge asks for <server>/mcp, so its token cannot read the REST API.
+   */
+  resource?: string;
+}
 
 export async function login(o: LoginOptions): Promise<TokenFile> {
   const { server } = o;
@@ -51,7 +64,9 @@ export async function login(o: LoginOptions): Promise<TokenFile> {
 
   const prev = readToken();
   let clientId = prev && prev.server === server && prev.clientId && (await knownClient(server, prev.clientId)) ? prev.clientId : null;
-  clientId ??= await register(server, meta.registration_endpoint);
+  const scopes = o.scopes ?? ALL_SCOPES;
+  clientId ??= await register(server, meta.registration_endpoint, o.clientName ?? `Search CLI on ${hostname().replace(/\.local$/, "")}`, scopes);
+  const resource = o.resource ?? `${server}/`;
 
   const verifier = randomBytes(32).toString("base64url");
   const challenge = createHash("sha256").update(verifier).digest("base64url");
@@ -64,7 +79,7 @@ export async function login(o: LoginOptions): Promise<TokenFile> {
       if (u.pathname !== "/callback") { res.writeHead(404).end(); return; }
       const err = u.searchParams.get("error");
       if (u.searchParams.get("state") !== state) {
-        res.writeHead(400, { "content-type": "text/html" }).end(DONE_PAGE(false, "The answer did not match this sign-in. Run search login again."));
+        res.writeHead(400, { "content-type": "text/html" }).end(DONE_PAGE(false, "The answer did not match this sign-in. Run the sign-in again."));
         return;
       }
       if (err) {
@@ -77,7 +92,7 @@ export async function login(o: LoginOptions): Promise<TokenFile> {
         reject(new CliError("Sign-in answer came from a different issuer."));
         return;
       }
-      res.writeHead(200, { "content-type": "text/html" }).end(DONE_PAGE(true, "You can close this tab and go back to your terminal."));
+      res.writeHead(200, { "content-type": "text/html" }).end(DONE_PAGE(true, o.doneText ?? "You can close this tab and go back to your terminal."));
       const addr = srv!.address();
       resolveCode({ code: u.searchParams.get("code") ?? "", redirectUri: `http://127.0.0.1:${typeof addr === "object" && addr ? addr.port : 0}/callback` });
     });
@@ -89,17 +104,17 @@ export async function login(o: LoginOptions): Promise<TokenFile> {
   const authUrl = new URL(meta.authorization_endpoint);
   authUrl.search = new URLSearchParams({
     response_type: "code", client_id: clientId, redirect_uri: redirectUri, code_challenge: challenge, code_challenge_method: "S256",
-    state, scope: ALL_SCOPES.join(" "), resource: `${server}/api/v1`,
+    state, scope: scopes.join(" "), resource,
   }).toString();
 
   o.log(`Opening your browser to sign in to Search at ${server}.`);
   o.log(`If it does not open, visit:\n  ${authUrl.toString()}`);
   if (o.open) openBrowser(authUrl.toString());
 
-  const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new CliError("Timed out waiting for the browser (5 minutes). Run search login again.", EXIT.notSignedIn)), o.timeoutMs ?? 5 * 60_000).unref());
+  const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new CliError("Timed out waiting for the browser (5 minutes). Run the sign-in again.", EXIT.notSignedIn)), o.timeoutMs ?? 5 * 60_000).unref());
   try {
     const { code } = await Promise.race([result, timeout]);
-    const r = await tokenRequest(server, { grant_type: "authorization_code", client_id: clientId, code, code_verifier: verifier, redirect_uri: redirectUri, resource: `${server}/api/v1` });
+    const r = await tokenRequest(server, { grant_type: "authorization_code", client_id: clientId, code, code_verifier: verifier, redirect_uri: redirectUri, resource });
     if (r.status !== 200) throw new CliError(`Token exchange failed: ${String(r.json.error_description ?? r.json.error ?? r.status)}`, EXIT.notSignedIn);
     return issuedToFile(server, clientId, r.json);
   } finally {

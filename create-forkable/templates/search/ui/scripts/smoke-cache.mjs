@@ -42,7 +42,7 @@ for (const theme of ["light", "dark"]) {
   // 1. first visit: search, rerank and answer run once, and the page is not marked saved
   reset();
   await page.goto(`${base}/?q=${encodeURIComponent(Q)}`);
-  await page.getByText("Reranked by Jev").waitFor({ timeout: 20000 });
+  await page.getByTestId("order-note").getByText("Best results first").waitFor({ timeout: 20000 });
   await page.getByTestId("answer-strip").locator("text=sources").waitFor({ timeout: 30000 }).catch(() => {});
   await page.waitForTimeout(800);
   const firstOrder = await page.locator("[data-testid=results] [data-id]").evaluateAll((els) => els.map((e) => e.getAttribute("data-id")));
@@ -61,7 +61,7 @@ for (const theme of ["light", "dark"]) {
   await page.waitForTimeout(1500);
   const order = await page.locator("[data-testid=results] [data-id]").evaluateAll((els) => els.map((e) => e.getAttribute("data-id")));
   check(tag("refresh shows Saved results with Refresh"), /Saved results from (just now|\d+ min ago)/.test(await page.getByTestId("saved-note").innerText()) && (await page.getByTestId("refresh-results").count()) === 1);
-  check(tag("refresh keeps the Jev order"), JSON.stringify(order) === JSON.stringify(firstOrder) && (await page.getByText("Reranked by Jev").count()) === 1, { order: order.slice(0, 3), firstOrder: firstOrder.slice(0, 3) });
+  check(tag("refresh keeps the Jev order"), JSON.stringify(order) === JSON.stringify(firstOrder) && (await page.getByTestId("order-note").getByText("Best results first").count()) === 1, { order: order.slice(0, 3), firstOrder: firstOrder.slice(0, 3) });
   check(tag("refresh renders without a skeleton"), (await page.getByRole("status", { name: "Loading results" }).count()) === 0 && (await page.getByRole("status", { name: "Reading the results" }).count()) === 0);
   check(tag("refresh makes no rerank and no answer call"), seen.rerank.length === 0 && seen.answer.length === 0, seen);
   check(tag("refresh makes zero Jev calls"), (await jevCalls()) === jev0, { before: jev0, after: await jevCalls() });
@@ -96,7 +96,7 @@ for (const theme of ["light", "dark"]) {
   await page.waitForTimeout(800);
   reset();
   await page.getByTestId("refresh-results").click();
-  await page.getByText("Reranked by Jev").waitFor({ timeout: 20000 });
+  await page.getByTestId("order-note").getByText("Best results first").waitFor({ timeout: 20000 });
   await page.waitForTimeout(1500);
   check(tag("Refresh runs a fresh search, rerank and answer"), seen.search.includes("fresh") && seen.rerank.join() === "fresh" && seen.answer.length === 1, seen);
   check(tag("after Refresh the page is live, not saved"), (await page.getByTestId("saved-note").count()) === 0);
@@ -113,12 +113,26 @@ for (const theme of ["light", "dark"]) {
 
   // 6. another query, then back: the saved page again
   await page.goto(`${base}/?q=${encodeURIComponent("globex renewal")}`);
-  await page.getByText("Reranked by Jev").waitFor({ timeout: 20000 });
+  await page.getByTestId("order-note").getByText("Best results first").waitFor({ timeout: 20000 });
   reset();
   await page.goBack();
   await page.getByTestId("saved-note").waitFor({ timeout: 5000 });
   await page.waitForTimeout(800);
   check(tag("returning to a query renders it saved, no rerank or answer"), seen.rerank.length === 0 && seen.answer.length === 0, seen);
+
+  // 7. a page saved on another day is never shown: "today" is a new day after midnight
+  await page.reload();
+  await page.getByTestId("saved-note").waitFor({ timeout: 5000 });
+  await page.evaluate((k) => {
+    const s = JSON.parse(localStorage.getItem(k));
+    for (const e of s.entries) { e.day = "2000-01-01"; }
+    localStorage.setItem(k, JSON.stringify(s));
+  }, STORE);
+  reset();
+  await page.reload();
+  await page.locator("[data-testid=results] [data-id]").first().waitFor({ timeout: 20000 });
+  await page.waitForTimeout(800);
+  check(tag("a page saved on another day is searched again"), (await page.getByTestId("saved-note").count()) === 0 && seen.search.length >= 1, { saved: await page.getByTestId("saved-note").count(), search: seen.search });
   await ctx.close();
 }
 
@@ -130,7 +144,7 @@ for (const theme of ["light", "dark"]) {
   await page.getByTestId("try-sample").click().catch(() => {});
   await page.waitForURL((u) => !u.pathname.startsWith("/start"), { timeout: 120000 }).catch(() => {});
   await page.goto(`${base}/?q=${encodeURIComponent(Q)}`);
-  await page.getByText("Reranked by Jev").waitFor({ timeout: 20000 });
+  await page.getByTestId("order-note").getByText("Best results first").waitFor({ timeout: 20000 });
   await page.waitForTimeout(500);
   const had = await page.evaluate((k) => !!localStorage.getItem(k), STORE);
   await page.goto(`${base}/settings`);

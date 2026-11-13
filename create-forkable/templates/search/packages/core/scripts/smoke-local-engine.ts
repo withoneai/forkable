@@ -61,7 +61,7 @@ try {
   check("setting one: status says chosen", (await engineStatus(settings)).reason === "chosen");
   const evs0 = await ask("Where does the Globex renewal stand?");
   const err0 = evs0.find((e) => e.type === "error") as Extract<ChatEvent, { type: "error" }> | undefined;
-  check("setting one: says Anthropic is not in your grant", err0?.error.code === "model_unavailable" && /Anthropic is not in your grant/.test(err0.error.message), err0?.error.message);
+  check("setting one: says Search has no access to Anthropic", err0?.error.code === "model_unavailable" && /no access to Anthropic/.test(err0.error.message), err0?.error.message);
   check("setting one: no local run", (await execRows()) === before);
   settings = { ...settings, engine: "auto" };
   if (savedEnv !== undefined) process.env.SEARCH_LOCAL_ENGINE = savedEnv;
@@ -76,7 +76,7 @@ try {
   check("hosted: engine is one", (await engineStatus({ engine: "claude-code" })).engine === "one");
   evs = await ask("Where does the Globex renewal stand?");
   err = evs.find((e) => e.type === "error") as Extract<ChatEvent, { type: "error" }> | undefined;
-  check("hosted: says Anthropic in your grant", err?.error.message === "The assistant needs Anthropic in your grant.", err?.error.message);
+  check("hosted: says it needs access to Anthropic", err?.error.message === "The assistant needs access to Anthropic. Connect it in One, then ask again.", err?.error.message);
   delete process.env.SEARCH_HOSTED;
 } finally {
   await b.done();

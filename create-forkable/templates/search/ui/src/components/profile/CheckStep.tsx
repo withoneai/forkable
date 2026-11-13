@@ -8,8 +8,6 @@ import { AlertTriangle, Check, ChevronDown, ExternalLink, Sparkles, X } from "lu
 import type { DraftPreview } from "@/contract/api-types";
 import { cn, fmtRelative, KIND_LABEL } from "@/lib/utils";
 import { SourceLogo } from "@/components/SourceLogo";
-import { AccountMark } from "@/components/AccountChip";
-import { markFor } from "@/lib/accounts";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -61,7 +59,7 @@ export function CheckStep({ platform, noun, preview, previewLoading, issues, che
 
       <section className="flex flex-col gap-5" aria-label="Settings">
         <Row label="Name" hint="Shown in Settings.">
-          <Input value={name} onChange={(e) => onName(e.target.value)} aria-label="Profile name" data-testid="profile-name" className="max-w-[360px]" />
+          <Input value={name} onChange={(e) => onName(e.target.value)} aria-label="Source name" data-testid="profile-name" className="max-w-[360px]" />
         </Row>
         {accounts.length > 1 && onAccounts && (
           <Row label="Accounts" hint={`Each one becomes its own source. Results say which ${platform} they came from.`}>
@@ -75,7 +73,6 @@ export function CheckStep({ platform, noun, preview, previewLoading, issues, che
                     data-testid={`account-${a.label}`}
                     className={cn("flex h-8 items-center gap-2 rounded-md border px-2.5 text-xs transition-colors duration-100", on ? "border-border-strong bg-card text-foreground" : "border-border bg-faint text-muted-foreground hover:text-foreground", last && "cursor-default")}>
                     <span className={cn("flex size-3.5 items-center justify-center rounded-sm border", on ? "border-foreground bg-foreground text-background" : "border-border-strong")}>{on && <Check className="size-2.5 stroke-[3]" />}</span>
-                    <AccountMark text={markFor(a.label, accounts.map((x) => x.label))} />
                     {a.label}
                   </button>
                 );
@@ -83,13 +80,13 @@ export function CheckStep({ platform, noun, preview, previewLoading, issues, che
             </div>
           </Row>
         )}
-        <Row label="Refresh" hint={refreshSentence(identity, platform, noun)}>
+        <Row label="Updates" hint={refreshSentence(identity, platform, noun)}>
           <div className="flex flex-wrap items-center gap-2">
-            <Segmented label="Refresh" value={identity.every as (typeof SCHEDULES)[number]["key"]} options={SCHEDULES} onChange={(k) => onIdent({ every: k })} />
-            {identity.every === "custom" && <Input mono className="w-[160px]" value={identity.cron} onChange={(e) => onIdent({ cron: e.target.value })} placeholder="*/30 8-18 * * 1-5" aria-label="Cron" />}
+            <Segmented label="How often it updates" value={identity.every as (typeof SCHEDULES)[number]["key"]} options={SCHEDULES} onChange={(k) => onIdent({ every: k })} />
+            {identity.every === "custom" && <Input mono className="w-[160px]" value={identity.cron} onChange={(e) => onIdent({ cron: e.target.value })} placeholder="*/30 8-18 * * 1-5" aria-label="Custom schedule" />}
           </div>
         </Row>
-        <Row label="Start from" hint="How far back the first sync reads.">
+        <Row label="Start from" hint="How far back the first update reads.">
           <Segmented label="Start from" value={identity.backfill} options={BACKFILLS} onChange={(k) => onIdent({ backfill: k })} />
         </Row>
         <Row label="Searchable text" hint="Other fields stay out of search.">
@@ -104,7 +101,7 @@ export function CheckStep({ platform, noun, preview, previewLoading, issues, che
       <Disclosure title="Advanced" hint={`Record id, the link to open in ${platform}, the title when empty.`} open={open.advanced} onToggle={(v) => onOpen("advanced", v)} testId="advanced">{advanced}</Disclosure>
 
       <p className="text-11 text-muted-foreground" data-testid="cost-line">
-        Uses about {calls} {platform} {calls === 1 ? "request" : "requests"} per refresh. You can see each one in Access.{checking ? " Checking..." : ""}
+        Uses about {calls} {platform} {calls === 1 ? "request" : "requests"} per update. You can see each one in Access.{checking ? " Checking..." : ""}
       </p>
     </div>
   );
@@ -127,7 +124,7 @@ const Disclosure = forwardRef<HTMLDivElement, { title: string; hint: string; ope
 function ResultsPreview({ preview, loading, platform }: { preview: DraftPreview | undefined; loading: boolean; platform: string }) {
   const rows = (preview?.samples ?? []).slice(0, 3);
   if (!preview) return <Skeleton className="h-[132px] w-full rounded-xl" />;
-  if (!rows.length) return <p className="rounded-xl border border-border bg-card px-3 py-3 text-13 text-muted-foreground">No sample records to show yet. The first sync fills this in.</p>;
+  if (!rows.length) return <p className="rounded-xl border border-border bg-card px-3 py-3 text-13 text-muted-foreground">No sample records to show yet. The first update fills this in.</p>;
   return (
     <ul className={cn("divide-y divide-border overflow-hidden rounded-xl border border-border bg-card transition-opacity", loading && "opacity-60")} data-testid="results-preview">
       {rows.map((s, k) => (

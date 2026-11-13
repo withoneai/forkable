@@ -2,7 +2,7 @@
 
 import { Hono } from "hono";
 import { and, desc, eq, gte, inArray, sql } from "drizzle-orm";
-import { createSource, dbSchema, fetchIsStale, parseDuration, recountEntities, settingsFor, type RunTrigger } from "@search/core";
+import { createSource, dbSchema, dropVocab, fetchIsStale, parseDuration, recountEntities, settingsFor, type RunTrigger } from "@search/core";
 import type { AppEnv } from "../deps.js";
 import { ApiError, badRequest, conflict, notFound } from "../errors.js";
 import { bootstrapSample, SAMPLE_USER } from "../sample.js";
@@ -39,7 +39,7 @@ sourceRoutes.post("/sources", async (c) => {
   const b = await readJson<{ platform?: string; connectionKey?: string; profileId?: string }>(c);
   if (!b.platform || !b.connectionKey || !b.profileId) throw badRequest("platform, connectionKey and profileId are required.");
   const conn = (await connectionsFor(deps.ctx, u.id)).find((x) => x.key === b.connectionKey && x.platform === b.platform);
-  if (!conn) throw new ApiError(409, "not_connected", `${b.platform} on that connection is not in your grant.`, { platform: b.platform });
+  if (!conn) throw new ApiError(409, "not_connected", `Search has no access to ${b.platform} on that account.`, { platform: b.platform });
   const [p] = await deps.db.select().from(profiles).where(eq(profiles.id, b.profileId));
   if (!p || (p.userId && p.userId !== u.id) || p.platform !== b.platform || !p.currentVersionId) throw notFound("Profile");
   const [v] = await deps.db.select().from(profileVersions).where(eq(profileVersions.id, p.currentVersionId));
@@ -91,7 +91,7 @@ sourceRoutes.patch("/sources/:id", async (c) => {
 /** Kicks a run and answers with its id once the runs row exists (or after 1.5 s). */
 async function startRun(c: Parameters<typeof requireUser>[0], sourceId: string, trigger: RunTrigger, full = false): Promise<string> {
   const deps = c.get("deps");
-  if (deps.scheduler.isRunning(sourceId)) throw conflict("A run is already in flight for this source.");
+  if (deps.scheduler.isRunning(sourceId)) throw conflict("This source is already updating.");
   const since = new Date(Date.now() - 1000);
   void deps.scheduler.kick(sourceId, { trigger, full });
   for (let i = 0; i < 30; i++) {
@@ -119,7 +119,7 @@ sourceRoutes.post("/sources/:id/update-profile", async (c) => {
   const [p] = await deps.db.select().from(profiles).where(eq(profiles.id, s.profileId));
   const target = b.versionId ?? p?.currentVersionId;
   const [v] = target ? await deps.db.select().from(profileVersions).where(and(eq(profileVersions.id, target), eq(profileVersions.profileId, s.profileId))) : [];
-  if (!v) throw notFound("Profile version");
+  if (!v) throw notFound("That version of the source setup");
   await deps.db.update(sources).set({ profileVersionId: v.id, scheduleEvery: parseDuration(v.json.schedule?.every ?? "") ?? s.scheduleEvery }).where(eq(sources.id, s.id));
   if (!deps.scheduler.isRunning(s.id)) void deps.scheduler.kick(s.id, { trigger: "remap" });
   const [row] = await deps.db.select().from(sources).where(eq(sources.id, s.id));
@@ -132,7 +132,7 @@ sourceRoutes.delete("/sources/:id", async (c) => {
   const deps = c.get("deps");
   const s = await sourceFor(deps, u.id, c.req.param("id"));
   const b = await readJson<{ keepItems?: boolean }>(c);
-  if (deps.scheduler.isRunning(s.id)) throw conflict("A run is in flight. Pause the source, then remove it.");
+  if (deps.scheduler.isRunning(s.id)) throw conflict("This source is updating. Pause it, then remove it.");
   await deps.db.transaction(async (tx) => {
     if (!b.keepItems) {
       const ids = (await tx.select({ id: items.id }).from(items).where(eq(items.sourceId, s.id))).map((r) => r.id);
@@ -157,6 +157,7 @@ sourceRoutes.delete("/sources/:id", async (c) => {
     await tx.delete(sources).where(eq(sources.id, s.id));
   });
   if (!b.keepItems) await recountEntities(deps.db, u.id);
+  dropVocab(u.id);
   return c.body(null, 204);
 });
 

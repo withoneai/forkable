@@ -29,8 +29,8 @@ const PERMISSION_SET = "00000000-fake-smoke-perm-0000000000ps";
 const REDIRECT = `http://127.0.0.1:${PORT}/api/one/callback`;
 const SECRET = "one_secret_fake_smoke_abcdefgh";
 const KEY = "sk_live_fake_smoke_ijklmnop";
-const writeEnv = (clientId: string) => writeFileSync(join(envDir, ".env"), [
-  `ONE_CLIENT_ID=${clientId}`, `ONE_REDIRECT_URI=${REDIRECT}`, `ONE_PERMISSION_SET=${PERMISSION_SET}`, "ONE_CLIENT_SECRET=", "ONE_CONNECT_KEY=", "",
+const writeEnv = (clientId: string, permissionSet: string | null = PERMISSION_SET) => writeFileSync(join(envDir, ".env"), [
+  `ONE_CLIENT_ID=${clientId}`, `ONE_REDIRECT_URI=${REDIRECT}`, ...(permissionSet ? [`ONE_PERMISSION_SET=${permissionSet}`] : []), "ONE_CLIENT_SECRET=", "ONE_CONNECT_KEY=", "",
 ].join("\n"));
 writeEnv(CLIENT_ID);
 
@@ -96,6 +96,15 @@ try {
   writeEnv(CLIENT_ID);
   r = await call("GET", "/setup/connect");
   check("back to the first app: its stored secrets apply again", r.json.configured === true, r.json);
+  check("an app made with a permission set asks to be updated to everything", r.json.create.askChanged === true, r.json.create);
+  const authLoc = async () => (await fetch(`${base}/api/one/authorize`, { redirect: "manual", headers: { cookie } })).headers.get("location") ?? "";
+  check("with a permission set in .env, sign-in sends it", (await authLoc()).includes(PERMISSION_SET));
+
+  // `pnpm connect` updates the app to ask for everything: the CLI drops ONE_PERMISSION_SET from .env
+  writeEnv(CLIENT_ID, null);
+  r = await call("GET", "/setup/connect");
+  check("after the update to everything, no permission set and nothing to update", r.json.configured === true && r.json.create.askChanged === false, r.json.create);
+  check("sign-in no longer narrows to the old permission set (no fallback to the store)", !(await authLoc()).includes(PERMISSION_SET));
 
   r = await call("DELETE", "/setup/connect/ONE_CONNECT_KEY");
   check("removing the Connect key turns sign-in off", r.status === 200 && !r.json.configured && (await call("GET", "/me")).json.connect.signInUrl === null);

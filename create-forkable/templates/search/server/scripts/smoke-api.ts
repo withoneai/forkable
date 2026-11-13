@@ -13,7 +13,7 @@ import { join } from "node:path";
 import { dbSchema } from "@search/core";
 import { eq } from "drizzle-orm";
 import { startServer } from "../src/node.js";
-import { connectExtraFile, ROOT } from "../src/config.js";
+import { assertNotRepoFileUnderTest, ROOT } from "../src/config.js";
 
 const PORT = Number(process.env.SMOKE_PORT ?? 52377);
 const home = mkdtempSync(join(tmpdir(), "search-smoke-api-"));
@@ -27,8 +27,8 @@ const server = await startServer({ env: { HOME: home, PORT, PG_PORT: Number(proc
 const base = `http://127.0.0.1:${PORT}`;
 {
   let refused = false;
-  try { connectExtraFile({ ROOT, ENV_DIR: undefined }); } catch { refused = true; }
-  check("under test, the repo's connect.extra.json is refused", refused);
+  try { assertNotRepoFileUnderTest(join(ROOT, ".env")); } catch { refused = true; }
+  check("under test, the repo's .env is refused", refused);
 }
 let cookie = "";
 async function call(method: string, path: string, body?: unknown, headers: Record<string, string> = {}): Promise<{ status: number; json: any; text: string; headers: Headers }> {
@@ -72,8 +72,86 @@ try {
   check("GET /search falls back to any word", r.status === 200 && r.json.fallback === "or" && r.json.total > 0, { fallback: r.json.fallback, total: r.json.total });
   r = await call("GET", "/search?q=Owen%20Prise");
   check("GET /search offers did you mean", r.status === 200 && r.json.didYouMean?.name === "Owen Price", r.json.didYouMean);
-  r = await call("GET", "/search?q=pricing%20last%20month");
-  check("GET /search proposes dates", r.status === 200 && r.json.dateProposals?.length === 1 && /^after:\d{4}-\d{2}-01 before:/.test(r.json.dateProposals[0].insert), r.json.dateProposals);
+  r = await call("GET", "/search?q=pricing%20last%20month&understand=0");
+  check("GET /search understand=0 proposes dates", r.status === 200 && r.json.understanding === false && r.json.dateProposals?.length === 1 && /^after:\d{4}-\d{2}-01 before:/.test(r.json.dateProposals[0].insert), r.json.dateProposals);
+
+  // plain sentences (D48)
+  const enc = encodeURIComponent;
+  r = await call("GET", `/search?q=${enc("emails from Priya last month")}`);
+  {
+    const f = (r.json.understood ?? []).map((u: any) => u.filter);
+    check("GET /search reads a sentence into filters", r.status === 200 && r.json.understanding === true && f[0] === "type:mail" && f[1] === "from:priya@globex.com" && /^after:\d{4}-\d{2}-01 before:/.test(f[2] ?? ""), r.json.understood);
+    check("GET /search understood: phrase, filter, label, place", (r.json.understood ?? []).every((u: any) => typeof u.label === "string" && u.label && "emails from Priya last month".slice(u.start, u.end) === u.phrase), r.json.understood);
+    check("GET /search searchedAs is the query run, parsed matches it", r.json.searchedAs?.startsWith("type:mail from:priya@globex.com after:") && r.json.parsed.text === "" && r.json.parsed.clauses.length === 4, { searchedAs: r.json.searchedAs, parsed: r.json.parsed?.text });
+    check("GET /search the sentence finds only Priya's mail", r.json.results.every((x: any) => x.kind === "email_thread") && r.json.dateProposals.length === 0, r.json.results?.map((x: any) => x.kind));
+  }
+  r = await call("GET", `/search?q=${enc("emails from Priya")}`);
+  const priyaMail = r.json.total;
+  check("GET /search emails from Priya", r.status === 200 && priyaMail > 0 && r.json.results.every((x: any) => x.kind === "email_thread" && x.people.some((p: any) => /Priya/.test(p.name))), { total: priyaMail });
+  r = await call("GET", `/search?q=${enc("emails from Priya")}&understand=0`);
+  check("GET /search understand=0 keeps the words", r.status === 200 && r.json.understanding === false && r.json.understood.length === 0 && r.json.suggestions.length === 0 && r.json.searchedAs === "emails from Priya", { understood: r.json.understood, searchedAs: r.json.searchedAs });
+  r = await call("GET", `/search?q=${enc('"emails" "from Priya"')}`);
+  check("GET /search quoted words are never read", r.status === 200 && r.json.understood.length === 0, r.json.understood);
+  r = await call("GET", `/search?q=${enc("from:lena emails from Priya")}`);
+  check("GET /search a typed filter wins over a phrase", r.status === 200 && r.json.understood.map((u: any) => u.filter).join(" ") === "type:mail" && r.json.searchedAs.includes("from:lena"), r.json.understood);
+  r = await call("GET", `/search?q=${enc("from Mia")}`);
+  check("GET /search two Mia Parks: a choice, not a pick", r.status === 200 && r.json.understood.length === 0 && r.json.suggestions[0]?.why === "same_name" && r.json.suggestions[0].choices.length >= 2 && new Set(r.json.suggestions[0].choices.map((c: any) => c.filter)).size === r.json.suggestions[0].choices.length, r.json.suggestions);
+  r = await call("GET", `/search?q=${enc("open deals")}`);
+  check("GET /search open deals", r.status === 200 && r.json.understood.map((u: any) => u.filter).join(" ") === "is:open type:deal" && r.json.total > 0 && r.json.results.every((x: any) => x.kind === "deal"), { u: r.json.understood, total: r.json.total });
+  r = await call("GET", `/search?q=${enc("slack messages about Globex")}`);
+  // Slack holds only messages here, so "messages" is not a second chip (final review 2026-11-12)
+  check("GET /search slack messages", r.status === 200 && r.json.understood.map((u: any) => u.filter).join(" ") === "in:slack" && r.json.results.every((x: any) => x.platform === "slack"), r.json.understood);
+  for (const q of ["from scratch", "in progress", "with regards", "renewal deal"]) {
+    r = await call("GET", `/search?q=${enc(q)}`);
+    check(`GET /search "${q}" reads nothing`, r.status === 200 && r.json.understood.length === 0 && r.json.suggestions.length === 0 && r.json.searchedAs === q, r.json.understood);
+  }
+  r = await call("GET", `/search?q=${enc("where are we with Globex")}`);
+  check("GET /search small words left over list the filter alone", r.status === 200 && r.json.understood[0]?.filter === "with:globex.com" && r.json.total > 3, { u: r.json.understood, total: r.json.total });
+  r = await call("GET", `/search?q=yesterday&tz=Asia%2FQatar`);
+  check("GET /search tz: dates in the browser's zone", r.status === 200 && r.json.understood[0]?.filter === "on:yesterday" && /^Yesterday, /.test(r.json.understood[0]?.label), r.json.understood);
+  r = await call("GET", `/search/count?q=${enc("emails from Priya")}`);
+  const c1 = r.json.count;
+  r = await call("GET", `/search/count?q=${enc("emails from Priya")}&understand=0`);
+  check("GET /search/count reads sentences too, understand=0 does not", c1 === priyaMail && r.json.count !== c1, { understood: c1, words: r.json.count });
+  // when in doubt, no filter (D48)
+  r = await call("GET", `/search?q=${enc("emails that are not from Priya")}`);
+  check("GET /search \"not from Priya\" never applies from:Priya, offers the exclusion", r.status === 200 && !r.json.understood.some((u: any) => /^from:/.test(u.filter)) && r.json.suggestions.some((s: any) => s.why === "negated" && s.choices[0]?.filter === "-from:priya@globex.com"), { u: r.json.understood, s: r.json.suggestions });
+  r = await call("GET", `/search?q=${enc("what happened last week")}`);
+  check("GET /search a question with a date lists that week", r.status === 200 && r.json.understood.length === 1 && r.json.total > 0 && r.json.searchedAs === r.json.understood[0].filter, { total: r.json.total, searchedAs: r.json.searchedAs });
+  r = await call("GET", `/search?q=${enc("anything from last week")}`);
+  check("GET /search \"anything from last week\" finds that week", r.status === 200 && r.json.total > 0, r.json.total);
+  r = await call("GET", `/search?q=${enc("contract review with Globex")}`);
+  check("GET /search \"contract review with Globex\" keeps what the words found", r.status === 200 && r.json.total >= 5 && ["Globex contract review", "Globex x Acme contract review"].every((t) => r.json.results.some((x: any) => x.title === t)), r.json.results?.map((x: any) => x.title));
+  r = await call("GET", `/search?q=${enc("procurement questionnaire from Hannah")}`);
+  // from means from: a note that only names her is not from her; with reaches it (final review 2026-11-12)
+  check("GET /search \"procurement questionnaire from Hannah\" lists only what she sent", r.status === 200 && !r.json.results.some((x: any) => /^Hannah sent/.test(x.title)) && r.json.results.some((x: any) => /Procurement questionnaire/i.test(x.title)), r.json.results?.map((x: any) => x.title));
+  r = await call("GET", `/search?q=${enc("procurement questionnaire with Hannah")}`);
+  check("GET /search \"procurement questionnaire with Hannah\" keeps the note that names her", r.status === 200 && r.json.results.some((x: any) => /^Hannah sent/.test(x.title)), r.json.results?.map((x: any) => x.title));
+  r = await call("GET", `/search?q=${enc("emails with price changes")}`);
+  check("GET /search a last name inside a phrase is never applied", r.status === 200 && !r.json.understood.some((u: any) => u.kind === "person") && r.json.suggestions.length === 0, { u: r.json.understood, s: r.json.suggestions });
+  r = await call("GET", `/search?q=${enc("notes on linear algebra")}`);
+  check("GET /search a tool name in an everyday phrase is offered", r.status === 200 && !r.json.understood.some((u: any) => u.kind === "source") && r.json.suggestions[0]?.why === "maybe_tool", { u: r.json.understood, s: r.json.suggestions });
+  r = await call("GET", `/search?q=${enc("emails from Priya and Marco")}`);
+  check("GET /search a list of senders is one filter", r.status === 200 && r.json.understood.some((u: any) => u.filter === "from:priya@globex.com,marco@globex.com") && r.json.total > 0, r.json.understood);
+  {
+    // a bearer caller (a script, an agent, the CLI) gets its text as written unless it asks
+    const db = server.deps.db;
+    const me = (await call("GET", "/me")).json;
+    const { createHash } = await import("node:crypto");
+    const tok = "sat_smoke_understand_0001";
+    await db.insert(dbSchema.oauthTokens).values({ tokenHash: createHash("sha256").update(tok).digest("hex"), kind: "access", clientId: "client_smoke", userId: me.user.id, familyId: "fam_smoke", scopes: ["search:read", "search:ask"], resource: null, expiresAt: new Date(Date.now() + 3_600_000) });
+    const bearer = (path: string) => call("GET", path, undefined, { authorization: `Bearer ${tok}`, cookie: "" });
+    r = await bearer(`/search?q=${enc("emails from Priya")}`);
+    check("GET /search with a bearer token searches the words as sent", r.status === 200 && r.json.understanding === false && r.json.understood.length === 0 && r.json.searchedAs === "emails from Priya", { understanding: r.json.understanding, searchedAs: r.json.searchedAs });
+    r = await bearer(`/search?q=${enc("emails from Priya")}&understand=1`);
+    check("GET /search with a bearer token and understand=1 reads the sentence", r.status === 200 && r.json.understanding === true && r.json.total === priyaMail, { understanding: r.json.understanding, total: r.json.total });
+    r = await bearer(`/search/count?q=${enc("emails from Priya")}`);
+    const words = r.json.count;
+    r = await bearer(`/search/count?q=${enc("emails from Priya")}&understand=1`);
+    check("GET /search/count with a bearer token follows understand=1 too", r.json.count === priyaMail && words !== priyaMail, { words, read: r.json.count });
+  }
+  r = await call("GET", "/recent-searches?limit=50");
+  check("GET /recent-searches keeps the sentence as typed", r.status === 200 && r.json.some((x: any) => x.query === "emails from Priya"), r.json?.slice(0, 3));
   r = await call("GET", "/search?q=globex%20renewal&limit=30");
   const queryId = r.json?.queryId;
   check("GET /search globex renewal", r.status === 200 && r.json.total > 3 && r.json.mode === "hybrid" && r.json.results[0].sourceName, r.json?.total);
@@ -95,7 +173,8 @@ try {
   r = await call("POST", "/search/rerank", {});
   check("POST /search/rerank without queryId is 400", r.status === 400);
   r = await call("GET", "/search/count?q=type:deal");
-  check("GET /search/count", r.status === 200 && r.json.count === 7, r.json);
+  // 7 deal records, 2 of them one deal kept in two CRMs: 5 rows
+  check("GET /search/count", r.status === 200 && r.json.count === 5, r.json);
   r = await call("GET", "/suggest?prefix=from:pri");
   check("GET /suggest from:pri", r.status === 200 && r.json.operators.some((o: any) => /priya/i.test(o.label)), r.json);
   r = await call("GET", "/suggest?prefix=globex");
@@ -122,6 +201,19 @@ try {
   check("GET /entities limit up to 200, self first", r.status === 200 && r.json.length > 10 && r.json[0].isSelf === true, r.json?.[0]);
   r = await call("GET", `/entities/${priya.id}`);
   check("GET /entities/:id Priya across sources", r.status === 200 && r.json.entity.sources.length >= 6 && r.json.timeline.length > 5, r.json?.entity?.sources);
+  // item 10 (polish): a card and the page it opens show the same number
+  for (const q of ["priya", "globex", "who is Ravi", "owen"]) {
+    const cards = (await call("GET", `/search?q=${encodeURIComponent(q)}`)).json.entities ?? [];
+    for (const card of cards) {
+      const page = (await call("GET", `/entities/${card.id}`)).json;
+      const total = page.entity.sources.reduce((n: number, x: any) => n + x.count, 0);
+      check(`card and page agree: ${card.name} (${q})`, card.itemCount === page.entity.itemCount && total === page.entity.itemCount, { card: card.itemCount, page: page.entity.itemCount, tools: total });
+      // the timeline leaves out its own record and shows each person or company once
+      const own = page.timeline.filter((r: any) => (r.people ?? []).some((p: any) => p.entityId === card.id && p.role === "is"));
+      const ids = page.timeline.map((r: any) => r.id);
+      check(`timeline without its own record, no repeats: ${card.name} (${q})`, own.length === 0 && new Set(ids).size === ids.length && page.timeline.length <= page.entity.itemCount, { own: own.map((r: any) => r.title) });
+    }
+  }
   const pend = (await call("GET", "/entities?limit=200")).json as any[];
   let matchId: string | null = null, matchEntity: string | null = null;
   for (const e of pend) { const d = (await call("GET", `/entities/${e.id}`)).json; if (d.pendingMatches?.length) { matchId = d.pendingMatches[0].matchId; matchEntity = e.id; break; } }
@@ -249,29 +341,9 @@ try {
   r = await call("POST", "/profile-drafts", { platform: "pipedrive" });
   check("POST /profile-drafts outside the grant", r.status === 200 && r.json.inGrant === false && r.json.connection === null, r.json);
   const outDraft = r.json.id;
+  // the Connect app asks for everything: no route changes its ask any more
   r = await call("POST", `/profile-drafts/${outDraft}/widen-ask`);
-  // the sample (every UI test signs in as it) never widens a Connect app, not even the tmp one
-  check("POST /profile-drafts/:id/widen-ask on the sample writes nothing", r.status === 200 && r.json.written === null && r.json.next === "sample" && !existsSync(join(home, "connect.extra.json")), r.json);
-  {
-    // a real (non-sample) user: Save adds exactly the saved models' actions to the ask, once
-    const sampleCookie = cookie;
-    const db = server.deps.db;
-    const { users: U, sessions: S, profileDrafts: PD, connectUsers: CU } = dbSchema;
-    await db.insert(U).values({ id: "usr_ask", name: "Ask Test", email: "ask@acme.com", isSample: false });
-    await db.insert(S).values({ sid: "sid_ask_widen_test_0001", userId: "usr_ask" });
-    await db.insert(CU).values({ userId: "usr_ask", reference: "ref:cu_ask", connectUserId: "cu_ask" });
-    await db.update(PD).set({ userId: "usr_ask" }).where(eq(PD.id, draft.id));
-    const as = (method: string, path: string, body?: unknown) => call(method, path, body, { cookie: "search_sid=sid_ask_widen_test_0001" });
-    r = await as("POST", `/profile-drafts/${draft.id}/widen-ask`, { profiles: ["zendesk.tickets"] });
-    const extraFile = join(home, "connect.extra.json");
-    const extra = existsSync(extraFile) ? JSON.parse(readFileSync(extraFile, "utf8")) : null;
-    check("widen-ask names the saved model's exact actions", r.status === 200 && r.json.written === "connect.extra.json" && r.json.added.length >= 1 && extra?.platforms?.zendesk?.actions?.join() === r.json.added.join() && !extra.platforms.zendesk.access, { json: r.json, extra });
-    r = await as("POST", `/profile-drafts/${draft.id}/widen-ask`, { profiles: ["zendesk.tickets"] });
-    check("widen-ask again adds nothing", r.status === 200 && r.json.written === null && r.json.next === "none" && r.json.added.length === 0, r.json);
-    rmSync(extraFile, { force: true });
-    await db.update(PD).set({ userId: (await db.select().from(S).where(eq(S.sid, sampleCookie.split("=")[1]!)))[0]!.userId }).where(eq(PD.id, draft.id));
-    cookie = sampleCookie;
-  }
+  check("widen-ask is gone (the app asks for everything)", r.status === 404 && !existsSync(join(home, "connect.extra.json")), r.status);
   r = await call("DELETE", `/profile-drafts/${outDraft}`);
   check("DELETE /profile-drafts/:id", r.status === 204 && (await call("GET", `/profile-drafts/${outDraft}`)).status === 404);
   r = await call("DELETE", `/sources/${zdSource}`, { keepItems: false });
@@ -283,6 +355,14 @@ try {
   check("GET /settings", r.status === 200 && r.json.chatModel);
   r = await call("PUT", "/settings", { rerank: false, lanesOn: true });
   check("PUT /settings", r.status === 200 && r.json.settings.rerank === false && r.json.effect === null);
+  r = await call("GET", "/one-plan");
+  check("GET /one-plan (auto, Free until One answers)", r.status === 200 && r.json.plan === "auto" && r.json.limit === 20 && r.json.pace === 18 && r.json.limitFrom === "default" && typeof r.json.monthCalls === "number");
+  r = await call("PUT", "/settings", { onePlan: "custom" });
+  check("PUT /settings onePlan custom without oneRpm -> 400", r.status === 400);
+  r = await call("PUT", "/settings", { onePlan: "custom", oneRpm: 2000 });
+  const plan = await call("GET", "/one-plan");
+  check("PUT /settings onePlan custom 2000 -> pace 1800", r.status === 200 && plan.json.limit === 2000 && plan.json.pace === 1800 && plan.json.limitFrom === "chosen");
+  await call("PUT", "/settings", { onePlan: "auto", oneRpm: null });
   r = await call("PUT", "/settings", { nope: 1 });
   check("PUT /settings unknown key is 400", r.status === 400);
   // the AI engine (Settings, Assistant)

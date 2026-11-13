@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Bookmark, Check, ChevronDown, ChevronRight, Plus, X } from "lucide-react";
-import type { ItemKind, OperatorKey, SearchResponse } from "@/contract/api-types";
-import { applyChip, opValues, parseQuery } from "@/contract/query";
+import type { ItemKind, OperatorKey, SearchResponse, Understood } from "@/contract/api-types";
+import { applyChip, opValues, parseQuery, writeUnderstood } from "@/contract/query";
 import { useEntityOptions } from "./entityOptions";
 import { cn, platformName } from "@/lib/utils";
 import { SourceLogo } from "@/components/SourceLogo";
@@ -23,7 +23,7 @@ function typeChips(scope: ItemKind | "all", typed: string[]): ChipDef[] {
   switch (k) {
     case "email_thread": return [
       { key: "has", label: "Has", any: "Attachment", options: [{ value: "attachment", label: "Has attachment" }], single: true },
-      { key: "is", label: "Is", any: "Read or unread", options: [{ value: "unread", label: "Unread" }, { value: "needs-you", label: "Needs you" }, { value: "waiting", label: "Waiting" }] },
+      { key: "is", label: "Show only", any: "Read or unread", options: [{ value: "unread", label: "Unread" }, { value: "needs-you", label: "Needs you" }, { value: "waiting", label: "Waiting on others" }] },
     ];
     case "task": return [
       { key: "status", label: "Status", any: "Any", options: ["Todo", "In Progress", "In Review", "Done"].map((s) => ({ value: s, label: s })) },
@@ -31,7 +31,7 @@ function typeChips(scope: ItemKind | "all", typed: string[]): ChipDef[] {
     ];
     case "deal": return [
       { key: "stage", label: "Stage", any: "Any", options: ["Qualified", "Discovery", "Negotiation", "Contract sent", "Closed won"].map((s) => ({ value: s, label: s })) },
-      { key: "is", label: "Owner", any: "Anyone", options: [{ value: "mine", label: "Mine" }, { value: "open", label: "Open" }] },
+      { key: "is", label: "Show only", any: "Any deal", options: [{ value: "mine", label: "Yours" }, { value: "open", label: "Open" }] },
     ];
     case "event": case "meeting_note": return [
       { key: "from", label: "Organizer", any: "Anyone", options: [] },
@@ -47,11 +47,21 @@ function typeChips(scope: ItemKind | "all", typed: string[]): ChipDef[] {
  * no second filter state, so a typed operator lights its chip and a chip
  * writes its operator into the box.
  */
-export function ChipBar({ q, data, scope, onChange, onSave, filterOpen, setFilterOpen }: {
+export function ChipBar({ q, data, scope, onChange: setQ, onSave, filterOpen, setFilterOpen }: {
   q: string; data: SearchResponse | undefined; scope: ItemKind | "all"; onChange: (q: string) => void; onSave: () => void;
   filterOpen: boolean; setFilterOpen: (v: boolean) => void;
 }) {
   const parsed = useMemo(() => parseQuery(q), [q]);
+  // Filters read from the sentence (D48) have their own chips above. A chip here for the
+  // same key is hidden, and editing a key the sentence set writes that phrase into the box
+  // as its filter first, so the hand-picked value and the read one never fight.
+  const understood: Understood[] = data?.understood ?? [];
+  const readKeys = new Set(understood.flatMap((u) => u.keys));
+  const onChange = (next: string) => setQ(next);
+  const edit = (key: OperatorKey, values: string[] | null) => {
+    const base = readKeys.has(key) ? writeUnderstood(q, understood, [key]) : q;
+    onChange(applyChip(base, { key, values }));
+  };
   const ENTITY_OPTIONS = useEntityOptions();
   const accounts = useAccounts();
   const srcCounts = data?.counts.source ?? {};
@@ -66,19 +76,20 @@ export function ChipBar({ q, data, scope, onChange, onSave, filterOpen, setFilte
     { key: "with", label: "With", any: "Anyone", fixed: true, options: withOpts },
     { key: "after", label: "Date", any: "Any time", fixed: true, single: true, options: DATE_OPTIONS },
   ];
-  const typed = opValues(parsed, "type");
+  const typed = [...opValues(parsed, "type"), ...understood.filter((u) => u.keys.includes("type")).map((u) => u.filter.replace(/^type:/, ""))];
   const extra = typeChips(scope, typed).map((c) => (c.options.length ? c : { ...c, options: personOpts }));
-  const all = [...fixed, ...extra];
+  const dateRead = ["after", "before", "on", "during"].some((k) => readKeys.has(k as OperatorKey));
+  const all = [...fixed.filter((c) => !readKeys.has(c.key) && !(c.key === "after" && dateRead)), ...extra];
   const active = parsed.clauses.some((c) => c.kind === "op");
 
   return (
     <div className="flex min-h-9 flex-wrap items-center gap-1.5" data-testid="chip-bar">
       {all.map((c) => (
-        <FilterChip key={`${c.key}-${c.label}`} def={c} values={opValues(parsed, c.key)} onSet={(vals) => onChange(applyChip(q, { key: c.key, values: vals }))} />
+        <FilterChip key={`${c.key}-${c.label}`} def={c} values={opValues(parsed, c.key)} onSet={(vals) => edit(c.key, vals)} />
       ))}
-      {opValues(parsed, "type").length > 0 && <SetChip label="Type" value={opValues(parsed, "type").join(", ")} onClear={() => onChange(applyChip(q, { key: "type", values: null }))} />}
-      {opValues(parsed, "lane").length > 0 && <SetChip label="Lane" value={opValues(parsed, "lane").join(", ")} onClear={() => onChange(applyChip(q, { key: "lane", values: null }))} />}
-      <AddFilter open={filterOpen} setOpen={setFilterOpen} q={q} onChange={onChange} defs={all} />
+      {opValues(parsed, "type").length > 0 && <SetChip label="Type" value={opValues(parsed, "type").map(typeLabel).join(", ")} onClear={() => onChange(applyChip(q, { key: "type", values: null }))} />}
+      {opValues(parsed, "lane").length > 0 && <SetChip label="Priority" value={opValues(parsed, "lane").map((v) => LANE_LABEL[v] ?? v).join(", ")} onClear={() => onChange(applyChip(q, { key: "lane", values: null }))} />}
+      <AddFilter open={filterOpen} setOpen={setFilterOpen} q={q} onEdit={edit} defs={all} />
       {active && (
         <>
           <button type="button" onClick={() => onChange(parsed.clauses.filter((c) => c.kind !== "op").map((c) => (c.kind === "or" ? "OR" : c.kind === "phrase" ? `${c.negate ? "-" : ""}"${c.value}"` : `${c.negate ? "-" : ""}${c.value}`)).join(" "))}
@@ -164,15 +175,23 @@ function OptionList({ options, selected, onPick, single }: { options: ChipOption
   );
 }
 
-/** `+ Filter` (F): a cascading menu, key first, then its values. */
-function AddFilter({ open, setOpen, q, onChange, defs }: { open: boolean; setOpen: (v: boolean) => void; q: string; onChange: (q: string) => void; defs: ChipDef[] }) {
+const TYPE_OPTIONS: [string, string][] = [["mail", "Emails"], ["event", "Calendar events"], ["meeting", "Meetings"], ["person", "People"], ["company", "Companies"], ["doc", "Docs"], ["issue", "Issues and tasks"], ["message", "Messages"], ["deal", "Deals"], ["note", "Notes"]];
+const TYPE_LABEL: Record<string, string> = { ...Object.fromEntries(TYPE_OPTIONS), "note,meeting_note": "Notes", meeting_note: "Meeting notes", email: "Emails", task: "Issues and tasks" };
+const typeLabel = (v: string) => TYPE_LABEL[v.toLowerCase()] ?? v;
+const LANE_OPTIONS: [string, string][] = [["vip", "VIPs"], ["needs-you", "Needs you"], ["waiting", "Waiting on others"], ["fyi", "For your information"], ["low", "Low"]];
+const LANE_LABEL: Record<string, string> = Object.fromEntries(LANE_OPTIONS);
+const IS_OPTIONS: [string, string][] = [["unread", "Unread"], ["vip", "VIPs"], ["needs-you", "Needs you"], ["waiting", "Waiting on others"], ["mine", "Yours"], ["open", "Open"], ["upcoming", "Upcoming"], ["past", "Past"]];
+const HAS_OPTIONS: [string, string][] = [["attachment", "An attachment"], ["link", "A link"], ["joinurl", "A meeting link"], ["transcript", "A transcript"]];
+
+/** `+ Filter` (F): a cascading menu, the kind of filter first, then its values. Plain words only; the typed form is in the Cheatsheet. */
+function AddFilter({ open, setOpen, q, onEdit, defs }: { open: boolean; setOpen: (v: boolean) => void; q: string; onEdit: (key: OperatorKey, values: string[] | null) => void; defs: ChipDef[] }) {
   const [key, setKey] = useState<ChipDef | null>(null);
   useEffect(() => { if (!open) setKey(null); }, [open]);
   const more: ChipDef[] = [
-    { key: "type", label: "Type", any: "", options: ["mail", "event", "meeting", "person", "company", "doc", "issue", "message", "deal", "note"].map((t) => ({ value: t, label: t[0]!.toUpperCase() + t.slice(1) })) },
-    { key: "lane", label: "Lane", any: "", options: [["vip", "VIPs"], ["needs-you", "Needs you"], ["waiting", "Waiting"], ["fyi", "FYI"], ["low", "Low"]].map(([v, l]) => ({ value: v!, label: l! })) },
-    { key: "is", label: "Is", any: "", options: ["unread", "vip", "needs-you", "waiting", "mine", "open", "upcoming", "past"].map((t) => ({ value: t, label: t })) },
-    { key: "has", label: "Has", any: "", options: ["attachment", "link", "joinurl", "transcript"].map((t) => ({ value: t, label: t })) },
+    { key: "type", label: "Type", any: "", options: TYPE_OPTIONS.map(([v, l]) => ({ value: v, label: l })) },
+    { key: "lane", label: "Priority", any: "", options: LANE_OPTIONS.map(([v, l]) => ({ value: v, label: l })) },
+    { key: "is", label: "Show only", any: "", options: IS_OPTIONS.map(([v, l]) => ({ value: v, label: l })) },
+    { key: "has", label: "Includes", any: "", options: HAS_OPTIONS.map(([v, l]) => ({ value: v, label: l })) },
     { key: "before", label: "Before", any: "", single: true, options: DATE_OPTIONS },
     { key: "to", label: "To", any: "", options: defs.find((d) => d.key === "from")?.options ?? [] },
   ];
@@ -193,7 +212,7 @@ function AddFilter({ open, setOpen, q, onChange, defs }: { open: boolean; setOpe
           const cur = opValues(parsed, key.key);
           const has = cur.some((x) => x.toLowerCase() === v.toLowerCase());
           const next = key.single ? (has ? [] : [v]) : has ? cur.filter((x) => x.toLowerCase() !== v.toLowerCase()) : [...cur, v];
-          onChange(applyChip(q, { key: key.key, values: next.length ? next : null }));
+          onEdit(key.key, next.length ? next : null);
           if (key.single) setOpen(false);
         }} />
       ) : (
@@ -207,7 +226,7 @@ function AddFilter({ open, setOpen, q, onChange, defs }: { open: boolean; setOpe
             <button key={`${k.key}-${k.label}`} type="button" role="menuitem" onMouseEnter={() => setI(idx)} onClick={() => setKey(k)}
               className={cn("flex h-7 w-full items-center justify-between rounded-md px-2 text-left text-13", idx === i && "bg-muted")}>
               <span>{k.label}</span>
-              <span className="flex items-center gap-1 font-mono text-11 text-muted-foreground">{k.key}:<ChevronRight className="size-3" /></span>
+              <ChevronRight className="size-3 text-muted-foreground" />
             </button>
           ))}
         </div>

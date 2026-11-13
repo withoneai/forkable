@@ -1,8 +1,8 @@
 // Mock routes: the assistant (SPEC 14, CONTRACT 7.1). POST /chat streams the
 // same events the server will (chat, step, results, answer, proposal,
 // followups, done). A few questions have fixture answers like
-// fixtures/sample/chat.json; anything else gets the extractive answerer, which
-// quotes the top results and says it used no model.
+// fixtures/sample/chat.json; anything else answers like the server with no Claude
+// Code or Codex here: "not set up", never pasted snippets dressed as an answer.
 import type { ChatContext, ChatEvent, ChatMessage, ChatStep, ChatTurnInput, Citation, QueryProposal, ResultRow } from "@/contract/api-types";
 import { parseQuery } from "@/contract/query";
 import { fail, noContent, route, sleep } from "./http";
@@ -91,27 +91,11 @@ function fixture(question: string, ctx: ChatContext): Answer | null {
   return null;
 }
 
-/** No fixture: quote the top three results and say no model wrote it. */
-function extractive(question: string, ctx: ChatContext): Answer {
-  const searchFor = /^search (for|in chat)?:?\s*/i.test(question) ? question.replace(/^search (for|in chat)?:?\s*/i, "") : question;
-  let res = quietSearch(searchFor, 12);
-  let searched = searchFor;
-  if (res.results.length === 0 && ctx.query) { res = quietSearch(ctx.query, 12); searched = ctx.query; }
-  const top = res.results.slice(0, 3);
-  if (!top.length) {
-    return { text: "I could not find that in your sources.", citations: [], grounded: true, model: "extractive", searches: [searched], proposal: null, followups: [] };
-  }
-  const citations = top.map((r, i) => cite(i + 1, ITEMS.find((it) => it.id === r.id)!, undefined));
-  const lines = citations.map((c) => `${c.title}: "${c.quote}" [${c.n}]`);
-  return {
-    text: `Here is what your sources say.\n\n${lines.join("\n\n")}`,
-    citations, grounded: true, model: "extractive", searches: [searched], proposal: null,
-    followups: top[0] ? [`Tell me more about ${top[0].title}`] : [],
-  };
-}
+/** What the server says when the sample has no replay and no local engine (core chat/run.ts NOT_SET_UP). */
+const NOT_SET_UP = "The assistant is not set up on this computer yet. It needs Claude Code or Codex signed in here.";
 
-function answerFor(question: string, ctx: ChatContext): Answer {
-  return fixture(question, ctx) ?? extractive(question, ctx);
+function answerFor(question: string, ctx: ChatContext): Answer | null {
+  return fixture(question, ctx);
 }
 
 const title = (m: string) => (m.length > 48 ? `${m.slice(0, 46)}...` : m);
@@ -130,14 +114,15 @@ route("POST", "/answer", async ({ body }) => {
   const b = body as { q: string };
   await sleep(700);
   const a = answerFor(b.q, { query: b.q });
-  return { text: a.text, citations: a.citations, grounded: a.grounded, model: a.model };
+  if (!a) fail(409, "model_unavailable", NOT_SET_UP);
+  return { text: a!.text, citations: a!.citations, grounded: a!.grounded, model: a!.model };
 });
 
 route("POST", "/chat", ({ body, signal }) => {
   const input = body as ChatTurnInput;
   if (!input?.message?.trim()) fail(400, "bad_request", "Empty message.");
   // A switch for testing the "needs Anthropic" state: localStorage search.mock.noAnthropic = 1.
-  try { if (localStorage.getItem("search.mock.noAnthropic") === "1") fail(409, "model_unavailable", "The assistant needs Anthropic in your grant."); } catch (e) { if (e instanceof Error && "code" in e) throw e; }
+  try { if (localStorage.getItem("search.mock.noAnthropic") === "1") fail(409, "model_unavailable", "The assistant needs access to Anthropic. Connect it in One, then ask again."); } catch (e) { if (e instanceof Error && "code" in e) throw e; }
   const enc = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -160,6 +145,7 @@ route("POST", "/chat", ({ body, signal }) => {
           step({ id: "read", label: `Read ${ctxCount} results`, state: "done", count: ctxCount });
         }
         const a = answerFor(input.message.trim(), input.context ?? {});
+        if (!a) { send({ type: "error", error: { code: "model_unavailable", message: NOT_SET_UP } }); send({ type: "done" }); return; }
         let n = 0;
         for (const [i, q] of a.searches.entries()) {
           step({ id: `s${i}`, label: `Searching "${q}"`, state: "running", query: q });

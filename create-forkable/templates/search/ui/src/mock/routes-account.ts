@@ -1,6 +1,6 @@
 // Mock routes: sign out, disconnect, access and the ledger, the write-only
 // Connect setup (and its Create my Connect app flow), OAuth clients.
-import type { AccessResponse, ConnectSetupResponse, LedgerRow, OAuthClientRow } from "@/contract/api-types";
+import type { AccessResponse, AgentId, AgentRow, AgentsResponse, ConnectSetupResponse, LedgerRow, OAuthClientRow } from "@/contract/api-types";
 import { logoUrl, platformName } from "@/lib/utils";
 import { emit, fail, json, noContent, route } from "./http";
 import { createState, ledger, ledgerRow, persist, persisted, setupFields, sources } from "./state";
@@ -46,7 +46,7 @@ route("POST", "/access/receipt-demo", () => {
   const row: LedgerRow = ledgerRow({
     platform: "gmail", action: "Delete a message", actionId: "conn_mod_def::GJ3ocgKltKQ::s8UCfiDLSaO9w9oPU32TYA", actor: "user", method: "DELETE",
     path: "/gmail/v1/users/me/messages/{id}", level: "write", status: 403, ok: false, blockedByGrant: true, refusal: "grant", ms: 9,
-    summary: "Declined by the grant. Gmail was never called.", sentence: "Search tried to delete a Gmail message and One declined it", note: "Receipt demo from the Access page",
+    summary: "Search was never allowed to delete. Gmail was never asked.", sentence: "Search tried to delete a Gmail message and One declined it", note: "Receipt demo from the Access page",
   });
   ledger.unshift(row);
   emit({ type: "ledger", row });
@@ -127,3 +127,63 @@ const clients: OAuthClientRow[] = [
 route("GET", "/oauth-clients", () => clients);
 // like the server: a revoked client stays listed as signed out
 route("DELETE", "/oauth-clients/:clientId", ({ params }) => { const c = clients.find((x) => x.clientId === params.clientId); if (c) c.activeTokens = 0; return noContent(); });
+
+// ---- Agents (the Agents screen) ------------------------------------------------------
+// Claude Code starts connected (its OAuth client above), Codex and Cursor are found,
+// Claude Desktop is not on this computer. Connect moves a card to "added"; the mock
+// then signs it in after 4 s, like a person finishing the step.
+const MOCK_BASE = "http://localhost:52289";
+const AGENT_NAMES: Record<AgentId, string> = { "claude-code": "Claude Code", codex: "Codex", cursor: "Cursor", "claude-desktop": "Claude Desktop" };
+const NEXT: Record<AgentId, string> = {
+  "claude-code": "Open Claude Code, type /mcp, pick search and choose Authenticate. Your browser asks you to allow it.",
+  codex: "Allow Search in the browser tab that just opened. If none opened, run: codex mcp login search.",
+  cursor: "Open Cursor Settings, then MCP, and click Connect next to search. Your browser asks you to allow it.",
+  "claude-desktop": "Quit Claude and open it again. Your browser opens once to ask you to allow it.",
+};
+const READY: Record<AgentId, string> = {
+  "claude-code": "Ready. Open a new Claude Code session to use it.",
+  codex: "Ready. Open a new Codex session to use it.",
+  cursor: "Ready. Cursor picks it up on its own. To see it, in Cursor open Settings, then MCP.",
+  "claude-desktop": "Ready. Quit Claude and open it again, then ask it about your mail, meetings or deals.",
+};
+const agentMock: Record<AgentId, { found: string | null; added: boolean; signedInAt: string | null; usedAt?: string | null; config: string }> = {
+  "claude-code": { found: "/Users/dana/.local/bin/claude", added: true, signedInAt: new Date(Date.now() - 0.3 * H).toISOString(), usedAt: new Date(Date.now() - 0.3 * H).toISOString(), config: "/Users/dana/.claude.json" },
+  codex: { found: "/Users/dana/.local/bin/codex", added: false, signedInAt: null, config: "/Users/dana/.codex/config.toml" },
+  cursor: { found: "/Applications/Cursor.app", added: false, signedInAt: null, config: "/Users/dana/.cursor/mcp.json" },
+  "claude-desktop": { found: null, added: false, signedInAt: null, config: "/Users/dana/Library/Application Support/Claude/claude_desktop_config.json" },
+};
+function agentRowMock(id: AgentId): AgentRow {
+  const a = agentMock[id];
+  const state = a.added && a.signedInAt ? "connected" : a.added ? "added" : a.found ? "not_connected" : "not_found";
+  return {
+    id, name: AGENT_NAMES[id], found: !!a.found, foundWhere: a.found, added: a.added, state, lastUsedAt: a.added ? a.usedAt ?? null : null,
+    nextStep: state === "added" ? NEXT[id] : state === "connected" && !a.usedAt ? READY[id] : null, configPath: a.config, clientIds: a.signedInAt ? [`cli_${id}`] : [],
+    entryName: a.added ? "search" : null, note: null,
+    ...(id === "claude-code" ? { skillInstalled: a.added } : {}),
+  };
+}
+route("GET", "/agents", (): AgentsResponse => ({
+  local: true, mcpUrl: `${MOCK_BASE}/mcp`, startUrl: `${MOCK_BASE}/start.md`, setupSentence: `Set up Search for me with ${MOCK_BASE}/start.md`,
+  genericJson: JSON.stringify({ mcpServers: { search: { type: "http", url: `${MOCK_BASE}/mcp` } } }, null, 2),
+  agents: (Object.keys(agentMock) as AgentId[]).map(agentRowMock),
+}));
+route("POST", "/agents/:id/connect", ({ params }) => {
+  const id = params.id as AgentId;
+  const a = agentMock[id];
+  if (!a) return fail(404, "not_found", "No such agent.");
+  if (!a.found) return fail(404, "not_found", `${AGENT_NAMES[id]} is not on this computer. Install it first, then try again.`);
+  const changed = !a.added;
+  a.added = true;
+  // like the server: Connect signs in Claude Code, Cursor and Claude Desktop at once; Codex waits for the browser
+  if (changed && id !== "codex") a.signedInAt = new Date().toISOString();
+  if (changed && id === "codex") setTimeout(() => { if (agentMock[id].added) agentMock[id].signedInAt = new Date().toISOString(); }, 4000);
+  return json({ agent: agentRowMock(id), changed, backup: null, message: changed ? `Added Search to ${AGENT_NAMES[id]}. ${NEXT[id]}` : `${AGENT_NAMES[id]} already has Search.` });
+});
+route("DELETE", "/agents/:id", ({ params }) => {
+  const id = params.id as AgentId;
+  const a = agentMock[id];
+  if (!a) return fail(404, "not_found", "No such agent.");
+  const changed = a.added;
+  a.added = false; a.signedInAt = null; a.usedAt = null;
+  return json({ agent: agentRowMock(id), changed, backup: null, message: changed ? `Removed Search from ${AGENT_NAMES[id]}.` : `${AGENT_NAMES[id]} did not have Search.` });
+});

@@ -124,7 +124,7 @@
     "rejected": 1
   },
   "lanes": {
-    "fyi": 134,
+    "fyi": 133,
     "vip": 38,
     "low": 26,
     "needs_you": 6,
@@ -146,10 +146,9 @@
         "Globex renewal 2027",
         "Globex renewal terms",
         "Globex renewal signature call",
-        "Globex renewal 2027",
         "Globex legal redline, final"
       ],
-      "note": "after Jev rerank (rerank.json); the HubSpot deal is first, RRF alone puts the signature call first"
+      "note": "after Jev rerank (rerank.json); the deal is first (Attio and HubSpot keep it, one row since 2026-11-12), RRF alone puts the signature call first"
     }
   },
   "ask": {

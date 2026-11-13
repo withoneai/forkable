@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Bookmark, Clock, Keyboard, MessageCircle, Moon, Plus, RefreshCw, Search as SearchIcon, Settings, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Bookmark, Bot, Clock, Keyboard, MessageCircle, Moon, Plus, RefreshCw, Search as SearchIcon, Settings, ShieldCheck, Sparkles } from "lucide-react";
 import { api } from "@/lib/api";
 import { keys, useRecent, useSaved, useSources } from "@/lib/queries";
 import { toast } from "@/lib/toast";
@@ -9,9 +9,10 @@ import { cn, fmtRelative, KIND_LABEL, MOD, platformName, useDebounced } from "@/
 import { useWorkspace } from "@/lib/workspace";
 import { SourceLogo } from "./SourceLogo";
 import { Keys, Kbd } from "./ui/Kbd";
+import { COPY } from "@/lib/copy";
 
 type Group = "Jump to" | "Searches" | "Sources" | "Actions" | "Ask";
-interface Item { id: string; group: Group; label: string; detail?: string; icon?: React.ReactNode; keys?: string; run: () => void; url?: string | null; mono?: boolean }
+interface Item { id: string; group: Group; label: string; detail?: string; /** More words that find it (not shown). */ keywords?: string; icon?: React.ReactNode; keys?: string; run: () => void; url?: string | null; mono?: boolean }
 
 const COACHED = "search.coached";
 
@@ -56,22 +57,24 @@ export function CommandPalette({ open, onClose, onToggleTheme, onCheatsheet }: {
     out.push(...(ql ? searches.slice(0, 4) : searches.slice(0, 6)));
     const plats = new Map<string, string>();
     for (const s of sources.data?.sources ?? []) if (!plats.has(s.platform)) plats.set(s.platform, s.id);
-    out.push(...[...plats.entries()].filter(([p]) => match(platformName(p))).slice(0, ql ? 4 : 0).map(([p, id]) => ({ id: `src-${p}`, group: "Sources" as const, label: platformName(p), detail: "Source detail", icon: <SourceLogo platform={p} size={14} />, run: () => nav(`/sources/${id}`) })));
+    out.push(...[...plats.entries()].filter(([p]) => match(platformName(p))).slice(0, ql ? 4 : 0).map(([p, id]) => ({ id: `src-${p}`, group: "Sources" as const, label: platformName(p), detail: "Open the source", icon: <SourceLogo platform={p} size={14} />, run: () => nav(`/sources/${id}`) })));
     const actions: Item[] = [
-      { id: "a-new", group: "Actions", label: "New profile", detail: "Index another platform", icon: <Plus />, keys: "N", run: () => nav("/settings/integrations/new") },
-      { id: "a-sync", group: "Actions", label: "Sync all sources", icon: <RefreshCw />, run: () => {
+      { id: "a-new", group: "Actions", label: COPY.addSource, detail: "Search another tool", icon: <Plus />, keys: "N", run: () => nav("/settings/integrations/new") },
+      { id: "a-sync", group: "Actions", label: COPY.updateAll, icon: <RefreshCw />, run: () => {
         const list = sources.data?.sources ?? [];
-        void Promise.allSettled(list.map((s) => api.syncSource(s.id))).then(() => { void qc.invalidateQueries({ queryKey: keys.sources }); toast({ title: `Syncing ${list.length} sources` }); });
+        void Promise.allSettled(list.map((s) => api.syncSource(s.id))).then(() => { void qc.invalidateQueries({ queryKey: keys.sources }); toast({ title: COPY.updatingCount(list.length) }); });
       } },
       { id: "a-dock", group: "Actions", label: ws.dockOpen ? "Close the assistant" : "Open the assistant", icon: <MessageCircle />, keys: `${MOD} J`, run: () => ws.setDockOpen(!ws.dockOpen) },
       { id: "a-home", group: "Actions", label: "Go home", icon: <SearchIcon />, keys: "G H", run: () => nav("/") },
-      { id: "a-int", group: "Actions", label: "Go to Integrations", icon: <ArrowRight />, keys: "G I", run: () => nav("/settings/integrations") },
+      { id: "a-int", group: "Actions", label: "Go to Sources", icon: <ArrowRight />, keys: "G I", run: () => nav("/settings/integrations") },
       { id: "a-access", group: "Actions", label: "Go to Access", icon: <ShieldCheck />, keys: "G A", run: () => nav("/access") },
+      // the Agents screen, found by the words people use for it
+      { id: "a-agents", group: "Actions", label: "Use Search in your AI app", detail: "Claude, Codex, Cursor", keywords: "connect claude agent agents ai app codex cursor desktop mcp chat", icon: <Bot />, run: () => nav("/settings/agents") },
       { id: "a-settings", group: "Actions", label: "Go to Settings", icon: <Settings />, keys: "G ,", run: () => nav("/settings/general") },
       { id: "a-theme", group: "Actions", label: "Toggle dark mode", icon: <Moon />, run: onToggleTheme },
       { id: "a-keys", group: "Actions", label: "Keyboard shortcuts", icon: <Keyboard />, keys: "?", run: onCheatsheet },
     ];
-    out.push(...actions.filter((a) => match(a.label)).slice(0, ql ? 4 : 9));
+    out.push(...actions.filter((a) => match(a.label) || (!!ql && ql.split(/\s+/).every((w) => `${a.label} ${a.detail ?? ""} ${a.keywords ?? ""}`.toLowerCase().includes(w)))).slice(0, ql ? 4 : 10));
     if (ql) {
       out.unshift({ id: "search", group: "Jump to", label: `Search for “${q.trim()}”`, icon: <SearchIcon />, run: () => ws.setQuery(q.trim()) });
       out.push({ id: "ask", group: "Ask", label: `Ask: “${q.trim()}”`, icon: <Sparkles />, keys: "Tab", run: () => ws.askAbout(undefined, q.trim()) });

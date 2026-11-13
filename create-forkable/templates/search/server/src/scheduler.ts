@@ -5,7 +5,7 @@
 // reload reaches the next run.
 
 import { and, eq, inArray, isNotNull, isNull, lt, lte, notInArray, or, sql } from "drizzle-orm";
-import { attachNewConnections, classifyPending, dbSchema, embedPending, runEntityMatch, runSource, sourceHealth, type RunSummary, type RunTrigger, type SourceHealth } from "@search/core";
+import { attachNewConnections, quotaHeld, flushOneUsage, classifyPending, dbSchema, embedPending, runEntityMatch, runSource, sourceHealth, type RunSummary, type RunTrigger, type SourceHealth } from "@search/core";
 import type { Deps } from "./deps.js";
 
 const { sources, runs, users, settings, oauthPending, oauthCodes, oauthTokens, ledger, pendingEmbeddings, connectUsers } = dbSchema;
@@ -126,7 +126,8 @@ export function createScheduler(deps: Deps): Scheduler {
       let started = 0;
       for (const d of due) {
         if (started >= room) break;
-        if (inFlight.has(d.id) || held.has(d.id) || pausedUsers.has(d.userId)) continue;
+        // One said this month's requests are used up: leave the user's updates until it lets a call through again
+        if (inFlight.has(d.id) || held.has(d.id) || pausedUsers.has(d.userId) || quotaHeld(d.userId)) continue;
         void kick(d.id, { trigger: d.lastSuccessAt ? "schedule" : "first" });
         started++;
       }
@@ -202,7 +203,7 @@ export function createScheduler(deps: Deps): Scheduler {
 
   async function work(): Promise<void> {
     if (stopped) return;
-    for (const u of [...dirty]) await runWorkers(u);
+    for (const u of [...dirty]) if (!quotaHeld(u)) await runWorkers(u);
   }
 
   return {
@@ -221,6 +222,7 @@ export function createScheduler(deps: Deps): Scheduler {
       stopped = true;
       if (tickTimer) clearInterval(tickTimer);
       if (workTimer) clearInterval(workTimer);
+      void flushOneUsage();
     },
     kick,
     isRunning: (id) => inFlight.has(id),

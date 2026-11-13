@@ -1,5 +1,6 @@
 // Saved searches in the browser (instant refresh): the last 20 result pages with their
-// Jev order and the answer strip's answer, per signed-in user, for 30 minutes. A refresh
+// Jev order and the answer strip's answer, per signed-in user, for 30 minutes, and only
+// on the day they were saved (after midnight "today" is another day). A refresh
 // or a return to the same query, scope and sort renders from here with no rerank or
 // answer call. Dropped on sign-out and when another user signs in.
 import type { AnswerResponse, RerankResponse, SearchResponse } from "@/contract/api-types";
@@ -11,6 +12,8 @@ const MAX = 20;
 export interface CachedSearch {
   k: string;
   at: number;
+  /** The browser's local day it was saved on ("2026-11-12"): words like today and yesterday mean that day. */
+  day?: string;
   search: SearchResponse;
   /** The Jev order for search.queryId, once it answered. */
   order: string[] | null;
@@ -44,6 +47,12 @@ function write(s: Store): void {
   }
 }
 
+/** The browser's local day. */
+export function localDay(t = Date.now()): string {
+  const d = new Date(t);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function live(userId: string): Store {
   const s = read();
   const now = Date.now();
@@ -51,7 +60,8 @@ function live(userId: string): Store {
     clearSearchCache();
     return { userId, entries: [] };
   }
-  return { userId, entries: s.entries.filter((e) => now - e.at < CACHE_TTL_MS) };
+  const today = localDay(now);
+  return { userId, entries: s.entries.filter((e) => now - e.at < CACHE_TTL_MS && (e.day ?? localDay(e.at)) === today) };
 }
 
 export function readCached(userId: string, k: string): CachedSearch | null {
@@ -61,7 +71,8 @@ export function readCached(userId: string, k: string): CachedSearch | null {
 /** A fresh result page: replaces any entry for the key and keeps the newest MAX. */
 export function saveSearch(userId: string, k: string, search: SearchResponse, keep: Partial<Pick<CachedSearch, "answer">> = {}): void {
   const s = live(userId);
-  const entry: CachedSearch = { k, at: Date.now(), search, order: null, rerankReason: null, answer: keep.answer ?? null };
+  const at = Date.now();
+  const entry: CachedSearch = { k, at, day: localDay(at), search, order: null, rerankReason: null, answer: keep.answer ?? null };
   write({ userId, entries: [entry, ...s.entries.filter((e) => e.k !== k)].slice(0, MAX) });
 }
 

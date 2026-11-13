@@ -78,10 +78,47 @@ function isExecutableFile(p: string): boolean {
   }
 }
 
+/**
+ * Where a CLI lives, for the Agents screen as well as the engine. `pathOnly` looks
+ * at PATH alone (no well-known dirs, no login shell), so a test with fake binaries
+ * on PATH never finds the real install.
+ */
+export function findBinary(bin: string, o: { pathOnly?: boolean } = {}): string | null {
+  if (o.pathOnly) {
+    // Windows (unverified): try PATHEXT, .exe first, so an npm .cmd shim is found but an extensionless one is not.
+    const exts = process.platform === "win32" ? winExts() : [""];
+    for (const dir of (process.env.PATH ?? "").split(path.delimiter).filter(Boolean)) {
+      for (const ext of exts) {
+        const cand = path.join(dir, bin + ext);
+        if (process.platform === "win32" ? existsFile(cand) : isExecutableFile(cand)) return cand;
+      }
+    }
+    return null;
+  }
+  return discover(bin);
+}
+
+function winExts(): string[] {
+  const list = (process.env.PATHEXT ?? ".EXE;.CMD;.BAT;.COM").split(";").map((e) => e.toLowerCase()).filter(Boolean);
+  return [".exe", ...list.filter((e) => e !== ".exe")];
+}
+
+function existsFile(p: string): boolean {
+  try { return statSync(p).isFile(); } catch { return false; }
+}
+
+/** `where` lists every match, often the extensionless npm shim first; pick a runnable one (.exe, then .cmd/.bat). */
+export function pickWhereLine(out: string): string | null {
+  const lines = out.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const rank = (l: string) => (/\.exe$/i.test(l) ? 0 : /\.(cmd|bat)$/i.test(l) ? 1 : /\.com$/i.test(l) ? 2 : 9);
+  const best = lines.filter((l) => rank(l) < 9).sort((a, b) => rank(a) - rank(b))[0];
+  return best ?? null;
+}
+
 function discover(bin: string): string | null {
   try {
     const res = spawnSync(process.platform === "win32" ? "where" : "which", [bin], { encoding: "utf8", timeout: 5_000 });
-    const first = res.status === 0 ? res.stdout.split(/\r?\n/)[0]?.trim() : "";
+    const first = res.status !== 0 ? "" : process.platform === "win32" ? pickWhereLine(res.stdout) ?? "" : res.stdout.split(/\r?\n/)[0]?.trim();
     if (first) return first;
   } catch { /* which missing: probe directly */ }
   if (process.platform === "win32") return null;
@@ -110,7 +147,9 @@ function cleanEnv(): NodeJS.ProcessEnv {
 
 function exec(bin: string, args: string[], stdin?: string, timeout = TIMEOUT_MS): Promise<string> {
   return new Promise((resolve, reject) => {
-    const child = execFile(bin, args, { timeout, maxBuffer: 8e6, cwd: os.tmpdir(), env: cleanEnv(), killSignal: "SIGKILL" }, (err, stdout, stderr) => {
+    // Windows (unverified): an npm .cmd shim only runs through the shell.
+    const shell = process.platform === "win32" && /\.(cmd|bat)$/i.test(bin);
+    const child = execFile(bin, args, { timeout, maxBuffer: 8e6, cwd: os.tmpdir(), env: cleanEnv(), killSignal: "SIGKILL", shell }, (err, stdout, stderr) => {
       if (err) {
         const detail = String(stderr ?? "").trim().split(/\r?\n/).pop() ?? "";
         reject(new Error(`${err.message.split("\n")[0]}${detail ? `: ${detail}` : ""}`.slice(0, 400)));

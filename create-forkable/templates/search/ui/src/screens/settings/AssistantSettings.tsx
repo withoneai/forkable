@@ -19,28 +19,45 @@ const CHAT_MODELS = [
   { value: "claude-haiku-5-5", label: "Claude Haiku 5.5" },
 ];
 
-const NAMES: Record<EngineChoice, string> = { auto: "Auto", "claude-code": "Claude Code", codex: "Codex", one: "Models through One" };
+const NAMES: Record<EngineChoice, string> = { auto: "Auto", "claude-code": "Claude Code", codex: "Codex", one: "Claude through One" };
 
 /** Keeps a saved value the list no longer has, so the select never lies. */
 const withValue = (list: { value: string; label: string }[], v: string) => (list.some((m) => m.value === v) ? list : [{ value: v, label: v }, ...list]);
 
 function autoDetail(e: EngineStatus): string {
-  const now = e.choice === "auto" || e.effective === "auto" ? (e.local ? `Now: ${e.local.name}.` : "Now: models through One, nothing found here.") : "";
-  return `Claude Code, else Codex, else models through One. ${now}`.trim();
+  const now = e.choice === "auto" || e.effective === "auto" ? (e.local ? `Now: ${e.local.name}.` : "Now: Claude through One, nothing found here.") : "";
+  return `Claude Code, else Codex, else Claude through One. ${now}`.trim();
+}
+
+/** Where each agent was found, closed by default: a path is for the curious, not the choice. */
+function WhereFound({ clis }: { clis: EngineStatus["clis"] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-1">
+      <button type="button" className="self-start text-11 text-muted-foreground underline-offset-2 hover:text-foreground hover:underline" aria-expanded={open} onClick={() => setOpen((v) => !v)} data-testid="engine-where-toggle">
+        {open ? "Hide where they are" : "Where they are on this computer"}
+      </button>
+      {open && (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-md bg-faint px-2.5 py-2 text-11" data-copy="advanced" data-testid="engine-where">
+          {clis.map((c) => <div key={c.id} className="contents"><dt className="text-muted-foreground">{NAMES[c.id]}</dt><dd className="min-w-0 truncate font-mono" title={c.path ?? ""}>{c.path}</dd></div>)}
+        </dl>
+      )}
+    </div>
+  );
 }
 
 function EngineChoiceCard({ engine, onPick, saving }: { engine: EngineStatus; onPick: (c: EngineChoice) => void; saving: boolean }) {
   const cli = (id: "claude-code" | "codex") => engine.clis.find((c) => c.id === id);
   const rows: { key: EngineChoice; detail: string; disabled: string | null; badge?: string }[] = engine.hosted
-    ? [{ key: "one", detail: "Anthropic on your grant. This server is hosted, so there is no local agent to run.", disabled: null }]
+    ? [{ key: "one", detail: "Claude, through your One connection. Search runs online here, so there is no agent on this computer to use.", disabled: null }]
     : [
       { key: "auto", detail: autoDetail(engine), disabled: null },
       ...(["claude-code", "codex"] as const).map((id) => {
         const c = cli(id);
-        const detail = c?.installed ? `Found at ${c.path}${c.signedIn ? ", signed in" : ""}. Your own subscription, no tools.` : "Not found on this computer.";
+        const detail = c?.installed ? `On this computer${c.signedIn ? ", signed in" : ""}. Your own subscription, no tools.` : "Not found on this computer.";
         return { key: id as EngineChoice, detail, disabled: c?.ready ? null : (c?.reason ?? "Not installed") };
       }),
-      { key: "one", detail: "Anthropic on your grant. Every call shows in Access, Activity.", disabled: null },
+      { key: "one", detail: "Claude, through your One connection. Every call shows in Access, Activity.", disabled: null },
     ];
   const locked = engine.override !== null;
   return (
@@ -76,8 +93,9 @@ function EngineChoiceCard({ engine, onPick, saving }: { engine: EngineStatus; on
         })}
       </div>
       {locked && <p className="text-xs text-muted-foreground">SEARCH_LOCAL_ENGINE is set on the server, so it decides ({NAMES[engine.override!]}). Unset it to choose here.</p>}
-      {!engine.hosted && engine.reason === "unavailable" && <p className="text-xs text-warning-text">{NAMES[engine.effective]} is not ready, so models through One answer until it is.</p>}
-      {!engine.hosted && <p className="text-xs text-muted-foreground">If the local agent fails, that turn tries models through One on your grant. Both calls show in Access, Activity.</p>}
+      {!engine.hosted && engine.reason === "unavailable" && <p className="text-xs text-warning-text">{NAMES[engine.effective]} is not ready, so Claude through One answers until it is.</p>}
+      {!engine.hosted && <p className="text-xs text-muted-foreground">If the agent on this computer fails, that turn goes to Claude through One. Both calls show in Access, Activity.</p>}
+      {!engine.hosted && engine.clis.some((c) => c.installed) && <WhereFound clis={engine.clis.filter((c) => c.installed)} />}
     </div>
   );
 }
@@ -107,7 +125,7 @@ export function AssistantSettings() {
   const cli = engine?.clis.find((c) => c.id === runs);
   const fallback = CHAT_MODELS.find((m) => m.value === s.chatModel)?.label ?? s.chatModel;
   const modelSelect = (kind: "chat" | "proposal") => {
-    const label = kind === "chat" ? "Chat model" : "Proposal model";
+    const label = kind === "chat" ? "Chat AI model" : "Setup AI model";
     if (runs === "claude-code") {
       const key = kind === "chat" ? "localChatModel" : "localProposalModel";
       return <Select label={label} value={s[key]} options={withValue(cli?.models ?? [{ value: "default", label: "Claude Code default" }], s[key])} onChange={(v) => put({ [key]: v })} />;
@@ -116,12 +134,12 @@ export function AssistantSettings() {
     const key = kind === "chat" ? "chatModel" : "proposalModel";
     return <Select label={label} value={s[key]} options={withValue(CHAT_MODELS, s[key])} onChange={(v) => put({ [key]: v })} />;
   };
-  const where = runs === "one" ? "through One on your grant" : `on ${engine?.local?.name} on this computer`;
+  const where = runs === "one" ? "through One" : `on ${engine?.local?.name} on this computer`;
 
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <SectionTitle title="AI engine" hint="Who writes chat answers, the answer strip and New profile proposals. Jev judgments (lanes, matches, reranking) and embeddings always run through One on your grant; they are not writing.">
+        <SectionTitle title="AI engine" hint="Who writes chat answers, the answer strip and the setup of a new source. Jev sorts by priority, matches people and orders results, and search by meaning always runs through One. Neither one writes.">
           {engine && !engine.hosted && <Button size="sm" loading={checking} onClick={checkAgain}>Check again</Button>}
         </SectionTitle>
         {engineQ.isError ? <LoadError what="The engine" error={engineQ.error} onRetry={() => void engineQ.refetch()} retrying={engineQ.isFetching} className="rounded-lg border border-border bg-card py-6" />
@@ -130,16 +148,16 @@ export function AssistantSettings() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <SectionTitle title="Models" hint={`These run ${where}.${runs !== "one" ? ` A failed local turn falls back to ${fallback} through One.` : ""}`} />
+        <SectionTitle title="AI models" hint={`These run ${where}.${runs !== "one" ? ` A failed local turn falls back to ${fallback} through One.` : ""}`} />
         <SettingsCard>
-          <SettingRow label="Chat and answers" hint={runs === "codex" ? "Codex picks its own model." : "Writes answers in the dock and the answer strip, citing only what Search found."}>
+          <SettingRow label="Chat and answers" hint={runs === "codex" ? "Codex picks its own AI model." : "Writes answers in the dock and the answer strip, citing only what Search found."}>
             {modelSelect("chat")}
           </SettingRow>
-          <SettingRow label="New profile proposals" hint={runs === "codex" ? "Codex picks its own model." : "Proposes the field map when you add a platform. Without a model, rules suggest one instead."}>
+          <SettingRow label="New source setup" hint={runs === "codex" ? "Codex picks its own AI model." : "Suggests which fields to read when you add a source. Without an AI model, simple rules suggest them."}>
             {modelSelect("proposal")}
           </SettingRow>
-          <SettingRow label="Judgments" hint="Lanes, matches and reranking. Jev, through One on your grant.">
-            <span className="font-mono text-xs text-muted-foreground">{s.jevModel}</span>
+          <SettingRow label="Judgments" hint="Priority, spotting the same person, and result order. Runs through One.">
+            <span className="text-xs text-muted-foreground" title={`AI model: ${s.jevModel}`}>Jev, latest</span>
           </SettingRow>
         </SettingsCard>
       </section>

@@ -5,11 +5,22 @@ import type {
   ProfileSetting, SearchProfile, LedgerActor, ErrorCode,
 } from "./contract.js";
 import type { DateProposal } from "./query/dates.js";
+import type { Understood, UnderstandChoice, UnderstandSuggestion } from "./query/understand.js";
 
-export type { DateProposal };
+export type { DateProposal, Understood, UnderstandChoice, UnderstandSuggestion };
 
 export interface ApiUser { id: string; name: string | null; email: string | null; avatarUrl: string | null; isSample: boolean }
-export interface MeResponse { user: ApiUser | null; signedIn: boolean; connect: { configured: boolean; signInUrl: string | null }; capability: Capability; settings: SettingsData | null }
+export interface MeResponse { user: ApiUser | null; signedIn: boolean; connect: { configured: boolean; signInUrl: string | null }; capability: Capability; settings: SettingsData | null; database?: DatabaseInfo | null }
+/** Where this Search keeps its data, as the running server knows it (Settings, Database). Signed-in callers only. */
+export interface DatabaseInfo {
+  kind: "embedded" | "external";
+  /** The connection string with its password masked. */
+  url: string;
+  /** The embedded data folder, with the home folder shown as ~; null for an external database. */
+  dataDir: string | null;
+  port: number | null;
+  version: string;
+}
 
 export interface ResultRow {
   id: string; kind: ItemKind; platform: string; sourceId: string; sourceName: string; logoUrl: string;
@@ -46,10 +57,25 @@ export type OpValue =
   | { t: "cmp"; op: ">" | ">=" | "<" | "<="; v: string | number; resolved?: string };
 export interface ChipEdit { key: OperatorKey; values: string[] | null; negate?: boolean }
 
-export interface SearchRequest { q: string; /** skip the query vector cache (the UI Refresh) */ fresh?: boolean; limit?: number; offset?: number; sort?: "best" | "newest" | "oldest"; scope?: ItemKind | "all"; selectedEntityIds?: string[] }
+export interface SearchRequest {
+  q: string; /** skip the query vector cache (the UI Refresh) */ fresh?: boolean; limit?: number; offset?: number; sort?: "best" | "newest" | "oldest"; scope?: ItemKind | "all"; selectedEntityIds?: string[];
+  /** Read plain phrases ("emails from Priya last week") into filters (D48). Off unless asked; REST and the web turn it on. */
+  understand?: boolean;
+  /** IANA zone date words resolve in ("Asia/Qatar"): the browser's. Else the server's own. */
+  tz?: string;
+}
 export interface SearchResponse {
   queryId: string;
+  /** What was searched: the box with understood phrases read as filters (the box itself when understanding is off). */
   parsed: ParsedQuery;
+  /** Whether plain phrases were read (D48). */
+  understanding: boolean;
+  /** Phrases applied as filters, in text order; each removable (the UI quotes the phrase to keep it as words). */
+  understood: Understood[];
+  /** Phrases that could mean more than one thing (two Priyas, a name or a tool), with choices; never applied. */
+  suggestions: UnderstandSuggestion[];
+  /** The query actually run, as operator text ("type:mail from:priya@globex.com after:..."). Equals q when nothing was understood. */
+  searchedAs: string;
   total: number;
   hiddenByFilters: number;
   counts: { scope: Record<ItemKind | "all", number>; source: Record<string, number> };
@@ -57,8 +83,27 @@ export interface SearchResponse {
   results: ResultRow[];
   mode: "hybrid" | "keyword";
   embedder: EmbedderStatus;
-  /** The keyword arm found nothing for every word together, so it ran again with OR between the words. */
-  fallback: "or" | null;
+  /**
+   * "or": the keyword arm found nothing for every word together, so it ran again with OR between the words.
+   * "filters": a read sentence's leftover words (`unmatched`) matched nothing under its filters, so the page
+   * lists what the filters match on their own (D48).
+   */
+  fallback: "or" | "filters" | null;
+  /** With fallback "filters": the words no result had, or (with `matchedWords`) only that many had. */
+  unmatched?: string | null;
+  /** With fallback "filters": how many items had the words; they come first, then everything else the filters match. */
+  matchedWords?: number;
+  /**
+   * The first `topRows` rows are the ones the words match best (every word, or all of them the
+   * filters' items had); the rest follow under a divider named `restLabel` ("Other messages in Slack"),
+   * which the web app shows collapsed. Absent when every row matches as well as the first.
+   */
+  /** With a during: date ("deals closing this quarter"): deals with no close date and tasks with no due date, left out of any range. */
+  undated?: { deals: number; tasks: number };
+  topRows?: number;
+  restLabel?: string;
+  /** Which filter hides how many items that have the words; a read phrase carries its phrase and offsets so the UI can keep it as words. */
+  hiddenBy?: { label: string; filter: string; phrase: string | null; start: number | null; end: number | null; n: number }[];
   /** Plain dates read from the text ("last month", "in October"), offered as chips; never applied on their own. */
   dateProposals: DateProposal[];
   /** An entity whose name is close to the text when nothing named it exactly ("Did you mean Priya Shah?"). */
@@ -88,7 +133,10 @@ export interface ItemDetail {
 }
 
 export interface EntityDetail {
-  entity: { id: string; type: "person" | "company"; name: string; emails: string[]; domain: string | null; title: string | null; company: EntityChip | null; avatarUrl: string | null; isSelf: boolean; sources: { platform: string; count: number; lastAt: string }[] };
+  entity: { id: string; type: "person" | "company"; name: string; emails: string[]; domain: string | null; title: string | null; company: EntityChip | null; avatarUrl: string | null; isSelf: boolean; sources: { platform: string; count: number; lastAt: string }[];
+    /** The same number every card that opens this page shows (EntityChip.itemCount, both from entityItemStats): live items linked to it, its own records included, and for a company its people's items. */
+    itemCount: number };
+  /** Newest first, at most 50: its own records (the contact itself) left out, two tools' copies of one thing shown once, and for a company its people's items too. Fewer than itemCount when any of those apply. */
   timeline: ResultRow[];
   pendingMatches: { matchId: string; other: EntityChip; probability: number; reason: string }[];
   /** People merged into this one (by email, by Jev or by the user); each can be unmerged (POST /entities/:mergedId/unmerge). */
@@ -98,10 +146,16 @@ export interface EntityDetail {
 export interface Citation { n: number; itemId: string; chunkId: string | null; kind: ItemKind; title: string; platform: string; url: string | null; quote: string; occurredAt: string }
 export interface QueryProposal { query: string; diff: { op: "+" | "-"; clause: string }[]; count: number; reason: string }
 export type ChatStep = { id: string; label: string; state: "running" | "done" | "error"; query?: string; count?: number };
-export interface ChatContext { query?: string; queryId?: string; itemIds?: string[]; selectedItemId?: string }
+export interface ChatContext {
+  query?: string; queryId?: string; itemIds?: string[]; selectedItemId?: string;
+  /** Read `query` as a sentence (D48) when it is searched again (no `queryId` page to read). Unset: on for the web app, off for MCP and REST. */
+  understand?: boolean;
+  /** IANA zone for date words in `query`. */
+  tz?: string;
+}
 export interface ChatMessage { id: string; role: "user" | "assistant"; content: string; citations: Citation[]; steps: ChatStep[]; proposal: QueryProposal | null; followups: string[]; grounded: boolean; model: string; createdAt: string }
 export interface ChatTurnInput { chatId?: string; message: string; context: ChatContext }
-export interface AnswerRequest { q: string; queryId?: string }
+export interface AnswerRequest { q: string; queryId?: string; understand?: boolean; tz?: string }
 export interface AnswerResponse { text: string; citations: Citation[]; grounded: boolean; model: string }
 
 export interface ApiSource {
@@ -129,6 +183,48 @@ export interface AccessResponse {
 export interface LedgerRow { id: string; at: string; actor: LedgerActor; clientName: string | null; platform: string; action: string; actionId: string; method: string; path: string; mode: "fixture" | "connect"; level: "read" | "write"; status: number; ok: boolean; blockedByGrant: boolean; refusal: string | null; ms: number; summary: string; note: string | null; sentence: string }
 
 export interface OAuthClientRow { clientId: string; name: string; createdAt: string; lastUsedAt: string | null; scopes: string[]; activeTokens: number }
+/** The Agents screen (SPEC 16.5): one coding agent on this computer. */
+export type AgentId = "claude-code" | "codex" | "cursor" | "claude-desktop";
+export type AgentState = "not_found" | "not_connected" | "added" | "connected";
+export interface AgentRow {
+  id: AgentId;
+  name: string;
+  /** Installed on this computer (the CLI on PATH, the app, or its config folder). */
+  found: boolean;
+  foundWhere: string | null;
+  /** Search's entry is in the agent's config. */
+  added: boolean;
+  state: AgentState;
+  /** The newest use by a sign-in that belongs to this agent. */
+  lastUsedAt: string | null;
+  /** What the person still has to do, in plain words, when state is "added"; on a connected card not used yet, how to start using it. */
+  nextStep: string | null;
+  /** The name Search's entry has in this agent ("search", or "search-local" when "search" is someone else's). */
+  entryName: string | null;
+  /** Something the person should know, in plain words (a name already taken, a sign-in with no entry). */
+  note: string | null;
+  configPath: string;
+  /** OAuth clients that belong to this agent (signed in at least once). */
+  clientIds: string[];
+  /** Claude Code only: the usage skill is installed in its skills folder. */
+  skillInstalled?: boolean;
+  /** Search is in the agent's settings but its sign-in ended (signed out, another account, removed): Connect signs it in again. */
+  needsConnect?: boolean;
+}
+export interface AgentsResponse {
+  /** False when this server does not run on the person's own computer. */
+  local: boolean;
+  mcpUrl: string;
+  startUrl: string;
+  /** The one sentence to paste into any agent. */
+  setupSentence: string;
+  /** The generic MCP config for any other client. */
+  genericJson: string;
+  agents: AgentRow[];
+  /** Set while the browser shows the Acme sample and apps are still connected to the person's own account. */
+  sampleNote?: string | null;
+}
+export interface AgentActionResult { agent: AgentRow; changed: boolean; message: string; backup: string | null }
 export interface ConnectSetupResponse { available: boolean; configured: boolean; source: "store" | "env" | null; redirectUri: string; storage: "keychain" | "file"; shadowed: boolean; fields: { name: "ONE_CLIENT_ID" | "ONE_CLIENT_SECRET" | "ONE_CONNECT_KEY" | "ONE_PERMISSION_SET"; saved: boolean; where: "keychain" | "file" | "env" | null; updatedAt: string | null; last4: string | null }[]; create: { running: boolean; approvalUrl: string | null; state: "idle" | "waiting" | "approved" | "failed"; message?: string; askChanged: boolean } }
 
 // ---------- streaming (CONTRACT 7) ----------

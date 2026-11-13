@@ -11,14 +11,15 @@
     "build:mock": "tsc -b && VITE_MOCK=1 vite build --outDir dist-mock",
     "preview": "vite preview --port 5680",
     "typecheck": "tsc -b",
-    "smoke": "node scripts/smoke-ui.mjs"
+    "smoke": "node scripts/smoke-ui.mjs",
+    "smoke:agents": "node scripts/smoke-agents.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",
     "@fontsource/space-grotesk": "^5.2.5",
     "@tanstack/react-query": "^5.80.0",
-    "@withone/connect": "^0.19.0",
+    "@withone/connect": "^0.23.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.510.0",
     "react": "^19.1.0",

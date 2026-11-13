@@ -23,7 +23,7 @@ export function useConnectMore() {
     const onMsg = (e: MessageEvent) => {
       if (e.origin !== window.location.origin || (e.data as { type?: string })?.type !== "search:signed-in") return;
       done();
-      toast({ title: "Connections updated", detail: "New connections show up as sources and start indexing." });
+      toast({ title: "Connections updated", detail: "New connections show up as sources, and Search starts reading them." });
     };
     window.addEventListener("message", onMsg);
     return () => window.removeEventListener("message", onMsg);

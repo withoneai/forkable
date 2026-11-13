@@ -7,8 +7,6 @@ import type { CatalogRow } from "@/lib/api";
 import { useCatalog } from "@/lib/queries";
 import { cn, useDebounced } from "@/lib/utils";
 import { SourceLogo } from "@/components/SourceLogo";
-import { AccountMark } from "@/components/AccountChip";
-import { markFor } from "@/lib/accounts";
 import { Spinner } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -51,8 +49,8 @@ export function PlatformStep({ picked, onPick, onSubmit, creating, stages }: {
             ref={input}
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Find a platform: Zendesk, Intercom, Jira..."
-            aria-label="Find a platform"
+            placeholder="Find a tool: Zendesk, Intercom, Jira..."
+            aria-label="Find a tool"
             data-testid="platform-search"
             className="h-full flex-1 bg-transparent text-13 outline-none placeholder:text-muted-foreground/60"
             onKeyDown={(e) => {
@@ -62,10 +60,10 @@ export function PlatformStep({ picked, onPick, onSubmit, creating, stages }: {
             }}
           />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto p-1.5" role="listbox" aria-label="Platforms">
+        <div className="min-h-0 flex-1 overflow-y-auto p-1.5" role="listbox" aria-label="Tools">
           {cat.isPending && <div className="flex flex-col gap-2 p-2">{Array.from({ length: 6 }).map((_, k) => <Skeleton key={k} className="h-6 w-full" />)}</div>}
-          {!cat.isPending && flat.length === 0 && <p className="px-3 py-8 text-center text-13 text-muted-foreground">No platform matches “{q}”.</p>}
-          {([["Connected", inGrant, null], ["More from One", notIn, "Pick any. Search adds it to your Connect app when you save."]] as const).map(([label, list, hint]) => list.length > 0 && (
+          {!cat.isPending && flat.length === 0 && <p className="px-3 py-8 text-center text-13 text-muted-foreground">No tool matches “{q}”.</p>}
+          {([["Connected", inGrant, null], ["More from One", notIn, "Pick any. Search adds it to the tools it can ask for when you save."]] as const).map(([label, list, hint]) => list.length > 0 && (
             <div key={label} className="mb-1">
               <p className="flex items-baseline gap-2 px-2 pb-1 pt-2"><span className="label-caps">{label}</span>{hint && <span className="text-11 text-muted-foreground">{hint}</span>}</p>
               {list.map((r) => {
@@ -115,26 +113,26 @@ export function PlatformStep({ picked, onPick, onSubmit, creating, stages }: {
             </div>
             {picked.inGrant && (picked.accounts ?? 1) > 1 && (
               <ul className="flex flex-col gap-1.5" aria-label="Accounts" data-testid="picker-accounts">
-                {(picked.connectionLabel ?? "").split(" · ").map((l, _i, all) => (
-                  <li key={l} className="flex min-w-0 items-center gap-2 text-xs"><AccountMark text={markFor(l, all)} /><span className="truncate">{l}</span></li>
+                {(picked.connectionLabel ?? "").split(" · ").map((l) => (
+                  <li key={l} className="flex min-w-0 items-center gap-2 text-xs"><SourceLogo platform={picked.platform} size={14} /><span className="truncate">{l}</span></li>
                 ))}
-                <li className="text-11 text-muted-foreground">You pick which ones to index on the next step.</li>
+                <li className="text-11 text-muted-foreground">You pick which ones to search on the next step.</li>
               </ul>
             )}
             {picked.description && <p className="text-xs text-muted-foreground">{picked.description}</p>}
             {picked.inGrant ? (
               creating ? <Progress stages={stages} /> : (
                 <ul className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />Groups {picked.name}'s actions into models you pick from</li>
-                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />Reads one page of each model you pick, nothing else</li>
-                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />An AI on your grant proposes the map. You confirm every field.</li>
+                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />Finds what you can search in {picked.name}, like contacts or deals</li>
+                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />Reads one page of each one you pick, nothing else</li>
+                  <li className="flex gap-2"><Check className="mt-0.5 size-3 shrink-0 text-success-text" />An AI suggests which fields to read. You confirm every one.</li>
                   <li className="mt-1 font-medium text-foreground">Read only. Search never picks an action that writes.</li>
                 </ul>
               )
             ) : (
               <div className="flex flex-col gap-2 text-xs text-muted-foreground">
-                <p>You can set it up now. Search reads {picked.name}'s docs to map it.</p>
-                <p>When you save, Search adds what it needs to your Connect app. Sign in again to grant it, and indexing starts.</p>
+                <p>You can set it up now. Search reads {picked.name}'s docs to set it up.</p>
+                <p>When you save, Search adds {picked.name} to the tools it can ask for. Sign in again to allow it, and reading starts.</p>
               </div>
             )}
           </>
@@ -145,8 +143,8 @@ export function PlatformStep({ picked, onPick, onSubmit, creating, stages }: {
 }
 
 const STAGE_LABEL: Record<string, string> = {
-  actions: "Reading the actions and their models", docs: "Loading the docs for your models", dry_run: "One page each on your grant",
-  propose: "Mapping the fields", validate: "Checking ids, dates and links", ready: "Ready",
+  actions: "Finding what you can search", docs: "Reading the docs for your picks", dry_run: "Reading one page of each",
+  propose: "Matching the fields", validate: "Checking ids, dates and links", ready: "Ready",
 };
 
 export function Progress({ stages, order = ["actions"] }: { stages: DraftStage[]; order?: string[] }) {

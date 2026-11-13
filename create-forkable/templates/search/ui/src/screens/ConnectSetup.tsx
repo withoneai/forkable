@@ -23,7 +23,6 @@ const DASHBOARD = "https://app.withone.ai/connect";
 interface Spec { name: FieldName; label: string; secret: boolean; required: boolean; placeholder: string; where: string }
 const FIELDS: Spec[] = [
   { name: "ONE_CLIENT_ID", label: "Client ID", secret: false, required: true, placeholder: "oc_...", where: "Credentials, Client ID. pnpm connect writes it for you." },
-  { name: "ONE_PERMISSION_SET", label: "Permission set", secret: false, required: false, placeholder: "ps_...", where: "Optional. The ask this app makes at sign-in." },
   { name: "ONE_CLIENT_SECRET", label: "Client secret", secret: true, required: true, placeholder: "Shown once in the dashboard", where: "Credentials, Client secret. Shown once." },
   { name: "ONE_CONNECT_KEY", label: "Connect key", secret: true, required: true, placeholder: "Shown once in the dashboard", where: "Connect keys, Create key on Production. Shown once." },
 ];
@@ -207,13 +206,13 @@ function CreateCard({ s, busy, onCreate }: { s: ConnectSetupResponse; busy: bool
         {st === "waiting" ? (
           <>
             <p className="flex items-center gap-2 text-13 font-medium"><Spinner /> Waiting for you to approve in One</p>
-            <p className="text-xs text-muted-foreground">Open the link, check the platforms Search asks for, and approve. This page notices on its own.</p>
+            <p className="text-xs text-muted-foreground">Open the link, check how Search will look to people signing in, and approve. This page notices on its own.</p>
             {s.create.approvalUrl && <ApprovalLink url={s.create.approvalUrl} />}
           </>
         ) : st === "approved" ? (
           <>
             <p className="text-13 font-medium">Approved, now paste the secret and the Connect key.</p>
-            <p className="text-xs text-muted-foreground">The client ID and permission set are saved. One shows the secret and the key once on the approval page.</p>
+            <p className="text-xs text-muted-foreground">The client ID is saved. One shows the secret and the key once on the approval page.</p>
           </>
         ) : st === "failed" ? (
           <>
@@ -225,14 +224,16 @@ function CreateCard({ s, busy, onCreate }: { s: ConnectSetupResponse; busy: bool
             <p className="text-13 font-medium">{hasApp ? "Your Connect app" : "Make the Connect app from code"}</p>
             <p className="text-xs text-muted-foreground">
               {hasApp
-                ? "When you add a platform in New profile, the app has to ask for it too. Update the Connect app, approve, then sign in again."
-                : "Search reads its manifest, asks One to create the app with exactly those read actions, and you approve it in your browser."}
+                ? s.create.askChanged
+                  ? "Update it once. After that it asks for every tool you connect, so adding a source never needs another update."
+                  : "It asks for every tool you connect, and you pick what Search may read. Adding a source never changes it."
+                : "Search asks One to make the app from one.connect.ts and you approve it in your browser. People see every tool they have and pick what Search may read."}
             </p>
           </>
         )}
       </div>
       {st !== "waiting" && (
-        <Button size="sm" variant={hasApp ? "default" : "primary"} icon={hasApp ? <RefreshCw /> : undefined} loading={busy} onClick={onCreate}>
+        <Button size="sm" variant={hasApp && !s.create.askChanged ? "default" : "primary"} icon={hasApp ? <RefreshCw /> : undefined} loading={busy} onClick={onCreate}>
           {hasApp ? "Update the Connect app" : "Create my Connect app"}
         </Button>
       )}

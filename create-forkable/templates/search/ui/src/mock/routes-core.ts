@@ -28,7 +28,8 @@ route("GET", "/search", async ({ url }) => {
   needUser();
   await sleep(40 + Math.random() * 60);
   const q = url.searchParams.get("q") ?? "";
-  return search(q, (url.searchParams.get("scope") ?? "all") as ItemKind | "all", url.searchParams.get("sort") ?? "best", Number(url.searchParams.get("limit") ?? 30));
+  return search(q, (url.searchParams.get("scope") ?? "all") as ItemKind | "all", url.searchParams.get("sort") ?? "best", Number(url.searchParams.get("limit") ?? 30),
+    { understand: !/^(0|false|off|no)$/i.test(url.searchParams.get("understand") ?? ""), tz: url.searchParams.get("tz") ?? undefined });
 });
 route("POST", "/search/rerank", async ({ body }) => {
   const { queryId } = body as { queryId: string };
@@ -36,7 +37,7 @@ route("POST", "/search/rerank", async ({ body }) => {
   const order = lastQueries.get(queryId) ?? [];
   return { queryId, order, reranked: false, ms: 0, reason: "sample_no_fixture" };
 });
-route("GET", "/search/count", ({ url }) => ({ count: search(url.searchParams.get("q") ?? "", "all", "best", 500).total }));
+route("GET", "/search/count", ({ url }) => ({ count: search(url.searchParams.get("q") ?? "", "all", "best", 500, { understand: !/^(0|false|off|no)$/i.test(url.searchParams.get("understand") ?? "") }).total }));
 route("GET", "/suggest", ({ url }) => suggest(url.searchParams.get("prefix") ?? ""));
 
 const opened: string[] = [];
@@ -114,6 +115,11 @@ function mockEngine() {
   };
 }
 route("GET", "/assistant/engine", () => mockEngine());
+route("GET", "/one-plan", () => {
+  const lim = settings.onePlan === "custom" ? settings.oneRpm ?? 20 : settings.onePlan === "pro" ? 500 : settings.onePlan === "free" ? 20 : 100;
+  const pace = Math.floor(lim * 0.9);
+  return { plan: settings.onePlan, customRpm: settings.oneRpm, limit: lim, pace, reserved: Math.floor(pace * 0.25), limitFrom: settings.onePlan === "auto" ? "one" : "chosen", learnedAt: new Date().toISOString(), lastMinute: Math.min(pace, 42), waiting: { now: 0, background: 3 }, slowedUntil: null, heldUntil: null, todayCalls: 1_284, monthCalls: 18_902 };
+});
 route("POST", "/assistant/engine/redetect", async () => { await sleep(400); return mockEngine(); });
 route("PUT", "/settings", ({ body }) => {
   const patch = body as Partial<SettingsData>;
@@ -131,7 +137,7 @@ export function sourcesResponse(): SourcesResponse {
     sources: list,
     available: [{ platform: "google-drive", name: "Google Drive", logoUrl: logoUrl("google-drive"), connectionKey: "sample:google-drive", connectionLabel: "dana@acme.com", builtinProfiles: [] }],
     notInApp: ["jira", "github", "salesforce", "asana"].map((p) => ({ platform: p, name: platformName(p), logoUrl: logoUrl(p) })),
-    banner: slack ? { level: "warn", text: `Slack is rate limiting Search. Trying again at ${new Date(slack.health.retryAt!).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}.`, sourceId: slack.id, action: "retry" } : null,
+    banner: slack ? { level: "warn", text: `Slack asked Search to slow down. Trying again at ${new Date(slack.health.retryAt!).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}.`, sourceId: slack.id, action: "retry" } : null,
   };
 }
 
@@ -204,15 +210,15 @@ export async function simulateRun(s: MockSourceState, trigger: ApiRun["trigger"]
 
 route("POST", "/sources/:id/sync", ({ params }) => {
   const s = src(params.id!);
-  if (s.health.status === "syncing") fail(409, "conflict", "A run is already in flight for this source.");
+  if (s.health.status === "syncing") fail(409, "conflict", "This source is already updating.");
   void simulateRun(s, "manual", Math.max(3, s.health.itemCount));
   return { runId: `run_${Date.now()}` };
 });
 route("GET", "/sources/:id/errors", ({ params }) => {
   const s = src(params.id!);
   if (s.def.platform === "teams") return [
-    { externalId: "19:channel-general", stage: "fetch", code: "blocked_by_grant", message: "Search was not granted Read channel messages on Teams. Turn it on in One, or leave channel messages off.", attempts: 3, lastAt: new Date(Date.now() - 40 * 60_000).toISOString() },
-    { externalId: "19:channel-sales", stage: "fetch", code: "blocked_by_grant", message: "Search was not granted Read channel messages on Teams.", attempts: 3, lastAt: new Date(Date.now() - 41 * 60_000).toISOString() },
+    { externalId: "19:channel-general", stage: "fetch", code: "blocked_by_grant", message: "Search has no access to Teams channel messages. Allow it in One, or leave channel messages off.", attempts: 3, lastAt: new Date(Date.now() - 40 * 60_000).toISOString() },
+    { externalId: "19:channel-sales", stage: "fetch", code: "blocked_by_grant", message: "Search has no access to Teams channel messages.", attempts: 3, lastAt: new Date(Date.now() - 41 * 60_000).toISOString() },
   ];
   if (s.def.platform === "slack") return [{ externalId: "C0DEALS", stage: "fetch", code: "rate_limited", message: "Slack is rate limiting history calls. Search retries on the next window.", attempts: 1, lastAt: new Date(Date.now() - 2 * 60_000).toISOString() }];
   if (s.def.platform === "notion") return [{ externalId: "page_8c1e", stage: "normalize", code: "invalid_profile", message: "Body over 200,000 characters after decoding. Kept the first 200,000.", attempts: 1, lastAt: new Date(Date.now() - 26 * 3600_000).toISOString() }];

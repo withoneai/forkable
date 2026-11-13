@@ -263,6 +263,13 @@ function scalars(v: unknown): string[] {
 
 export function fixtureTransport(world: SampleWorld): FixtureTransport {
   return {
+    has(fixtureKey: string): boolean {
+      const i = fixtureKey.indexOf(":");
+      const kind = fixtureKey.slice(0, i), key = fixtureKey.slice(i + 1);
+      if (kind === "match") { const [a, b] = key.split("|"); return world.matches.some((m) => (m.a === a && m.b === b) || (m.a === b && m.b === a)); }
+      if (kind === "judgment") return key in world.judgments;
+      return true;
+    },
     async answer(req: FixtureRequest): Promise<FixtureAnswer> {
       if (req.fixtureKey) {
         const k = req.fixtureKey;
@@ -274,7 +281,11 @@ export function fixtureTransport(world: SampleWorld): FixtureTransport {
           : kind === "chat" ? world.chat.find((c) => c.q === normalizeQuestion(key))
           : kind === "proposal" ? world.proposals.get(key)
           : undefined;
-        return hit ? { status: 200, data: structuredClone(hit) } : { status: 404, data: { error: "no fixture", fixtureKey: k } };
+        if (hit) return { status: 200, data: structuredClone(hit) };
+        // A query rerank.json does not list: Jev knows nothing better, so it scores nothing and
+        // the order stands. Answering 404 here filled the sample's Activity with failures.
+        if (kind === "rerank") return { status: 200, data: {} };
+        return { status: 404, data: { error: "no fixture", fixtureKey: k } };
       }
       const files = world.pages.get(req.actionId);
       if (files) {

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOneConnect } from "@withone/connect/react";
-import { ArrowRight, Building2, Search as SearchIcon, Sparkles } from "lucide-react";
+import { ArrowRight, Building2, CalendarDays, Search as SearchIcon, Sparkles, X } from "lucide-react";
 import { api } from "@/lib/api";
 import { keys, useMe } from "@/lib/queries";
 import { toast } from "@/lib/toast";
@@ -51,7 +51,7 @@ export function Start() {
         <div className="mx-auto flex w-full max-w-[380px] flex-1 flex-col justify-center gap-8 py-10">
           <div className="slide-up flex flex-col gap-3">
             <h1 className="text-3xl font-semibold tracking-[-0.02em] text-balance">One search box for everything you connect.</h1>
-            <p className="text-15 text-muted-foreground text-pretty">Mail, calendars, CRMs, docs, issues and chat in one index you own. An assistant on the right reads the results, cites every claim and suggests a better search.</p>
+            <p className="text-15 text-muted-foreground text-pretty">Mail, calendars, contacts and deals, docs, issues and chat, in one place you own. An assistant on the right reads the results, cites every claim and suggests a better search.</p>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -63,22 +63,27 @@ export function Start() {
                 <ArrowRight className="ml-auto size-3.5 transition-transform duration-100 group-hover:translate-x-0.5" />
               </button>
             )}
-            <button
-              type="button"
-              onClick={connect.open}
-              disabled={!configured || connect.status === "connecting"}
-              data-testid="sign-in"
-              className={cn("group flex h-11 items-center gap-2.5 rounded-lg px-4 transition-[filter,opacity] duration-100",
-                // not set up yet: an outline, so the sample is the obvious next step
-                configured ? "bg-foreground text-background shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] hover:brightness-110 disabled:opacity-45" : "border border-dashed border-border-strong text-muted-foreground")}
-            >
-              {connect.status === "connecting" ? <Spinner /> : <Logo size={16} />}
-              <span className="text-13 font-medium">Sign in with One</span>
-              <span className="ml-auto flex items-center gap-1.5 rounded-md bg-background/95 px-1.5 py-1">
-                {BUILT_IN.slice(0, 4).map((p) => <SourceLogo key={p} platform={p} size={14} />)}
-              </span>
-            </button>
-            <div className="flex items-center gap-3 text-11 text-muted-foreground"><span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" /></div>
+            {configured && (
+              <button
+                type="button"
+                onClick={connect.open}
+                disabled={connect.status === "connecting"}
+                data-testid="sign-in"
+                className="group flex h-11 items-center gap-2.5 rounded-lg bg-foreground px-4 text-background shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] transition-[filter,opacity] duration-100 hover:brightness-110 disabled:opacity-45"
+              >
+                {connect.status === "connecting" ? <Spinner /> : <Logo size={16} />}
+                <span className="text-13 font-medium">Sign in with One</span>
+                <span className="ml-auto flex items-center gap-1.5 rounded-md bg-background/95 px-1.5 py-1">
+                  {BUILT_IN.slice(0, 4).map((p) => <SourceLogo key={p} platform={p} size={14} />)}
+                </span>
+              </button>
+            )}
+            {!configured && (
+              <p className="text-13 text-muted-foreground" data-testid="signin-not-ready">
+                Signing in with your own accounts is not ready on this computer yet. Try the sample in the meantime.
+              </p>
+            )}
+            {configured && <div className="flex items-center gap-3 text-11 text-muted-foreground"><span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" /></div>}
             <button
               type="button"
               onClick={() => void openSample()}
@@ -92,8 +97,8 @@ export function Start() {
               <ArrowRight className="ml-auto size-3.5 text-muted-foreground transition-transform duration-100 group-hover:translate-x-0.5" />
             </button>
             {!configured ? (
-              <p className="text-11 text-muted-foreground">
-                Sign in is not set up on this computer yet. <Link to="/setup/connect" className="font-medium text-foreground underline underline-offset-2">Set it up</Link>
+              <p className="pt-2 text-11 text-muted-foreground">
+                Setting this up for someone? <Link to="/setup/connect" className="font-medium text-foreground underline underline-offset-2" data-testid="setup-link">Start here</Link>
               </p>
             ) : (
               <p className="text-11 text-muted-foreground">No account needed for the sample. Acme Inc's tools, already indexed.</p>
@@ -103,8 +108,8 @@ export function Start() {
           <ol className="flex flex-col gap-2.5 border-t border-border pt-6 text-xs">
             {[
               ["Sign in with One", "Pick the tools Search may read. Read only, always."],
-              ["Let it index", "Each source fills in on its own and stays fresh."],
-              ["Search, or ask", "Filters like from: and after:, or a plain question."],
+              ["Let it read", "Each source fills in on its own and stays up to date."],
+              ["Search, or ask", "Type it the way you would say it, or ask a question."],
             ].map(([t, d], i) => (
               <li key={t} className="flex items-start gap-3">
                 <span className="tnum flex size-5 shrink-0 items-center justify-center rounded-full border border-border text-11 text-muted-foreground">{i + 1}</span>
@@ -113,7 +118,7 @@ export function Start() {
             ))}
           </ol>
         </div>
-        <p className="text-11 text-muted-foreground">Integrations and Sign in with One come built in. Secured by One. You connect your own accounts and can revoke them any time.</p>
+        <p className="text-11 text-muted-foreground">Secured by One. You connect your own accounts and can remove them any time.</p>
       </section>
 
       <section aria-hidden className="relative hidden min-h-0 overflow-hidden border-l border-border bg-faint lg:block">
@@ -125,12 +130,14 @@ export function Start() {
 }
 
 type Row = { platform: string; type: string; title: string; context: string; meta: string };
+// "this month" reads as the month by name, the way the box shows it
+const THIS_MONTH = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
 const ROWS: Row[] = [
   { platform: "hubspot", type: "Deal", title: "Globex renewal 2027", context: "Contract sent · $84,000", meta: "Nov 14" },
   { platform: "gmail", type: "Mail", title: "Priya Shah · Re: Globex renewal terms", context: "(5)", meta: "6h" },
   { platform: "outlook-mail", type: "Mail", title: "Marco Bellini · Globex legal redline, final", context: "", meta: "2d" },
   { platform: "granola", type: "Meeting", title: "Globex contract review", context: "42 min", meta: "Thu" },
-  { platform: "slack", type: "Message", title: "Dana: Globex is basically closed, waiting on signature", context: "#deals", meta: "1d" },
+  { platform: "slack", type: "Message", title: "Dana in #deals: Globex is basically closed, waiting on signature", context: "", meta: "1d" },
   { platform: "linear", type: "Issue", title: "SSO for Globex rollout", context: "ACME-311 · In Progress", meta: "Mia" },
   { platform: "notion", type: "Doc", title: "Globex account plan", context: "in Accounts", meta: "9d" },
 ];
@@ -152,15 +159,19 @@ function ProductWindow() {
     <div className="absolute left-10 top-[12%] w-[min(960px,calc(100%-2.5rem))] overflow-hidden rounded-xl border border-border bg-background shadow-float">
       <div className="flex h-9 items-center gap-1.5 border-b border-border px-3">
         <span className="size-2.5 rounded-full bg-border-strong" /><span className="size-2.5 rounded-full bg-border-strong" /><span className="size-2.5 rounded-full bg-border-strong" />
-        <span className="ml-3 text-11 text-muted-foreground">localhost:5680</span>
       </div>
-      <div className="grid grid-cols-[minmax(0,1fr)_280px]">
-        <div className="flex min-h-[680px] flex-col border-r border-border">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="flex min-h-[680px] min-w-0 flex-col xl:border-r xl:border-border">
           <div className="flex h-11 items-center gap-2 border-b border-border px-4">
-            <SearchIcon className="size-4 text-muted-foreground" />
-            <span className="font-mono text-13">globex renewal <span className="rounded-sm bg-muted px-1">with:globex.com</span> <span className="rounded-sm bg-muted px-1">after:30d</span></span>
+            <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
+            <span className="min-w-0 truncate text-13">globex renewal this month</span>
           </div>
-          <div className="flex h-9 items-center gap-1 border-b border-border px-3 text-xs">
+          {/* the way the app shows a read sentence: the box keeps the words, the chip sits under it */}
+          <div className="flex h-9 items-center gap-1.5 border-b border-border px-4 text-11">
+            <span className="text-muted-foreground">Understood as</span>
+            <span className="inline-flex h-6 items-center gap-1 rounded-md bg-muted pl-1.5 pr-1 font-medium text-foreground"><CalendarDays className="size-3 text-muted-foreground" />{THIS_MONTH}<X className="size-3 text-muted-foreground" /></span>
+          </div>
+          <div className="flex h-9 items-center gap-1 overflow-hidden border-b border-border px-3 text-xs">
             {[["All", 11], ["Mail", 3], ["Deals", 2], ["Meetings", 2], ["Chat", 2], ["Issues", 1]].map(([l, c], i) => (
               <span key={l} className={cn("inline-flex h-6 items-center gap-1.5 rounded-md px-2 font-medium", i === 0 ? "bg-muted text-foreground" : "text-muted-foreground")}>{l}<span className="tnum text-11 text-muted-foreground">{c}</span></span>
             ))}
@@ -178,7 +189,7 @@ function ProductWindow() {
             ))}
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="hidden flex-col xl:flex">
           <div className="flex h-11 items-center gap-2 border-b border-border px-3 text-13 font-medium"><Sparkles className="size-3.5 text-accent" />Assistant</div>
           <div className="flex flex-col gap-3 p-3 text-xs">
             <p className="self-end rounded-lg bg-muted px-2.5 py-1.5">Where are we with Globex?</p>
@@ -188,7 +199,7 @@ function ProductWindow() {
             </p>
             <div className="flex flex-col gap-1.5 rounded-lg border border-border bg-card p-2.5">
               <span className="text-11 text-muted-foreground">Try a narrower search</span>
-              <span className="flex flex-wrap gap-1 font-mono text-11"><span className="rounded-sm bg-muted px-1">+ with:globex.com</span><span className="rounded-sm bg-muted px-1">+ after:14d</span></span>
+              <span className="flex flex-wrap gap-1 text-11"><span className="rounded-md bg-muted px-1.5 py-0.5">+ With Globex</span><span className="rounded-md bg-muted px-1.5 py-0.5">+ Last 14 days</span></span>
               <span className="flex items-center justify-between text-11"><span className="text-muted-foreground">7 results</span><span className="rounded-md bg-primary px-2 py-0.5 font-medium text-primary-foreground">Apply</span></span>
             </div>
           </div>

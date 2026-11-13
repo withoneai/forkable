@@ -64,7 +64,7 @@ describe("search quality on the Acme sample", () => {
       assert.equal(r.embedder.semantic, false);
       assert.equal(r.embedder.reason, "not_in_grant");
       assert.equal(r.embedder.platform, "openai");
-      assert.equal(r.embedder.message, "OpenAI is not in your grant.");
+      assert.equal(r.embedder.message, "Search has no access to OpenAI.");
       const st = await semanticStatus(real, "usr_real");
       assert.equal(st.reason, "not_in_grant", "the status (sources, banner) remembers it without calling anything");
     });

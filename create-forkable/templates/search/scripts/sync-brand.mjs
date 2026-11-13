@@ -3,9 +3,9 @@
 // Point SEARCH_BRAND_KIT at its design/brand/search folder (default: a checkout
 // at ~/projects/forkable). Never hand-edit the copies, re-run this instead:
 // node scripts/sync-brand.mjs
-import { cpSync, copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { cpSync, copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { homedir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 
 const kit = process.env.SEARCH_BRAND_KIT ?? join(homedir(), "projects/forkable/design/brand/search");
@@ -27,7 +27,15 @@ for (const app of ["ui", "site"]) {
 // The landing page links these sizes from index.html and its manifest.
 const sitePub = join(root, "site/public");
 for (const s of [16, 32, 512]) copyFileSync(join(kit, `icon/search-icon-on-dark-${s}.png`), join(sitePub, `icon-${s}.png`));
-copyFileSync(join(kit, "og.png"), join(sitePub, "og.png"));
+// The kit's card sits on the deep brand green; the site is near black, so the
+// share card is the kit's og.svg on the site's dark tokens (background, muted).
+const og = readFileSync(join(kit, "og.svg"), "utf8")
+  .replace('fill="#172e25"', 'fill="#000000"')
+  .replace('fill="#627b6f"', 'fill="#779084"');
+if (!og.includes('fill="#000000"')) throw new Error("og.svg background not found; check the kit");
+const ogSvg = join(tmpdir(), "search-og.svg");
+writeFileSync(ogSvg, og);
+execFileSync("rsvg-convert", ["-w", "1200", "-h", "630", ogSvg, "-o", join(sitePub, "og.png")]);
 // 48 and 192 aren't in the kit; scale them from the 512 (sips ships with macOS).
 for (const s of [48, 192])
   execFileSync("sips", ["-z", String(s), String(s), join(kit, "icon/search-icon-on-dark-512.png"), "--out", join(sitePub, `icon-${s}.png`)], { stdio: "ignore" });

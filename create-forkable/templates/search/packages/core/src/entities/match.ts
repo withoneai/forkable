@@ -113,9 +113,12 @@ export async function runEntityMatch(ctx: EngineCtx, userId: string): Promise<{ 
     for (const c of cands) {
       const ka = await keysOf(ctx.db, c.a.id), kb = await keysOf(ctx.db, c.b.id);
       let p: number | null = null;
-      for (const x of ka) for (const y of kb) {
+      // ask only about a pair the sample knows (a transport without has() keeps the old probing)
+      const pairs = ka.flatMap((x) => kb.map((y) => `match:${x}|${y}`));
+      const ask = ctx.transport?.has ? pairs.filter((k) => ctx.transport!.has!(k)).slice(0, 1) : pairs;
+      for (const fixtureKey of ask) {
         if (p !== null) break;
-        const r = await one.raw(callCtx, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Check whether two people are the same", fixtureKey: `match:${x}|${y}`, body: {} });
+        const r = await one.raw(callCtx, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Check whether two people are the same", fixtureKey, body: {} });
         if (r.ok) p = Number((r.data as { same?: number }).same ?? 0);
       }
       await decide(c, p, "fixture");

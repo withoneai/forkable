@@ -102,10 +102,14 @@ reversed in this file.
 | D41 | **The semantic arm says when it is off.** A failed query embedding returns `embedder.semantic: false` with `reason` (`not_in_grant`, `error`, `keyword_mode`, `sample`) and a message; the last outcome per user (queries and the embed worker) feeds `GET /sources` (`semantic`, and the banner when no source is worse). A CLI or MCP sign-in that lands on an existing account keeps that account's stored Connect reference; only a web sign-in replaces it. | real-data review, 2026-10-30 |
 | D42 | **Exact matches go first.** A query that is an email, a domain, an external id or a whole entity name puts that record ahead of RRF (`ResultRow.exact`). An exact title, or the query as a phrase in a title, adds one rank-1 hit to the RRF sum. | real-data review, 2026-10-30 |
 | D43 | **One row per human.** On text queries, records linked `is` to one entity fold into the best one, the other platforms in `alsoIn`. A person or company record nothing else mentions weighs 0.6. A profile's `is.allEmails` makes each of a record's 2 to 5 addresses a merge key (Attio people). When every word together finds nothing, a 1 to 3 word text gets the closest entity name by trigram (`didYouMean`). | real-data review, 2026-10-30 |
-| D44 | **Zero results fall back to any word**, said in `fallback: "or"`, when no semantic arm can stand in. Plain dates in the text ("last month", "in October", "this week") come back as `dateProposals`, chips that rewrite the query into `after:`/`before:`. | real-data review, 2026-10-30 |
+| D44 | **Zero results fall back to any word**, said in `fallback: "or"`, when no semantic arm can stand in. Plain dates in the text ("last month", "in October", "this week") come back as `dateProposals`, chips that rewrite the query into `after:`/`before:`. Since D48 they are applied as understood filters instead; `dateProposals` is filled only when understanding is off (`understand=0`). | real-data review, 2026-10-30 |
 | D45 | **Dates are when things happened.** occurredAt falls back to the profile's updatedAt, then the record's own modified/updated/created keys, then the day Search first saw it (kept, never the fetch time, never hashed). Nothing more than two years out; an event that far out is not indexed. Google Calendar expands a year ahead (`timeMax`, filter `plus:`). Normalize version 2 re-maps every source once from raw payloads. | real-data review, 2026-10-30 |
 | D46 | **One source per account, named by its address.** An account call that learns an address relabels its connection's sources when One titled them with the platform name. The scheduler attaches connections that joined a grant every 10 minutes, and never adds a built-in where the user's own profile already calls the same list action. | real-data review, 2026-10-30 |
 | D47 | **Never pay twice for one search.** The browser keeps the last 20 result pages (results, Jev order, answer) per user for 30 minutes and renders them with no call, says so ("Saved results from 4 min ago", Refresh `⇧ R`), and quietly reruns only the cheap search to offer "N new results" without moving the list. The server keeps Jev rerank scores in Postgres per user, query and item until the item changes, keeps a late Jev answer, and runs one call per missing set. Refresh skips every cache. AI answers are not stored on the server. | real-data review, 2026-10-30 |
+| D48 | **The box reads plain sentences.** "emails from Priya last week" becomes `type:mail from:priya@globex.com after:... before:...` by hand-written rules in `packages/core/src/query/understand.ts` (`understandQuery`, pure, no I/O, browser-safe, about 0.1 ms a sentence against 5,000 people), checked against the user's own people, companies and connected platforms (`search/vocab.ts`, cached 30 s while the counts hold). Patterns: a connector and a name or tool (from, sent by, by, with, to, sent to, assigned to, cc, at a company, in/on/via a tool), possessives ("Priya's notes"), "me" and "I sent", a tool before a type ("slack messages"), type words (emails, meetings, events, deals, docs, notes, tickets, issues, tasks, messages, people, companies; a plural opens a sentence before a linking word, a singular only before a phrase that was read), states (unread, upcoming, open and my before deals or issues, past before meetings, "needs me" and "waiting on me" as `lane:needs-you`, "waiting for a reply" as `lane:waiting`, "with an attachment", VIPs) and the D44 dates. **Apply only when unambiguous; when in doubt, no filter** (a wrong filter empties the page with nothing on screen saying why, which is worse than no understanding): one match in a recognized pattern. These come back as `suggestions` with choices, never picked: two people with the name; a word that is a name and a connected tool of the same length ("from Notion" with a company Notion Labs); "from May" with a person May; a last name alone (offered only when it reads as a name: a capital, or nothing after it that makes a phrase, so "emails with price changes" stays words); a first name that is also a word or month ("grace", "will", "mark") unless it has a capital right after a connector with nothing after it; a tool name that is also a word ("slack", "linear", "teams", "notion") unless it has a capital or follows a type word ("messages in teams"), and any tool followed by a word that makes it an everyday phrase ("notes on linear algebra"); "with A and B" or "to A, B" (one filter with several values matches any of them, so "with A or B" is offered); a month still ahead this year ("in December" in November: December of last year or of this year, the year in the label). **Negation** ("not", "except", "without", "excluding", "other than", "isn't" and other n't words) turns the rest of its run around: nothing after it is ever applied, and a clear target right after the cue is offered as the exclusion ("Not from Priya Shah", `-from:...`). **Lists**: "from A and B", "from A, B and C" and "A or B" with any connector apply as one filter of several values; a list with a word that matches nobody is left as words. **One human, one chip**: records with the same name where at most one address is known (a chat account and a mail contact) collapse to one, filtered by the name; two addresses under a name are two people, and a record with no address then stays apart. **Names compare** with every combining mark removed on both sides (accents, Arabic hamza, Japanese voicing marks, full-width forms), and invisible marks between words count as space. Past the busiest 20,000 people and companies in memory, an exact full name or address in the sentence is looked up in the database. The list is dropped when sources, entities or merges change and is built once per user at a time. Never read: quoted text, filters, `#channel`, `@handle`, stop words ("from scratch", "with regards", "in progress", "notes from the meeting" keeps "from meeting" as words), a connector before a name that matches nobody. **A read sentence never loses what its words found**: once a filter is read, question and filler words leave the searched words ("what happened last week" lists that week, "anything from last week" too), the any-word fallback still runs with filters, a person or company read from words also reaches items with someone who works there (company) and items that name them but link no person (a note), and meaning reads the whole sentence. **Typed filters win:** a key typed in the box (`from:`, `in:`, `type:`, any date key, `is:`, `lane:`, `has:`) is never inferred again. **The box text never changes on its own**: the response says what was read (`understood`, with `phrase`, offsets, `filter`, `label`) and what was searched (`searchedAs`, `parsed`). Removing a chip quotes its phrase, "Search the exact words instead" quotes every phrase (quotes are always words), a choice writes its filter in place of the phrase, and editing a chip of a read key writes that phrase as its filter first. Recent searches keep the sentence as typed. When what is left of the sentence is only small words ("where are we" of "where are we with Globex", an empty English tsquery), the filters list on their own. When the leftover words match nothing under the filters, the filters list on their own too, and the page says so in a line naming the words (`fallback: "filters"`, `unmatched`); when only a few items have the words they come first. Each filter that hides items with the words says how many (`hiddenBy`, "X hides N" with Drop). Jev rerank reads the whole sentence, not what is left of it. **Defaults per surface:** on for the web app (a browser session on `GET /search`, `/search/count` and `POST /answer`); off for a bearer token (a script, an agent, the CLI), which sends exactly what it means and asks with `understand=1` (the CLI sends it so it agrees with the app); `understand=0` turns it off for anyone; off in core (`SearchRequest.understand` unset: count helpers, MCP) until a caller asks; MCP `search` stays off by default because agents write their own filters, and has an `understand` input (false by default) for the person's own words. **The list, the answer and the counts agree**: the answer strip reads the page the person sees (even an empty one) and never reruns the search another way, and the chat's proposal counts read the query the way the list does. **No LLM fallback**: the rules answer in the same request; a model would add seconds or a second round trip for a gain the choices already cover. **Dates in the browser's zone**: every search sends `tz` (IANA); date words and `after:2026-11-02` resolve in that zone, else the server's. | owner, 2026-11-12 |
+| D49 | **The first index is shown plainly.** While any source is on its first read (`status: "new"`, or `syncing` with no `lastSuccessAt`), home shows one panel: each tool with a bar and a count ("114 of about 1,080", "54 so far" without an estimate) and one sentence, "You can search now. Gmail is 40% in." (the tool furthest behind, then "and N more tools are on the way"). Home polls `GET /sources` every 2 s while it shows. A tool that stops before its first good read (`error`, `degraded`, `rate_limited`, `auth_needed`, `grant_blocked` with no `lastSuccessAt`) stays in the panel with its status word, why in plain words and what to do ("Needs sign-in · Slack asked for a new sign-in. Reconnect Slack in One, then update it here.", with a link to the tool), and the sentence says it stopped. "Everything is in" never shows while one has stopped. When the last tool is in, the panel goes and one notice says "Everything is in" with the item and tool counts. The mock plays it with `localStorage["search.mock.firstIndex"] = <start ms>`, and `localStorage["search.mock.firstIndexStop"] = "slack:auth_needed"` makes a tool stop. Saved results in the browser (D47) belong to the local day they were saved on. | owner, 2026-11-12 |
+| D50 | **The Connect app asks for everything** (supersedes D26). `one.connect.ts` is `ask: "everything"` (One CLI 2.14, `@withone/connect` 0.23): each person sees every tool they have, picks what Search may use and can narrow it; the CLI writes no `ONE_PERMISSION_SET`. A new source for a tool the person has not connected saves `awaiting_grant` on `pending:<platform>` and the New source sheet asks them to connect it in One; the app never changes, so `connect.extra.json` and `POST /profile-drafts/:id/widen-ask` are gone. Reading only is the code's job: every profile action stays `access: "read"`. The Gmail delete receipt runs on the Acme sample only, since a real grant may now allow it. `/setup/connect` asks once to update an app that still has a permission set. | owner, 2026-11-13 |
+| D51 | **Keep to the One plan.** One budget per user in `one.ts` (CONTRACT 19): 90% of the plan's per-minute limit, the person first, a quarter kept for them, 429 and 402 handled, a One plan card in Settings, General. | owner, 2026-11-13 |
 
 ---
 
@@ -115,7 +119,7 @@ reversed in this file.
 search/
   AGENTS.md  CLAUDE.md (= @AGENTS.md)  README.md  LICENSE (MIT)
   package.json  pnpm-workspace.yaml  tsconfig.base.json  .env.example
-  forkable.json  connect.manifest.json  one.connect.ts  connect.extra.json
+  forkable.json  connect.manifest.json  one.connect.ts
   scripts/connect.mjs            pnpm connect (one --agent connect create)
   agents/indexer.md  agents/assistant.md
   local/profile.md
@@ -267,7 +271,9 @@ defines `search_unaccent` as identity.
 
 Every secret is stored as SHA-256 and compared in constant time. Access 1 h,
 refresh 30 days rotated on use; reusing a rotated refresh token revokes the
-family.
+family, except within 30 s of its rotation from the same client while the new
+pair is unused, when the server answers that same pair again (the refresh
+grace, 16.5, for processes that share one token file).
 
 ### 4.10 Ledger (Activity)
 
@@ -888,7 +894,11 @@ date      = YYYY-MM-DD | YYYY-MM | today | yesterday | tomorrow | this-week | la
 | `id:` | item id or external id | `id:ACME-311` |
 
 Rules: same key ORs (`in:gmail in:outlook-mail`), different keys AND, `-`
-negates the clause, `OR` joins free words, quotes make phrases. Unknown keys
+negates the clause, `OR` joins free words, quotes make phrases. Free words are
+also read as plain sentences (D48): on by default for the web app, asked for with
+`understand=1` by bearer callers (the CLI always asks) and with `understand: true`
+on MCP, off with `understand=0`; a typed key
+always wins over a read one, and quoted words are never read. Unknown keys
 are treated as words (so `re:` in a subject still searches). A person value
 that matches several entities ORs them and the chip says "Priya (2)". The
 parser is `parseQuery(text) -> ParsedQuery` and `formatQuery(parsed) -> text`
@@ -1193,7 +1203,7 @@ Size setting (Small, Default, Large via `--ui-scale`).
 | `/settings/search` | Embedding model, capability note, rerank toggle, lanes, VIPs, Slack tier |
 | `/settings/assistant` | Chat model, proposal model, chat history |
 | `/settings/database` | Embedded or external, URL masked, capability, sizes |
-| `/settings/api` | OAuth clients (CLI, MCP hosts, scripts) with last used and Revoke; MCP and CLI setup snippets |
+| `/settings/agents` | Agents (16.5): the sentence to paste, a card per coding agent with Connect and its status, Any other agent, signed-in apps with Sign out, the command line. `/settings/api` redirects here. Also in the sidebar. |
 | `/access` | Grant card, actions by platform (verb in bold), Activity ledger, Disconnect (local), Manage in One |
 | `/setup/connect` | Write-only Connect setup, "Create my Connect app", "Update the Connect app" |
 | `/start` | Sign in with One (split layout like Rill's), or "Try the Acme sample" |
@@ -1234,7 +1244,7 @@ The `?` sheet and the palette render from one `keymap.ts` table.
 | Where | Copy |
 |---|---|
 | Nothing connected | "Search reads the tools you connect. Add one to start." plus connector tiles and "Try the Acme sample" |
-| First index | "Indexing HubSpot, 1,240 of about 3,000" per source |
+| First index | Home panel (D49): "You can search now. Gmail is 40% in." with a bar and "1,240 of about 3,000" per tool; one "Everything is in" notice at the end |
 | Empty results | "Nothing matched `<query>` in N sources." plus fix buttons |
 | Keyword-only | Settings and a one-time banner: "Semantic search is off. <reason>." with the one SQL line for external databases |
 | Sample embedder | "Sample embedder (local, not semantic)" in Settings, Search and in the demo output |
@@ -1298,12 +1308,17 @@ has a signed-in `search_sid` skips One and goes straight from consent to code.
 | `search demo` | keyless Acme demo in process, exits 0 (`pnpm start` runs this) |
 | `search login [--server URL]` | OAuth (DCR public client, PKCE, loopback redirect); token in `~/.search/cli-token.json` 0600 |
 | `search logout`, `search whoami` | |
-| `search "<query>" [--json] [--limit N] [--source s] [--type t]` | query; prints rows (source, type, title, date, url), `--json` prints `SearchResponse` |
+| `search "<query or sentence>" [--json] [--limit N] [--source s] [--type t] [--exact]` | query; prints rows (source, type, title, date, url), `--json` prints `SearchResponse`. Sends `understand=1` and `tz`: plain phrases are read as filters in this computer's time zone, with one line saying what was understood and any choices offered; `--exact` sends `understand=0` |
 | `search ask "<question>" [--json]` | one chat turn, prints answer with numbered sources |
 | `search open <itemId>` | opens the item's url |
 | `search sources [list\|sync <id>\|pause <id>\|resume <id>]` | |
 | `search profiles [list\|export <id> [file]\|import <file\|url>\|validate <file>]` | `validate` runs offline schema checks plus fixture checks when fixtures exist |
-| `search mcp-config [--client claude-code\|codex\|json]` | prints the config snippet for `http://localhost:52289/mcp` |
+| `search fetch <id> [--json]` | the full text of one item |
+| `search install [<agent>] [--remove]` | adds Search to Claude Code, Codex, Cursor or Claude Desktop (the Agents screen's code); no agent lists them |
+| `search mcp [--server URL] [--as <agent>] [--home DIR]` | stdio MCP bridge to `/mcp` with the CLI's sign-in, or with the agent's own (from Connect, else through the browser on first start); answers while Search is down and recovers when it is up |
+| `search mcp-config [--client claude-code\|codex\|cursor\|vscode\|claude-desktop\|json]` | prints the config snippet for `http://localhost:52289/mcp` |
+
+In a fork the bin runs as `pnpm run search <args>` from the repo root.
 
 Exit codes: 0 ok, 1 error, 2 usage, 3 not signed in, 4 server not running.
 
@@ -1316,16 +1331,41 @@ the operator grammar in five lines. Tools:
 
 | Tool | Input | Output | Scope |
 |---|---|---|---|
-| `search` | `{ query, limit?: 1..50 (10) }` | `{ results: [{ id, title, url, source, kind, date, snippet }] }` (text content is the same as a numbered list) | `search:read` |
-| `fetch` | `{ id }` | `{ id, title, url, text (body, 20,000 chars max), metadata: { source, kind, date, people, facets } }` | `search:read` |
+| `search` | `{ query?, source?, type?, from?, with?, after?, before?, limit?: 1..50 (10), offset?, understand?: false }` | `{ query, total, offset, nextOffset, results: [{ id, title, url, source, kind, date, snippet, people: [{ name, email, role }] }] }`, plus `understood`, `searchedAs` with `understand` (text content is a numbered list with the next offset) | `search:read` |
+| `fetch` | `{ id, offset?, max_chars?: 100..50,000 (20,000) }` | `{ id, title, url, text, truncated, offset, totalChars, nextOffset, metadata: { source, kind, date, people, facets } }` | `search:read` |
 | `get_entity` | `{ query }` (email, domain or name) | entity card: names, emails, company, sources, last 10 items | `search:read` |
 | `list_sources` | `{}` | sources with status, counts, last sync | `search:read` |
 | `ask` | `{ question, query? }` | `{ answer, citations: [{ n, id, title, url, quote }] }` | `search:ask` |
 
 Hosts drop `structuredContent` when `isError` is set, so errors return text
-only. Remote chat apps cannot reach `127.0.0.1`; local MCP clients (Claude
-Code, Codex) use `http://localhost:52289/mcp` directly; remote hosts need a
-tunnel or a hosted build (not in this spec).
+only. Every description has a "Use this when" line; `instructions` say when to
+reach for Search and how to page.
+
+### 16.5 Agents
+
+Connecting a coding agent is one click on Settings, Agents (also in the
+sidebar) or one pasted sentence, `Set up Search for me with
+http://localhost:52289/start.md`. The server serves `/start.md` (the steps an
+agent follows to add Search to itself and check it with `list_sources`),
+`/skill.md` and `/.well-known/agent-skills/search/SKILL.md` (when to reach for
+Search and how to use each tool), the skills index and `/llms.txt`. Cards for
+Claude Code, Codex, Cursor and Claude Desktop show found or not, Connect, the
+one step left, Connected with the last use, and Remove; "Any other agent" shows
+the MCP address and generic JSON. Connect never writes a token; each agent
+signs in with Search's OAuth. For Claude Code, Cursor and Claude Desktop the
+Connect click also signs the agent in (an OAuth client per agent, bound to
+`/mcp`), so there is nothing to type; Codex signs itself in through a browser
+tab. Search only ever changes its own entries and its own skill. Details, safety
+rules and tests in CONTRACT 18. Windows paths are written from reading only and
+are not verified. Remote chat apps cannot reach `127.0.0.1`. Codex and any agent added by hand
+use `http://localhost:52289/mcp` directly; Claude Code, Cursor and Claude
+Desktop added from the Agents screen or `search install` run the stdio bridge
+(`search mcp` through `cli/bin/search-mcp`). Every bridge and CLI process shares one token
+file per server: a refresh runs under a file lock and re-reads the file first,
+and the server's 30 s refresh grace covers a process that died after the
+rotation and before the write. An agent sign-in belongs to the account that
+pressed Connect; signing out or switching accounts ends it. Remote hosts need a tunnel or a
+hosted build (not in this spec).
 
 ---
 

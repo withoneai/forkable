@@ -1,17 +1,14 @@
 // Profiles (list, versions, edit, fork, export, import, validate), the catalog and
 // connections, and the New profile drafts (SPEC 10, CONTRACT 6.2).
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { Hono } from "hono";
 import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import {
-  acceptImport, connectionsFor, createDraft, pickModels, draftActionIds, dbSchema, discardDraft, dryRun, exportPack, fetchPackUrl, getDraft, hashProfile, importPack,
+  acceptImport, connectionsFor, createDraft, pickModels, dbSchema, discardDraft, dryRun, exportPack, fetchPackUrl, getDraft, hashProfile, importPack,
   listPlatforms, patchDraft, previewDraft, reproposeDraft, saveDraft, upsertProfileVersion, validateDraft, validateProfile, draftEstimate,
   type SearchProfile,
 } from "@search/core";
 import { assistDraft, type AssistInput } from "@search/core/mapper/assist";
-import { connectExtraFile } from "../config.js";
 import type { AppEnv } from "../deps.js";
 import { ApiError, badRequest, notFound } from "../errors.js";
 import { requireUser } from "../session.js";
@@ -64,7 +61,7 @@ profileRoutes.put("/profiles/:id", async (c) => {
   const b = await readJson<{ json?: SearchProfile; note?: string }>(c);
   if (!b.json) throw badRequest("json is required.");
   const report = validateProfile(b.json);
-  if (!report.ok) throw new ApiError(400, "invalid_profile", "The profile does not validate.", { report });
+  if (!report.ok) throw new ApiError(400, "invalid_profile", "These source settings have problems. Fix them, then save again.", { report });
   const [old] = await deps.db.select({ v: profileVersions }).from(profiles).innerJoin(profileVersions, eq(profileVersions.id, profiles.currentVersionId)).where(eq(profiles.id, c.req.param("id")));
   const r = await ownCopy(c, u.id, c.req.param("id"), b.json, b.note);
   const h = hashProfile(b.json);
@@ -220,43 +217,6 @@ profileRoutes.post("/profile-drafts/:id/save", async (c) => {
   }
   if (!r.firstRunIds.length) r.firstRunIds = r.sourceIds.map((s) => `pending:${s}`);
   return c.json(r);
-});
-
-/**
- * D26: the actions a draft's chosen profiles call join the Connect ask by id
- * (connect.extra.json), merged into the platform's custom ask. Only ids the ask
- * does not already name are written. With no profiles yet (an old client) the
- * platform joins as read-only, as before.
- */
-profileRoutes.post("/profile-drafts/:id/widen-ask", async (c) => {
-  cookieOnly(c);
-  localOnly(c);
-  const u = await requireUser(c);
-  const deps = c.get("deps");
-  const b = await readJson<{ profiles?: string[] }>(c).catch(() => ({} as { profiles?: string[] }));
-  const { platform, actionIds } = await draftActionIds(deps.ctx, u.id, c.req.param("id"), Array.isArray(b.profiles) ? b.profiles.map(String) : undefined);
-  // The Acme sample (and every UI test, which signs in as it) never changes the
-  // Connect app a real user approves: nothing is written.
-  if (u.isSample) return c.json({ written: null, next: "sample", added: [] });
-  const file = connectExtraFile(deps.env);
-  const cur = existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as { platforms?: Record<string, { access?: string; actions?: string[] }> }) : {};
-  const platforms = { ...(cur.platforms ?? {}) };
-  const entry = { ...(platforms[platform] ?? {}) };
-  let added: string[] = [];
-  if (!Array.isArray(b.profiles) || !b.profiles.length) {
-    if (entry.access === "read-only") return c.json({ written: null, next: "none", added });
-    entry.access = "read-only";
-  } else {
-    const manifest = JSON.parse(readFileSync(resolve(deps.env.ROOT, "connect.manifest.json"), "utf8")) as { actions: { platform: string; actionId: string; grant?: boolean }[] };
-    const asked = new Set([...manifest.actions.filter((a) => a.platform === platform && a.grant !== false).map((a) => a.actionId), ...(entry.actions ?? [])]);
-    added = actionIds.filter((a) => !asked.has(a));
-    if (!added.length) return c.json({ written: null, next: "none", added });
-    entry.actions = [...(entry.actions ?? []), ...added];
-  }
-  platforms[platform] = entry;
-  writeFileSync(file, `${JSON.stringify({ platforms }, null, 2)}\n`);
-  deps.log(`[search] ${platform}: ${added.length ? `${added.length} actions` : "read-only"} added to the Connect ask (${file}) by ${u.id}`);
-  return c.json({ written: "connect.extra.json", next: "update_connect_app", added });
 });
 
 profileRoutes.delete("/profile-drafts/:id", async (c) => {

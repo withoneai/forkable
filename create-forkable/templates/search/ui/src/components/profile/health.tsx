@@ -2,11 +2,9 @@
 import type { ApiSource, SourceHealth, SourceStatus } from "@/contract/api-types";
 import { HealthDot } from "@/components/Shell";
 import { cn, fmtAgo, fmtIn, fmtNum } from "@/lib/utils";
+import { STATUS_WORD } from "@/lib/copy";
 
-export const STATUS_WORD: Record<SourceStatus, string> = {
-  healthy: "Healthy", syncing: "Syncing", new: "Starting", degraded: "Needs attention", rate_limited: "Rate limited",
-  auth_needed: "Needs sign-in", grant_blocked: "Not in grant", awaiting_grant: "Waiting for grant", paused: "Paused", error: "Failed",
-};
+export { STATUS_WORD };
 
 export const STATUS_TONE: Record<SourceStatus, string> = {
   healthy: "text-success-text", syncing: "text-foreground", new: "text-foreground", degraded: "text-warning-text", rate_limited: "text-warning-text",
@@ -22,16 +20,17 @@ export function everyLabel(every: string): string {
   return n === 1 ? "daily" : `every ${n} days`;
 }
 
-/** "Synced 4 min ago · next in 11 min", or the live progress while a run is going. */
-export function healthLine(h: SourceHealth): string {
+/** "Updated 4 min ago · next in 11 min", or the live progress while a run is going. */
+export function healthLine(h: SourceHealth, o: { short?: boolean } = {}): string {
   if ((h.status === "syncing" || h.status === "new") && h.progress) {
     const est = h.progress.estimate;
     return est && est >= h.progress.done ? `${fmtNum(h.progress.done)} of about ${fmtNum(est)}` : `${fmtNum(h.progress.done)} so far`;
   }
   if (h.status === "rate_limited" && h.retryAt) return `Trying again at ${new Date(h.retryAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}`;
-  if (h.status === "paused") return h.lastSuccessAt ? `Last synced ${fmtAgo(h.lastSuccessAt)}` : "Not synced yet";
-  if (h.status === "auth_needed") return `Indexing stopped ${fmtAgo(h.lastSuccessAt)}`;
-  return `Synced ${fmtAgo(h.lastSuccessAt)}${h.nextRunAt ? ` · next ${fmtIn(h.nextRunAt)}` : ""}`;
+  if (h.status === "paused") return h.lastSuccessAt ? `Last updated ${fmtAgo(h.lastSuccessAt)}` : "Not updated yet";
+  if (h.status === "auth_needed") return `Stopped updating ${fmtAgo(h.lastSuccessAt)}`;
+  const next = h.nextRunAt && !o.short ? fmtIn(h.nextRunAt) : null;
+  return `Updated ${fmtAgo(h.lastSuccessAt)}${next ? ` · next update ${next === "now" ? "any moment" : next}` : ""}`;
 }
 
 export function StatusCell({ health, className }: { health: SourceHealth; className?: string }) {
@@ -41,7 +40,7 @@ export function StatusCell({ health, className }: { health: SourceHealth; classN
         <HealthDot status={health.status} />
         {STATUS_WORD[health.status]}
       </span>
-      <span className="truncate text-11 text-muted-foreground">{healthLine(health)}</span>
+      <span className="truncate text-11 text-muted-foreground" title={healthLine(health)}>{healthLine(health, { short: true })}</span>
     </span>
   );
 }

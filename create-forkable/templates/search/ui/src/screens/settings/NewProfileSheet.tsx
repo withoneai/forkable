@@ -28,6 +28,7 @@ import { FinishStep } from "@/components/profile/FinishStep";
 import { AdvancedFields, SCHEDULES, type Identity } from "@/components/profile/IdentityStep";
 import { humanizeIssue, leafPaths, missingTargets, rowsFromProposal, rowsToPatch, targetLabel, type MapRow, type PlainIssue, type Target } from "@/components/profile/fieldmap";
 import { onControl } from "@/components/profile/keys";
+import { COPY } from "@/lib/copy";
 import { applyMapOps, describeOp, MappingAssistant, type AssistMessage, type AssistOp } from "@/components/profile/MappingAssistant";
 
 const STEPS = ["Source", "Check", "Connect"] as const;
@@ -56,7 +57,7 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
   // the accounts this profile indexes (two Gmails): all of them unless the user unticks one
   const [accountKeys, setAccountKeys] = useState<string[]>([]);
   // saved, but the grant does not cover it yet: the Connect step finishes it in this sheet
-  const [finish, setFinish] = useState<{ sourceIds: string[]; needsAppUpdate: boolean } | null>(null);
+  const [finish, setFinish] = useState<{ sourceIds: string[] } | null>(null);
   const [mapping, setMapping] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const creatingRef = useRef(false);
@@ -207,7 +208,7 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
       if (reprop) {
         setReproposing(true);
         try { const d = await api.repropose(draft.id, reprop.hint); setDraft(d); initFromDraft(d); }
-        catch (e) { toast({ title: "Could not propose again", detail: (e as Error).message, tone: "destructive" }); }
+        catch (e) { toast({ title: "Could not suggest again", detail: (e as Error).message, tone: "destructive" }); }
         finally { setReproposing(false); }
       }
     } catch (e) {
@@ -240,10 +241,10 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
       initFromDraft(d);
       const got = d.proposal?.models.length ?? 0;
       if (got === picks.length) { setReport(null); setStep(1); }
-      else if (got) toast({ title: `Mapped ${got} of ${picks.length}`, detail: "The others say why. Continue with what mapped, or change the picks." });
-      else toast({ title: "Nothing mapped", detail: "No picked model returned records Search could read. Try other models.", tone: "destructive" });
+      else if (got) toast({ title: `${got} of ${picks.length} ready`, detail: "The others say why. Continue with what is ready, or change your picks." });
+      else toast({ title: "Nothing is ready", detail: "Search could not read records from what you picked. Try other picks.", tone: "destructive" });
     } catch (e) {
-      toast({ title: "Could not map the models", detail: (e as Error).message, tone: "destructive" });
+      toast({ title: "Could not set up your picks", detail: (e as Error).message, tone: "destructive" });
     } finally {
       mappingRef.current = false;
       setMapping(false);
@@ -263,7 +264,7 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
     const m = modelOf(p);
     if (!m || !draft) return;
     setRows((all) => ({ ...all, [p]: rowsFromProposal(m, draft.samples[m.profile.list.actionId]?.sample[0]) }));
-    toast({ title: "Back to the AI proposal" });
+    toast({ title: "Back to what the AI suggested" });
   };
   const setIdent = (p: string, patch: Partial<Identity>) => {
     setIdentity((all) => ({ ...all, [p]: { ...all[p]!, ...patch } }));
@@ -274,20 +275,16 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
     if (!draft) return;
     setSaving(true);
     try {
-      // the actions these models call join the Connect app's ask first (none on the sample)
-      const ask = await api.widenAsk(draft.id, selected);
       const res = await api.saveDraft(draft.id, { name: name.trim() || undefined, profiles: selected, ...(draft.accounts.length > 1 ? { connectionKeys: accountKeys } : {}) });
       await qc.invalidateQueries({ queryKey: keys.sources });
       await qc.invalidateQueries({ queryKey: keys.profiles });
-      const n = ask.added.length;
-      if ((res.awaitingGrant || n) && ask.next !== "sample") {
-        // finish here: update the app if its ask changed, grant, watch indexing start
-        const setup = await api.connectSetup().catch(() => null);
-        setFinish({ sourceIds: res.sourceIds, needsAppUpdate: n > 0 || !!setup?.create.askChanged });
+      if (res.awaitingGrant) {
+        // the Connect app asks for everything, so only the account is missing: connect it, watch indexing start
+        setFinish({ sourceIds: res.sourceIds });
         setStep(2);
         return;
       }
-      toast({ title: `Indexing ${picked?.name ?? draft.platform}`, detail: `${res.sourceIds.length} ${res.sourceIds.length === 1 ? "source" : "sources"} created, first run started` });
+      toast({ title: `Reading ${picked?.name ?? draft.platform}`, detail: `${res.sourceIds.length} ${res.sourceIds.length === 1 ? "source" : "sources"} added, first update started` });
       nav(`/sources/${res.sourceIds[0]}`);
     } catch (e) {
       const r = e instanceof ApiError ? (e.data as { report?: ValidationReport } | null)?.report : undefined;
@@ -316,18 +313,18 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
   const onModels = step === 0 && !!draft && draft.platform === picked?.platform;
   const gate: { label: string; ok: boolean } = useMemo(() => {
     if (step === 0 && !onModels) {
-      if (!picked) return { label: "Pick a platform", ok: false };
+      if (!picked) return { label: "Pick a tool", ok: false };
       if (creating) return { label: `Reading ${picked.name}...`, ok: false };
       return { label: "Continue", ok: true };
     }
     if (step === 2) return { label: "Close", ok: true };
     if (step === 0) {
-      if (mapping) return { label: "Mapping...", ok: false };
-      if (!picks.length) return { label: "Pick at least one model", ok: false };
+      if (mapping) return { label: "Getting ready...", ok: false };
+      if (!picks.length) return { label: "Pick at least one", ok: false };
       if (mappedPicks && selected.length) return { label: "Continue", ok: true };
-      return { label: `Map ${picks.length} ${picks.length === 1 ? "model" : "models"}`, ok: true };
+      return { label: `Set up ${picks.length} ${picks.length === 1 ? "pick" : "picks"}`, ok: true };
     }
-    const label = saving ? "Saving..." : draft && !draft.inGrant ? "Save, then grant it" : "Save and start indexing";
+    const label = saving ? "Saving..." : draft && !draft.inGrant ? "Save, then allow it" : "Save and start reading";
     return { label, ok: !saving && !checking && blocking === 0 && !!report?.ok };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, onModels, picked, creating, selected, rows, report, checking, saving, blocking, picks, mapping, mappedPicks]);
@@ -366,10 +363,10 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
   const starters = issues.slice(0, 3).map((i) => `Fix: ${i.text}`);
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="New profile" data-testid="new-profile-sheet" className="fade-in fixed inset-0 z-40 flex flex-col bg-background">
+    <div role="dialog" aria-modal="true" aria-label={COPY.addSource} data-testid="new-profile-sheet" className="fade-in fixed inset-0 z-40 flex flex-col bg-background">
       <header className="flex h-14 shrink-0 items-center gap-4 border-b border-border px-4">
         <button type="button" aria-label="Close" onClick={attemptClose} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-card-hover hover:text-foreground"><X className="size-4" /></button>
-        <span className="text-13 font-semibold">New profile</span>
+        <span className="text-13 font-semibold">{COPY.addSource}</span>
         <ol className="mx-auto flex min-w-0 items-center gap-1 overflow-x-auto scrollbar-none" aria-label="Steps">
           {(finish ? STEPS : STEPS.slice(0, 2)).map((s, i) => (
             <li key={s} className="flex shrink-0 items-center gap-1">
@@ -395,9 +392,9 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
         <div className="mx-auto flex min-h-full w-full max-w-[960px] flex-col gap-5 px-6 py-6">
           {(step > 0 || onModels) && (
             <div>
-              <h1 className="text-xl font-semibold tracking-tight">{step === 0 ? "Models" : step === 1 ? "Check" : `Connect ${picked?.name ?? draft?.platform}`}</h1>
+              <h1 className="text-xl font-semibold tracking-tight">{step === 0 ? COPY.whatToSearch : step === 1 ? "Check" : `Connect ${picked?.name ?? draft?.platform}`}</h1>
               <p className="mt-0.5 text-13 text-muted-foreground">
-                {step === 0 ? `Pick what to search in ${picked?.name}. Search only reads.` : step === 1 ? `This is what Search will index from ${picked?.name ?? draft?.platform}. The AI set it up; change anything, then save.` : "Saved. Two quick steps and indexing starts."}
+                {step === 0 ? `Pick what to search in ${picked?.name}. Search only reads.` : step === 1 ? `This is what Search will read from ${picked?.name ?? draft?.platform}. The AI set it up. Change anything, then save.` : "Saved. Two quick steps and reading starts."}
               </p>
             </div>
           )}
@@ -407,7 +404,7 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
           {step === 0 && !onModels && <PlatformStep picked={picked} onPick={(p) => { setPicked(p); if (draft && draft.platform !== p.platform) setDraft(null); }} onSubmit={next} creating={creating} stages={stages} />}
           {onModels && draft && <ModelsStep draft={draft} picks={picks} onPicks={setPicks} mapping={mapping} stages={stages} />}
           {step === 2 && finish && (
-            <FinishStep platform={picked?.name ?? draft?.platform ?? ""} sourceIds={finish.sourceIds} needsAppUpdate={finish.needsAppUpdate}
+            <FinishStep platform={picked?.name ?? draft?.platform ?? ""} sourceIds={finish.sourceIds}
               onOpenSource={(id) => nav(`/sources/${id}`)} onLater={() => nav(`/sources/${finish.sourceIds[0]}`)} />
           )}
           {step === 1 && pid && rows[pid] && identity[pid] && (
@@ -448,9 +445,9 @@ export function NewProfileSheet({ onClose }: { onClose: () => void }) {
         </Button>
       </footer>
 
-      <Dialog open={confirmLeave} onClose={() => setConfirmLeave(false)} title="Discard this profile?" size="sm">
+      <Dialog open={confirmLeave} onClose={() => setConfirmLeave(false)} title="Discard this source?" size="sm">
         <div className="flex flex-col gap-4 p-4">
-          <p className="text-13 text-muted-foreground">The draft and your field choices go away. Nothing was indexed yet.</p>
+          <p className="text-13 text-muted-foreground">Your picks and field choices go away. Nothing was read yet.</p>
           <div className="flex justify-end gap-2">
             <Button onClick={() => setConfirmLeave(false)}>Keep editing</Button>
             <Button variant="destructive" onClick={discard} data-testid="discard">Discard</Button>

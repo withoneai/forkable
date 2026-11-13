@@ -60,7 +60,7 @@ export function AdvancedFields({ pid, identity, onChange, samples, paths, report
   const idIssue = issueFor(report, "id", pid);
   const linkIssue = issueFor(report, "link", pid);
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5" data-copy="advanced">
       <Row label="Record id" hint={`How Search tells ${noun}s apart. Leave it as is.`}>
         <div className="flex items-center gap-3">
           <Menu open={idMenu} onClose={() => setIdMenu(false)} className="max-h-[260px] w-[280px] overflow-y-auto"

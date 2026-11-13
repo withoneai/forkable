@@ -4,8 +4,8 @@ import type {
   AccessResponse, AnswerRequest, AnswerResponse, ApiItemError, ApiProfile, ApiRun, ApiSource, ChatMessage, ConnectSetupResponse,
   CreateDraftInput, DraftPreview, DraftStep, DryRunResult, EntityChip, EntityDetail, GrantedConnection, ImportPreview, ItemDetail,
   LedgerRow, MeResponse, OAuthClientRow, ProfileDraft, ProfileHashes, RerankResponse, SaveDraftInput, SaveDraftResult, SearchProfile,
-  SearchProfilePack, SearchResponse, SettingsData, SourcesResponse, SuggestResponse, ValidationReport, CatalogPlatform, DraftEdits,
-  ItemKind, ResultRow,
+  SearchProfilePack, SearchResponse, SettingsData, OnePlanStatus, SourcesResponse, SuggestResponse, ValidationReport, CatalogPlatform, DraftEdits,
+  ItemKind, ResultRow, AgentActionResult, AgentId, AgentsResponse,
 } from "@/contract/api-types";
 import { clearSearchCache } from "./searchCache";
 
@@ -80,6 +80,11 @@ export type SavedSearch = { id: string; name: string; query: string; position: n
 export type RecentSearch = { query: string; at: string; resultCount: number };
 export type FieldName = ConnectSetupResponse["fields"][number]["name"];
 
+/** The browser's IANA zone ("Asia/Qatar"), sent with every search so date words mean the person's day. */
+export function browserZone(): string | undefined {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined; } catch { return undefined; }
+}
+
 export const api = {
   health: () => fetch("/api/health").then((r) => r.json() as Promise<{ ok: boolean; version: string }>),
   me: () => request<MeResponse>("GET", "/me"),
@@ -87,10 +92,11 @@ export const api = {
   signout: () => { clearSearchCache(); return request<void>("POST", "/signout"); },
   disconnect: () => { clearSearchCache(); return request<void>("POST", "/connect/disconnect"); },
 
+  // plain sentences are read on the server (D48); the browser's zone says what "yesterday" is
   search: (p: { q: string; sort?: string; scope?: ItemKind | "all"; limit?: number; offset?: number; fresh?: boolean }, signal?: AbortSignal) =>
-    request<SearchResponse>("GET", `/search${qs({ q: p.q, sort: p.sort ?? "best", scope: p.scope ?? "all", limit: p.limit ?? 30, offset: p.offset, fresh: p.fresh ? 1 : undefined })}`, undefined, signal),
+    request<SearchResponse>("GET", `/search${qs({ q: p.q, sort: p.sort ?? "best", scope: p.scope ?? "all", limit: p.limit ?? 30, offset: p.offset, fresh: p.fresh ? 1 : undefined, tz: browserZone() })}`, undefined, signal),
   rerank: (queryId: string, fresh?: boolean) => request<RerankResponse>("POST", "/search/rerank", fresh ? { queryId, fresh } : { queryId }),
-  count: (q: string) => request<{ count: number }>("GET", `/search/count${qs({ q })}`),
+  count: (q: string) => request<{ count: number }>("GET", `/search/count${qs({ q, tz: browserZone() })}`),
   suggest: (prefix: string, signal?: AbortSignal) => request<SuggestResponse>("GET", `/suggest${qs({ prefix })}`, undefined, signal),
   item: (id: string) => request<ItemDetail>("GET", `/items/${id}`),
   recentItems: (limit = 8) => request<ResultRow[]>("GET", `/recent-items${qs({ limit })}`),
@@ -104,7 +110,8 @@ export const api = {
   chats: () => request<{ id: string; title: string; updatedAt: string }[]>("GET", "/chats"),
   chat: (id: string) => request<{ id: string; title: string; messages: ChatMessage[] }>("GET", `/chats/${id}`),
   deleteChat: (id: string) => request<void>("DELETE", `/chats/${id}`),
-  answer: (body: AnswerRequest) => request<AnswerResponse>("POST", "/answer", body),
+  // the answer reads the question the way the list did (D48): the same zone, sentences read
+  answer: (body: AnswerRequest) => request<AnswerResponse>("POST", "/answer", { tz: browserZone(), ...body }),
 
   sources: () => request<SourcesResponse>("GET", "/sources"),
   sampleSources: () => request<SourcesResponse>("POST", "/sources/sample"),
@@ -145,11 +152,10 @@ export const api = {
   previewDraft: (id: string, profileId: string) => request<DraftPreview>("POST", `/profile-drafts/${id}/preview`, { profileId }),
   validateDraft: (id: string) => request<ValidationReport>("POST", `/profile-drafts/${id}/validate`),
   saveDraft: (id: string, body: SaveDraftInput) => request<SaveDraftResult>("POST", `/profile-drafts/${id}/save`, body),
-  /** Adds the actions these profiles call to the Connect app's ask (connect.extra.json); added lists the new ids. */
-  widenAsk: (id: string, profiles: string[]) => request<{ written: string | null; next: string; added: string[] }>("POST", `/profile-drafts/${id}/widen-ask`, { profiles }),
   discardDraft: (id: string) => request<void>("DELETE", `/profile-drafts/${id}`),
 
   settings: () => request<SettingsData>("GET", "/settings"),
+  onePlan: () => request<OnePlanStatus>("GET", "/one-plan"),
   engine: () => request<EngineStatus>("GET", "/assistant/engine"),
   redetectEngine: () => request<EngineStatus>("POST", "/assistant/engine/redetect"),
   putSettings: (patch: Partial<SettingsData>) => request<{ settings: SettingsData; effect: null | { reembed: { chunks: number; estimateCalls: number } } }>("PUT", "/settings", patch),
@@ -172,6 +178,10 @@ export const api = {
 
   oauthClients: () => request<OAuthClientRow[]>("GET", "/oauth-clients"),
   revokeClient: (clientId: string) => request<void>("DELETE", `/oauth-clients/${clientId}`),
+
+  agents: () => request<AgentsResponse>("GET", "/agents"),
+  connectAgent: (id: AgentId) => request<AgentActionResult>("POST", `/agents/${id}/connect`),
+  removeAgent: (id: AgentId) => request<AgentActionResult>("DELETE", `/agents/${id}`),
 };
 
 export type Api = typeof api;

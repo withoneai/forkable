@@ -1,3 +1,4 @@
+import { attendeesOf, eventWhen, eventZoneNote, RSVP_LABEL, selfRsvp } from "./eventTime";
 import { forwardRef, type ReactNode } from "react";
 import { CircleDashed, CircleDot, CircleCheck, CircleX, Circle, Paperclip, Users, Video } from "lucide-react";
 import type { ResultRow as Row } from "@/contract/api-types";
@@ -15,7 +16,6 @@ export function Highlighted({ text, ranges, className }: { text: string; ranges:
   );
 }
 
-const RSVP: Record<string, string> = { accepted: "Going", tentative: "Maybe", declined: "No", needsAction: "Invited" };
 
 export function StateIcon({ type, className }: { type?: string; className?: string }) {
   const c = cn("size-3.5 shrink-0 stroke-[1.75]", className);
@@ -69,14 +69,15 @@ function parts(r: Row): { type: ReactNode; title: ReactNode; context: ReactNode;
       };
     }
     case "event": {
-      const names = (f.attendees ?? []).map((a) => (a.name ?? nameForAddress(r.people, a.email) ?? a.email ?? "").split(" ")[0]).filter(Boolean);
-      const resp = f.selfResponse ?? "accepted";
+      const names = attendeesOf(f).map((a) => (a.name ?? nameForAddress(r.people, a.email ?? undefined) ?? a.email ?? "").split(" ")[0]).filter(Boolean);
+      const resp = selfRsvp(f);
       return {
         type: typeText("Event"),
         title,
-        context: <span className="tnum">{new Date(f.start).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}, {fmtTime(f.start)} to {fmtTime(f.end)}</span>,
-        meta: <span className={cn("rounded-sm px-1.5 py-0.5 text-11 font-medium leading-none", resp === "needsAction" ? "border border-dashed border-border-strong text-foreground" : resp === "declined" ? "bg-muted text-muted-foreground line-through" : "bg-muted text-foreground")}>{RSVP[resp] ?? resp}</span>,
-        second: names.length ? <span className="inline-flex items-center gap-1.5"><span>{names.slice(0, 2).join(", ")}{names.length > 2 ? ` +${names.length - 2}` : ""}</span>{f.joinUrl && <Video className="size-3" aria-label="Has a meeting link" />}</span> : null,
+        // the time sits on the second line, so a narrow list never cuts the title to make room for it
+        context: null,
+        meta: <span className={cn("rounded-sm px-1.5 py-0.5 text-11 font-medium leading-none", resp === "invited" ? "border border-dashed border-border-strong text-foreground" : resp === "no" ? "bg-muted text-muted-foreground line-through" : "bg-muted text-foreground")}>{RSVP_LABEL[resp]}</span>,
+        second: <span className="inline-flex min-w-0 items-center gap-1.5"><span className="tnum shrink-0" title={eventZoneNote(f) ?? undefined}>{eventWhen(f)}</span>{names.length > 0 && <span className="truncate">· {names.slice(0, 2).join(", ")}{names.length > 2 ? ` +${names.length - 2}` : ""}</span>}{f.joinUrl && <Video className="size-3 shrink-0" aria-label="Has a meeting link" />}</span>,
       };
     }
     case "person":
@@ -85,7 +86,7 @@ function parts(r: Row): { type: ReactNode; title: ReactNode; context: ReactNode;
         title,
         context: [f.jobTitle, f.companyName].filter(Boolean).join(" at "),
         meta: <span>Updated {fmtRelative(r.updatedAt ?? r.occurredAt)}</span>,
-        second: f.email ? <span className="font-mono text-11">{f.email}</span> : null,
+        second: f.email ? <span>{f.email}</span> : null,
       };
     case "company":
       return {
@@ -106,12 +107,19 @@ function parts(r: Row): { type: ReactNode; title: ReactNode; context: ReactNode;
         second: snippet,
       };
     case "message": {
-      // the pack titles a chat message by its channel; the row reads "Sender: the message" (2.4)
+      // the pack titles a chat message by its channel; the row reads "Sender in #channel: the message" (2.4)
       const text = r.snippet ? <Highlighted text={r.snippet} ranges={r.snippetHighlights} /> : title;
-      const ch = f.channel ? (f.channel.startsWith("#") || /\s/.test(f.channel) || r.platform !== "slack" ? f.channel : `#${f.channel}`) : r.title.startsWith("#") ? r.title : "DM";
+      // a chat tool's channel ("#deals", a Teams channel) or a direct message; a support tool's
+      // "channel" is how the person wrote in (Intercom's "email"), which is not a place, so it stays out
+      const chatTool = r.platform === "slack" || r.platform === "teams";
+      const ch = f.channel && (chatTool || f.channel.startsWith("#"))
+        ? (f.channel.startsWith("#") || /\s/.test(f.channel) || r.platform !== "slack" ? f.channel : `#${f.channel}`)
+        : r.title.startsWith("#") ? r.title : chatTool ? "a direct message" : null;
+      // the type is "Message"; the channel sits right after the author, whole, so a narrow list
+      // never cuts it to "#acme-gl..." and the message itself is what gives way
       return {
-        type: typeText(ch),
-        title: <><span className="font-medium">{senderName(r, f.sender)}</span><span className="text-muted-foreground">: </span>{text}</>,
+        type: typeText(KIND_LABEL.message),
+        title: <><span className="font-medium">{senderName(r, f.sender)}</span><span className="text-muted-foreground">{ch ? ` in ${ch}` : ""}: </span>{text}</>,
         context: null,
         meta: when,
         second: f.replyCount ? <span>{f.replyCount} {f.replyCount === 1 ? "reply" : "replies"}</span> : null,
@@ -157,6 +165,7 @@ export const ResultRowView = forwardRef<HTMLDivElement, { row: Row; selected: bo
         data-testid="result-row"
         data-id={row.id}
         data-index={index}
+        data-kind={row.kind}
         onMouseDown={(e) => { if (e.button === 0) onSelect(); }}
         onDoubleClick={onOpen}
         className={cn(
@@ -173,8 +182,9 @@ export const ResultRowView = forwardRef<HTMLDivElement, { row: Row; selected: bo
           </span>
           <span className="flex w-16 shrink-0 items-center text-11 text-muted-foreground">{p.type}</span>
           <span className="flex min-w-0 flex-1 items-baseline gap-2">
-            <span className="min-w-0 truncate text-13 text-foreground">{p.title}</span>
-            {p.context && <span className="hidden shrink-0 truncate text-xs text-muted-foreground sm:inline md:max-w-[40%]">{p.context}</span>}
+            {/* a narrow list keeps the title readable first; the context gives way, never cut to a stub */}
+            <span className={cn("truncate text-13 text-foreground", p.context ? "min-w-[min(45%,max-content)]" : "min-w-0")}>{p.title}</span>
+            {p.context && <span className="hidden min-w-0 shrink truncate text-xs text-muted-foreground sm:inline">{p.context}</span>}
           </span>
           {/* one row per person or company: the other tools that hold a record for them */}
           {row.alsoIn?.length ? (

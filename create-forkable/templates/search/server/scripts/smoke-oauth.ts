@@ -191,11 +191,17 @@ try {
   check("the new access token works", a.status === 200 && a.json.user?.name === "Theo Lund");
   t = await post("/token", { grant_type: "refresh_token", client_id: pub.client_id, refresh_token: tok2.refresh_token, scope: "search:read sources:write account:read search:ask admin" });
   check("a refresh cannot widen scopes", t.status === 400 && t.json.error === "invalid_scope", t.json);
+  // grace: a process that died after the rotation presents the old token again within seconds
   t = await post("/token", { grant_type: "refresh_token", client_id: pub.client_id, refresh_token: tok.refresh_token });
-  check("reusing the rotated refresh token is invalid_grant", t.status === 400 && t.json.error === "invalid_grant", t.json);
-  a = await api("/api/v1/me", tok2.access_token);
-  check("reuse revoked the whole family: the newest access token is 401", a.status === 401 && a.json.error.code === "unauthorized", a.json);
+  check("grace: the just-rotated token presented again answers the same new pair", t.status === 200 && t.json.refresh_token === tok2.refresh_token && t.json.access_token === tok2.access_token, t.json);
   t = await post("/token", { grant_type: "refresh_token", client_id: pub.client_id, refresh_token: tok2.refresh_token });
+  const tok3 = t.json;
+  check("the pair from the grace refreshes normally", t.status === 200 && tok3.refresh_token !== tok2.refresh_token, t.json);
+  t = await post("/token", { grant_type: "refresh_token", client_id: pub.client_id, refresh_token: tok.refresh_token });
+  check("once its successor was used, reusing the rotated refresh token is invalid_grant", t.status === 400 && t.json.error === "invalid_grant", t.json);
+  a = await api("/api/v1/me", tok3.access_token);
+  check("reuse revoked the whole family: the newest access token is 401", a.status === 401 && a.json.error.code === "unauthorized", a.json);
+  t = await post("/token", { grant_type: "refresh_token", client_id: pub.client_id, refresh_token: tok3.refresh_token });
   check("and the newest refresh token is dead too", t.status === 400 && t.json.error === "invalid_grant");
 
   // 8. The sample identity, MCP default scopes, /mcp
@@ -210,7 +216,7 @@ try {
   check("an MCP resource with no scope gets search:read search:ask", t.status === 200 && mt.scope === "search:read search:ask", t.json);
   r = await mcp(mt.access_token, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "smoke", version: "0" } } });
   const init = await r.json() as any;
-  check("POST /mcp initialize with a token", r.status === 200 && init.result?.serverInfo?.name === "search" && /operators/.test(init.result?.instructions ?? ""), init);
+  check("POST /mcp initialize with a token", r.status === 200 && init.result?.serverInfo?.name === "search" && /filters/.test(init.result?.instructions ?? ""), init);
   r = await mcp(mt.access_token, { jsonrpc: "2.0", id: 2, method: "tools/list" });
   const tools = ((await r.json()) as any).result?.tools?.map((x: any) => x.name).sort();
   check("tools/list has the five read-only tools", tools?.join() === "ask,fetch,get_entity,list_sources,search", tools);
@@ -219,6 +225,27 @@ try {
   check("tools/call search on the sample", sr?.structuredContent?.results?.length === 3 && !sr.isError, sr);
   a = await api("/api/v1/search?q=globex", mt.access_token);
   check("an MCP token is refused on /api/v1", a.status === 401);
+  a = await api("/api/v1/sources", mt.access_token);
+  check("an MCP token (an agent's bridge sign-in) cannot read /api/v1/sources either", a.status === 401);
+
+  // 8b. The person's own CLI asks for the bare origin: one token for REST and /mcp (the bridge).
+  const b3r = new Browser();
+  const p3r = pkce();
+  await b3r.go("GET", `/authorize?${new URLSearchParams({ response_type: "code", client_id: pub.client_id, redirect_uri: "http://127.0.0.1:51000/callback", code_challenge: p3r.challenge, code_challenge_method: "S256", scope: "search:read search:ask sources:write account:read", resource: `${base}/` })}`);
+  r = await b3r.go("POST", "/oauth/consent", { pending: b3r.jar.get("search_oauth_pending")!, action: "sample" });
+  t = await post("/token", { grant_type: "authorization_code", client_id: pub.client_id, code: new URL(r.headers.get("location")!).searchParams.get("code")!, code_verifier: p3r.verifier, redirect_uri: "http://127.0.0.1:51000/callback", resource: `${base}/` });
+  const rootTok = t.json.access_token as string;
+  a = await api("/api/v1/sources", rootTok);
+  check("a bare-origin token works on /api/v1", t.status === 200 && a.status === 200, { t: t.status, a: a.status });
+  r = await mcp(rootTok, { jsonrpc: "2.0", id: 9, method: "tools/list" });
+  check("and on /mcp", r.status === 200);
+  const b3a = new Browser();
+  const p3a = pkce();
+  await b3a.go("GET", `/authorize?${new URLSearchParams({ response_type: "code", client_id: pub.client_id, redirect_uri: "http://127.0.0.1:51000/callback", code_challenge: p3a.challenge, code_challenge_method: "S256", resource: `${base}/api/v1` })}`);
+  r = await b3a.go("POST", "/oauth/consent", { pending: b3a.jar.get("search_oauth_pending")!, action: "sample" });
+  t = await post("/token", { grant_type: "authorization_code", client_id: pub.client_id, code: new URL(r.headers.get("location")!).searchParams.get("code")!, code_verifier: p3a.verifier, redirect_uri: "http://127.0.0.1:51000/callback", resource: `${base}/api/v1` });
+  r = await mcp(t.json.access_token, { jsonrpc: "2.0", id: 10, method: "tools/list" });
+  check("an /api/v1 token is refused on /mcp", r.status === 401);
 
   // 9. Scope enforcement on REST (a read-only token)
   const b4 = new Browser();

@@ -62,13 +62,14 @@ const shots = [
   { name: "new-profile-4-identity", path: "/settings/integrations/new", act: async (p) => { await np(p, 3); } },
   { name: "new-profile-5-review", path: "/settings/integrations/new", act: async (p) => { await np(p, 4); } },
   { name: "source-detail", path: "/sources/src_hubspot_deals" },
-  { name: "source-runs", path: "/sources/src_slack_messages", act: async (p) => { await p.getByRole("tab", { name: /Runs/ }).click().catch(() => {}); } },
+  { name: "source-runs", path: "/sources/src_slack_messages", act: async (p) => { await p.getByRole("tab", { name: /History/ }).click().catch(() => {}); } },
   { name: "source-errors", path: "/sources/src_teams_chat_messages", act: async (p) => { await p.getByRole("tab", { name: /Errors/ }).click().catch(() => {}); } },
   { name: "access", path: "/access", act: async (p) => { await p.getByTestId("write-row").first().click(); } },
   { name: "setup-connect", path: "/setup/connect" },
   { name: "settings-general", path: "/settings/general" },
   { name: "settings-search", path: "/settings/search" },
-  { name: "settings-api", path: "/settings/api" },
+  { name: "settings-assistant", path: "/settings/assistant" },
+  { name: "settings-agents", path: "/settings/agents" },
 ];
 
 async function np(p, steps) {

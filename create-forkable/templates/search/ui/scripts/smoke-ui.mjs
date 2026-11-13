@@ -108,6 +108,10 @@ await step("chips rewrite the box (and back)", async () => {
 });
 
 await step("preview opens for the selected row", async () => {
+  // On a real server the new query's rows land after the URL changes; a click on the
+  // old rows is lost when they swap in, so wait for the list to settle first.
+  await page.waitForFunction(() => document.querySelector('[data-testid="results"]')?.getAttribute("data-loading") === "0", null, { timeout: 10_000 });
+  await page.waitForTimeout(300);
   await page.getByTestId("result-row").nth(1).click();
   const preview = page.getByTestId("preview");
   await preview.waitFor();
@@ -158,13 +162,13 @@ await step("New profile for Zendesk to a saved source with a first run", async (
   const primary = page.getByTestId("sheet-primary");
   // Platform, Models, Fields, Identity: Continue whenever the step allows it (the proposal takes a few seconds).
   for (let i = 0; i < 6 && !(await page.getByTestId("profile-name").isVisible().catch(() => false)); i++) {
-    await page.waitForFunction(() => { const b = document.querySelector('[data-testid="sheet-primary"]'); return b && !b.hasAttribute("disabled") && b.getAttribute("aria-busy") !== "true"; }, null, { timeout: 25_000 });
+    await page.waitForFunction(() => { const b = document.querySelector('[data-testid="sheet-primary"]'); return b && !b.hasAttribute("disabled") && b.getAttribute("aria-busy") !== "true"; }, null, { timeout: 60_000 });
     await primary.click();
     await page.waitForTimeout(300);
   }
   await page.getByTestId("profile-name").waitFor();
   await page.keyboard.press(`${mod}+Enter`);
-  await page.waitForURL(/\/sources\/[^/]+$/, { timeout: 15_000 });
+  await page.waitForURL(/\/sources\/[^/]+$/, { timeout: 30_000 });
   await page.getByTestId("first-run").waitFor({ timeout: 15_000 });
 });
 
@@ -172,10 +176,75 @@ await step("Access lists the grant", async () => {
   await page.goto(`${base}/access`);
   await page.getByText(/Search can read/).first().waitFor();
   await page.getByTestId("actions").waitFor();
-  const granted = await page.getByTestId("actions").getByText("Granted", { exact: true }).count();
+  const granted = await page.getByTestId("actions").getByText("Allowed", { exact: true }).count();
   expect(granted >= 5, `expected granted read actions, got ${granted}`);
   await page.getByTestId("write-row").first().click();
-  await page.getByText(/declined, 403/).first().waitFor();
+  await page.getByTestId("receipt").getByText(/Search asked to delete a Gmail message/).waitFor();
+});
+
+await step("Access: the receipt leads with a plain sentence, the request under a toggle", async () => {
+  await page.locator('[data-testid="ledger"] button').filter({ hasText: "Not allowed" }).first().click();
+  const sentence = await page.getByTestId("call-sentence").innerText();
+  expect(/^Search asked to delete a Gmail message\. One said no, because Search may only read\./.test(sentence), `lead sentence: ${sentence}`);
+  const panel = page.getByTestId("call-detail");
+  expect(!(await panel.getByText(/conn_mod_def|DELETE|\{\{/).count()), "raw request values show before the toggle");
+  await page.getByTestId("call-request-toggle").click();
+  await page.getByTestId("call-request").getByText("declined, 403").first().waitFor();
+  // no alarm colour for zero, and the clock is plain text, not a code font
+  const strip = await page.getByTestId("tick-problems").evaluate((el) => ({ text: el.textContent, red: el.className.includes("destructive") }));
+  expect(/all worked/.test(strip.text ?? "") ? !strip.red : strip.red, `tick strip: ${JSON.stringify(strip)}`);
+  const clockFont = await page.locator('[data-testid="ledger"] button span').first().evaluate((el) => getComputedStyle(el).fontFamily);
+  expect(!/mono/i.test(clockFont), `the clock is in ${clockFont}`);
+});
+
+await step("1024 with the assistant open: names on hover, and room keeps them at 1280", async () => {
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.goto(`${base}/?q=globex`);
+  await page.getByTestId("result-row").first().waitFor();
+  if (!(await page.getByTestId("dock").isVisible().catch(() => false))) await page.keyboard.press(`${mod}+j`);
+  await page.getByTestId("dock").waitFor();
+  const aside = page.getByRole("complementary", { name: "Sidebar" });
+  expect(await aside.getAttribute("data-folded") === "1", "the sidebar should fold at 1024 with the assistant open");
+  await aside.hover({ position: { x: 26, y: 300 } });
+  await page.waitForFunction(() => document.querySelector('aside[aria-label="Sidebar"]')?.getAttribute("data-peek") === "1", null, { timeout: 3000 });
+  await aside.getByText("Settings", { exact: true }).waitFor();
+  await page.mouse.move(700, 400);
+  await page.waitForFunction(() => !document.querySelector('aside[aria-label="Sidebar"]')?.getAttribute("data-peek"), null, { timeout: 3000 });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.waitForFunction(() => !document.querySelector('aside[aria-label="Sidebar"]')?.getAttribute("data-folded"), null, { timeout: 3000 });
+});
+
+await step("the assistant stays as she left it on search pages and closed elsewhere", async () => {
+  await page.goto(`${base}/settings/general`);
+  await page.waitForTimeout(300);
+  expect(!(await page.getByTestId("dock").isVisible().catch(() => false)), "the assistant opened on Settings by itself");
+  await page.keyboard.press(`${mod}+j`);
+  await page.getByTestId("dock").waitFor();
+  await page.goto(`${base}/access`);
+  await page.waitForTimeout(300);
+  expect(!(await page.getByTestId("dock").isVisible().catch(() => false)), "the assistant followed her from Settings to Access");
+  await page.goto(`${base}/?q=globex`);
+  await page.getByTestId("dock").waitFor();
+  await page.keyboard.press(`${mod}+j`);
+  await page.goto(`${base}/?q=priya`);
+  await page.getByTestId("result-row").first().waitFor();
+  expect(!(await page.getByTestId("dock").isVisible().catch(() => false)), "closed on search, it came back on the next search");
+  await page.setViewportSize({ width: 1536, height: 900 });
+});
+
+await step("a person's page shows the card's number and not her own record", async () => {
+  await page.goto(`${base}/?q=priya`);
+  const card = page.getByTestId("entity-strip").locator("button").first();
+  await card.waitFor({ timeout: 10_000 });
+  const cardText = await card.innerText();
+  const name = cardText.split("\n")[0].trim();
+  const cardN = Number(/(\d+) items?/.exec(cardText)?.[1]);
+  await card.click();
+  const head = await page.getByTestId("entity-count").innerText();
+  const pageN = Number(/(\d+) items?/i.exec(head)?.[1]);
+  expect(cardN === pageN, `card says ${cardN}, page says ${pageN}`);
+  const own = await page.locator(`[data-testid="timeline-row"][data-kind="person"][data-title="${name}"]`).count();
+  expect(own === 0, `${name}'s own record is on her timeline`);
 });
 
 await step("Settings, Assistant: AI engine choice", async () => {
@@ -184,16 +253,50 @@ await step("Settings, Assistant: AI engine choice", async () => {
   await group.waitFor({ timeout: 10_000 });
   const radio = (name) => group.getByRole("radio", { name: new RegExp(`^${name}`) });
   expect(await radio("Auto").getAttribute("aria-checked") === "true", "Auto is not the default");
-  expect(await radio("Codex").isDisabled(), "Codex (signed out in the mock) should be disabled");
-  await page.getByText("Not signed in (run codex login)").waitFor();
-  await radio("Models through One").click();
-  await page.waitForFunction(() => document.querySelector('[role="radiogroup"][aria-label="AI engine"] [aria-checked="true"]')?.textContent?.startsWith("Models through One"), null, { timeout: 5000 });
-  await page.waitForFunction(() => /Claude Sonnet 5\.5/.test(document.querySelector('[aria-label="Chat model"]')?.textContent ?? ""), null, { timeout: 5000 });
-  await radio("Claude Code").click();
-  // Claude Code lists its own models (labels carry the tier)
-  await page.waitForFunction(() => /balanced/.test(document.querySelector('[aria-label="Chat model"]')?.textContent ?? ""), null, { timeout: 5000 });
+  // The mock has Codex signed out. A real server reports what is installed on this
+  // computer, so there a disabled choice only has to say why.
+  if (!process.env.SMOKE_URL) {
+    expect(await radio("Codex").isDisabled(), "Codex (signed out in the mock) should be disabled");
+    await page.getByText("Not signed in (run codex login)").waitFor();
+  } else if (await radio("Codex").isDisabled()) {
+    await page.getByText(/Not signed in|Not installed|not found/i).first().waitFor();
+  }
+  await radio("Claude through One").click();
+  await page.waitForFunction(() => document.querySelector('[role="radiogroup"][aria-label="AI engine"] [aria-checked="true"]')?.textContent?.startsWith("Claude through One"), null, { timeout: 5000 });
+  await page.waitForFunction(() => /Claude Sonnet 5\.5/.test(document.querySelector('[aria-label="Chat AI model"]')?.textContent ?? ""), null, { timeout: 5000 });
+  if (!(await radio("Claude Code").isDisabled())) {
+    await radio("Claude Code").click();
+    // Claude Code lists its own models (labels carry the tier)
+    await page.waitForFunction(() => /balanced/.test(document.querySelector('[aria-label="Chat AI model"]')?.textContent ?? ""), null, { timeout: 5000 });
+  }
   await radio("Auto").click();
   await page.getByRole("button", { name: "Check again" }).click();
+});
+
+await step("plain words: helpers, the engine's path, a source's count, the account chip", async () => {
+  await page.goto(`${base}/access`);
+  const helper = page.getByTestId("helper-row").first();
+  await helper.waitFor();
+  const first = (await helper.locator("span").first().innerText()).split("\n")[0];
+  expect(!/TypeSafe|OpenAI|Anthropic/.test(first) && /\w+s /.test(first), `a helper row leads with a name: ${first}`);
+  await page.goto(`${base}/settings/search`);
+  await page.getByText(/Done by Jev/).first().waitFor();
+  const hints = await page.locator("main").innerText();
+  expect(!/^\s*Jev,/m.test(hints) && /Done by Jev/.test(hints), "Settings, Search still opens a hint with Jev");
+  await page.goto(`${base}/settings/assistant`);
+  await page.getByRole("radiogroup", { name: "AI engine" }).waitFor();
+  expect(!/Found at/.test(await page.locator("main").innerText()), "a path shows on Settings, Assistant before Where they are");
+  await page.goto(`${base}/settings/integrations`);
+  const src = page.locator('a[href^="/sources/"]').first();
+  await src.click();
+  await page.getByTestId("tile-items").waitFor();
+  expect(/Items found/.test(await page.getByTestId("tile-items").innerText()), "the source tile still says indexed");
+  await page.goto(`${base}/?q=globex`);
+  const chip = page.getByTestId("account-chip").first();
+  if (await chip.count()) {
+    const tip = await chip.getAttribute("title");
+    expect(/^From your \S+ account/.test(tip ?? ""), `account chip tooltip: ${tip}`);
+  }
 });
 
 await step("no page errors", async () => { expect(errors.length === 0, errors.join(" | ")); });

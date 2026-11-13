@@ -26,7 +26,7 @@ export const PROVIDERS: Record<string, (model?: string) => EmbedProvider> = {
     platform: "openai", model, batch: 128,
     build: (texts) => ({
       platform: "openai", action: "embed", level: "read", actionId: "conn_mod_def::GJ564JtA2kg::RZSxROt_TaGPn5dj1cERcg",
-      method: "POST", path: "/embeddings", body: { model, input: texts, dimensions: DIMS }, summary: "Embed text for semantic search",
+      method: "POST", path: "/embeddings", body: { model, input: texts, dimensions: DIMS }, summary: "Read text so Search can find it by meaning",
       pick: (d) => arr((d as { data?: unknown }).data).map((e) => pad(((e as { embedding?: number[] }).embedding) ?? [])),
     }),
   }),
@@ -36,7 +36,7 @@ export const PROVIDERS: Record<string, (model?: string) => EmbedProvider> = {
       platform: "gemini", action: "embed", level: "read", actionId: "conn_mod_def::GKYsLheH12Q::Tpg2bcnfSjenI3U6jlwKzQ",
       method: "POST", path: "/v1beta/models/{{model}}:batchEmbedContents", pathParams: { model },
       body: { requests: texts.map((text) => ({ model: `models/${model}`, content: { parts: [{ text }] }, taskType: task === "query" ? "RETRIEVAL_QUERY" : "RETRIEVAL_DOCUMENT", outputDimensionality: DIMS })) },
-      summary: "Embed text for semantic search",
+      summary: "Read text so Search can find it by meaning",
       pick: (d) => arr((d as { embeddings?: unknown }).embeddings).map((e) => pad(((e as { values?: number[] }).values) ?? [])),
     }),
   }),
@@ -46,7 +46,7 @@ export const PROVIDERS: Record<string, (model?: string) => EmbedProvider> = {
       platform: "cohere", action: "embed", level: "read", actionId: "conn_mod_def::GOBI50QrjAs::W77uZN_sRAq12F_k0a3kEg",
       method: "POST", path: "/v2/embed",
       body: { model, texts, input_type: task === "query" ? "search_query" : "search_document", embedding_types: ["float"], output_dimension: DIMS, truncate: "END" },
-      summary: "Embed text for semantic search",
+      summary: "Read text so Search can find it by meaning",
       pick: (d) => arr(((d as { embeddings?: { float?: unknown } }).embeddings ?? {}).float).map((e) => pad(e as number[])),
     }),
   }),
@@ -54,7 +54,7 @@ export const PROVIDERS: Record<string, (model?: string) => EmbedProvider> = {
     platform: "mistral-ai", model, batch: 64,
     build: (texts) => ({
       platform: "mistral-ai", action: "embed", level: "read", actionId: "conn_mod_def::GMZh4j5K2IA::ZZRIBQWMS0-Kn1uey0EP4A",
-      method: "POST", path: "/v1/embeddings", body: { model, input: texts }, summary: "Embed text for semantic search",
+      method: "POST", path: "/v1/embeddings", body: { model, input: texts }, summary: "Read text so Search can find it by meaning",
       // mistral-embed is 1024 wide: zero-padded to 1536, cosine similarity unchanged
       pick: (d) => arr((d as { data?: unknown }).data).map((e) => pad(((e as { embedding?: number[] }).embedding) ?? [])),
     }),

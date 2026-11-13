@@ -10,14 +10,15 @@ import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import { login, logout, openBrowser } from "./login.js";
 import { mcpConfig, MCP_CLIENTS, type McpClient } from "./mcp-config.js";
-import { api, CliError, EXIT, readToken, serverUrl } from "./remote.js";
+import { api, CliError, EXIT, fsProblem, home, readToken, serverUrl } from "./remote.js";
+import { bridge } from "./bridge.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 // ---------- args ----------
 
 interface Args { _: string[]; flags: Record<string, string | boolean> }
-const VALUE_FLAGS = new Set(["limit", "source", "type", "server", "client", "sort", "query"]);
+const VALUE_FLAGS = new Set(["limit", "source", "type", "server", "client", "sort", "query", "as", "offset", "max-chars", "home"]);
 function parseArgs(argv: string[]): Args {
   const out: Args = { _: [], flags: {} };
   for (let i = 0; i < argv.length; i++) {
@@ -51,18 +52,26 @@ const json = (v: unknown) => say(JSON.stringify(v, null, 2));
 
 const HELP = `search, one search box for everything you connect
 
+In a fork of Search, run these from its folder as: pnpm run search <command>
+
 Usage
   search                         start the app on http://localhost:52289 and open it
   search start                   same
   search demo                    the keyless Acme demo, in process (no server)
   search login [--server URL]    sign in (OAuth in your browser, Sign in with One)
   search logout | whoami
-  search "<query>" [--json] [--limit N] [--source gmail] [--type deal]
+  search "<query>" [--json] [--limit N] [--source gmail] [--type deal] [--exact]
+                                 plain sentences are read as filters ("emails from priya last week");
+                                 --exact searches the words as typed
   search ask "<question>" [--json] [--query "<narrow to>"]
   search open <itemId>
+  search fetch <itemId> [--json] [--offset N] [--max-chars N]   the full text of one item
   search sources [list | sync <id> | pause <id> | resume <id>] [--json]
   search profiles [list | export <id> [file] | import <file|url> [--yes] | validate <file>]
-  search mcp-config [--client claude-code|codex|claude-desktop|json] [--server URL]
+  search install [claude-code|codex|cursor|claude-desktop] [--remove] [--server URL] [--json]
+                                 add Search to a coding agent (no agent: list them)
+  search mcp [--server URL] [--as <agent>]   stdio MCP bridge to the running Search
+  search mcp-config [--client claude-code|codex|cursor|vscode|claude-desktop|json] [--server URL]
 
 Queries take operators: source: type: from: to: with: after: before: on: is: lane: status: amount:
 Exit codes: 0 ok, 1 error, 2 usage, 3 not signed in, 4 server not running.`;
@@ -164,15 +173,23 @@ async function query(q: string, a: Args): Promise<number> {
   const limit = Math.max(1, Math.min(200, Number(a.flags.limit ?? 20) || 20));
   const params = new URLSearchParams({ q: parts.join(" "), limit: String(limit) });
   if (typeof a.flags.sort === "string") params.set("sort", a.flags.sort);
+  // A person typing reads naturally: plain phrases become filters, in this computer's time zone.
+  // Bearer callers get understanding only when they ask; a person typing asks, unless --exact.
+  const exact = !!(a.flags.exact || a.flags.literal);
+  params.set("understand", exact ? "0" : "1");
+  const tz = localZone();
+  if (tz) params.set("tz", tz);
   const r = await api("GET", `/search?${params}`);
   if (a.flags.json) { json(r); return 0; }
+  if (r.understood?.length) say(dim(`Understood: ${r.understood.map((u: any) => u.label).join(", ")}. Searched as: ${r.searchedAs}  (--exact to search the words as typed)`));
+  for (const sg of r.suggestions ?? []) say(dim(`"${sg.phrase}" could mean ${sg.choices.map((c: any) => `${c.label} (${c.filter})`).join(" or ")}. Add the one you mean to the search.`));
   for (const e of r.parsed?.errors ?? []) say(dim(`note: ${e.message}`));
   if (!r.results.length) { say(`No results for ${parts.join(" ")}.`); return 0; }
   r.results.forEach((x: any, i: number) => {
     say(`${dim(String(i + 1).padStart(2))}  ${cut(x.sourceName, 16)} ${cut(x.kind, 8)} ${bold(cut(x.title, 56))} ${dim(when(x.occurredAt).padEnd(12))}${x.url ? dim(x.url) : ""}`);
   });
   say(dim(`${r.total} match${r.total === 1 ? "" : "es"}, ${r.mode}${r.mode === "keyword" ? " (no pgvector)" : ""}, ${r.ms} ms. Item ids: --json.`));
-  if (r.embedder && !r.embedder.semantic && (r.embedder.reason === "not_in_grant" || r.embedder.reason === "error")) say(`Semantic search is off. ${r.embedder.message ?? ""}`.trim());
+  if (r.embedder && !r.embedder.semantic && (r.embedder.reason === "not_in_grant" || r.embedder.reason === "error")) say(`Search by meaning is off: ${r.embedder.message ?? r.embedder.reason}. Results match your words.`);
   if (r.fallback === "or") say(dim("No item had every word, so these match any of them."));
   if (r.didYouMean) say(dim(`Did you mean ${r.didYouMean.name}?`));
   return 0;
@@ -201,7 +218,7 @@ async function sources(a: Args): Promise<number> {
       say(`${cut(`${s.name} ${s.profile.title}`, 34)} ${cut(h.status, 13)} ${String(h.itemCount).padStart(6)} items  ${dim(`last sync ${when(h.lastSuccessAt) || "never"}  ${s.id}`)}`);
     }
     if (r.banner) say(`\n${r.banner.text}`);
-    else if (r.semantic && !r.semantic.semantic && r.semantic.reason !== "sample" && r.semantic.message) say(`\nSemantic search is off. ${r.semantic.message}`);
+    else if (r.semantic && !r.semantic.semantic && r.semantic.reason !== "sample" && r.semantic.message) say(`\nSearch by meaning is off: ${r.semantic.message}. Results match your words.`);
     return 0;
   }
   if (!id) throw new CliError(`Usage: search sources ${sub} <sourceId>`, EXIT.usage);
@@ -253,11 +270,69 @@ async function profiles(a: Args): Promise<number> {
 
 async function whoami(a: Args): Promise<number> {
   const t = readToken();
-  if (!t) throw new CliError("Not signed in. Run `search login`.", EXIT.notSignedIn);
+  if (!t) throw new CliError("Not signed in. Run `pnpm run search login` in the Search folder.", EXIT.notSignedIn);
   const me = await api("GET", "/me");
   if (a.flags.json) { json({ server: t.server, scopes: t.scopes, user: me.user }); return 0; }
   say(`${me.user?.name ?? "Signed in"}${me.user?.email ? ` <${me.user.email}>` : ""}${me.user?.isSample ? " (Acme sample)" : ""}`);
   say(dim(`${t.server}  ${t.scopes.join(" ")}`));
+  return 0;
+}
+
+function localZone(): string | undefined {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined; } catch { return undefined; }
+}
+
+function nonNegative(v: string | boolean | undefined, name: string, d: number): number {
+  if (v === undefined) return d;
+  const n = Number(v);
+  if (typeof v !== "string" || !Number.isInteger(n) || n < 0) throw new CliError(`--${name} takes a whole number, like 0 or 2000.`, EXIT.usage);
+  return n;
+}
+
+async function fetchItem(id: string, a: Args): Promise<number> {
+  const offset = nonNegative(a.flags.offset, "offset", 0);
+  const maxChars = a.flags["max-chars"] === undefined ? null : nonNegative(a.flags["max-chars"], "max-chars", 0) || null;
+  const d = await api("GET", `/items/${encodeURIComponent(id)}`);
+  const full: string = d.body || (d.parts ?? []).map((p: any) => [p.author && `${p.author}${p.at ? `, ${String(p.at).slice(0, 10)}` : ""}:`, p.title, p.text].filter(Boolean).join("\n")).join("\n\n");
+  const start = Math.min(offset, full.length);
+  const text = maxChars ? full.slice(start, start + maxChars) : full.slice(start);
+  const end = start + text.length;
+  const truncated = end < full.length;
+  if (a.flags.json) {
+    json({ id: d.row.id, title: d.row.title, url: d.row.url, text, truncated, offset: start, totalChars: full.length, nextOffset: truncated ? end : null, metadata: { source: d.row.sourceName, kind: d.row.kind, date: d.row.occurredAt, people: (d.row.people ?? []).map((p: any) => p.name), facets: d.row.facets }, properties: d.properties ?? [] });
+    return 0;
+  }
+  say(bold(d.row.title));
+  say(dim(`${d.row.sourceName} ${d.row.kind}, ${when(d.row.occurredAt)}${d.row.url ? `  ${d.row.url}` : ""}`));
+  for (const p of d.properties ?? []) say(dim(`${p.label}: ${p.value}`));
+  say();
+  say(text || dim("(no text)"));
+  if (start > 0 || truncated) say(dim(`\n[Characters ${start} to ${end} of ${full.length}.${truncated ? ` More: --offset ${end}` : ""}]`));
+  return 0;
+}
+
+async function install(a: Args): Promise<number> {
+  const { AGENT_IDS, agentRows, connectAgent, disconnectAgent } = await import("@search/server/agents");
+  const ctx = { searchHome: home(), base: serverUrl(typeof a.flags.server === "string" ? a.flags.server : undefined), root: ROOT, waitForLogin: true };
+  const id = a._[1];
+  if (!id) {
+    const rows = agentRows(ctx);
+    if (a.flags.json) { json(rows); return 0; }
+    for (const r of rows) say(`${cut(r.name, 16)} ${cut(r.found ? "found" : "not found", 10)} ${cut(r.added ? "Search added" : "", 13)} ${dim(r.configPath)}`);
+    say(dim("Add one: pnpm run search install <claude-code|codex|cursor|claude-desktop>"));
+    return 0;
+  }
+  if (!(AGENT_IDS as string[]).includes(id)) throw new CliError(`Pick one of ${AGENT_IDS.join(", ")}.`, EXIT.usage);
+  if (id === "codex" && !a.flags.remove) say(dim("Codex signs in as it adds Search. If your browser opens, allow Search there."));
+  let r;
+  try {
+    r = a.flags.remove ? await disconnectAgent(id as never, ctx) : await connectAgent(id as never, ctx);
+  } catch (e) {
+    throw new CliError((e as Error).message, (e as { code?: string }).code === "not_found" ? EXIT.usage : EXIT.error);
+  }
+  if (a.flags.json) { json(r); return 0; }
+  say(r.message);
+  if (r.backup) say(dim(`Backup of the old file: ${r.backup}`));
   return 0;
 }
 
@@ -267,6 +342,8 @@ async function main(argv: string[]): Promise<number> {
   const a = parseArgs(argv);
   const cmd = a._[0];
   if (a.flags.help || cmd === "help") { say(HELP); return 0; }
+  // --server is checked up front for every command, so a typo never falls back to another server.
+  if (a.flags.server !== undefined) serverUrl(typeof a.flags.server === "string" ? a.flags.server : "");
   if (a.flags.version) { say(JSON.parse(readFileSync(resolve(ROOT, "cli", "package.json"), "utf8")).version); return 0; }
   if (!cmd || cmd === "start") return start();
   if (cmd === "demo") return demo();
@@ -282,8 +359,20 @@ async function main(argv: string[]): Promise<number> {
   if (cmd === "mcp-config") {
     const client = (typeof a.flags.client === "string" ? a.flags.client : "claude-code") as McpClient;
     if (!MCP_CLIENTS.includes(client)) throw new CliError(`--client is one of ${MCP_CLIENTS.join(", ")}`, EXIT.usage);
-    say(mcpConfig(client, serverUrl(typeof a.flags.server === "string" ? a.flags.server : undefined)));
+    say(mcpConfig(client, serverUrl(typeof a.flags.server === "string" ? a.flags.server : undefined), { node: process.execPath, bin: resolve(ROOT, "cli", "bin", "search.mjs") }));
     return 0;
+  }
+  if (cmd === "mcp") {
+    const as = typeof a.flags.as === "string" ? a.flags.as : null;
+    const names: Record<string, string> = { "claude-code": "Search for Claude Code", cursor: "Search for Cursor", "claude-desktop": "Search for Claude Desktop", codex: "Search for Codex" };
+    if (typeof a.flags.home === "string") process.env.SEARCH_HOME = a.flags.home;
+    return bridge({ server: serverUrl(typeof a.flags.server === "string" ? a.flags.server : undefined), as, clientName: as ? names[as] ?? `Search for ${as}` : undefined, home: typeof a.flags.home === "string" ? a.flags.home : null });
+  }
+  if (cmd === "install") return install(a);
+  if (cmd === "fetch") {
+    const id = a._[1];
+    if (!id) throw new CliError("Usage: search fetch <itemId> [--json]", EXIT.usage);
+    return fetchItem(id, a);
   }
   if (cmd === "ask") {
     const q = a._.slice(1).join(" ").trim();
@@ -313,7 +402,9 @@ try {
     console.error(`search: ${e.message}`);
     process.exitCode = e.exit;
   } else {
-    console.error(`search: ${(e as Error).stack ?? e}`);
+    // a file Search could not write (a read-only or someone else's folder): plain words, no stack
+    const plain = fsProblem(e, (e as NodeJS.ErrnoException).path ?? home());
+    console.error(`search: ${plain ? plain.message : (e as Error).stack ?? e}`);
     process.exitCode = EXIT.error;
   }
 }

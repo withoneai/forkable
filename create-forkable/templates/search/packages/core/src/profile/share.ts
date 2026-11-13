@@ -36,7 +36,7 @@ export function shareable(p: SearchProfile): SearchProfile {
 
 export async function exportPack(db: Db, userId: string, profileId: string): Promise<SearchProfilePack> {
   const r = await readableProfile(db, userId, profileId);
-  if (!r) throw new SearchError("not_found", "No such profile.");
+  if (!r) throw new SearchError("not_found", "No such source setup.");
   return { $schema: PACK_SCHEMA_ID as SearchProfilePack["$schema"], name: platformName(r.json.platform), platform: r.json.platform, profiles: [shareable(r.json)] };
 }
 
@@ -51,7 +51,7 @@ export async function importPack(db: Db, userId: string, input: unknown, opts: {
     pack = parsePack(input, "import");
   } catch (e) {
     const issues: ValidationIssue[] = e instanceof PackError ? e.issues.map((m) => ({ check: "schema", level: "error", message: m })) : [{ check: "schema", level: "error", message: (e as Error).message }];
-    throw new SearchError("invalid_profile", "That file is not a Search profile pack.", { report: { ok: false, issues } });
+    throw new SearchError("invalid_profile", "That file is not a Search source file.", { report: { ok: false, issues } });
   }
   const issues: ValidationIssue[] = [];
   const diff: ImportPreview["diff"] = [];
@@ -60,7 +60,7 @@ export async function importPack(db: Db, userId: string, input: unknown, opts: {
     const rep = validateProfile(p);
     issues.push(...rep.issues.map((i) => ({ ...i, profileId: p.id })));
     if (!rep.issues.some((i) => i.level === "error")) issues.push({ check: "schema", level: "ok", message: "Matches profile-1", profileId: p.id });
-    if (p.list.actionId.startsWith("sample::") || p.sampleOnly) issues.push({ check: "actions", level: "warn", message: "Sample actions: this profile runs only in the Acme sample", profileId: p.id });
+    if (p.list.actionId.startsWith("sample::") || p.sampleOnly) issues.push({ check: "actions", level: "warn", message: "This source runs only in the Acme sample", profileId: p.id });
     const [mine] = await db.select({ v: profileVersions }).from(profiles).innerJoin(profileVersions, eq(profileVersions.id, profiles.currentVersionId)).where(and(eq(profiles.userId, userId), eq(profiles.slug, p.id)));
     const [built] = mine ? [] : await db.select({ v: profileVersions }).from(profiles).innerJoin(profileVersions, eq(profileVersions.id, profiles.currentVersionId)).where(and(isNull(profiles.userId), eq(profiles.slug, p.id)));
     const have = mine?.v ?? built?.v;

@@ -4,6 +4,8 @@
 // The UI chips are a view over ParsedQuery and every chip edit goes back
 // through applyChip, so the box is the only state.
 export { parseQuery, formatQuery, applyChip, OPERATOR_KEYS } from "@search/core/query/parse";
+// Plain sentences (D48): the server reads them; these rewrite the box when a chip is removed or a choice taken.
+export { keepWords, takeChoice, writeUnderstood } from "@search/core/query/understand";
 import type { OperatorKey, ParsedQuery, QueryClause } from "./api-types";
 
 const DAY = 86_400_000;

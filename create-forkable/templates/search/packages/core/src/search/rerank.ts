@@ -102,7 +102,7 @@ async function askJev(ctx: EngineCtx, call: CallCtx, o: {
   const scores = new Map<string, number>();
   try {
     if (o.sample) {
-      const r = await one.raw(call, { ...JEV_ACTION, action: "rerank", level: "read", summary: "Rerank search results", fixtureKey: `rerank:${o.text}`, body: {} }).catch(() => null);
+      const r = await one.raw(call, { ...JEV_ACTION, action: "rerank", level: "read", summary: "Put search results in a better order", fixtureKey: `rerank:${o.text}`, body: {} }).catch(() => null);
       if (!r?.ok) return { ok: false, reason: "sample_no_fixture" };
       const refs = r.data as Record<string, number>;
       for (const id of o.missing) { const it = o.byId.get(id)!; const v = refs[`${it.platform}:${it.externalId}`]; scores.set(id, typeof v === "number" ? v : 0); }
@@ -110,7 +110,7 @@ async function askJev(ctx: EngineCtx, call: CallCtx, o: {
       const candidates = o.missing.map((id, n) => ({ n, ...o.cands.get(id)!.c }));
       const questions = Object.fromEntries(o.missing.map((_, n) => [`rel_${n}`, { type: "score", instructions: `How well does \`candidates[${n}]\` answer \`query\`?`, criteria: ["Unrelated to the query.", "Mentions it in passing.", "About the query.", "Exactly what was asked."] }]));
       const [u] = await ctx.db.select({ name: users.name, email: users.email }).from(users).where(eq(users.id, o.userId));
-      const res = await one.call<{ answers?: Record<string, unknown> }>(call, { ...JEV_ACTION, action: "rerank", level: "read", summary: "Rerank search results", body: { model: o.model, state: { query: o.text, me: { name: u?.name, email: u?.email }, candidates }, questions } });
+      const res = await one.call<{ answers?: Record<string, unknown> }>(call, { ...JEV_ACTION, action: "rerank", level: "read", summary: "Put search results in a better order", body: { model: o.model, state: { query: o.text, me: { name: u?.name, email: u?.email }, candidates }, questions } });
       for (const [n, id] of o.missing.entries()) {
         const v = res.answers?.[`rel_${n}`];
         const s = typeof v === "number" ? v : v && typeof v === "object" ? Number((v as Record<string, unknown>).score ?? (v as Record<string, unknown>).level ?? 0) : 0;

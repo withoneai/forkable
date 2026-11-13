@@ -63,7 +63,13 @@ export async function ensureUserForSid(db: Db, sid: string): Promise<UserRow> {
   return (await userForSid(db, sid)) ?? user!;
 }
 
-/** Points the sid at a user (sample sign-in, merge). */
+/**
+ * Points the sid at a user (sample sign-in, merge). It never ends an agent's sign-in:
+ * opening the Acme sample in a browser is looking at a demo, not another account
+ * signing in. Agent sign-ins end only when their account signs out or disconnects
+ * (routes/account.ts), or when a different real account finishes Sign in with One
+ * (connect.ts), see agent-signins.ts.
+ */
 export async function bindSid(db: Db, sid: string, userId: string): Promise<void> {
   await db.insert(sessions).values({ sid, userId }).onConflictDoUpdate({ target: sessions.sid, set: { userId, lastSeenAt: new Date() } });
 }

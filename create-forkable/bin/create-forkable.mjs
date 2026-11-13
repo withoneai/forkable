@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // npm create forkable@latest <name> [--for "<who>"] [--in "<where>"] [--template <id>]
+// npm create forkable@latest update   (inside a fork: take the newest template, keep your changes)
 //
 // Copies a template (the forkable-starter by default), fills in
 // local/profile.md, makes a fresh git history, installs, and runs the
@@ -12,6 +13,7 @@ import { tmpdir } from "node:os";
 import { delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { update } from "./update.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, "..");
@@ -142,6 +144,7 @@ function printCatalogTable(catalog, source) {
 
 function printHelp() {
   say(`Usage: npm create forkable@latest <name> [options]
+       npm create forkable@latest update          (inside a fork)
        npm create forkable@latest -- --list [--json]
 
   <name>              Directory and project name for the new fork.
@@ -152,6 +155,14 @@ Options:
   --template <id>     Template to copy. Default: forkable-starter.
                       A name that matches a template id (rill, search) picks it.
   --list              Print the template catalog and exit.
+
+Update (inside a fork, or with --dir):
+  update, --update    Merge the newest template into this fork. Your own
+                      changes stay; a file you and the template both changed
+                      becomes a normal git conflict. Needs a clean git tree.
+  --dir <path>        The fork to update. Default: this folder.
+  --dry-run           List what the template changed, merge nothing.
+
   --json              Machine output: one JSON object on stdout, all other
                       output on stderr. Errors are JSON too (ok: false, code).
   --no-json           Force human output.
@@ -168,14 +179,16 @@ or stdout is not a TTY. A person piping to a log keeps human output.
 Error codes (JSON "code", exit status 1 unless noted): USAGE (2),
 NAME_MISSING (2), DIR_EXISTS, UNKNOWN_TEMPLATE, TEMPLATE_COMING_SOON,
 TEMPLATE_NOT_BUNDLED, PNPM_MISSING, INSTALL_FAILED, DEMO_FAILED (the
-demo's own status), INTERNAL. An existing target directory is never
+demo's own status), INTERNAL. Update adds NOT_A_FORK, NO_GIT, NO_BASE,
+DIRTY, MERGE_IN_PROGRESS, CONFLICTS, MERGE_FAILED. An existing target directory is never
 overwritten.
 
 Templates in this package: ${bundledTemplateIds().join(", ")}
 
 Examples:
   npm create forkable@latest rill -- --for "real estate agents" --in "Los Angeles"
-  npm create forkable@latest rill -- --json --yes`);
+  npm create forkable@latest rill -- --json --yes
+  cd rill && npm create forkable@latest update`);
 }
 
 // ---- args -----------------------------------------------------------------
@@ -201,6 +214,9 @@ function parseArgs(argv) {
     version: false,
     install: true,
     demo: true,
+    update: false,
+    dir: null,
+    dryRun: false,
   };
   const value = (i, flag) => {
     const v = argv[i];
@@ -223,10 +239,22 @@ function parseArgs(argv) {
       // --json/--no-json were read before parsing; --yes is a no-op.
     } else if (a === "--no-install") out.install = false;
     else if (a === "--no-demo") out.demo = false;
+    else if (a === "--update") out.update = true;
+    else if (a === "--dry-run") out.dryRun = true;
+    else if (a === "--dir") out.dir = value(++i, a);
     else if (!a.startsWith("-") && !out.name) out.name = a;
     else throw new CliError("USAGE", `unknown argument "${a}". Run with --help for the options.`, { exitCode: 2 });
   }
   if (!out.install) out.demo = false;
+  // `update` as the name means the update command when run inside a fork
+  // (forkable.json with forkedFrom), so a folder named "update" stays possible elsewhere
+  if (out.name === "update" && !out.templateExplicit && !out.update) {
+    try {
+      const fj = JSON.parse(readFileSync(join(resolve(out.dir ?? process.cwd()), "forkable.json"), "utf8"));
+      if (typeof fj.forkedFrom === "string") { out.update = true; out.name = null; }
+    } catch { /* not in a fork: a new fork named update */ }
+  }
+  if (out.update && out.name) throw new CliError("USAGE", `update takes no name. Run it inside the fork, or pass --dir <fork>.`, { exitCode: 2 });
   return out;
 }
 
@@ -490,6 +518,7 @@ function nextSteps(dir, pm, args, state) {
     ? "Going live needs one Connect app made in the One dashboard by a person. Ask them; never ask for, copy or write a secret yourself."
     : "How to run it and what is in it.";
   steps.push({ read: join(dir, "README.md"), why: live });
+  steps.push({ run: `cd ${dir} && npm create forkable@latest update`, why: "Later: take the newest version of the template. Your own committed changes stay." });
   return steps;
 }
 
@@ -548,6 +577,12 @@ async function main() {
       else printCatalogTable(catalog, source);
       return 0;
     }
+    if (args.update) {
+      await update(args, state, { say, CliError, packageRoot, cliVersion, bundledTemplateIds, findPnpm, run, PNPM_FIX, npmCmd });
+      for (const w of state.warnings) warn(`create-forkable: ${w}`);
+      if (jsonMode) emitJson(state);
+      return 0;
+    }
     if (!args.name) {
       if (!jsonMode) printHelp();
       throw new CliError("NAME_MISSING", "give the fork a name: npm create forkable@latest <name>", { exitCode: 2, fix: "npm create forkable@latest my-business" });
@@ -562,7 +597,7 @@ async function main() {
     warn(`\ncreate-forkable: ${err.message}`);
     if (err.fix) warn(`  ${err.fix}`);
     if (jsonMode) {
-      emitJson({ ...state, ok: false, code: err.code, error: { code: err.code, message: err.message, fix: err.fix } });
+      emitJson({ ...state, ...err.extra, ok: false, code: err.code, error: { code: err.code, message: err.message, fix: err.fix } });
     }
     return err.exitCode || 1;
   }

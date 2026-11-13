@@ -2,11 +2,12 @@
 // Search returned: it reads the page's query and results, cites every claim
 // with numbered pills that select the item in the list, and proposes better
 // queries the user applies with a keypress. Streams steps over SSE (CONTRACT 7.1).
+import { Link } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, CornerDownRight, ExternalLink, Plus, X } from "lucide-react";
 import type { ChatContext, ChatMessage, Citation, ResultRow } from "@/contract/api-types";
-import { api } from "@/lib/api";
+import { api, browserZone } from "@/lib/api";
 import { streamChat } from "@/lib/chatStream";
 import { keys, useChats } from "@/lib/queries";
 import { useWorkspace } from "@/lib/workspace";
@@ -81,6 +82,7 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
     return {
       query: ws.query || undefined,
       queryId: results?.queryId,
+      tz: browserZone(),
       itemIds: ws.dockPins.length ? ws.dockPins.map((r) => r.id) : results?.results.slice(0, 12).map((r) => r.id),
       selectedItemId: ws.selectedId ?? undefined,
     };
@@ -124,9 +126,13 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
         case "done": {
           const finished = { ...acc, streaming: false };
           if (id && !finished.error) {
+            const chatKey = id;
+            // A read of this chat that started while it streamed would land after this and
+            // put back the empty conversation it saw; stop it, then write the finished turn.
+            void qc.cancelQueries({ queryKey: keys.chat(chatKey) }).then(() => {
             const now = new Date().toISOString();
-            qc.setQueryData(keys.chat(id), (old: { id: string; title: string; messages: ChatMessage[] } | undefined) => ({
-              id: id!, title: old?.title ?? message,
+            qc.setQueryData(keys.chat(chatKey), (old: { id: string; title: string; messages: ChatMessage[] } | undefined) => ({
+              id: chatKey, title: old?.title ?? message,
               messages: [...(old?.messages ?? []),
                 { id: `${finished.id}_q`, role: "user", content: message, citations: [], steps: [], proposal: null, followups: [], grounded: true, model: "", createdAt: now },
                 { id: finished.id, role: "assistant", content: finished.text ?? "", citations: finished.citations, steps: finished.steps, proposal: finished.proposal, followups: followupsAcc, grounded: finished.grounded, model: finished.model, createdAt: now },
@@ -134,6 +140,7 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
             }));
             setLive(null);
             void qc.invalidateQueries({ queryKey: keys.chats });
+            });
           } else {
             setLive(finished);
           }
@@ -184,7 +191,7 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
 
   // Context chips: the page's query (detachable) and any pinned items.
   const chips: ContextChip[] = [
-    ...(!detached && ws.query ? [{ key: "q", label: ws.query, mono: true, onRemove: () => setDetached(true) }] : []),
+    ...(!detached && ws.query ? [{ key: "q", label: `“${ws.query}”`, mono: false, onRemove: () => setDetached(true) }] : []),
     ...ws.dockPins.map((r) => ({ key: r.id, label: r.title, platform: r.platform, onRemove: () => ws.setDockPins(ws.dockPins.filter((p) => p.id !== r.id)) })),
   ];
 
@@ -251,7 +258,7 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
         {!detached && ws.query ? (
           <>
             <span className="shrink-0">Looking at</span>
-            <code className="min-w-0 truncate rounded-sm bg-muted px-1 font-mono text-foreground">{ws.query}</code>
+            <span className="min-w-0 truncate font-medium text-foreground" title={ws.query}>“{ws.query}”</span>
             {results && <span className="tnum shrink-0">· {results.total} {results.total === 1 ? "result" : "results"}</span>}
             <button type="button" onClick={() => setDetached(true)} aria-label="Stop using this search as context" title="Answer without the page's search" className="ml-auto shrink-0 rounded p-0.5 transition-colors hover:bg-card-hover hover:text-foreground">
               <X className="size-3" />
@@ -271,7 +278,7 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
           <div className="flex h-full flex-col justify-end gap-3 px-3 pb-3">
             <div className="flex flex-col gap-1 px-1">
               <p className="text-13 font-medium">Ask about {ws.query && !detached ? "these results" : "anything you connected"}</p>
-              <p className="text-xs text-muted-foreground">Answers cite the items they come from. A better search shows up as a proposal you apply.</p>
+              <p className="text-xs text-muted-foreground">Answers cite the items they come from. A better search shows up as a suggestion you can apply.</p>
             </div>
             <div className="flex flex-col">
               {suggestions.map((s) => (
@@ -330,7 +337,8 @@ export function ChatDock({ overlay = false, width, onWidthChange, onClose }: { o
 /** Three questions built from what is on the page. */
 function suggestionsFor(rows: ResultRow[] | null, query: string): string[] {
   if (!rows || rows.length === 0) return ["Where are we with Globex?", "What is blocking the Initech pilot?", "What needs a reply from me this week?"];
-  const out: string[] = [`Summarize what these ${rows.length} results say`];
+  // no number: the page loads 30 at a time and the assistant reads the top ones, so any count here would disagree with one on screen
+  const out: string[] = ["Summarize what these results say"];
   const person = rows.flatMap((r) => r.people).find((p) => p.entityId !== "ent_dana" && p.role !== "to");
   if (person) out.push(`What did ${person.name.split(" ")[0]} ask for most recently?`);
   if (rows.some((r) => r.kind === "deal")) out.push("Which of these deals close this month?");
@@ -368,10 +376,16 @@ function NeedsModel({ message }: { message: string }) {
     <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center" role="alert">
       <SourceLogo platform="anthropic" size={24} />
       <p className="text-13 font-medium">{message}</p>
-      <p className="text-xs text-muted-foreground">{local ? "Install Claude Code or Codex and sign in to it, or add Anthropic in One, then ask again. Search itself keeps working." : "Search runs the assistant on your own One connection. Add Anthropic, then ask again. Search itself keeps working."}</p>
-      <a href="https://app.withone.ai" target="_blank" rel="noreferrer" className="mt-1 inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-xs font-medium transition-colors hover:border-border-strong hover:bg-card-hover">
-        Add in One <ExternalLink className="size-3" />
-      </a>
+      <p className="text-xs text-muted-foreground">{local ? "Install Claude Code or Codex and sign in to it, then ask again. Search itself keeps working." : "Search runs the assistant on your own One connection. Add Anthropic, then ask again. Search itself keeps working."}</p>
+      {local ? (
+        <Link to="/settings/assistant" className="mt-1 inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-xs font-medium transition-colors hover:border-border-strong hover:bg-card-hover">
+          Set up the assistant
+        </Link>
+      ) : (
+        <a href="https://app.withone.ai" target="_blank" rel="noreferrer" className="mt-1 inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-xs font-medium transition-colors hover:border-border-strong hover:bg-card-hover">
+          Add in One <ExternalLink className="size-3" />
+        </a>
+      )}
     </div>
   );
 }

@@ -55,11 +55,11 @@ export function applyMapOps(rows: Record<string, MapRow[]>, identity: Record<str
 export function describeOp(o: AssistOp, modelTitle: (pid: string) => string): string {
   switch (o.op) {
     case "map": return o.target === "skip" ? `Skipped ${o.path}` : `${o.path} is now ${targetLabel(o.target)}`;
-    case "identity": return [o.idPath && `id is ${o.idPath}`, o.urlTemplate !== undefined && "new link", o.titleTemplate !== undefined && "new title template", o.every && `refresh every ${o.every}`, o.backfill && `backfill ${o.backfill}`].filter(Boolean).join(", ");
+    case "identity": return [o.idPath && `id is ${o.idPath}`, o.urlTemplate !== undefined && "new link", o.titleTemplate !== undefined && "new title template", o.every && `update every ${o.every}`, o.backfill && `start from ${o.backfill}`].filter(Boolean).join(", ");
     case "select": return `Picked ${modelTitle(o.model)}`;
     case "unselect": return `Dropped ${modelTitle(o.model)}`;
     case "name": return `Renamed to ${o.value}`;
-    case "repropose": return "Asked for a fresh proposal";
+    case "repropose": return "Asked for fresh suggestions";
   }
 }
 
@@ -80,7 +80,7 @@ export function MappingAssistant({ messages, busy, onSend, onUndo, onClose, star
   const send = (t = text) => { const v = t.trim(); if (!v || busy) return; onSend(v); setText(""); };
 
   return (
-    <aside aria-label="Mapping assistant" data-testid="mapping-assistant" className="flex h-full w-full flex-col border-l border-border bg-faint">
+    <aside aria-label="Setup assistant" data-testid="mapping-assistant" className="flex h-full w-full flex-col border-l border-border bg-faint">
       <div className="flex h-11 shrink-0 items-center gap-1.5 border-b border-border px-3">
         <Sparkles className="size-3.5 text-muted-foreground" />
         <span className="flex-1 text-13 font-semibold">Assistant</span>
@@ -89,7 +89,7 @@ export function MappingAssistant({ messages, busy, onSend, onUndo, onClose, star
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {messages.length === 0 ? (
           <div className="flex flex-col gap-3">
-            <p className="text-13 text-muted-foreground">Ask anything about this setup. I can see the docs, the sample records and your map, and I change the map for you when you ask.</p>
+            <p className="text-13 text-muted-foreground">Ask anything about this setup. I can see the docs, the sample records and your fields, and I change the fields for you when you ask.</p>
             <div className="flex flex-col gap-1.5">
               {starters.map((s) => (
                 <button key={s} type="button" onClick={() => send(s)} disabled={busy} className="rounded-md border border-border bg-card px-2.5 py-1.5 text-left text-xs transition-colors hover:border-border-strong hover:bg-card-hover">{s}</button>
@@ -117,7 +117,7 @@ export function MappingAssistant({ messages, busy, onSend, onUndo, onClose, star
       </div>
       <div className="shrink-0 border-t border-border p-2">
         <div className="flex items-end gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 focus-within:border-border-strong">
-          <textarea ref={box} value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder="Ask or tell it what to change" aria-label="Message the mapping assistant" data-testid="assist-input"
+          <textarea ref={box} value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder="Ask or tell it what to change" aria-label="Message the setup assistant" data-testid="assist-input"
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.stopPropagation(); send(); } else if (e.key === "Escape") { e.stopPropagation(); onClose(); } }}
             className="max-h-40 min-h-0 flex-1 resize-none bg-transparent text-13 outline-none placeholder:text-muted-foreground" />
           <button type="button" onClick={() => send()} disabled={!text.trim() || busy} aria-label="Send" className="inline-flex size-6 shrink-0 items-center justify-center rounded-md bg-foreground text-background disabled:opacity-40"><ArrowUp className="size-3.5" /></button>

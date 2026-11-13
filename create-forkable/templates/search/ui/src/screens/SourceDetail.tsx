@@ -24,6 +24,7 @@ import { Select } from "@/components/ui/Select";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LoadError } from "@/components/ui/EmptyState";
 import { Tabs } from "@/components/ui/Tabs";
+import { COPY } from "@/lib/copy";
 
 type Tab = "overview" | "fields" | "runs" | "errors";
 const DIMMED: SourceStatus[] = ["auth_needed", "grant_blocked"];
@@ -48,7 +49,7 @@ export function SourceDetail() {
   const doSync = () => {
     if (!s) return;
     sync.mutate({ id: s.id }, {
-      onSuccess: () => toast({ title: `Syncing ${sourceLabel(s)}` }),
+      onSuccess: () => toast({ title: `Updating ${sourceLabel(s)}` }),
       onError: (e) => toast({ title: "Did not start", detail: e.message, tone: "destructive" }),
     });
   };
@@ -70,14 +71,14 @@ export function SourceDetail() {
     catch (e) { toast({ title: "Could not remove it", detail: (e as Error).message, tone: "destructive" }); }
   };
   const updateProfile = async () => {
-    try { await api.updateSourceProfile(s.id); await qc.invalidateQueries({ queryKey: keys.source(s.id) }); toast({ title: "Moved to the latest built-in version" }); }
+    try { await api.updateSourceProfile(s.id); await qc.invalidateQueries({ queryKey: keys.source(s.id) }); toast({ title: "Now on the newest setup" }); }
     catch (e) { toast({ title: "Did not update", detail: (e as Error).message, tone: "destructive" }); }
   };
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto" data-testid="source-detail">
       <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-5 px-6 pb-12 pt-6">
-        <Link to="/settings/integrations" className="flex w-fit items-center gap-1 text-xs text-muted-foreground hover:text-foreground"><ArrowLeft className="size-3" />Integrations</Link>
+        <Link to="/settings/integrations" className="flex w-fit items-center gap-1 text-xs text-muted-foreground hover:text-foreground"><ArrowLeft className="size-3" />{COPY.sources}</Link>
         <header className="flex flex-wrap items-start gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <div className="flex min-w-0 items-center gap-2.5">
@@ -90,17 +91,17 @@ export function SourceDetail() {
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
-            {s.profile.updateAvailable && <Button size="sm" variant="ghost" onClick={() => void updateProfile()}>Update available</Button>}
+            {s.profile.updateAvailable && <Button size="sm" variant="ghost" onClick={() => void updateProfile()}>Newer setup available</Button>}
             <Button icon={<RefreshCw className={cn(status === "syncing" && "animate-spin")} />} onClick={doSync} disabled={status === "syncing" || dim} loading={sync.isPending} trailing={<Kbd>R</Kbd>} data-testid="sync-now">
-              {status === "syncing" ? "Syncing" : "Sync now"}
+              {status === "syncing" ? COPY.updating : COPY.updateNow}
             </Button>
             <Menu open={menu} onClose={() => setMenu(false)} align="end"
               items={[
                 { key: "pause", label: paused ? "Resume" : "Pause", onSelect: () => patch.mutate({ id: s.id, paused: !paused }) },
-                { key: "full", label: "Full re-sync", onSelect: () => sync.mutate({ id: s.id, full: true }) },
-                { key: "edit", label: "Edit profile", onSelect: () => setTab("fields") },
-                { key: "export", label: "Export profile", onSelect: () => window.open(api.exportProfileUrl(s.profile.id), "_blank") },
-                { key: "reconnect", label: "Reconnect", onSelect: () => nav("/start"), disabled: !dim },
+                { key: "full", label: COPY.updateFromStart, onSelect: () => sync.mutate({ id: s.id, full: true }) },
+                { key: "edit", label: COPY.editSource, onSelect: () => setTab("fields") },
+                { key: "export", label: COPY.exportSource, onSelect: () => window.open(api.exportProfileUrl(s.profile.id), "_blank") },
+                { key: "reconnect", label: "Sign in again", onSelect: () => nav("/start"), disabled: !dim },
                 { key: "remove", label: "Remove", tone: "destructive", onSelect: () => setConfirmRemove(true) },
               ]}
               anchor={<Button aria-label="More actions" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}><MoreHorizontal className="size-4" /></Button>}
@@ -110,8 +111,8 @@ export function SourceDetail() {
 
         {status === "awaiting_grant" && (
           <div role="status" className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2.5 text-13">
-            <span className="min-w-0 flex-1">Saved and waiting for {platformName(s.platform)} in your grant. Add it to the Connect app, then sign in again. Indexing starts on its own.</span>
-            <Button size="sm" variant="primary" onClick={() => nav("/setup/connect")}>Update the Connect app</Button>
+            <span className="min-w-0 flex-1">Saved. Search is waiting for access to {platformName(s.platform)}. Add it to {COPY.askListName}, then sign in again. Reading starts on its own.</span>
+            <Button size="sm" variant="primary" onClick={() => nav("/setup/connect")}>Add {platformName(s.platform)}</Button>
           </div>
         )}
 
@@ -119,11 +120,11 @@ export function SourceDetail() {
           <div role="status" className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2.5 text-13" data-testid="refetch-note">
             <RotateCcw className={cn("size-4 shrink-0 text-muted-foreground", status === "syncing" && "animate-spin")} />
             <span className="min-w-0 flex-1">
-              {status === "syncing" ? `Fetching all ${fmtNum(s.health.itemCount)} items again with the new settings.`
-                : paused ? `Settings changed. All ${fmtNum(s.health.itemCount)} items are fetched again when you resume.`
-                : `Settings changed. The next run fetches all ${fmtNum(s.health.itemCount)} items again.`}
+              {status === "syncing" ? `Reading all ${fmtNum(s.health.itemCount)} items again with the new settings.`
+                : paused ? `Settings changed. All ${fmtNum(s.health.itemCount)} items are read again when you resume.`
+                : `Settings changed. The next update reads all ${fmtNum(s.health.itemCount)} items again.`}
             </span>
-            {status !== "syncing" && !paused && <Button size="sm" onClick={doSync}>Run it now</Button>}
+            {status !== "syncing" && !paused && <Button size="sm" onClick={doSync}>{COPY.updateNow}</Button>}
           </div>
         )}
 
@@ -132,16 +133,16 @@ export function SourceDetail() {
             status === "auth_needed" || status === "grant_blocked" ? "border-destructive-text/30 bg-destructive-text/[0.06]" : "border-warning-text/30 bg-warning-text/[0.07]")}>
             <AlertTriangle className={cn("size-4 shrink-0", status === "auth_needed" || status === "grant_blocked" ? "text-destructive-text" : "text-warning-text")} />
             <span className="min-w-0 flex-1">{s.health.lastError.message}</span>
-            {status === "auth_needed" ? <Button size="sm" variant="primary" onClick={() => nav("/start")}>Reconnect</Button>
-              : status === "grant_blocked" || s.health.lastError.code === "blocked_by_grant" ? <Button size="sm" onClick={() => window.open("https://app.withone.ai", "_blank", "noopener")}>Manage in One</Button>
-              : <Button size="sm" onClick={doSync}>Retry now</Button>}
+            {status === "auth_needed" ? <Button size="sm" variant="primary" onClick={() => nav("/start")}>Sign in again</Button>
+              : status === "grant_blocked" || s.health.lastError.code === "blocked_by_grant" ? <Button size="sm" onClick={() => window.open("https://app.withone.ai", "_blank", "noopener")}>{COPY.manageInOne}</Button>
+              : <Button size="sm" onClick={doSync}>Try again now</Button>}
           </div>
         )}
 
         <div className={cn("flex flex-col gap-5 transition-opacity", dim && "pointer-events-none opacity-40")} aria-disabled={dim || undefined}>
           <div className="border-b border-border pb-1">
             <Tabs value={tab} onChange={setTab} options={[
-              { key: "overview", label: "Overview" }, { key: "fields", label: "Fields" }, { key: "runs", label: "Runs", count: runs.data?.length },
+              { key: "overview", label: "Overview" }, { key: "fields", label: "What it keeps" }, { key: "runs", label: "History", count: runs.data?.length },
               { key: "errors", label: "Errors", count: errCount },
             ]} />
           </div>
@@ -154,7 +155,7 @@ export function SourceDetail() {
 
       <Dialog open={confirmRemove} onClose={() => setConfirmRemove(false)} title={`Remove ${sourceLabel(s)}?`} size="sm">
         <div className="flex flex-col gap-4 p-4">
-          <p className="text-13 text-muted-foreground">{fmtNum(s.health.itemCount)} items leave your index. The connection stays in your One account; revoke it there to end access.</p>
+          <p className="text-13 text-muted-foreground">{fmtNum(s.health.itemCount)} items leave Search. The account stays connected in One. Remove it there to end access.</p>
           <div className="flex justify-end gap-2">
             <Button onClick={() => setConfirmRemove(false)}>Keep it</Button>
             <Button variant="destructive" onClick={() => void remove()}>Remove</Button>
@@ -168,12 +169,12 @@ export function SourceDetail() {
 function Overview({ s, runs, siblings }: { s: ApiSource; runs: ApiRun[] | undefined; siblings: ApiSource[] }) {
   const h = s.health;
   const tiles = [
-    { label: "Items indexed", value: fmtNum(h.itemCount), testid: "tile-items" },
+    { label: "Items found", value: fmtNum(h.itemCount), testid: "tile-items" },
     { label: "Added 24h", value: fmtNum(h.added24h) },
     { label: "Updated 24h", value: fmtNum(h.updated24h) },
     { label: "Failed 24h", value: fmtNum(h.failed24h), bad: h.failed24h > 0 },
   ];
-  const strip = [...(runs ?? [])].slice(0, 24).reverse();
+  const recent = (runs ?? []).slice(0, 5);
   const backfill = typeof s.settings.backfill === "string" ? s.settings.backfill : null;
   const progress = h.progress;
   // A first run on a small source can finish before this screen opens: keep its card up for two minutes, done.
@@ -185,7 +186,7 @@ function Overview({ s, runs, siblings }: { s: ApiSource; runs: ApiRun[] | undefi
         {((progress && (h.status === "syncing" || h.status === "new")) || firstDone) && (
           <div className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3.5" data-testid="first-run">
             <div className="flex items-center justify-between text-13">
-              <span className="flex items-center gap-2 font-medium"><HealthDot status={firstDone ? h.status : "syncing"} />{firstDone ? "First run done" : h.status === "new" ? "First run" : "Indexing"}</span>
+              <span className="flex items-center gap-2 font-medium"><HealthDot status={firstDone ? h.status : "syncing"} />{firstDone ? "First update done" : h.status === "new" ? "First update" : COPY.updating}</span>
               <span className="tnum text-xs text-muted-foreground">{firstDone ? `${fmtNum(first!.upserted)} indexed` : healthLine(h)}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-muted">
@@ -201,18 +202,23 @@ function Overview({ s, runs, siblings }: { s: ApiSource; runs: ApiRun[] | undefi
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between"><p className="label-caps">Runs, last 24</p><span className="text-11 text-muted-foreground">oldest to newest</span></div>
-          <div className="flex h-6 items-end gap-1" aria-label="Recent runs">
-            {strip.length === 0 ? <span className="text-xs text-muted-foreground">No runs yet.</span> : strip.map((r) => (
-              <span key={r.runId} title={`${new Date(r.finishedAt).toLocaleString()} · ${r.outcome} · +${r.upserted}`}
-                className={cn("w-1.5 rounded-full", r.outcome === "ok" ? "h-full bg-success-text/70" : r.outcome === "running" ? "h-full bg-accent pulse-dot" : r.outcome === "rate_limited" || r.outcome === "partial" ? "h-3/5 bg-warning-text" : "h-3/5 bg-destructive-text")} />
-            ))}
-          </div>
+        <div className="flex flex-col gap-2" data-testid="recent-updates">
+          <p className="label-caps">Recent updates</p>
+          {recent.length === 0 ? <p className="text-xs text-muted-foreground">No updates yet.</p> : (
+            <ul className="overflow-hidden rounded-xl border border-border bg-card text-xs">
+              {recent.map((r) => (
+                <li key={r.runId} className="flex min-h-9 items-center gap-3 border-b border-border px-3 py-1.5 last:border-b-0">
+                  <span className={cn("size-1.5 shrink-0 rounded-full", r.outcome === "ok" ? "bg-success-text" : r.outcome === "running" ? "bg-accent pulse-dot" : r.outcome === "rate_limited" || r.outcome === "partial" ? "bg-warning-text" : "bg-destructive-text")} aria-hidden />
+                  <span className="tnum w-24 shrink-0 text-muted-foreground">{fmtAgo(r.finishedAt)}</span>
+                  <span className="min-w-0 flex-1 truncate">{runWords(r)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         {siblings.length > 1 && (
           <div className="flex flex-col gap-2">
-            <p className="label-caps">Models on this connection</p>
+            <p className="label-caps">{COPY.whatToSearch} on this account</p>
             <div className="overflow-hidden rounded-xl border border-border bg-card">
               {siblings.map((x) => (
                 <Link key={x.id} to={`/sources/${x.id}`} className={cn("flex h-10 items-center gap-3 border-b border-border px-3 text-13 last:border-b-0 hover:bg-card-hover", x.id === s.id && "bg-muted")}>
@@ -230,21 +236,26 @@ function Overview({ s, runs, siblings }: { s: ApiSource; runs: ApiRun[] | undefi
       <aside className="flex flex-col gap-3 rounded-xl border border-border bg-faint p-4 text-xs xl:self-start" aria-label="Details">
         <p className="label-caps">Details</p>
         <dl className="grid grid-cols-[96px_minmax(0,1fr)] gap-x-3 gap-y-2.5">
-          <Detail k="Connection" v={s.connectionLabel} />
-          <Detail k="Mode" v={s.mode === "fixture" ? "Sample, replayed" : "Your grant"} />
+          <Detail k="Account" v={s.connectionLabel} />
+          <Detail k="Reads from" v={s.mode === "fixture" ? "The sample" : COPY.yourAccess} />
           <Detail k="Type" v={KIND_LABEL[s.profile.kind]} />
-          <Detail k="Profile" v={<span className="font-mono text-11">{s.profile.slug} v{s.profile.version}</span>} />
-          <Detail k="Origin" v={s.profile.origin === "builtin" ? "Built in" : s.profile.origin === "user" ? "Yours" : "Imported"} />
-          <Detail k="Verified" v={<Badge tone={s.profile.verified === "real" ? "success" : "outline"}>{s.profile.verified === "real" ? "Real grant" : s.profile.verified === "fixture" ? "Fixture-verified" : "Not verified"}</Badge>} />
-          <Detail k="Schedule" v={<ScheduleSelect s={s} />} />
+          <Detail k="Set up by" v={s.profile.origin === "builtin" ? "Search" : s.profile.origin === "user" ? "You" : "Imported"} />
+          <Detail k="Updates" v={<ScheduleSelect s={s} />} />
           {Object.entries(s.settingsSpec).filter(([, spec]) => spec.type === "choice").map(([k, spec]) => {
             const opt = spec.type === "choice" ? spec.options.find((o) => o.value === s.settings[k]) : undefined;
             return <Detail key={k} k={spec.label} v={opt?.label ?? String(s.settings[k] ?? "")} />;
           })}
-          {backfill && <Detail k="Backfill" v={backfill === "all" ? "Everything" : backfill === "30d" ? "30 days" : backfill === "365d" ? "1 year" : backfill} />}
-          <Detail k="Next run" v={s.health.nextRunAt ? new Date(s.health.nextRunAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }) : "not scheduled"} />
+          {backfill && <Detail k="How far back" v={backfill === "all" ? "Everything" : backfill === "30d" ? "30 days" : backfill === "365d" ? "1 year" : backfill} />}
+          <Detail k="Next update" v={s.health.nextRunAt ? new Date(s.health.nextRunAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }) : "not scheduled"} />
         </dl>
-        <ActionsUsed s={s} />
+        <details className="group border-t border-border pt-3" data-copy="advanced" data-testid="source-advanced">
+          <summary className="cursor-pointer select-none text-muted-foreground hover:text-foreground">Advanced</summary>
+          <dl className="mt-2.5 grid grid-cols-[96px_minmax(0,1fr)] gap-x-3 gap-y-2.5">
+            <Detail k="Profile" v={<span className="font-mono text-11">{s.profile.slug} v{s.profile.version}</span>} />
+            <Detail k="Verified" v={<Badge tone={s.profile.verified === "real" ? "success" : "outline"}>{s.profile.verified === "real" ? "Real grant" : s.profile.verified === "fixture" ? "Fixture-verified" : "Not verified"}</Badge>} />
+          </dl>
+          <ActionsUsed s={s} />
+        </details>
       </aside>
     </div>
   );
@@ -262,9 +273,10 @@ function ActionsUsed({ s }: { s: ApiSource }) {
   const footer = rows.length === 0 ? null
     : known.length < rows.length ? "Method not recorded for some actions."
     : nonGet.length === 0 ? "All GET, read only."
+    // copy-ok: shown only in the Advanced disclosure, for whoever maintains the Connect app
     : `${nonGet.length} of ${rows.length} use ${[...new Set(nonGet.map((r) => r.method))].join(", ")} to read. A Read only grant covers GET only, so these must be in the Connect app's ask by name.`;
   return (
-    <div className="flex flex-col gap-1.5 border-t border-border pt-3">
+    <div className="flex flex-col gap-1.5 border-t border-border pt-3" data-copy="advanced">
       <p className="text-muted-foreground">Actions used</p>
       {rows.length === 0 ? <Skeleton className="h-4 w-full" /> : rows.map((a) => (
         <span key={a.actionId} className="flex min-w-0 items-baseline gap-1.5 font-mono text-11" title={a.path ?? undefined}>
@@ -293,7 +305,7 @@ function Fields({ s }: { s: ApiSource }) {
   const [busy, setBusy] = useState(false);
   const ap = profiles.data?.find((x) => x.id === s.profile.id);
   const rows = useMemo(() => (ap?.json ? profileToRows(ap.json) : []), [ap]);
-  if (profiles.isError) return <LoadError what="The profile" error={profiles.error} onRetry={() => void profiles.refetch()} />;
+  if (profiles.isError) return <LoadError what="The fields" error={profiles.error} onRetry={() => void profiles.refetch()} />;
   if (!ap) return <Skeleton className="h-64 w-full rounded-xl" />;
   const reindex = async () => {
     if (!ap.json) return;
@@ -301,7 +313,7 @@ function Fields({ s }: { s: ApiSource }) {
     try {
       const r = await api.putProfile(ap.id, ap.json, "Edited in source detail");
       await qc.invalidateQueries({ queryKey: keys.profiles });
-      toast({ title: r.effect === "remap" ? `Remapping ${fmtNum(r.affectedItems)} items` : r.effect === "refetch" ? "Fetching again from the start" : "Saved", detail: r.effect === "remap" ? "From stored records, no new calls on your grant" : undefined });
+      toast({ title: r.effect === "remap" ? `Rereading ${fmtNum(r.affectedItems)} items` : r.effect === "refetch" ? "Reading everything again" : "Saved", detail: r.effect === "remap" ? "From what Search already has. Nothing new is fetched." : undefined });
       setConfirm(false);
     } catch (e) { toast({ title: "Not saved", detail: (e as Error).message, tone: "destructive" }); }
     finally { setBusy(false); }
@@ -327,12 +339,12 @@ function Fields({ s }: { s: ApiSource }) {
         ))}
       </div>
       <p className="font-mono text-11 text-muted-foreground">list {ap.json?.list.actionId} · results at {ap.json?.list.resultsPath} · {ap.json?.incremental.strategy}{ap.json?.incremental.strategy === "watermark" ? ` on ${ap.json.incremental.field}` : ""}</p>
-      <Dialog open={confirm} onClose={() => setConfirm(false)} title={`Reindex ${fmtNum(s.health.itemCount)} items?`} size="sm">
+      <Dialog open={confirm} onClose={() => setConfirm(false)} title={`Read ${fmtNum(s.health.itemCount)} items again?`} size="sm">
         <div className="flex flex-col gap-4 p-4">
-          <p className="text-13 text-muted-foreground">A change to the map re-reads the records Search already stored, so it makes no new calls. A change to what is fetched starts over from the first page.</p>
+          <p className="text-13 text-muted-foreground">A change to the fields rereads what Search already has, so it calls nothing. A change to what is fetched starts over from the first page.</p>
           <div className="flex justify-end gap-2">
             <Button onClick={() => setConfirm(false)}>Cancel</Button>
-            <Button variant="primary" loading={busy} onClick={() => void reindex()}>Reindex</Button>
+            <Button variant="primary" loading={busy} onClick={() => void reindex()}>Read again</Button>
           </div>
         </div>
       </Dialog>
@@ -340,7 +352,7 @@ function Fields({ s }: { s: ApiSource }) {
   );
 }
 
-const TRIGGER: Record<string, string> = { schedule: "Scheduled", manual: "Manual", first: "First run", remap: "Remap", reindex: "Reindex", resume: "Resumed" };
+const TRIGGER: Record<string, string> = { schedule: "Scheduled", manual: "By you", first: "First update", remap: "Reread", reindex: "Read again", resume: "Resumed" };
 function dur(r: ApiRun) {
   const ms = new Date(r.finishedAt).getTime() - new Date(r.startedAt).getTime();
   return r.outcome === "running" ? "running" : ms < 1000 ? `${ms} ms` : `${(ms / 1000).toFixed(1)} s`;
@@ -348,9 +360,9 @@ function dur(r: ApiRun) {
 
 function Runs({ runs, loading, onRetry }: { runs: ApiRun[] | undefined; loading: boolean; onRetry: () => void }) {
   if (loading) return <Skeleton className="h-64 w-full rounded-xl" />;
-  if (!runs?.length) return <p className="text-13 text-muted-foreground">No runs yet.</p>;
+  if (!runs?.length) return <p className="text-13 text-muted-foreground">No updates yet.</p>;
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card" role="list" aria-label="Runs" data-testid="runs">
+    <div className="overflow-hidden rounded-xl border border-border bg-card" role="list" aria-label="History" data-testid="runs">
       {runs.map((r) => {
         const bad = r.outcome !== "ok" && r.outcome !== "running";
         return (
@@ -360,7 +372,7 @@ function Runs({ runs, loading, onRetry }: { runs: ApiRun[] | undefined; loading:
             <span className="tnum w-[64px] shrink-0 font-mono text-11 text-muted-foreground">{fmtClock(r.startedAt)}</span>
             <span className="w-[84px] shrink-0 truncate">{TRIGGER[r.trigger] ?? r.trigger}</span>
             <span className={cn("min-w-0 flex-1 truncate", bad ? "text-warning-text" : "text-muted-foreground")}>
-              {r.outcome === "running" ? `Running, ${fmtNum(r.fetched)} fetched` : bad ? r.error?.message ?? r.outcome : `+${fmtNum(r.upserted)} new, ${fmtNum(r.unchanged)} unchanged, ${fmtNum(r.tombstoned)} removed, 0 failed`}
+              {r.outcome === "running" ? `Updating, ${fmtNum(r.fetched)} read` : bad ? r.error?.message ?? r.outcome : `+${fmtNum(r.upserted)} new, ${fmtNum(r.unchanged)} unchanged, ${fmtNum(r.tombstoned)} removed, 0 failed`}
             </span>
             <span className="tnum w-[60px] shrink-0 text-right text-11 text-muted-foreground">{r.calls} {r.calls === 1 ? "call" : "calls"}</span>
             <span className="tnum w-[56px] shrink-0 text-right text-11 text-muted-foreground">{dur(r)}</span>
@@ -374,17 +386,17 @@ function Runs({ runs, loading, onRetry }: { runs: ApiRun[] | undefined; loading:
   );
 }
 
-const BUCKET: Record<string, string> = { blocked_by_grant: "Not in grant", rate_limited: "Rate limited", reconnect_required: "Auth", unauthorized: "Auth", invalid_profile: "Mapping", upstream_error: "Provider", not_found: "Removed" };
+const BUCKET: Record<string, string> = { blocked_by_grant: "No access", rate_limited: "Slowed down", reconnect_required: "Sign-in", unauthorized: "Sign-in", invalid_profile: "Setup", upstream_error: "The tool", not_found: "Removed" };
 function Errors({ id, errors, loading }: { id: string; errors: ApiItemError[] | undefined; loading: boolean }) {
   const [bucket, setBucket] = useState<string | null>(null);
   const qc = useQueryClient();
   if (loading) return <Skeleton className="h-40 w-full rounded-xl" />;
-  if (!errors?.length) return <p className="rounded-xl border border-dashed border-border-strong p-6 text-center text-13 text-muted-foreground">No errors. Every record in the last run made it into the index.</p>;
+  if (!errors?.length) return <p className="rounded-xl border border-dashed border-border-strong p-6 text-center text-13 text-muted-foreground">No errors. Everything in the last update made it into Search.</p>;
   const counts = new Map<string, number>();
   for (const e of errors) counts.set(BUCKET[e.code] ?? "Other", (counts.get(BUCKET[e.code] ?? "Other") ?? 0) + 1);
   const shown = errors.filter((e) => !bucket || (BUCKET[e.code] ?? "Other") === bucket);
   const retry = async (ids?: string[]) => {
-    try { const r = await api.retryErrors(id, ids); toast({ title: `Queued ${r.queued} for retry` }); void qc.invalidateQueries({ queryKey: keys.errors(id) }); }
+    try { const r = await api.retryErrors(id, ids); toast({ title: `Trying ${r.queued} again` }); void qc.invalidateQueries({ queryKey: keys.errors(id) }); }
     catch (e) { toast({ title: "Could not retry", detail: (e as Error).message, tone: "destructive" }); }
   };
   return (
@@ -430,8 +442,19 @@ function ScheduleSelect({ s }: { s: ApiSource }) {
       await api.patchSource(s.id, { scheduleEvery: v });
       await qc.invalidateQueries({ queryKey: keys.source(s.id) });
       await qc.invalidateQueries({ queryKey: keys.sources });
-      toast({ title: `Refreshes ${everyLabel(v)}` });
-    } catch (e) { toast({ title: "Could not change the schedule", detail: (e as Error).message, tone: "destructive" }); }
+      toast({ title: `Updates ${everyLabel(v)}` });
+    } catch (e) { toast({ title: "Could not change how often it updates", detail: (e as Error).message, tone: "destructive" }); }
   };
-  return <Select label="Schedule" value={s.scheduleEvery} options={options} onChange={(v) => void change(v)} className="h-7 w-[150px] text-xs" />;
+  return <Select label="How often it updates" value={s.scheduleEvery} options={options} onChange={(v) => void change(v)} className="h-7 w-[150px] text-xs" />;
+}
+
+/** One update in words: "Added 24 new items", "Nothing new", "Slowed down by the tool, finishes later". */
+function runWords(r: ApiRun): string {
+  if (r.outcome === "running") return "Updating now";
+  const added = r.upserted > 0 ? `${fmtNum(r.upserted)} new or changed` : "Nothing new";
+  const gone = r.tombstoned > 0 ? `, ${fmtNum(r.tombstoned)} removed` : "";
+  if (r.outcome === "ok") return `${added}${gone}`;
+  if (r.outcome === "rate_limited") return `${added}${gone}. Slowed down by the tool, the rest comes next time`;
+  if (r.outcome === "partial") return `${added}${gone}. Some items did not come through`;
+  return "Did not finish. See Errors";
 }

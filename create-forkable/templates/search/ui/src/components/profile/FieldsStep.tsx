@@ -119,25 +119,25 @@ export function FieldsStep({ rows, samples, onChange, onReset, preview, previewL
       <div className="flex min-h-0 flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <p className="text-13">
-            <span className="font-medium">{mapped} of {rows.length} mapped</span>
+            <span className="font-medium">{mapped} of {rows.length} used</span>
             <span className="text-muted-foreground"> · {review.length} need review</span>
             {missing.length > 0 && <span className="text-destructive-text"> · {missing.map(targetLabel).join(", ")} missing</span>}
           </p>
-          <Button size="sm" variant="ghost" icon={<RotateCcw />} onClick={onReset}>Reset to the proposal</Button>
+          <Button size="sm" variant="ghost" icon={<RotateCcw />} onClick={onReset}>Back to the AI picks</Button>
         </div>
         <div className={cn("min-h-0 overflow-y-auto rounded-xl border border-border bg-card", embedded && "max-h-[420px]")} role="table" aria-label="Field map" data-testid="field-map">
           <div role="row" className="sticky top-0 z-10 grid h-8 grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)_20px_minmax(0,1.2fr)_76px] items-center gap-3 border-b border-border bg-card px-3 text-11 font-medium text-muted-foreground">
             <span>Source field</span><span>Samples</span><span /><span>Search field</span><span>Format</span>
           </div>
           {group("Needs review", review, "Low confidence. Check these.")}
-          {group("Mapped by AI", auto)}
+          {group("Picked by AI", auto)}
           <button type="button" onClick={() => setShowSkipped((v) => !v)} className="flex h-8 w-full items-center gap-2 border-t border-border bg-faint px-3 text-left">
-            <span className="label-caps">Not mapped ({skipped.length})</span>
+            <span className="label-caps">Not used ({skipped.length})</span>
             <span className="text-11 text-muted-foreground">{showSkipped ? "Hide" : "Show"}</span>
           </button>
           {showSkipped && group("Skipped", skipped)}
         </div>
-        <p className="text-11 text-muted-foreground">J and K move, Enter picks a field, S skips it, R resets to the proposal. * is required.</p>
+        <p className="text-11 text-muted-foreground">J and K move, Enter picks a field, S skips it, R goes back to the AI picks. * is required.</p>
       </div>
       {!embedded && <PreviewPane preview={preview} loading={previewLoading} />}
     </div>
@@ -196,7 +196,7 @@ export function PreviewPane({ preview, loading }: { preview: DraftPreview | unde
                 <dt className="text-11 text-muted-foreground">Created</dt><dd>{new Date(s.item.occurredAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</dd>
                 <dt className="text-11 text-muted-foreground">Id</dt><dd className="font-mono text-11">{s.item.externalId || "missing"}</dd>
               </dl>
-              {s.item.body ? <p className="line-clamp-5 text-xs leading-relaxed text-foreground/90">{s.item.body}</p> : <p className="text-xs text-muted-foreground">No body mapped.</p>}
+              {s.item.body ? <p className="line-clamp-5 text-xs leading-relaxed text-foreground/90">{s.item.body}</p> : <p className="text-xs text-muted-foreground">No text picked.</p>}
             </div>
           </div>
         </div>

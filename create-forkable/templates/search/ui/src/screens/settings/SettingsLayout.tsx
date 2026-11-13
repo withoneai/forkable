@@ -5,11 +5,11 @@ export { Select } from "@/components/ui/Select";
 
 const TABS = [
   { to: "general", label: "General" },
-  { to: "integrations", label: "Integrations" },
+  { to: "integrations", label: "Sources" },
   { to: "search", label: "Search" },
   { to: "assistant", label: "Assistant" },
-  { to: "database", label: "Database" },
-  { to: "api", label: "API" },
+  { to: "database", label: "Your data" },
+  { to: "agents", label: "Agents" },
 ];
 
 export function SettingsLayout() {

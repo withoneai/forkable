@@ -8,8 +8,11 @@ import type { EngineCtx } from "../ctx.js";
 import { pickEmbedder, embedQueryWithStatus, semanticStatus, vectorLiteral } from "../embed/index.js";
 import { newId } from "../ids.js";
 import { logoUrl, PLATFORM_NAMES, platformName } from "../platforms.js";
-import { DATE_KEYS, parseQuery, TYPE_ALIASES } from "../query/parse.js";
+import { DATE_KEYS, formatQuery, parseQuery, TYPE_ALIASES } from "../query/parse.js";
 import { proposeDates } from "../query/dates.js";
+import { fold, keepWords, understandQuery, withoutFiller } from "../query/understand.js";
+import { vocabExtra, vocabFor } from "./vocab.js";
+import { entityItemStats } from "./entity-items.js";
 
 export const RRF_K = 60;
 /** Cosine distance past which a vector neighbour is not a match (similarity under 0.25). */
@@ -107,15 +110,25 @@ function dateCond(col: SQL, v: OpValue, key: string): SQL | null {
   return null;
 }
 
+const DURING_START = sql`(case when i.kind = 'deal' then (i.facets->>'closeDate')::timestamptz when i.kind = 'task' then (i.facets->>'dueDate')::timestamptz else coalesce((i.facets->>'start')::timestamptz, i.occurred_at) end)`;
+const DURING_END = sql`(case when i.kind = 'deal' then (i.facets->>'closeDate')::timestamptz when i.kind = 'task' then (i.facets->>'dueDate')::timestamptz else coalesce((i.facets->>'end')::timestamptz, i.occurred_at) end)`;
+
 export interface BuiltFilters { where: SQL; entityIds: string[]; errors: string[] }
 
-export async function buildFilters(ctx: EngineCtx, userId: string, parsed: ParsedQuery, opts: { scope?: ItemKind | "all" } = {}): Promise<BuiltFilters> {
+/**
+ * `soft`: filters the box read from a sentence (D48), by their text ("with:globex.com").
+ * A "with" read from words reaches a little further than a typed filter: "with Globex"
+ * also finds items with someone who works at Globex, and "with Hannah" also finds an
+ * item that names them but links no person at all (a note, a doc). "from" keeps the
+ * sender's role: "from Priya" never lists a note that only mentions her.
+ */
+export async function buildFilters(ctx: EngineCtx, userId: string, parsed: ParsedQuery, opts: { scope?: ItemKind | "all"; soft?: Set<string> } = {}): Promise<BuiltFilters> {
   const conds: SQL[] = [sql`i.user_id = ${userId}`, sql`i.deleted_at is null`, sql`i.directory = false`];
   const entityIds: string[] = [];
   const errors: string[] = [];
   if (opts.scope && opts.scope !== "all") conds.push(sql`i.kind = ${opts.scope}`);
-  const byKey = new Map<string, { values: OpValue[]; negate: boolean }[]>();
-  for (const c of parsed.clauses) if (c.kind === "op") { const a = byKey.get(c.key) ?? []; a.push({ values: c.values, negate: c.negate }); byKey.set(c.key, a); }
+  const byKey = new Map<string, { values: OpValue[]; negate: boolean; raw: string }[]>();
+  for (const c of parsed.clauses) if (c.kind === "op") { const a = byKey.get(c.key) ?? []; a.push({ values: c.values, negate: c.negate, raw: c.raw }); byKey.set(c.key, a); }
 
   for (const [key, groups] of byKey) {
     // same key ORs (positives), negated clauses each AND NOT
@@ -124,7 +137,15 @@ export async function buildFilters(ctx: EngineCtx, userId: string, parsed: Parse
     const build = async (vals: OpValue[]): Promise<SQL | null> => {
       const parts: SQL[] = [];
       switch (key) {
-        case "source": { const ps = texts(vals).flatMap(platformsFor); if (ps.length) parts.push(sql`i.platform in (${sql.join(ps.map((p) => sql`${p}`), sql`, `)})`); break; }
+        case "source": {
+          // in:#deals is the deals channel, the same as container:deals, on every surface (web, REST, MCP)
+          const vs = texts(vals);
+          const chans = vs.filter((v) => v.startsWith("#")).map((v) => v.slice(1).toLowerCase()).filter(Boolean);
+          const ps = vs.filter((v) => !v.startsWith("#")).flatMap(platformsFor);
+          if (ps.length) parts.push(sql`i.platform in (${sql.join(ps.map((p) => sql`${p}`), sql`, `)})`);
+          for (const ch of chans) parts.push(sql`(lower(coalesce(i.container, '')) like ${"%" + ch + "%"})`);
+          break;
+        }
         case "type": { const ks = texts(vals).flatMap((t) => TYPE_ALIASES[t.toLowerCase()] ?? []); parts.push(ks.length ? sql`i.kind in (${sql.join(ks.map((k) => sql`${k}`), sql`, `)})` : sql`false`); break; }
         case "is": for (const t of texts(vals).map((x) => x.toLowerCase())) {
           if (t === "unread") parts.push(sql`(i.facets->>'unread') = 'true'`);
@@ -150,7 +171,9 @@ export async function buildFilters(ctx: EngineCtx, userId: string, parsed: Parse
         case "updated": for (const v of vals) { const c = dateCond(sql`coalesce(i.updated_at, i.occurred_at)`, v, v.t === "cmp" ? "cmp" : "on"); if (c) parts.push(c); } break;
         case "during": for (const v of vals) {
           const r = v.t === "date" ? v.resolved : v.t === "range" ? { from: v.from, to: v.to } : null;
-          if (r) parts.push(sql`(coalesce((i.facets->>'start')::timestamptz, i.occurred_at) < ${r.to}::timestamptz and coalesce((i.facets->>'end')::timestamptz, i.occurred_at) >= ${r.from}::timestamptz)`);
+          // an event by its start and end; a deal by its close date and a task by its due date when it has one
+          // a deal with no close date or a task with no due date is not "closing" or "due" in any range (polish item 6)
+          if (r) parts.push(sql`(${DURING_START} < ${r.to}::timestamptz and ${DURING_END} >= ${r.from}::timestamptz)`);
         } break;
         case "has": for (const t of texts(vals).map((x) => x.toLowerCase())) {
           if (t === "attachment") parts.push(sql`(i.facets->>'hasAttachment') = 'true'`);
@@ -170,11 +193,38 @@ export async function buildFilters(ctx: EngineCtx, userId: string, parsed: Parse
       }
       return parts.length ? sql`(${sql.join(parts, sql` or `)})` : null;
     };
-    const p = pos.length ? await build(pos) : null;
+    let p = pos.length ? await build(pos) : null;
+    const soft = groups.filter((g) => !g.negate && opts.soft?.has(g.raw)).flatMap((g) => g.values);
+    // "from" honours the sender's role even when read from words ("from Priya" is never a note that
+    // only mentions her); only "with" and "about" reach further (D48, final review 2026-11-12)
+    if (p && soft.length && key === "with") {
+      const more = await softReach(ctx, userId, texts(soft), ROLES[key]);
+      if (more) p = sql`(${p} or ${more})`;
+    }
     if (p) conds.push(p);
     if (neg.length) { const n = await build(neg); if (n) conds.push(sql`not ${n}`); }
   }
   return { where: sql.join(conds, sql` and `), entityIds: [...new Set(entityIds)], errors };
+}
+
+/** The extra reach of a name read from a sentence (see buildFilters). */
+async function softReach(ctx: EngineCtx, userId: string, values: string[], roles: EntityRole[] | null): Promise<SQL | null> {
+  const ids = (await Promise.all(values.map((t) => resolveEntityValue(ctx, userId, t)))).flat();
+  if (!ids.length) return null;
+  const ents = await rows<{ id: string; type: "person" | "company"; name: string }>(ctx, sql`select id, type, name from entities where id in (${sql.join(ids.map((x) => sql`${x}`), sql`, `)}) and not is_self`);
+  const parts: SQL[] = [];
+  const companies = ents.filter((e) => e.type === "company").map((e) => e.id);
+  if (companies.length) {
+    const roleCond = roles ? sql` and l.role in (${sql.join(roles.map((r) => sql`${r}`), sql`, `)})` : sql``;
+    parts.push(sql`exists (select 1 from entity_links l join entities pe on pe.id = l.entity_id where l.item_id = i.id and pe.company_id in (${sql.join(companies.map((x) => sql`${x}`), sql`, `)})${roleCond})`);
+  }
+  // a person by first name, a company by its name, in an item that links no person
+  const names = [...new Set(ents.map((e) => (e.type === "person" ? e.name.split(/\s+/)[0]! : e.name)).filter((n) => n.length > 1))];
+  if (names.length) {
+    const mention = sql.join(names.map((n) => sql`i.tsv @@ plainto_tsquery('english', ${n})`), sql` or `);
+    parts.push(sql`(not exists (select 1 from entity_links lx join entities ex on ex.id = lx.entity_id where lx.item_id = i.id and ex.type = 'person') and (${mention}))`);
+  }
+  return parts.length ? sql`(${sql.join(parts, sql` or `)})` : null;
 }
 
 // ---------- the search ----------
@@ -185,9 +235,9 @@ interface ItemRowLite {
   lane: Lane | null; importance: number | null;
 }
 
-const queries = new Map<string, { userId: string; q: string; at: number; ids: string[]; rows: ResultRow[] }>();
+const queries = new Map<string, { userId: string; q: string; at: number; ids: string[]; rows: ResultRow[]; understand: boolean; tz: string | null }>();
 
-export function rememberedQuery(queryId: string): { userId: string; q: string; ids: string[]; rows: ResultRow[] } | null {
+export function rememberedQuery(queryId: string): { userId: string; q: string; ids: string[]; rows: ResultRow[]; understand: boolean; tz: string | null } | null {
   const hit = queries.get(queryId);
   if (!hit || Date.now() - hit.at > 600_000) return null;
   return hit;
@@ -200,6 +250,12 @@ async function hasTrgm(ctx: EngineCtx): Promise<boolean> {
   trgm = !!r[0]?.ok;
   return trgm;
 }
+
+/** At most this many items with a read sentence's leftover words, against many more under its filters alone: the filters' items follow them. */
+export const FEW_WORD_HITS = 2;
+
+/** Words too small to name as "the words no result had". */
+const SMALL_WORDS = new Set(["a", "an", "the", "of", "to", "in", "on", "at", "by", "for", "from", "with", "about", "and", "or", "is", "are", "was", "it", "my", "me", "i", "this", "that"]);
 
 function terms(text: string): string[] {
   return text.toLowerCase().replace(/"/g, " ").split(/\s+/).filter((w) => w && w !== "or" && !w.startsWith("-")).map((w) => w.replace(/[^a-z0-9@.'-]/g, "")).filter((w) => w.length >= 2);
@@ -294,10 +350,12 @@ export async function toResultRows(ctx: EngineCtx, items: ItemRowLite[], fused: 
 
 async function entityStrip(ctx: EngineCtx, userId: string, text: string, named: string[]): Promise<EntityChip[]> {
   const ids = new Set(named.filter(Boolean));
-  if (text.trim()) {
+  // "who is Priya Shah" names Priya Shah: the question words are not part of the name
+  const nameText = withoutFiller(text);
+  if (nameText.trim()) {
     const r = await rows<{ id: string }>(ctx, sql`
       select id from entities where user_id = ${userId} and merged_into_id is null and item_count > 0
-        and tsv @@ plainto_tsquery('simple', search_unaccent(${text}))
+        and tsv @@ plainto_tsquery('simple', search_unaccent(${nameText}))
       order by item_count desc limit 3`);
     for (const x of r) ids.add(x.id);
   }
@@ -307,15 +365,16 @@ async function entityStrip(ctx: EngineCtx, userId: string, text: string, named: 
 
 export async function entityChips(ctx: EngineCtx, ids: string[]): Promise<EntityChip[]> {
   if (!ids.length) return [];
-  const r = await rows<{ id: string; type: "person" | "company"; name: string; title: string | null; domain: string | null; avatar_url: string | null; item_count: number; company: string | null; sources: string[] | null; is_self: boolean; primary_email: string | null }>(ctx, sql`
-    select e.id, e.type, e.name, e.title, e.domain, e.avatar_url, e.item_count, e.is_self, e.primary_email, c.name as company,
-      (select array_agg(distinct i.platform) from entity_links l join items i on i.id = l.item_id where l.entity_id = e.id and i.deleted_at is null) as sources
+  const r = await rows<{ id: string; type: "person" | "company"; name: string; title: string | null; domain: string | null; avatar_url: string | null; company: string | null; is_self: boolean; primary_email: string | null }>(ctx, sql`
+    select e.id, e.type, e.name, e.title, e.domain, e.avatar_url, e.is_self, e.primary_email, c.name as company
     from entities e left join entities c on c.id = e.company_id
     where e.id in (${sql.join(ids.map((x) => sql`${x}`), sql`, `)})`);
   const order = new Map(ids.map((x, i) => [x, i]));
+  // the card says what the page it opens says: one count, one place (entity-items.ts)
+  const stats = await entityItemStats(ctx, r.map((e) => e.id));
   return r.sort((a, b) => order.get(a.id)! - order.get(b.id)!).map((e) => ({
     id: e.id, type: e.type, name: e.name, subtitle: e.type === "person" ? [e.title, e.company].filter(Boolean).join(", ") || null : e.domain,
-    avatarUrl: e.avatar_url, logoUrl: null, itemCount: Number(e.item_count), sources: (e.sources ?? []).sort(), isSelf: !!e.is_self, email: e.primary_email,
+    avatarUrl: e.avatar_url, logoUrl: null, itemCount: stats.get(e.id)?.count ?? 0, sources: stats.get(e.id)?.platforms ?? [], isSelf: !!e.is_self, email: e.primary_email,
   }));
 }
 
@@ -335,7 +394,8 @@ export function exactTarget(parsed: ParsedQuery): string | null {
   const phrases = free.filter((c) => c.kind === "phrase");
   if (phrases.length === 1 && free.length === 1) return (phrases[0] as { value: string }).value.trim() || null;
   if (phrases.length) return null;
-  const t = free.map((c) => (c as { value: string }).value).join(" ").trim();
+  // "who is Priya Shah" looks for Priya Shah
+  const t = withoutFiller(free.map((c) => (c as { value: string }).value).join(" ").trim());
   return t && t.split(/\s+/).length <= 5 ? t : null;
 }
 
@@ -379,6 +439,83 @@ export async function nearestEntity(ctx: EngineCtx, userId: string, text: string
   return r[0] && r[0].lname !== v ? r[0].id : null;
 }
 
+/** Edit distance with one swap of two neighbours counting as one edit (Damerau, optimal string alignment). */
+export function editDistance(a: string, b: string): number {
+  const d: number[][] = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array<number>(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0]![j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    const c = a[i - 1] === b[j - 1] ? 0 : 1;
+    d[i]![j] = Math.min(d[i - 1]![j]! + 1, d[i]![j - 1]! + 1, d[i - 1]![j - 1]! + c);
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i]![j] = Math.min(d[i]![j]!, d[i - 2]![j - 2]! + 1);
+  }
+  return d[a.length]![b.length]!;
+}
+
+/**
+ * Did you mean, by spelling: a one-word text one or two edits from a person's first name
+ * or a company name ("Prya" is Priya Shah), the busiest first. Trigrams miss short names.
+ */
+export function nearestByName(entities: { id: string; type: string; name: string; itemCount?: number; isSelf?: boolean }[], text: string): string | null {
+  const v = fold(text.trim().replace(/"/g, ""));
+  if (!/^[\p{L}'-]{4,}$/u.test(v)) return null;
+  const max = v.length >= 7 ? 2 : 1;
+  let best: { id: string; n: number } | null = null;
+  for (const e of entities) {
+    if (e.isSelf) continue;
+    const words = fold(e.name).split(/\s+/);
+    const key = e.type === "person" ? words[0]! : fold(e.name);
+    if (key === v || words.includes(v)) return null; // the text is a name already
+    if (Math.abs(key.length - v.length) > max || editDistance(key, v) > max) continue;
+    if (!best || (e.itemCount ?? 0) > best.n) best = { id: e.id, n: e.itemCount ?? 0 };
+  }
+  return best?.id ?? null;
+}
+
+/** Companies' names, folded, for telling that two deals with one title name the same company. */
+async function companyNames(ctx: EngineCtx, userId: string): Promise<string[]> {
+  return (await vocabFor(ctx, userId)).entities.filter((e) => e.type === "company").map((e) => normTitle(e.name)).filter((n) => n.length > 2);
+}
+
+const normTitle = (t: string) => fold(t).replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+
+/**
+ * Two records that are clearly one thing kept in two tools: a deal (or a doc page) with the
+ * same title that names one of the person's companies ("Hooli design partner" in Attio and
+ * in HubSpot). Null when there is nothing safe to fold by. Only folded across platforms.
+ */
+export function sameRecordKey(it: { kind: string; title: string }, companies: string[]): string | null {
+  if (it.kind !== "deal") return null;
+  const t = normTitle(it.title);
+  if (!t || !companies.some((c) => new RegExp(`(^| )${c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}( |$)`).test(t))) return null;
+  return `${it.kind}\u0000${t}`;
+}
+
+/**
+ * One row per person or company and per record kept in two tools, the first row kept and
+ * the others as its "also in" badges: for lists that do not come from a search (a person's
+ * or company's own timeline).
+ */
+export async function collapseSame(ctx: EngineCtx, userId: string, rows: ResultRow[]): Promise<ResultRow[]> {
+  const ents = await recordEntities(ctx, rows.filter((r) => r.kind === "person" || r.kind === "company").map((r) => r.id));
+  const companies = await companyNames(ctx, userId);
+  const seen = new Map<string, ResultRow>();
+  const out: ResultRow[] = [];
+  for (const r of rows) {
+    const e = ents.get(r.id);
+    const key = e ? `e\u0000${e.entityId}` : sameRecordKey(r, companies);
+    const best = key ? seen.get(key) : undefined;
+    if (best && (e || best.platform !== r.platform)) {
+      if (r.platform !== best.platform && !(best.alsoIn ?? []).includes(r.platform)) best.alsoIn = [...(best.alsoIn ?? []), r.platform];
+      best.groupCount = (best.groupCount ?? 1) + 1;
+      continue;
+    }
+    const copy = { ...r };
+    if (key && !best) seen.set(key, copy);
+    out.push(copy);
+  }
+  return out;
+}
+
 /** For person and company items: which entity each one is, and whether anything but records mentions it. */
 async function recordEntities(ctx: EngineCtx, ids: string[]): Promise<Map<string, { entityId: string; lone: boolean }>> {
   const m = new Map<string, { entityId: string; lone: boolean }>();
@@ -409,22 +546,38 @@ export function titleBonus(title: string, phrase: string | null): number {
   return new RegExp(`(^|[^a-z0-9])${esc}($|[^a-z0-9])`).test(t) ? EXACT_TITLE_BONUS / 2 : 0;
 }
 
-export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRequest): Promise<SearchResponse> {
+export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRequest, inner = false): Promise<SearchResponse> {
   const t0 = Date.now();
-  const parsed = parseQuery(req.q ?? "", ctx.now());
+  // plain phrases to filters (D48): only the searched query changes, never the box text
+  let understanding: ReturnType<typeof understandQuery> | null = null;
+  if (req.understand && (req.q ?? "").trim()) {
+    const vocab = await vocabFor(ctx, userId);
+    understanding = understandQuery(req.q, vocab, { now: ctx.now(), tz: req.tz, extra: await vocabExtra(ctx, userId, req.q, vocab) });
+  }
+  const searchedAs = understanding ? understanding.query : (req.q ?? "").trim();
+  const parsed = parseQuery(searchedAs, ctx.now(), req.tz);
   const limit = Math.max(1, Math.min(req.limit ?? 30, 200));
   const offset = Math.max(0, req.offset ?? 0);
-  const filters = await buildFilters(ctx, userId, parsed, { scope: req.scope });
-  const unscoped = req.scope && req.scope !== "all" ? await buildFilters(ctx, userId, parsed) : filters;
+  const soft = new Set((understanding?.understood ?? []).filter((u) => u.kind === "person" || u.kind === "company").map((u) => u.filter));
+  const read = !!understanding?.understood.length;
+  const filters = await buildFilters(ctx, userId, parsed, { scope: req.scope, soft });
+  const unscoped = req.scope && req.scope !== "all" ? await buildFilters(ctx, userId, parsed, { soft }) : filters;
   const text = parsed.text;
-  const hasText = /[a-z0-9]/i.test(text.replace(/\bOR\b/g, ""));
+  let hasText = /[a-z0-9]/i.test(text.replace(/\bOR\b/g, ""));
+  const hadText = hasText;
+  // what a read sentence leaves can be only small words ("where are we" of "where are we with
+  // Globex"): nothing to match, so the filters list on their own instead of finding nothing (D48)
+  if (hasText && understanding?.understood.length) {
+    const r = await rows<{ empty: boolean }>(ctx, sql`select websearch_to_tsquery('english', ${text})::text = '' as empty`);
+    if (r[0]?.empty) hasText = false;
+  }
   const settings = await ctx.settingsFor(userId);
   const sample = (await rows<{ s: boolean }>(ctx, sql`select is_sample as s from users where id = ${userId}`))[0]?.s ?? false;
   const embedder = pickEmbedder(settings, sample ? "fixture" : "connect");
   const ts = terms(text);
 
   let fused: FusedRank[] = [];
-  let candidateWhere: SQL;
+  let candidateWhere: SQL = filters.where;
   let status = { model: embedder.id, semantic: false, reason: null, platform: null, message: null } as SearchResponse["embedder"];
   let fallback: SearchResponse["fallback"] = null;
   let kwText = text;
@@ -441,7 +594,9 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
       limit 100`);
     let kw = await kwFor(text);
     andEmpty = kw.length === 0;
-    const qv = await embedQueryWithStatus(ctx, userId, text, { fresh: req.fresh });
+    // meaning reads the whole sentence when names were read from it ("contract review with Globex"
+    // keeps Globex in the meaning while the filter keeps it in the links), else what is left
+    const qv = await embedQueryWithStatus(ctx, userId, soft.size ? req.q : text, { fresh: req.fresh });
     status = qv.status;
     let vec: { id: string }[] = [];
     if (qv.vector) {
@@ -456,8 +611,9 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
         return r.rows as { id: string }[];
       });
     }
-    // every word together found nothing and no semantic arm can stand in: any of the words (D44)
-    if (!kw.length && ts.length >= 2 && !status.semantic) {
+    // every word together found nothing and no semantic arm can stand in: any of the words (D44).
+    // A read sentence tries it even with meaning on, since its filters already narrow the page.
+    if (!kw.length && ts.length >= 2 && (!status.semantic || read)) {
       const orText = ts.join(" or ");
       const kw2 = await kwFor(orText);
       if (kw2.length) { kw = kw2; kwText = orText; fallback = "or"; }
@@ -473,15 +629,35 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
     fused = fuseRanks(kw.map((r) => r.id), vec.map((r) => r.id), title.map((r) => r.id));
     for (const id of exact.itemIds) if (!fused.some((f) => f.id === id)) fused.push({ id, kw: null, vec: null, title: null, rrf: 0 });
     candidateWhere = sql`i.id in (${fused.length ? sql.join(fused.map((f) => sql`${f.id}`), sql`, `) : sql`null`})`;
-  } else {
+  }
+  // a read sentence whose leftover words matched nothing under its filters: list what the filters
+  // match and say so, rather than an empty page the same words never gave without the filters (D48)
+  let unmatched: string | null = null;
+  // one or two items had the words while the filters alone hold many more ("lunch with Anika"
+  // finds only her record): those come first, then everything else the filters match
+  let wordHits: string[] = [];
+  if (hasText && read && fused.length > 0 && fused.length <= FEW_WORD_HITS) {
+    const n = (await rows<{ n: number }>(ctx, sql`select count(*)::int as n from (select 1 from items i where ${filters.where} limit 60) t`))[0]?.n ?? 0;
+    if (n >= Math.max(6, fused.length * 3)) wordHits = fused.map((f) => f.id);
+  }
+  if (hasText && read && (!fused.length || wordHits.length)) {
+    unmatched = ts.filter((w) => !SMALL_WORDS.has(w)).join(" ") || text.trim();
+    hasText = false;
+    fused = [];
+    kwText = text;
+  }
+  if (!hasText) {
     candidateWhere = filters.where;
-    status = await semanticStatus(ctx, userId);
+    if (!unmatched) status = await semanticStatus(ctx, userId);
   }
 
   // items for the candidates (text) or the newest N (filters only)
   let ordered = hasText
     ? fused.length ? await rows<ItemRowLite>(ctx, sql`select i.* from items i where ${candidateWhere}`) : []
     : await rows<ItemRowLite>(ctx, sql`select i.* from items i where ${filters.where} order by i.occurred_at ${req.sort === "oldest" ? sql`asc` : sql`desc`} limit 500`);
+
+  if (unmatched && ordered.length) fallback = "filters";
+  else if (unmatched) unmatched = null;
 
   // named-entity boost
   const named = new Set(filters.entityIds);
@@ -491,7 +667,7 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
   // a misspelt name: offer the closest entity and bring its own records in (D43)
   // only when every word together found nothing: a misspelt name, never a name plus a topic ("globex renewal")
   if (hasText && andEmpty && !named.size && !filters.entityIds.length && !exact.why && !/\d/.test(text)) {
-    didYouMean = await nearestEntity(ctx, userId, text);
+    didYouMean = await nearestEntity(ctx, userId, text) ?? nearestByName((await vocabFor(ctx, userId)).entities, text);
     if (didYouMean) {
       named.add(didYouMean);
       const own = await rows<ItemRowLite>(ctx, sql`select i.* from items i join entity_links l on l.item_id = i.id where l.entity_id = ${didYouMean} and l.role = 'is' and ${filters.where} limit 5`);
@@ -504,8 +680,10 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
     const r = await rows<{ item_id: string }>(ctx, sql`select distinct item_id from entity_links where entity_id in (${sql.join([...named].map((x) => sql`${x}`), sql`, `)}) and item_id in (${sql.join(ordered.map((o) => sql`${o.id}`), sql`, `)})`);
     for (const x of r) linked.add(x.item_id);
   }
-  // text queries only: a filter listing (type:person) keeps one row per record, matching its counts
-  const people = hasText ? await recordEntities(ctx, ordered.filter((o) => o.kind === "person" || o.kind === "company").map((o) => o.id)) : new Map<string, { entityId: string; lone: boolean }>();
+  // text queries: every record of one person or company is one row; a filter listing (type:person,
+  // a lane) keeps one row per record, matching the counts its tools show
+  const people = hasText || unmatched ? await recordEntities(ctx, ordered.filter((o) => o.kind === "person" || o.kind === "company").map((o) => o.id)) : new Map<string, { entityId: string; lone: boolean }>();
+  const companies = await companyNames(ctx, userId);
   const phrase = hasText ? phraseOf(parsed) : null;
   const pinned = new Map(exact.itemIds.map((id, i) => [id, i]));
   const now = ctx.now().getTime();
@@ -519,38 +697,71 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
     fusedMap.set(it.id, { ...f, score, group: 1, ...(pinned.has(it.id) ? { exact: exact.why } : {}) });
   }
   let list = [...ordered];
+  // how many of the words each row has (question words left out): in a fallback, rows with more of them come first
+  const covTerms = [...new Set(terms(withoutFiller(text)).filter((w) => !SMALL_WORDS.has(w)))].slice(0, 8);
+  const coverage = new Map<string, number>();
+  if ((unmatched || fallback === "or") && covTerms.length && ordered.length) {
+    const r = await rows<{ id: string; c: number }>(ctx, sql`select i.id, (${sql.join(covTerms.map((t) => sql`(i.tsv @@ plainto_tsquery('english', ${t}))::int`), sql` + `)}) as c from items i where i.id in (${sql.join(ordered.map((o) => sql`${o.id}`), sql`, `)})`);
+    for (const x of r) coverage.set(x.id, Number(x.c));
+  }
+  const cov = (id: string) => coverage.get(id) ?? 0;
+  if (wordHits.length) {
+    const first = wordHits.map((id) => list.find((x) => x.id === id)).filter((x): x is ItemRowLite => !!x);
+    list = [...first, ...list.filter((x) => !wordHits.includes(x.id))];
+    for (const it of first) { const f = fusedMap.get(it.id); if (f) f.score = 1; }
+  }
+  // the filters fallback: after the rows with every word, the rows with more of the words, then the newest
+  if (unmatched && coverage.size) {
+    const head = list.slice(0, wordHits.length);
+    const rest = list.slice(wordHits.length).sort((a, b) => cov(b.id) - cov(a.id) || +new Date(b.occurred_at) - +new Date(a.occurred_at));
+    list = [...head, ...rest];
+  }
   if (hasText) {
     if (req.sort === "newest") list.sort((a, b) => +new Date(b.occurred_at) - +new Date(a.occurred_at));
     else if (req.sort === "oldest") list.sort((a, b) => +new Date(a.occurred_at) - +new Date(b.occurred_at));
     else list.sort((a, b) => {
       const pa = pinned.get(a.id), pb = pinned.get(b.id);
       if (pa !== undefined || pb !== undefined) return (pa ?? Infinity) - (pb ?? Infinity);
+      // any of the words: a row with more of them first ("Felix wants ..." before "Owen wants ...")
+      if (fallback === "or" && cov(a.id) !== cov(b.id)) return cov(b.id) - cov(a.id);
       return fusedMap.get(b.id)!.score - fusedMap.get(a.id)!.score || +new Date(b.occurred_at) - +new Date(a.occurred_at);
     });
   }
   // group: items sharing group_key within a source collapse to the best one,
   // and every record of one person or company collapses to its best row (D43)
+  // and one record kept in two tools (the same deal in two CRMs) is one row with the other as a badge
   const seenGroups = new Map<string, string>();
   const seenEntity = new Map<string, string>();
+  const seenRecord = new Map<string, string>();
+  const collapsed: { kind: ItemKind; platform: string }[] = [];
   const grouped: ItemRowLite[] = [];
+  const fold2 = (best: string, it: ItemRowLite) => {
+    const b = fusedMap.get(best)!;
+    const bestRow = grouped.find((g) => g.id === best);
+    if (it.platform !== bestRow?.platform && !(b.alsoIn ?? []).includes(it.platform)) b.alsoIn = [...(b.alsoIn ?? []), it.platform];
+    b.group++;
+    collapsed.push({ kind: it.kind, platform: it.platform });
+  };
   for (const it of list) {
     if (it.group_key) {
       const g = `${it.source_id}\u0000${it.group_key}`;
       const best = seenGroups.get(g);
-      if (best) { fusedMap.get(best)!.group++; continue; }
+      // folded into its group's best row: the counts drop it too, so a tab or lane count never says one more than the list
+      if (best) { fusedMap.get(best)!.group++; collapsed.push({ kind: it.kind, platform: it.platform }); continue; }
       seenGroups.set(g, it.id);
     }
     const ent = people.get(it.id);
     if (ent) {
       const best = seenEntity.get(ent.entityId);
-      if (best) {
-        const b = fusedMap.get(best)!;
-        const bestRow = grouped.find((g) => g.id === best);
-        if (it.platform !== bestRow?.platform && !(b.alsoIn ?? []).includes(it.platform)) b.alsoIn = [...(b.alsoIn ?? []), it.platform];
-        b.group++;
-        continue;
-      }
+      if (best) { fold2(best, it); continue; }
       seenEntity.set(ent.entityId, it.id);
+    }
+    const rk = sameRecordKey(it, companies);
+    if (rk) {
+      const best = seenRecord.get(rk);
+      const bestRow = best ? grouped.find((g) => g.id === best) : undefined;
+      if (best && bestRow && bestRow.platform !== it.platform && !(fusedMap.get(best)!.alsoIn ?? []).includes(it.platform)) { fold2(best, it); continue; }
+      if (!best) seenRecord.set(rk, it.id);
     }
     grouped.push(it);
   }
@@ -561,32 +772,114 @@ export async function hybridSearch(ctx: EngineCtx, userId: string, req: SearchRe
   const scope: Record<string, number> = { all: 0 };
   const source: Record<string, number> = {};
   for (const r of cr) { scope[r.kind] = (scope[r.kind] ?? 0) + r.n; scope.all! += r.n; source[r.platform] = (source[r.platform] ?? 0) + r.n; }
-  let hiddenByFilters = 0;
-  if (hasText && parsed.clauses.some((c) => c.kind === "op")) {
-    const base = await buildFilters(ctx, userId, { text, clauses: parsed.clauses.filter((c) => c.kind !== "op"), errors: [] });
-    const all = await rows<{ n: number }>(ctx, sql`with q as (select websearch_to_tsquery('english', ${kwText}) as tq) select count(*)::int as n from items i cross join q where ${base.where} and i.tsv @@ q.tq`);
-    hiddenByFilters = Math.max(0, (all[0]?.n ?? 0) - grouped.length);
+  // the counts match the rows: a record folded into another one is not counted twice
+  for (const c of collapsed) {
+    if ((scope[c.kind] ?? 0) > 0) { scope[c.kind]!--; scope.all!--; }
+    if ((source[c.platform] ?? 0) > 0) source[c.platform]!--;
   }
+  // what each filter hides is what dropping it adds, measured by running the very search the Drop
+  // button runs (the same scope, the same reading), so the number on the page never disagrees with
+  // the page it opens, in any mode: plain, any of the words, or the filters fallback
+  let hiddenByFilters = 0;
+  let hiddenBy: NonNullable<SearchResponse["hiddenBy"]> = [];
+  const groups = inner ? [] : filterGroups(parsed, understanding?.understood ?? []);
+  if (groups.length && (hadText || !grouped.length) && groups.length <= 6) {
+    const totalOf = async (q: string) => (await hybridSearch(ctx, userId, { ...req, q, limit: 1, offset: 0 }, true)).total;
+    for (const g of groups) {
+      const n = (await totalOf(dropFilterText(req.q, g))) - grouped.length;
+      if (n > 0) hiddenBy.push({ ...g, n });
+    }
+    hiddenBy.sort((a, b) => b.n - a.n);
+    // every filter at once: one number for "Clear all", and with one filter it is that filter's own
+    if (groups.length === 1) hiddenByFilters = hiddenBy[0]?.n ?? 0;
+    else if (hadText) hiddenByFilters = Math.max(0, (await totalOf(wordsOnlyText(req.q, understanding?.understood ?? []))) - grouped.length);
+  }
+
+  // "deals closing this quarter": the deals with no close date are not in any range, and the page says how many
+  let undated: SearchResponse["undated"] = undefined;
+  if (!inner && parsed.clauses.some((c) => c.kind === "op" && c.key === "during" && !c.negate)) {
+    const others = await buildFilters(ctx, userId, { ...parsed, clauses: parsed.clauses.filter((c) => !(c.kind === "op" && c.key === "during")) }, { scope: req.scope, soft });
+    const r = await rows<{ kind: string; title: string }>(ctx, sql`select i.kind, i.title from items i where ${others.where} and ((i.kind = 'deal' and (i.facets->>'closeDate') is null) or (i.kind = 'task' and (i.facets->>'dueDate') is null)) limit 500`);
+    // a copy of a listed deal kept in another tool (no close date there) is that deal, not one more without a date
+    const dated = await rows<{ kind: string; title: string }>(ctx, sql`select i.kind, i.title from items i where ${others.where} and i.kind = 'deal' and (i.facets->>'closeDate') is not null limit 500`);
+    const listed = new Set(dated.map((g) => sameRecordKey(g, companies)).filter(Boolean));
+    const left = r.filter((x) => { const k = sameRecordKey(x, companies); return !k || !listed.has(k); });
+    const deals = left.filter((x) => x.kind === "deal").length, tasks = left.filter((x) => x.kind === "task").length;
+    if (deals || tasks) undated = { deals, tasks };
+  }
+
+  // the rows the words match best, then a divider before the rest (collapsed in the web app)
+  let topRows = 0;
+  let restLabel: string | undefined;
+  if (wordHits.length) topRows = grouped.filter((g) => wordHits.includes(g.id)).length;
+  else if (fallback === "or" && coverage.size && covTerms.length >= 2) {
+    const best = Math.max(...grouped.map((g) => cov(g.id)));
+    if (best >= 2) { let n = 0; while (n < grouped.length && cov(grouped[n]!.id) === best) n++; topRows = n; }
+  }
+  if (topRows > 0 && topRows < grouped.length) restLabel = fallback === "or" ? "Results with fewer of your words" : restLabelOf(understanding?.understood ?? []);
+  else topRows = 0;
 
   const page = grouped.slice(offset, offset + limit);
   const results = await toResultRows(ctx, page, fusedMap, fallback ? terms(text) : ts);
   const queryId = newId("q");
-  queries.set(queryId, { userId, q: req.q, at: Date.now(), ids: grouped.slice(0, 100).map((g) => g.id), rows: results });
+  // rerank asks Jev about the person's own words (the whole sentence reads better than what is left of it)
+  if (!inner) queries.set(queryId, { userId, q: req.q, at: Date.now(), ids: grouped.slice(0, 100).map((g) => g.id), rows: results, understand: !!req.understand, tz: req.tz ?? null });
   if (queries.size > 500) { const first = queries.keys().next().value; if (first) queries.delete(first); }
   const dated = parsed.clauses.some((c) => c.kind === "op" && DATE_KEYS.has(c.key));
   return {
-    queryId, parsed, total: grouped.length, hiddenByFilters,
+    queryId, parsed, total: grouped.length, hiddenByFilters, hiddenBy, unmatched, ...(wordHits.length ? { matchedWords: wordHits.length } : {}),
+    ...(topRows && offset === 0 ? { topRows, restLabel } : {}), ...(undated ? { undated } : {}),
+    understanding: !!req.understand, understood: understanding?.understood ?? [], suggestions: understanding?.suggestions ?? [], searchedAs,
     counts: { scope: scope as SearchResponse["counts"]["scope"], source },
     entities: await entityStrip(ctx, userId, hasText ? text : "", [...exact.entityIds, ...filters.entityIds, ...(didYouMean ? [didYouMean] : [])]),
     results, mode: ctx.capability.mode, embedder: status,
-    fallback, dateProposals: hasText && !dated ? proposeDates(text, ctx.now()) : [],
+    fallback, dateProposals: hasText && !dated && !req.understand ? proposeDates(text, ctx.now(), req.tz) : [],
     didYouMean: didYouMean ? (await entityChips(ctx, [didYouMean]))[0] ?? null : null,
     ms: Date.now() - t0,
   };
 }
 
+/** "Other messages in Slack", "Other results from Owen Price": the divider before the rows the words did not match. */
+export function restLabelOf(understood: { kind: string; label: string }[]): string {
+  const lower = (l: string) => l.charAt(0).toLowerCase() + l.slice(1);
+  const type = understood.find((u) => u.kind === "type");
+  const noun = type ? lower(type.label) : "results";
+  const quals = understood.filter((u) => u.kind === "source" || u.kind === "person" || u.kind === "company" || u.kind === "state").map((u) => u.kind === "state" ? `(${lower(u.label)})` : lower(u.label));
+  const dates = understood.filter((u) => u.kind === "date").map((u) => `(${u.label})`);
+  return ["Other", noun, ...quals, ...dates].join(" ");
+}
+
+type FilterGroup = { label: string; filter: string; phrase: string | null; start: number | null; end: number | null };
+
+/** The filters of a search as the page names them: a read phrase is one ("last week" is after: and before:), a typed one its own text. */
+export function filterGroups(parsed: ParsedQuery, understood: { phrase: string; start: number; end: number; filter: string; label: string }[]): FilterGroup[] {
+  const ops = parsed.clauses.filter((c) => c.kind === "op" && !c.negate) as Extract<ParsedQuery["clauses"][number], { kind: "op" }>[];
+  const groups: FilterGroup[] = [];
+  const taken = new Set<string>();
+  for (const u of understood) {
+    const raws = u.filter.split(" ").filter((r) => ops.some((o) => o.raw === r));
+    if (!raws.length) continue;
+    for (const r of raws) taken.add(r);
+    groups.push({ label: u.label, filter: u.filter, phrase: u.phrase, start: u.start, end: u.end });
+  }
+  for (const o of ops) if (!taken.has(o.raw)) { taken.add(o.raw); groups.push({ label: o.raw, filter: o.raw, phrase: null, start: null, end: null }); }
+  return groups;
+}
+
+/** The box without one filter, exactly as the page's Drop button writes it: a read phrase stays as its words, a typed filter comes out. */
+export function dropFilterText(q: string, g: FilterGroup): string {
+  if (g.phrase !== null && g.start !== null && g.end !== null) return keepWords(q, [{ phrase: g.phrase, start: g.start, end: g.end }]);
+  return q.split(/(\s+)/).filter((w) => w.trim() !== g.filter).join("").replace(/\s+/g, " ").trim();
+}
+
+/** The box with every filter gone, as "Clear all" writes it: typed ones dropped, read ones kept as their words. */
+export function wordsOnlyText(q: string, understood: { phrase: string; start: number; end: number }[]): string {
+  const p = parseQuery(keepWords(q, understood));
+  return formatQuery({ ...p, clauses: p.clauses.filter((c) => c.kind === "word" || c.kind === "phrase") });
+}
+
 /** Filters-only count for a query (refinement chips). */
-export async function countOnly(ctx: EngineCtx, userId: string, query: string): Promise<number> {
-  const r = await hybridSearch(ctx, userId, { q: query, limit: 1 });
+export async function countOnly(ctx: EngineCtx, userId: string, query: string, opts: { understand?: boolean; tz?: string } = {}): Promise<number> {
+  const r = await hybridSearch(ctx, userId, { q: query, limit: 1, ...opts });
   return r.total;
 }

@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 const target = process.env.VITE_API_TARGET ?? "http://127.0.0.1:52289";
-const proxied = ["/api", "/mcp", "/oauth", "/.well-known", "/authorize", "/token", "/register", "/revoke"];
+const proxied = ["/api", "/mcp", "/oauth", "/.well-known", "/authorize", "/token", "/register", "/revoke", "/start.md", "/skill.md", "/llms.txt"];
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],

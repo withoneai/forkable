@@ -17,6 +17,7 @@ import { dbSchema, ensureSources, forgetGrant, grantedConnections, type Db } fro
 import { connectConfigured, type ServerEnv } from "./config.js";
 import type { AppEnv, Deps } from "./deps.js";
 import { bindSid, currentUser, ensureUserForSid } from "./session.js";
+import { endOtherAccountsAgentSignIns } from "./agent-signins.js";
 import { newId } from "@search/core";
 import { denyPending, dropPending, finishPending, loadPending, PENDING_COOKIE } from "./oauth.js";
 
@@ -144,6 +145,7 @@ export async function onConnected(deps: Deps, userId: string, opts: { oauth?: bo
     log(`could not list the grant's connections: ${err instanceof Error ? err.message : String(err)}`);
   }
   for (const id of sourceIds) deps.scheduler.kick(id, { trigger: "first" });
+  await endOtherAccountsAgentSignIns(db, targetId);
   return { userId: targetId, merged: targetId !== userId, sourceIds };
 }
 

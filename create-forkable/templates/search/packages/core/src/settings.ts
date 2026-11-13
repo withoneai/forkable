@@ -17,6 +17,8 @@ export const DEFAULT_SETTINGS: SettingsData = {
   vipEntityIds: [],
   lanesOn: true,
   paused: false,
+  onePlan: "auto",
+  oneRpm: null,
 };
 
 export const SAMPLE_SETTINGS: SettingsData = {

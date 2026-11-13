@@ -16,6 +16,7 @@ you make one Connect app in the One dashboard. Secured by One.
 
 ```
 Usage: npm create forkable@latest <name> [options]
+       npm create forkable@latest update          (inside a fork)
        npm create forkable@latest -- --list [--json]
 
   <name>              Directory and project name for the new fork.
@@ -33,7 +34,29 @@ Options:
   -y, --yes           Never prompt (there are no prompts; accepted for scripts).
   -v, --version       Print the version.
   -h, --help          Show this help.
+
+Update (inside a fork, or with --dir):
+  update, --update    Merge the newest template into this fork.
+  --dir <path>        The fork to update. Default: this folder.
+  --dry-run           List what the template changed, merge nothing.
 ```
+
+## Update a fork
+
+```
+cd my-business
+npm create forkable@latest update
+```
+
+Takes the newest version of the template the fork came from and keeps
+your own changes. It is a git merge against the template as you last got
+it (the fork's first commit, "Forked from <id>@<version>", or the last
+"Forkable update:" commit): what only the template changed comes in, what
+only you changed stays, and a file you both changed becomes a normal git
+conflict to resolve, or `git merge --abort` to undo. It needs a clean git
+tree, never touches `.env`, untracked files or `local/profile.md`, and
+installs dependencies after a clean merge (`--no-install` skips that).
+Works on every fork made by create-forkable, old ones included.
 
 Four templates ship in this package: `forkable-starter` (the default, a
 small single-package app), `rill`, a full AI email client, `search`, one

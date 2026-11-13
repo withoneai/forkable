@@ -12,7 +12,8 @@
     "demo": "tsx src/index.ts demo",
     "typecheck": "tsc --noEmit",
     "start": "tsx src/index.ts start",
-    "smoke": "tsx scripts/smoke-cli.ts"
+    "smoke": "tsx scripts/smoke-cli.ts",
+    "stress:refresh": "tsx scripts/stress-refresh.ts"
   },
   "dependencies": {
     "@search/core": "workspace:*",
@@ -23,6 +24,7 @@
     "@search/server": "workspace:*"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@types/node": "^22.15.0",
     "@types/pg": "^8.15.0",
     "typescript": "^5.9.3"

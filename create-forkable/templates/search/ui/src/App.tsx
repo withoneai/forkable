@@ -14,7 +14,7 @@ import { IntegrationsSettings } from "@/screens/settings/IntegrationsSettings";
 import { SearchSettings } from "@/screens/settings/SearchSettings";
 import { AssistantSettings } from "@/screens/settings/AssistantSettings";
 import { DatabaseSettings } from "@/screens/settings/DatabaseSettings";
-import { ApiSettings } from "@/screens/settings/ApiSettings";
+import { AgentsSettings } from "@/screens/settings/AgentsSettings";
 
 // Routes from SPEC 15.1. /start and /setup/connect sit outside the shell;
 // everything else needs a signed-in (or sample) user, which Shell checks.
@@ -39,7 +39,8 @@ export function App() {
             <Route path="search" element={<SearchSettings />} />
             <Route path="assistant" element={<AssistantSettings />} />
             <Route path="database" element={<DatabaseSettings />} />
-            <Route path="api" element={<ApiSettings />} />
+            <Route path="agents" element={<AgentsSettings />} />
+            <Route path="api" element={<Navigate to="/settings/agents" replace />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

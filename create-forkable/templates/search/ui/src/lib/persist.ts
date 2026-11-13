@@ -32,3 +32,9 @@ export function usePersistedNumber(key: string, fallback: number): [number, (v: 
   useEffect(() => writeLocal(key, String(v)), [key, v]);
   return [v, setV];
 }
+
+export function usePersistedChoice<K extends string>(key: string, options: readonly K[], fallback: K): [K, (v: K) => void] {
+  const [v, setV] = useState<K>(() => { const raw = readLocal(key); return (options as readonly string[]).includes(raw ?? "") ? (raw as K) : fallback; });
+  useEffect(() => writeLocal(key, v), [key, v]);
+  return [v, setV];
+}

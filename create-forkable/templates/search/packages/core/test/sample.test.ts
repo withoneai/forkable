@@ -46,7 +46,8 @@ for (const keyword of [false, true]) {
         "has:attachment", "has:link", "has:joinurl", "has:transcript", "status:open", "stage:contract", "lane:vip", "label:INBOX", "container:deals", "amount:>=50000", "id:ACME-311",
         "globex -from:priya", "renewal OR pilot", "\"contract review\""];
       for (const o of ops) { const n = await q(o); assert.ok(n >= 0, o); }
-      assert.equal(await q("type:deal"), 7);
+      // 7 deal records, 2 of them the same deal kept in Attio and in HubSpot: 5 rows
+      assert.equal(await q("type:deal"), 5);
       assert.equal(await q("source:hubspot"), 23);
       assert.equal(await q("from:priya after:30d type:mail"), 3);
       assert.ok((await q("with:globex.com")) >= 10);
@@ -57,11 +58,12 @@ for (const keyword of [false, true]) {
     });
 
     it("lanes, matches and rerank follow the fixtures (Phase 4)", async () => {
-      assert.deepEqual(Object.fromEntries(await Promise.all(["vip", "needs-you", "waiting", "fyi", "low"].map(async (l) => [l, await q(`lane:${l}`)]))), { vip: 38, "needs-you": 6, waiting: 6, fyi: 134, low: 26 });
+      assert.deepEqual(Object.fromEntries(await Promise.all(["vip", "needs-you", "waiting", "fyi", "low"].map(async (l) => [l, await q(`lane:${l}`)]))), { vip: 38, "needs-you": 6, waiting: 6, fyi: 133, low: 26 });
       const st = (await b.db.execute(sql`select status, count(*)::int as n from entity_matches where user_id = ${DEMO_USER} group by status order by status`)).rows;
       assert.deepEqual(st, [{ status: "merged", n: 1 }, { status: "pending", n: 1 }, { status: "rejected", n: 1 }]);
       const top = lines.findIndex((l) => l.startsWith('Search "globex renewal"'));
-      assert.ok(lines[top + 1]!.includes("HubSpot") && lines[top + 1]!.includes("Globex renewal 2027"), lines[top + 1]);
+      // the deal is first; it is one row for Attio and HubSpot
+      assert.ok(lines[top + 1]!.includes("Globex renewal 2027"), lines[top + 1]);
     });
 
     it("merged people can be unmerged", async () => {

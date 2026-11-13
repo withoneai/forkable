@@ -5,6 +5,7 @@ import type {
   EntityChip, EntityDetail, ItemDetail, ItemKind, OperatorKey, OpValue, ParsedQuery, ResultRow, SearchResponse, SuggestResponse,
 } from "@/contract/api-types";
 import { parseQuery, resolveDate } from "@/contract/query";
+import { understandQuery, type Vocab } from "@search/core/query/understand";
 import { fmtMoney, fmtRange, logoUrl, platformName } from "@/lib/utils";
 import { ENTITIES, entity, ITEMS, ME, type MockEntity, type MockItem } from "./world";
 import { recent, settings, sources } from "./state";
@@ -182,9 +183,19 @@ export function toRow(it: MockItem, words: string[] = []): ResultRow {
 let qid = 0;
 export const lastQueries = new Map<string, string[]>();
 
-export function search(q: string, scope: ItemKind | "all", sort: string, limit = 30): SearchResponse {
+/** The mock's vocabulary for understanding (D48): its people, companies and connected platforms. */
+function mockVocab(): Vocab {
+  return {
+    entities: ENTITIES.map((e) => ({ id: e.id, type: e.type, name: e.name, email: e.emails[0] ?? null, domain: e.domain, isSelf: e.isSelf, itemCount: ITEMS.filter((i) => i.people.some((p) => p.entityId === e.id)).length })),
+    platforms: [...new Set([...sources.values()].map((s) => s.def.platform))],
+  };
+}
+
+export function search(q: string, scope: ItemKind | "all", sort: string, limit = 30, opts: { understand?: boolean; tz?: string } = {}): SearchResponse {
   const t0 = performance.now();
-  const parsed = parseQuery(q);
+  const u = opts.understand && q.trim() ? understandQuery(q, mockVocab(), { tz: opts.tz }) : null;
+  const searchedAs = u ? u.query : q.trim();
+  const parsed = parseQuery(searchedAs);
   const ops = parsed.clauses.filter((c) => c.kind === "op") as Extract<ParsedQuery["clauses"][number], { kind: "op" }>[];
   const t = terms(parsed);
   // Same key ORs, different keys AND, "-" negates.
@@ -214,7 +225,8 @@ export function search(q: string, scope: ItemKind | "all", sort: string, limit =
   lastQueries.set(id, results.map((r) => r.id));
   if (q.trim() && !recent.some((r) => r.query === q.trim())) recent.unshift({ query: q.trim(), at: new Date().toISOString(), resultCount: filtered.length });
   return {
-    queryId: id, parsed, total: filtered.length, hiddenByFilters, counts: { scope: scopeCounts, source: sourceCounts }, entities: ents, results,
+    queryId: id, parsed, total: filtered.length, hiddenByFilters,
+    understanding: !!opts.understand, understood: u?.understood ?? [], suggestions: u?.suggestions ?? [], searchedAs, counts: { scope: scopeCounts, source: sourceCounts }, entities: ents, results,
     mode: "hybrid", embedder: { model: "local:hash-v1", semantic: false, reason: "sample", platform: null, message: null }, fallback: null, dateProposals: [], didYouMean: null, ms: Math.max(4, Math.round(performance.now() - t0) + 6),
   };
 }
@@ -252,8 +264,8 @@ export function entityDetail(e: MockEntity): EntityDetail {
   const bySrc = new Map<string, { count: number; lastAt: string }>();
   for (const i of items) { const c = bySrc.get(i.platform); bySrc.set(i.platform, { count: (c?.count ?? 0) + 1, lastAt: !c || i.occurredAt > c.lastAt ? i.occurredAt : c.lastAt }); }
   return {
-    entity: { id: e.id, type: e.type, name: e.name, emails: e.emails, domain: e.domain, title: e.title, company: e.companyId ? entityChip(entity(e.companyId)) : null, avatarUrl: null, isSelf: !!e.isSelf, sources: [...bySrc.entries()].map(([platform, v]) => ({ platform, ...v })) },
-    timeline: items.sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).slice(0, 50).map((i) => toRow(i)),
+    entity: { id: e.id, type: e.type, name: e.name, emails: e.emails, domain: e.domain, title: e.title, company: e.companyId ? entityChip(entity(e.companyId)) : null, avatarUrl: null, isSelf: !!e.isSelf, sources: [...bySrc.entries()].map(([platform, v]) => ({ platform, ...v })), itemCount: entityChip(e).itemCount },
+    timeline: items.filter((i) => !i.people.some((p) => p.entityId === e.id && p.role === "is")).sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).slice(0, 50).map((i) => toRow(i)),
     pendingMatches: e.id === "ent_priya" ? [] : e.id === "ent_hannah" ? [{ matchId: "mt_1", other: { id: "ent_hcole", type: "person", name: "H. Cole", subtitle: "hcole@umbrella-eu.co", avatarUrl: null, logoUrl: null, itemCount: 1, sources: ["teams"], isSelf: false, email: "hcole@umbrella-eu.co" }, probability: 0.71, reason: "Same surname and company, a different email domain" }] : [],
   };
 }

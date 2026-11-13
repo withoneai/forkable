@@ -19,9 +19,10 @@ export const TYPE_ALIASES: Record<string, string[]> = {
   message: ["message"], messages: ["message"], chat: ["message"], note: ["note"], notes: ["note"], deal: ["deal"], deals: ["deal"], record: ["record"],
 };
 
-interface RawTok { text: string; start: number }
+export interface RawTok { text: string; start: number }
 
-function lex(input: string): RawTok[] {
+/** Whitespace tokens, a quoted run kept whole (with its spaces). */
+export function lexQuery(input: string): RawTok[] {
   const out: RawTok[] = [];
   let i = 0;
   while (i < input.length) {
@@ -54,14 +55,14 @@ function splitList(s: string): string[] {
   return out.map((x) => x.trim()).filter(Boolean);
 }
 
-function parseValue(key: OperatorKey, raw: string, now: Date, errs: (m: string) => void): OpValue {
+function parseValue(key: OperatorKey, raw: string, now: Date, errs: (m: string) => void, tz?: string | null): OpValue {
   const v = unq(raw);
   const cmp = /^(>=|<=|>|<)(.+)$/.exec(v);
   if (cmp) {
     const op = cmp[1] as ">" | ">=" | "<" | "<=";
     const val = cmp[2]!;
     if (DATE_KEYS.has(key)) {
-      const d = resolveDateValue(val, now);
+      const d = resolveDateValue(val, now, tz);
       if (!d) errs(`${key}: "${val}" is not a date`);
       return { t: "cmp", op, v: val, resolved: d ? (op === ">" || op === ">=" ? d.from : d.from) : undefined };
     }
@@ -71,11 +72,11 @@ function parseValue(key: OperatorKey, raw: string, now: Date, errs: (m: string) 
   if (DATE_KEYS.has(key)) {
     const range = /^(.+)\.\.(.+)$/.exec(v);
     if (range) {
-      const a = resolveDateValue(range[1]!, now), b = resolveDateValue(range[2]!, now);
+      const a = resolveDateValue(range[1]!, now, tz), b = resolveDateValue(range[2]!, now, tz);
       if (!a || !b) errs(`${key}: bad range "${v}"`);
       return { t: "range", from: a?.from ?? "", to: b?.to ?? "" };
     }
-    const d = resolveDateValue(v, now);
+    const d = resolveDateValue(v, now, tz);
     if (!d) { errs(`${key}: "${v}" is not a date`); return { t: "text", v }; }
     return { t: "date", v, resolved: d };
   }
@@ -86,11 +87,12 @@ function parseValue(key: OperatorKey, raw: string, now: Date, errs: (m: string) 
   return { t: "text", v };
 }
 
-export function parseQuery(text: string, now: Date = new Date()): ParsedQuery {
+/** `tz` (IANA) is the zone date words resolve in: the browser's, else this process's. */
+export function parseQuery(text: string, now: Date = new Date(), tz?: string | null): ParsedQuery {
   const clauses: QueryClause[] = [];
   const errors: ParsedQuery["errors"] = [];
   const free: string[] = [];
-  for (const tok of lex(text)) {
+  for (const tok of lexQuery(text)) {
     let t = tok.text;
     if (t === "OR") { clauses.push({ kind: "or" }); free.push("OR"); continue; }
     let negate = false;
@@ -99,7 +101,7 @@ export function parseQuery(text: string, now: Date = new Date()): ParsedQuery {
     const key = m ? (ALIASES[m[1]!.toLowerCase()] ?? (OPERATOR_KEYS.includes(m[1]!.toLowerCase() as OperatorKey) ? (m[1]!.toLowerCase() as OperatorKey) : null)) : null;
     if (m && key) {
       const errs = (msg: string) => errors.push({ at: tok.start, message: msg });
-      const values = splitList(m[2]!).map((v) => parseValue(key, v, now, errs));
+      const values = splitList(m[2]!).map((v) => parseValue(key, v, now, errs, tz));
       if (key === "is") for (const v of values) if (v.t === "text" && !IS_VALUES.includes(v.v.toLowerCase())) errs(`is: unknown value "${v.v}"`);
       if (key === "type") for (const v of values) if (v.t === "text" && !TYPE_ALIASES[v.v.toLowerCase()]) errs(`type: unknown type "${v.v}"`);
       if (key === "has") for (const v of values) if (v.t === "text" && !HAS_VALUES.includes(v.v.toLowerCase())) errs(`has: unknown value "${v.v}"`);

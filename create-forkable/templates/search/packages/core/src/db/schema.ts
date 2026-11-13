@@ -67,6 +67,14 @@ export const rerankScores = pgTable("rerank_scores", {
   at: ts("at").defaultNow().notNull(),
 }, (t) => [primaryKey({ columns: [t.userId, t.query, t.itemId] }), index("rerank_scores_item_idx").on(t.itemId)]);
 
+/** Calls Search sent through One, per user per UTC day (Settings shows this month against the plan). */
+export const oneUsage = pgTable("one_usage", {
+  userId: text("user_id").notNull(),
+  day: text("day").notNull(),
+  calls: integer("calls").default(0).notNull(),
+  refused: integer("refused").default(0).notNull(),
+}, (t) => [primaryKey({ columns: [t.userId, t.day] })]);
+
 export const recentSearches = pgTable("recent_searches", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),

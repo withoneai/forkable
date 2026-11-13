@@ -116,16 +116,6 @@ export function readConnectEnv(root: string = ROOT, shell: ConnectValues = SHELL
 
 /** The Connect ids this server's environment names (ENV_DIR when set, else repo root + shell). */
 /**
- * Where the extra Connect ask (connect.extra.json, SPEC D26) is read and written.
- * With SEARCH_ENV_DIR set (every smoke and test) it lives there, never in the repo.
- */
-export function connectExtraFile(env: Pick<ServerEnv, "ROOT" | "ENV_DIR">): string {
-  const file = resolve(env.ENV_DIR ?? env.ROOT, "connect.extra.json");
-  assertNotRepoFileUnderTest(file);
-  return file;
-}
-
-/**
  * Tests set SEARCH_SMOKE=1. Under it, the repo's own ask and env files are off limits,
  * so a smoke can never change the Connect app a real user approves.
  */
@@ -149,7 +139,8 @@ const SECRET_NAMES = ["ONE_CLIENT_SECRET", "ONE_CONNECT_KEY"] as const;
 
 /**
  * One Connect app from two places (Rill's Connect-from-code rule):
- * - .env names a client id: it wins for the ids; each secret comes from the
+ * - .env names a client id: it wins for the ids (and the permission set, which
+ *   it may leave out on purpose); each secret comes from the
  *   store only when the store holds the same client id. A different stored app
  *   is reported as shadowed, never used.
  * - Only the store names a client id: every value comes from the store.
@@ -162,7 +153,9 @@ export function resolveConnect(env: ConnectValues, stored: ConnectValues, port: 
     const match = stored.ONE_CLIENT_ID === env.ONE_CLIENT_ID;
     const values: ConnectValues = {
       ONE_CLIENT_ID: env.ONE_CLIENT_ID,
-      ONE_PERMISSION_SET: env.ONE_PERMISSION_SET ?? (match ? stored.ONE_PERMISSION_SET : undefined),
+      // .env is what `one connect create` wrote; an app that asks for everything has no
+      // permission set there, so a copy left in the store must not narrow it again
+      ONE_PERMISSION_SET: env.ONE_PERMISSION_SET,
       ONE_REDIRECT_URI: env.ONE_REDIRECT_URI ?? (match ? stored.ONE_REDIRECT_URI : undefined) ?? local,
     };
     for (const n of SECRET_NAMES) values[n] = match ? stored[n] : undefined;

@@ -17,6 +17,19 @@ function isTyping(e: KeyboardEvent): boolean {
   return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || t.isContentEditable;
 }
 
+/**
+ * A focused control keeps its own Enter and Space: a button, a link, a summary or an
+ * element with a control role answers them itself (a click, a toggle), so page-wide
+ * bindings for those keys never swallow them. Text fields are handled by isTyping.
+ */
+const CONTROL = 'button, a[href], summary, [role="button"], [role="link"], [role="checkbox"], [role="switch"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="tab"], [role="radio"], [role="option"]';
+function ownsActivation(e: KeyboardEvent): boolean {
+  if (e.metaKey || e.ctrlKey || e.altKey) return false;
+  if (e.key !== "Enter" && e.key !== " ") return false;
+  const t = e.target as HTMLElement | null;
+  return !!t && typeof t.closest === "function" && !!t.closest(CONTROL);
+}
+
 function chord(e: KeyboardEvent): string {
   const parts: string[] = [];
   if (e.metaKey || e.ctrlKey) parts.push("mod");
@@ -35,6 +48,7 @@ function chord(e: KeyboardEvent): string {
 function dispatch(e: KeyboardEvent) {
   if (e.defaultPrevented) return;
   if (e.key === "Shift" || e.key === "Meta" || e.key === "Control" || e.key === "Alt") return;
+  if (ownsActivation(e)) { pending = null; return; }
   const typing = isTyping(e);
   const c = chord(e);
   // An open modal owns the keyboard: only bindings registered while typing (the palette's) still run.

@@ -8,6 +8,9 @@ import { BlockedByGrant, HttpError, NotConnected, SampleActionLive, UnresolvedAc
 import { recordLedger, toLedgerRow, type LedgerInsert } from "./ledger.js";
 import { AI_PLATFORMS } from "./platforms.js";
 import { newId } from "./ids.js";
+import { ensurePlan, OneQuotaHeld, priorityFor, withOneObserver, type Budget } from "./one-budget.js";
+import { countOneCall } from "./one-usage.js";
+import { getSettings } from "./settings.js";
 
 /** The write Search never has: the Access receipt attempts it and One declines. */
 export const RECEIPT_ACTION = {
@@ -92,18 +95,36 @@ async function send(ctx: CallCtx, input: CallInput<unknown, unknown>): Promise<O
   const body = !lookUp && isOneServed(input.path) && input.body && typeof input.body === "object" && !Array.isArray(input.body)
     ? { connectionKey: key, ...(input.body as Record<string, unknown>) }
     : input.body;
+  // Keep to the One plan's per-minute limit, shared by everything this user runs (one-budget.ts).
+  let budget: Budget;
   try {
-    const res = await ctx.oneConnect.runAction(ctx.userId, {
-      connectionKey: key, actionId: input.actionId,
+    budget = await ensurePlan(ctx.userId, async () => {
+      const st = await getSettings(ctx.db, ctx.userId);
+      return { plan: st.onePlan ?? "auto", rpm: st.oneRpm ?? null };
+    });
+    await budget.acquire(priorityFor(ctx.actor));
+  } catch (e) {
+    if (e instanceof OneQuotaHeld) {
+      return { ...base, status: 402, refusal: "plan_limit", data: { error: "This month's One requests are used up. Search checks again later." }, retryAfterMs: Math.max(0, e.until.getTime() - Date.now()), note: "held by Search: the One plan's monthly requests are used up" };
+    }
+    throw e;
+  }
+  try {
+    const { value: res, seen } = await withOneObserver(() => ctx.oneConnect!.runAction(ctx.userId, {
+      connectionKey: key!, actionId: input.actionId,
       ...(lookUp ? { pathParams: input.pathParams } : { method: input.method, path: fillPath(input.path, input.pathParams) }),
       body, query: input.query, headers: input.headers,
-    });
+    }));
+    const retryAfterMs = seen?.retryAfterMs ?? retryAfterFrom(res.data) ?? (res.refusal === "rate_limit" ? seen?.resetMs ?? null : null);
+    budget.observe({ status: res.status, limit: seen?.limit ?? null, remaining: seen?.remaining ?? null, resetMs: seen?.resetMs ?? null, retryAfterMs, refusal: res.refusal });
+    countOneCall(ctx.db, ctx.userId, res.refusal === "rate_limit" || res.refusal === "plan_limit");
     return {
       ...base, status: res.status, ok: res.ok, data: res.data, blockedByGrant: res.blockedByGrant, refusal: res.refusal,
-      retryAfterMs: retryAfterFrom(res.data),
-      note: res.blockedByGrant ? "outside the grant" : res.ok ? null : `answered ${res.status}`,
+      retryAfterMs,
+      note: res.blockedByGrant ? "outside the grant" : res.refusal === "rate_limit" ? "One asked Search to slow down" : res.refusal === "plan_limit" ? "One plan limit reached" : res.ok ? null : `answered ${res.status}`,
     };
   } catch (e) {
+    countOneCall(ctx.db, ctx.userId, false);
     if (e instanceof OneConnectError) return { ...base, status: e.status ?? 0, note: e.code, error: e };
     return { ...base, note: String((e as Error).message ?? e).slice(0, 300), error: e };
   }

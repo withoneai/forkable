@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/Input";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LoadError } from "@/components/ui/EmptyState";
 import { ConfirmButton } from "@/components/ui/ConfirmButton";
+import { OnePlanSettings } from "./OnePlanSettings";
 import { SectionTitle, Segmented, SettingRow, SettingsCard } from "./SettingsLayout";
 
 export function GeneralSettings() {
@@ -47,7 +48,7 @@ export function GeneralSettings() {
             <Avatar name={user?.name ?? user?.email ?? "You"} src={user?.avatarUrl} size="lg" />
             <div className="min-w-0 flex-1">
               <p className="flex items-center gap-2 text-13 font-medium">{user?.name ?? "Signed in"}{user?.isSample && <Badge tone="outline">Sample</Badge>}</p>
-              <p className="truncate text-xs text-muted-foreground">{user?.isSample ? `${user.email} · the Acme Inc sample, replayed from fixtures` : `${user?.email ?? ""} · signed in with One`}</p>
+              <p className="truncate text-xs text-muted-foreground">{user?.isSample ? `${user.email} · the Acme Inc sample, made up` : `${user?.email ?? ""} · signed in with One`}</p>
             </div>
             <Button size="sm" icon={<LogOut />} onClick={() => void signOut()}>Sign out</Button>
           </div>
@@ -68,7 +69,7 @@ export function GeneralSettings() {
 
       {user?.isSample && (
         <section className="flex flex-col gap-3">
-          <SectionTitle title="Sample data" hint="Acme Inc's tools, made up and replayed from fixtures. Nothing here reaches a real account." />
+          <SectionTitle title="Sample data" hint="Acme Inc's tools, all made up. Nothing here reaches a real account." />
           <SettingsCard>
             <SettingRow label="Acme Inc sample" hint={`${fmtNum(items)} items across ${new Set((sources.data?.sources ?? []).map((s) => s.platform)).size} sources`}>
               <Button size="sm" onClick={() => nav("/start")}>Sign in with One instead</Button>
@@ -76,6 +77,8 @@ export function GeneralSettings() {
           </SettingsCard>
         </section>
       )}
+
+      {user && !user.isSample && <OnePlanSettings />}
 
       <SavedSearches />
     </div>

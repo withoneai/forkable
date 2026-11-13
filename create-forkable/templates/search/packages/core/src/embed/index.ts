@@ -105,9 +105,9 @@ const health = new Map<string, { ok: boolean; reason: SemanticOffReason | null; 
 
 function failureOf(e: unknown, spec: EmbedderSpec): { reason: SemanticOffReason; message: string } {
   const name = platformName(spec.provider);
-  if (e instanceof NotConnected || e instanceof BlockedByGrant) return { reason: "not_in_grant", message: `${name} is not in your grant.` };
+  if (e instanceof NotConnected || e instanceof BlockedByGrant) return { reason: "not_in_grant", message: `Search has no access to ${name}.` };
   const code = (e as { code?: string })?.code;
-  if (code === "reconnect_required") return { reason: "not_in_grant", message: `One will not act for you on ${name} until you sign in again.` };
+  if (code === "reconnect_required") return { reason: "not_in_grant", message: `Sign in with One again so Search can use ${name}.` };
   return { reason: "error", message: `${name} did not answer: ${String((e as Error)?.message ?? e).slice(0, 160)}` };
 }
 
@@ -125,7 +125,7 @@ export async function semanticStatus(ctx: EngineCtx, userId: string): Promise<Em
 }
 
 function statusFor(ctx: EngineCtx, userId: string, spec: EmbedderSpec): EmbedderStatus {
-  if (ctx.capability.mode !== "hybrid") return { model: spec.id, semantic: false, reason: "keyword_mode", platform: null, message: "pgvector is not available, so search runs on keywords." };
+  if (ctx.capability.mode !== "hybrid") return { model: spec.id, semantic: false, reason: "keyword_mode", platform: null, message: "This database cannot compare meaning, so Search matches your words." };
   if (spec.local) return { model: spec.id, semantic: false, reason: "sample", platform: null, message: null };
   const h = health.get(userId);
   if (h && !h.ok) return { model: spec.id, semantic: false, reason: h.reason, platform: h.platform, message: h.message };

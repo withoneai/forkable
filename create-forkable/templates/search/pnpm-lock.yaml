@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@withone/connect':
-        specifier: ^0.19.0
-        version: 0.19.0(react@19.3.1)
+        specifier: ^0.23.1
+        version: 0.23.1(react@19.3.1)
       concurrently:
         specifier: ^9.1.0
         version: 9.2.5
@@ -42,6 +42,9 @@ importers:
         specifier: ^4.20.0
         version: 4.23.15
     devDependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.32.2
+        version: 1.32.2(zod@4.6.7)
       '@types/node':
         specifier: ^22.15.0
         version: 22.20.5
@@ -58,8 +61,8 @@ importers:
         specifier: workspace:*
         version: link:../pgvector
       '@withone/connect':
-        specifier: ^0.19.0
-        version: 0.19.0(react@19.3.1)
+        specifier: ^0.23.1
+        version: 0.23.1(react@19.3.1)
       drizzle-orm:
         specifier: ^0.45.4
         version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)
@@ -113,8 +116,8 @@ importers:
         specifier: workspace:*
         version: link:../packages/core
       '@withone/connect':
-        specifier: ^0.19.0
-        version: 0.19.0(react@19.3.1)
+        specifier: ^0.23.1
+        version: 0.23.1(react@19.3.1)
       dotenv:
         specifier: ^16.5.0
         version: 16.6.1
@@ -159,8 +162,8 @@ importers:
         specifier: ^5.80.0
         version: 5.105.0(@types/react@19.3.0)(react@19.3.1)
       '@withone/connect':
-        specifier: ^0.19.0
-        version: 0.19.0(react@19.3.1)
+        specifier: ^0.23.1
+        version: 0.23.1(react@19.3.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1139,8 +1142,8 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
-  '@withone/connect@0.19.0':
-    resolution: {integrity: sha512-upLnwhSp+xRE+Y7FHD3hkeDl8iPGAICU3rs1Mc+FDpmiX+MR0QD1ZD+7/JxsWY3qZID3P9ejWVlg6MCP+ecSJA==}
+  '@withone/connect@0.23.1':
+    resolution: {integrity: sha512-AUA9wlUB4F7hDDkP9D+ZycQZJy0AKwzjwetvnil/FduXCJoaXDlG2BeGUq8FcGpH/kq9aWWtVnTlmAwZUmIJhg==}
     engines: {node: '>=18'}
     peerDependencies:
       react: '>=17'
@@ -2852,7 +2855,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@withone/connect@0.19.0(react@19.3.1)':
+  '@withone/connect@0.23.1(react@19.3.1)':
     optionalDependencies:
       react: 19.3.1
 

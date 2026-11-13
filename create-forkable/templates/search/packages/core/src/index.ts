@@ -15,6 +15,8 @@ export { createDb, runMigrations, ensureDatabase, detectCapability, ensureVector
 export * as dbSchema from "./db/schema.js";
 export { newId, type IdPrefix } from "./ids.js";
 export type { EngineCtx, CallCtx, OneConnectKeyClient } from "./ctx.js";
+export { ONE_PLAN_RPM, budgetFor, planChanged, quotaHeld, resetBudgets, priorityFor, readRateHeaders, Budget, OneQuotaHeld } from "./one-budget.js";
+export { countOneCall, flushOneUsage, oneUsageTotals } from "./one-usage.js";
 export { one, grantedConnections, forgetGrant, RECEIPT_ACTION, fillPath } from "./one.js";
 export { listLedger, recordLedger, toLedgerRow, ledgerSentence, LedgerRollup } from "./ledger.js";
 export { SearchError, NotConnected, BlockedByGrant, HttpError, SampleActionLive, UnresolvedAction } from "./errors.js";
@@ -31,9 +33,11 @@ export { pickEmbedder, embedPending, embedQuery, embedQueryWithStatus, semanticS
 export { PROVIDERS as EMBED_PROVIDERS } from "./embed/providers.js";
 export { classifyPending, laneFor, parseJevAnswers, vipIdsForKeys, QUESTION_SET } from "./classify/jev.js";
 export { parseQuery, formatQuery, applyChip, OPERATOR_KEYS, TYPE_ALIASES } from "./query/parse.js";
-export { resolveDateValue, proposeDates } from "./query/dates.js";
+export { resolveDateValue, proposeDates, findDates, zoneOr } from "./query/dates.js";
+export { understandQuery, keepWords, takeChoice, writeUnderstood, applyUnderstood, type Vocab, type VocabEntity, type Understanding } from "./query/understand.js";
+export { vocabFor, dropVocab } from "./search/vocab.js";
 export { hybridSearch, countOnly, fuseRanks, boostScore, entityChips, rememberedQuery, buildFilters } from "./search/hybrid.js";
-export { runChatTurn, answerOnce, proposalFor, type ChatVia } from "./chat/run.js";
+export { runChatTurn, answerEvents, answerOnce, proposalFor, type ChatVia } from "./chat/run.js";
 export { loadSampleWorld, fixtureTransport, resolveDates, resolveRel, normalizeQuestion, type SampleWorld } from "./sample/world.js";
 export { runDemo, DEMO_USER, type DemoDeps, type DemoResult } from "./sample/demo.js";
 export { listPlatforms, fetchPlatforms, connectionsFor, sampleGrant, listCatalogActions, actionDoc, classifyAction, userMode, CATALOG_URL, type CatalogRow } from "./mapper/catalog.js";
@@ -44,4 +48,5 @@ export { groupModels, nounFromTitle, nounFromPath, modelKey, modelLabel, kindFor
 export { exportPack, importPack, acceptImport, fetchPackUrl, readableProfile, shareable, MAX_PACK_BYTES } from "./profile/share.js";
 export { suggest } from "./search/suggest.js";
 export { jevRerank, fuseRerank, settleReranks, rerankInFlight, RERANK } from "./search/rerank.js";
-export { toResultRows } from "./search/hybrid.js";
+export { toResultRows, collapseSame } from "./search/hybrid.js";
+export { entityItemIds, entityItemStats, TIMELINE_LIMIT } from "./search/entity-items.js";

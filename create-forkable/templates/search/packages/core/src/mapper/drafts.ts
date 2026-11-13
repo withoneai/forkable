@@ -114,7 +114,7 @@ async function runDry(ctx: EngineCtx, userId: string, platform: string, a: Catal
     const r = await one.raw(callCtx(ctx, userId, mode, conn), {
       platform, action: "dry-run", level: "read", actionId: a.actionId, method: a.method.toUpperCase() as "GET", path: mode === "fixture" ? a.path : "",
       ...(a.pathVars ? { pathParams: a.pathVars } : {}),
-      ...(a.method.toUpperCase() === "POST" ? { body: {} } : {}), summary: `Dry run: one page of ${a.title}`, cursor: null,
+      ...(a.method.toUpperCase() === "POST" ? { body: {} } : {}), summary: `Try reading one page of ${a.title}`, cursor: null,
     });
     const { path, rows } = findResults(r.data);
     void path;
@@ -243,7 +243,7 @@ export async function createDraft(ctx: EngineCtx, userId: string, req: CreateDra
   await ctx.db.insert(profileDrafts).values({ id, userId, platform, step: "platform", input: input as unknown as Record<string, unknown> });
 
   try {
-    stage("actions", `Reading ${info.name}'s actions`);
+    stage("actions", `Finding what you can search in ${info.name}`);
     const all = await listCatalogActions(ctx, userId, platform, conn).catch(() => [] as CatalogAction[]);
     const { models, hidden } = groupModels(all, { platformName: info.name, builtin: await builtinIndex(ctx, platform) });
     input.models = models;
@@ -266,17 +266,17 @@ async function mapModels(ctx: EngineCtx, userId: string, id: string, keys: strin
   const input = r.input as unknown as DraftInput;
   const mode = await userMode(ctx, userId);
   const picked = [...new Set(keys)].filter((k) => input.models?.some((m) => m.key === k));
-  if (!picked.length) throw new SearchError("bad_request", "Pick at least one model.");
-  if (picked.length > MAX_PICKS) throw new SearchError("bad_request", `Pick up to ${MAX_PICKS} models at a time.`);
+  if (!picked.length) throw new SearchError("bad_request", "Pick at least one thing to search.");
+  if (picked.length > MAX_PICKS) throw new SearchError("bad_request", `Pick up to ${MAX_PICKS} at a time.`);
   input.picked = picked;
   input.candidates = picked.flatMap((k) => input.models!.find((m) => m.key === k)!.actions);
   const fresh = input.candidates.filter((a) => !input.samples[a.actionId]);
   if (fresh.length) {
-    stage("docs", `Loading the docs for ${fresh.length} ${fresh.length === 1 ? "action" : "actions"}`);
+    stage("docs", `Reading the docs for ${fresh.length} ${fresh.length === 1 ? "pick" : "picks"}`);
     const docs = await Promise.all(fresh.map((a) => actionDoc(ctx, userId, a.actionId)));
     const fullDocs: Record<string, string> = {};
     fresh.forEach((a, i) => { const d = docs[i]; if (d) { input.docs[a.actionId] = { knowledge: d.knowledge.slice(0, 6000), ioSchema: d.ioSchema }; fullDocs[a.actionId] = d.knowledge; } });
-    stage("dry_run", input.connection ? "Dry run on your grant, one page each" : `${input.platformInfo.name} is not in your grant yet, so the samples come from its docs`);
+    stage("dry_run", input.connection ? "Reading one page of each" : `${input.platformInfo.name} is not connected yet, so the samples come from its docs`);
     await Promise.all(fresh.map(async (a) => {
       const { result, response } = input.connection ? await runDry(ctx, userId, r.platform, a, input.connection, mode) : docSample(a, fullDocs[a.actionId]);
       input.samples[a.actionId] = result;
@@ -286,7 +286,7 @@ async function mapModels(ctx: EngineCtx, userId: string, id: string, keys: strin
       }
     }));
   }
-  stage("propose", mode === "fixture" ? "Replaying the sample proposal" : `Mapping ${picked.length} ${picked.length === 1 ? "model" : "models"}`);
+  stage("propose", mode === "fixture" ? "Matching the fields from the sample" : `Matching the fields for ${picked.length} ${picked.length === 1 ? "pick" : "picks"}`);
   const p = await proposeFor(ctx, userId, input, r.platform, mode);
   input.proposedBy = p.by;
   const edits: DraftEdits = { selected: p.output.models.map((m) => m.profile.id), profiles: {} };
@@ -326,7 +326,7 @@ export async function dryRun(ctx: EngineCtx, userId: string, id: string, actionI
   const r = await load(ctx, userId, id);
   const input = r.input as unknown as DraftInput;
   const a = input.candidates.find((c) => c.actionId === actionId);
-  if (!a) throw new SearchError("not_found", "That action is not one of this draft's candidates.");
+  if (!a) throw new SearchError("not_found", "That is not one of the choices for this setup.");
   const { result, response } = await runDry(ctx, userId, r.platform, a, input.connection, await userMode(ctx, userId));
   input.samples[actionId] = result;
   if (result.ok) { input.responses[actionId] = response; input.hints[actionId] = inferHints(response, { model: modelLabel(a.model ?? "") || a.title, ioSchema: input.docs[actionId]?.ioSchema }); }
@@ -337,7 +337,7 @@ export async function dryRun(ctx: EngineCtx, userId: string, id: string, actionI
 export async function reproposeDraft(ctx: EngineCtx, userId: string, id: string, hint?: string): Promise<ProfileDraft> {
   const r = await load(ctx, userId, id);
   const input = r.input as unknown as DraftInput;
-  ctx.emit(userId, { type: "draft", draftId: id, stage: "propose", message: "Proposing again" });
+  ctx.emit(userId, { type: "draft", draftId: id, stage: "propose", message: "Suggesting again" });
   const p = await proposeFor(ctx, userId, input, r.platform, await userMode(ctx, userId), hint);
   input.proposedBy = p.by;
   await ctx.db.update(profileDrafts).set({ input: input as unknown as Record<string, unknown>, proposal: p.output, model: p.by, edits: { selected: p.output.models.filter((m) => m.recommended || input.picked?.length).map((m) => m.profile.id), profiles: {} }, validation: null, updatedAt: new Date() }).where(eq(profileDrafts.id, id));
@@ -371,7 +371,7 @@ export async function previewDraft(ctx: EngineCtx, userId: string, id: string, p
   const r = await load(ctx, userId, id);
   const d = toDraft(r);
   const p = draftProfile(d, profileId);
-  if (!p) throw new SearchError("not_found", "No such model in this draft.");
+  if (!p) throw new SearchError("not_found", "That pick is not in this setup.");
   const input = r.input as unknown as DraftInput;
   const now = ctx.now();
   const out: DraftPreview["samples"] = [];
@@ -466,7 +466,7 @@ export async function validateDraft(ctx: EngineCtx, userId: string, id: string):
     add("size", big.length ? "error" : "ok", big.length ? "A body is over 200,000 characters" : "Bodies under 200,000 characters", big.map((x) => x.ext));
     try { hashes[pid] = hashProfile(p); add("hashes", "ok", "fetch, map and index hashes computed"); } catch (e) { add("hashes", "error", (e as Error).message); }
   }
-  if (!d.edits.selected.length) issues.push({ check: "schema", level: "error", message: "Pick at least one model" });
+  if (!d.edits.selected.length) issues.push({ check: "schema", level: "error", message: "Pick at least one thing to search" });
   const report: ValidationReport = { ok: !issues.some((i) => i.level === "error"), issues, hashes };
   await ctx.db.update(profileDrafts).set({ validation: report, updatedAt: new Date() }).where(eq(profileDrafts.id, id));
   return report;
@@ -492,10 +492,10 @@ export function isApiUrl(url: string): boolean {
 
 export async function saveDraft(ctx: EngineCtx, userId: string, id: string, body: SaveDraftInput): Promise<SaveDraftResult> {
   const r = await load(ctx, userId, id);
-  if (r.status === "saved") throw new SearchError("conflict", "This draft is already saved.");
+  if (r.status === "saved") throw new SearchError("conflict", "This source is already saved.");
   const d = toDraft(r);
   const want = body.profiles?.length ? body.profiles : d.edits.selected;
-  if (!want.length) throw new SearchError("bad_request", "Pick at least one model.");
+  if (!want.length) throw new SearchError("bad_request", "Pick at least one thing to search.");
   // validate exactly what is being saved
   await ctx.db.update(profileDrafts).set({ edits: { ...d.edits, selected: want } }).where(eq(profileDrafts.id, id));
   const report = await validateDraft(ctx, userId, id);

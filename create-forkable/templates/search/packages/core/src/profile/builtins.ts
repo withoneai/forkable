@@ -10,6 +10,7 @@ import { newId } from "../ids.js";
 import type { GrantedConnection } from "../contract.js";
 import { grantedConnections } from "../one.js";
 import { AI_PLATFORMS } from "../platforms.js";
+import { dropVocab } from "../search/vocab.js";
 import { hashProfile } from "./hash.js";
 
 export { loadBuiltinPacks } from "./packs.js";
@@ -67,6 +68,7 @@ export async function createSource(db: Db, o: { userId: string; platform: string
     profileId: o.profileId, profileVersionId: o.versionId, mode: o.mode, status: o.awaitingGrant ? "awaiting_grant" : "new",
     scheduleEvery: parseDuration(o.profile.schedule?.every ?? "30m") ?? 1_800_000, nextRunAt: o.awaitingGrant ? null : new Date(),
   }).onConflictDoNothing();
+  dropVocab(o.userId); // a new tool to read "in Slack" against
   const [row] = await db.select({ id: sources.id }).from(sources).where(and(eq(sources.userId, o.userId), eq(sources.connectionKey, o.connectionKey), eq(sources.profileId, o.profileId)));
   return row?.id ?? id;
 }
@@ -148,7 +150,7 @@ export async function ensureSources(ctx: EngineCtx, userId: string): Promise<str
       if (v) ids.push(await createSource(ctx.db, { userId, platform: c.platform, connectionKey: c.key, connectionLabel: label, profileId: w.profileId, versionId: w.profileVersionId, profile: v.json, mode: w.mode }));
     }
     // every account already had it: the waiting copy is a duplicate
-    if (accounts.length && !placed) await ctx.db.delete(sources).where(eq(sources.id, w.id));
+    if (accounts.length && !placed) { await ctx.db.delete(sources).where(eq(sources.id, w.id)); dropVocab(userId); }
   }
   // A fresh sign-in can carry a wider grant, and the scheduler never retries
   // sources stopped by the grant or by auth on its own. Give them another run.

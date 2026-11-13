@@ -5,9 +5,9 @@
 const esc = (s: string) => s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
 
 const SCOPE_TEXT: Record<string, string> = {
-  "search:read": "Search your index and read the items it found",
-  "search:ask": "Ask the assistant about your items (uses model calls on your grant)",
-  "sources:write": "Sync, pause and change your sources and profiles",
+  "search:read": "Search everything you connected and read what it finds",
+  "search:ask": "Ask the assistant about your items (it uses AI calls through One)",
+  "sources:write": "Update, pause and change your sources",
   "account:read": "See your account, Access and the activity record",
 };
 
@@ -60,7 +60,7 @@ export function consentPage(i: ConsentInput): string {
 <p>It will send you back to <b>${esc(i.redirectHost)}</b> when you continue. Read only: it can never change anything in your tools.</p>${who}
 <ul>${list}</ul>
 <form method="post" action="/oauth/consent"><input type="hidden" name="pending" value="${esc(i.pendingId)}"><div class="row">${buttons.join("")}</div></form>
-<p class="foot">Secured by One. Revoke this app any time in Settings, API.</p>${note}`);
+<p class="foot">Secured by One. Remove this app any time in Settings, Agents.</p>${note}`);
 }
 
 export function messagePage(title: string, text: string): string {

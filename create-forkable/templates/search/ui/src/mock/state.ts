@@ -30,6 +30,8 @@ export const settings: SettingsData = {
   vipEntityIds: ["ent_priya", "ent_owen"],
   lanesOn: true,
   paused: false,
+  onePlan: "auto",
+  oneRpm: null,
 };
 
 export interface MockSourceState { def: MockSourceDef; health: SourceHealth; paused: boolean; scheduleEvery: string; settings: Record<string, unknown>; extraItems: number; origin: "builtin" | "user" }
@@ -50,7 +52,7 @@ SOURCES.forEach((d, i) => {
   if (d.platform === "slack") {
     Object.assign(h, { status: "rate_limited", retryAt: iso(6 * min), nextRunAt: iso(6 * min), lastError: { code: "rate_limited", message: "Slack is rate limiting Search. It allows one history call a minute for this app.", at: iso(-2 * min), httpStatus: 429 } });
   }
-  if (d.platform === "teams") Object.assign(h, { failed24h: 2, status: "degraded", lastError: { code: "blocked_by_grant", message: "Search was not granted Read channel messages on Teams.", at: iso(-40 * min), httpStatus: 403 } });
+  if (d.platform === "teams") Object.assign(h, { failed24h: 2, status: "degraded", lastError: { code: "blocked_by_grant", message: "Search has no access to Teams channel messages. Allow it in One, or leave channel messages off.", at: iso(-40 * min), httpStatus: 403 } });
   sources.set(d.id, { def: d, health: h, paused: false, scheduleEvery: d.platform === "slack" ? "15m" : d.kind === "event" ? "5m" : "15m", settings: settingsFor(d), extraItems: 0, origin: "builtin" });
 });
 
@@ -69,7 +71,40 @@ export function settingsSpecFor(d: MockSourceDef): Record<string, ProfileSetting
   return { backfill: { type: "duration", default: "365d", label: "Backfill" } };
 }
 
+/**
+ * First index, played (D49): localStorage `search.mock.firstIndex` = a start time in ms makes
+ * Gmail, Slack and HubSpot read for the first time, done after 8 to 20 seconds.
+ * `search.mock.firstIndexStop` = "slack:auth_needed" (any platform and status) makes that
+ * tool stop at the end instead, before its first good read.
+ */
+const FIRST_INDEX: Record<string, { ms: number; scale: number }> = { gmail: { ms: 20_000, scale: 120 }, slack: { ms: 14_000, scale: 60 }, hubspot: { ms: 8_000, scale: 40 } };
+function firstIndex(s: MockSourceState): Partial<SourceHealth> | null {
+  let t0 = 0;
+  try { t0 = Number(localStorage.getItem("search.mock.firstIndex") ?? 0); } catch { /* no storage */ }
+  const f = FIRST_INDEX[s.def.platform];
+  if (!t0 || !f) return null;
+  const p = (Date.now() - t0) / f.ms;
+  if (p >= 1) {
+    let stop = "";
+    try { stop = localStorage.getItem("search.mock.firstIndexStop") ?? ""; } catch { /* no storage */ }
+    const [plat, status] = stop.split(":");
+    if (plat !== s.def.platform || !status) return null;
+    return { status: status as SourceHealth["status"], lastSuccessAt: null, itemCount: 0, progress: undefined,
+      retryAt: status === "rate_limited" ? new Date(t0 + f.ms + 15 * 60_000).toISOString() : null,
+      lastError: { code: status === "auth_needed" ? "reconnect_required" : status === "grant_blocked" ? "blocked_by_grant" : status === "rate_limited" ? "rate_limited" : "upstream_error", message: "The tool answered with an error", at: new Date(t0 + f.ms).toISOString() } };
+  }
+  const estimate = Math.max(1, s.health.itemCount) * f.scale;
+  const done = Math.floor(Math.max(0, p) * estimate);
+  return { status: "syncing", lastSuccessAt: null, itemCount: done, progress: { done, estimate } };
+}
+
 export function apiSource(s: MockSourceState): ApiSource {
+  const first = firstIndex(s);
+  if (first) return { ...apiSourceBase(s), health: { ...apiSourceBase(s).health, ...first } };
+  return apiSourceBase(s);
+}
+
+function apiSourceBase(s: MockSourceState): ApiSource {
   const d = s.def;
   return {
     id: d.id, platform: d.platform, name: platformName(d.platform), logoUrl: logoUrl(d.platform), connectionLabel: d.connectionLabel, mode: "fixture",
@@ -110,8 +145,8 @@ export const ledger: LedgerRow[] = [
   L(9, { platform: "google-calendar", action: "List events", actionId: "conn_mod_def::google-calendar::events.list", path: "/calendars/primary/events", summary: "no change", sentence: "Checked Google Calendar for changes", ms: 210 }),
   L(11, { platform: "linear", action: "GraphQL issues", actionId: "conn_mod_def::linear::graphql", method: "POST", path: "/graphql", summary: "+1 updated", sentence: "Indexed 6 Linear issues", ms: 330 }),
   L(14, { platform: "notion", action: "Search", actionId: "conn_mod_def::notion::search", method: "POST", path: "/v1/search", summary: "+1 updated", sentence: "Indexed 4 Notion pages", ms: 520 }),
-  L(40, { platform: "teams", action: "List channel messages", actionId: "conn_mod_def::teams::channels.messages.list", path: "/teams/{id}/channels/{id}/messages", status: 403, ok: false, blockedByGrant: true, refusal: "grant", summary: "Not in the grant", sentence: "Teams channel messages are not in the grant", ms: 12 }),
-  L(62, { platform: "openai", action: "Create embeddings", actionId: "conn_mod_def::openai::embeddings", actor: "embedder", method: "POST", path: "/v1/embeddings", summary: "Sample embedder used instead", sentence: "Embedded 48 chunks with the sample embedder", ms: 4, mode: "fixture" }),
+  L(40, { platform: "teams", action: "List channel messages", actionId: "conn_mod_def::teams::channels.messages.list", path: "/teams/{id}/channels/{id}/messages", status: 403, ok: false, blockedByGrant: true, refusal: "grant", summary: "No access", sentence: "Search has no access to Teams channel messages", ms: 12 }),
+  L(62, { platform: "openai", action: "Create embeddings", actionId: "conn_mod_def::openai::embeddings", actor: "embedder", method: "POST", path: "/v1/embeddings", summary: "The sample, words only", sentence: "Read 48 pieces for meaning with the sample", ms: 4, mode: "fixture" }),
 ];
 
 export const chats: { id: string; title: string; updatedAt: string; messages: ChatMessage[] }[] = [];

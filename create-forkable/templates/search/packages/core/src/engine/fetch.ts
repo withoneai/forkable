@@ -146,7 +146,7 @@ export async function fetchWithPolicy(ctx: CallCtx, input: CallInput<unknown, un
     if (status >= 200 && status < 300 && res.ok !== false) return { res, retries, calls };
     if (res.ok && slackStatus(input.platform, res.data) === null) return { res, retries, calls };
     if (o.passStatuses?.includes(status)) return { res: { ...res, status }, retries, calls };
-    if (res.blockedByGrant || res.refusal === "grant") throw new RunStop("grant_blocked", "blocked_by_grant", `Search was not granted ${input.actionId}.`, { status: 403, actionId: input.actionId });
+    if (res.blockedByGrant || res.refusal === "grant") throw new RunStop("grant_blocked", "blocked_by_grant", `Search has no access to one of the things it reads here (${input.actionId}). Allow it in One, then try again.`, { status: 403, actionId: input.actionId });
     if (status === 401) throw new RunStop("auth_needed", "reconnect_required", "The provider refused the connection: sign in again.", { status, actionId: input.actionId });
     if (status === 402 || res.refusal === "plan_limit") throw new RunStop("plan_limit", "plan_limit", "One plan limit reached.", { status, actionId: input.actionId });
     if ((status === 404 || status === 410) && o.notFoundOk) return { res: { ...res, status }, retries, calls };

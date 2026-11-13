@@ -167,7 +167,10 @@ export async function classifyPending(ctx: EngineCtx, userId: string, limit = 40
 
   if (mode === "fixture") {
     for (const r of recent) {
-      const res = await one.raw({ ...callCtx, rollup: undefined }, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Classify an item for lanes", fixtureKey: `judgment:${r.platform}:${r.external_id}`, body: {} }).catch(() => null);
+      const fixtureKey = `judgment:${r.platform}:${r.external_id}`;
+      // an item the sample has no judgment for is sorted by the rules, with no failed call in Activity
+      if (ctx.transport?.has && !ctx.transport.has(fixtureKey)) { await save(r, rulesAnswers(r), "rules", {}); continue; }
+      const res = await one.raw({ ...callCtx, rollup: undefined }, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Sort an item by priority", fixtureKey, body: {} }).catch(() => null);
       if (res && res.ok && res.data && typeof res.data === "object") {
         const d = res.data as Record<string, unknown>;
         await save(r, { kind: String(d.kind ?? "other"), needsYou: num(d.needs_you), ball: (d.ball as JevItemAnswers["ball"]) ?? "nobody", ballP: num(d.ball_p, 0.5), importance: Math.round(num(d.importance, 1)) }, "fixture", d);
@@ -189,7 +192,7 @@ export async function classifyPending(ctx: EngineCtx, userId: string, limit = 40
       })),
     };
     try {
-      const res = await one.call<{ answers?: Record<string, unknown>; model?: string }>(callCtx, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Classify items for lanes", body: { model: settings.jevModel, state, questions: questions(batch.length) } });
+      const res = await one.call<{ answers?: Record<string, unknown>; model?: string }>(callCtx, { ...JEV_ACTION, action: "systemone", level: "read", summary: "Sort items by priority", body: { model: settings.jevModel, state, questions: questions(batch.length) } });
       const ans = res.answers ?? {};
       for (const [j, r] of batch.entries()) await save(r, parseJevAnswers(ans, `_${j}`), res.model ?? settings.jevModel, Object.fromEntries(Object.entries(ans).filter(([k]) => k.endsWith(`_${j}`))));
     } catch (e) {
