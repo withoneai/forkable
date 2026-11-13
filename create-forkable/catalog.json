@@ -92,8 +92,7 @@
       "envToGoLive": [
         "ONE_CLIENT_ID",
         "ONE_CLIENT_SECRET",
-        "ONE_CONNECT_KEY",
-        "ONE_PERMISSION_SET"
+        "ONE_CONNECT_KEY"
       ]
     },
     {
