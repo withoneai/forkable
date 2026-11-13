@@ -5,7 +5,8 @@
 //
 //   base    the template as the fork last got it: the newest "Forkable update:"
 //           commit in the fork's history, else its first commit ("Forked from
-//           <id>@<version>", which create-forkable makes before installing)
+//           <id>@<version>", which create-forkable makes before installing, or
+//           the first commit of a repo made from a template mirror on GitHub)
 //   theirs  the template in this package, made into one commit on top of base
 //           in a scratch worktree, with the fork's own name, forkable.json name
 //           and local/profile.md kept, so those never show up as changes
@@ -42,9 +43,18 @@ export function findBase(dir) {
   const upd = git(dir, ["log", "-1", "--format=%H", `--grep=^${UPDATE_PREFIX}`, "HEAD"]);
   if (upd.status === 0 && upd.out) return { sha: upd.out, kind: "update" };
   const roots = git(dir, ["rev-list", "--max-parents=0", "HEAD"]);
-  for (const sha of roots.out.split("\n").filter(Boolean)) {
+  const list = roots.out.split("\n").filter(Boolean);
+  for (const sha of list) {
     const msg = git(dir, ["log", "-1", "--format=%s", sha]).out;
     if (msg.startsWith(FORKED_PREFIX)) return { sha, kind: "fork" };
+  }
+  // a repo made from a template mirror on GitHub ("Use this template") starts
+  // with "Initial commit": its first commit still holds forkable.json with forkedFrom
+  for (const sha of list) {
+    const fj = git(dir, ["show", `${sha}:forkable.json`]);
+    try {
+      if (fj.status === 0 && typeof JSON.parse(fj.out).forkedFrom === "string") return { sha, kind: "mirror" };
+    } catch { /* not JSON */ }
   }
   return null;
 }

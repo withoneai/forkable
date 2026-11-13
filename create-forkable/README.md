@@ -50,7 +50,7 @@ npm create forkable@latest update
 
 Takes the newest version of the template the fork came from and keeps
 your own changes. It is a git merge against the template as you last got
-it (the fork's first commit, "Forked from <id>@<version>", or the last
+it (the fork's first commit, "Forked from <id>@<version>", a template repo's "Initial commit", or the last
 "Forkable update:" commit): what only the template changed comes in, what
 only you changed stays, and a file you both changed becomes a normal git
 conflict to resolve, or `git merge --abort` to undo. It needs a clean git
