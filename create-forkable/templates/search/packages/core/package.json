@@ -16,7 +16,7 @@
     "generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "@withone/connect": "^0.23.1",
+    "@withone/connect": "^0.24.0",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.16.0",
     "zod": "^4.0.0",

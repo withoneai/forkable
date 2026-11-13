@@ -8,7 +8,7 @@ import { BlockedByGrant, HttpError, NotConnected, SampleActionLive, UnresolvedAc
 import { recordLedger, toLedgerRow, type LedgerInsert } from "./ledger.js";
 import { AI_PLATFORMS } from "./platforms.js";
 import { newId } from "./ids.js";
-import { ensurePlan, OneQuotaHeld, priorityFor, withOneObserver, type Budget } from "./one-budget.js";
+import { ensurePlan, fromRateLimit, OneQuotaHeld, priorityFor, type Budget } from "./one-budget.js";
 import { countOneCall } from "./one-usage.js";
 import { getSettings } from "./settings.js";
 
@@ -110,13 +110,14 @@ async function send(ctx: CallCtx, input: CallInput<unknown, unknown>): Promise<O
     throw e;
   }
   try {
-    const { value: res, seen } = await withOneObserver(() => ctx.oneConnect!.runAction(ctx.userId, {
+    const res = await ctx.oneConnect.runAction(ctx.userId, {
       connectionKey: key!, actionId: input.actionId,
       ...(lookUp ? { pathParams: input.pathParams } : { method: input.method, path: fillPath(input.path, input.pathParams) }),
       body, query: input.query, headers: input.headers,
-    }));
+    });
+    const seen = fromRateLimit(res.rateLimit);
     const retryAfterMs = seen?.retryAfterMs ?? retryAfterFrom(res.data) ?? (res.refusal === "rate_limit" ? seen?.resetMs ?? null : null);
-    budget.observe({ status: res.status, limit: seen?.limit ?? null, remaining: seen?.remaining ?? null, resetMs: seen?.resetMs ?? null, retryAfterMs, refusal: res.refusal });
+    budget.observe({ status: res.status, limit: seen?.limit ?? null, remaining: seen?.remaining ?? null, resetMs: seen?.resetMs ?? null, retryAfterMs, refusal: res.refusal, unlimited: seen?.unlimited ?? false });
     countOneCall(ctx.db, ctx.userId, res.refusal === "rate_limit" || res.refusal === "plan_limit");
     return {
       ...base, status: res.status, ok: res.ok, data: res.data, blockedByGrant: res.blockedByGrant, refusal: res.refusal,

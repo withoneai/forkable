@@ -11,20 +11,21 @@
 // - A RESERVE share is kept for calls a person is waiting on (search, assistant,
 //   MCP, CLI, the mapper). Background work never dips into it, and still gets
 //   the full rate over a minute.
-// - The limit comes from the plan picked in Settings, or (auto) from One's own
-//   X-RateLimit-* headers, read off the responses runAction gets. Until a header
-//   arrives, auto assumes Free.
+// - The limit comes from the plan picked in Settings, or (auto) from what One
+//   reports on each call (`rateLimit` on runAction's result, @withone/connect
+//   0.24). Until a call has reported it, auto assumes Free.
 // - A 429 from One stops every call for that user until Retry-After / reset.
 // - A 402 (the month's requests are used up) holds background work for an hour,
 //   then lets one call through to check again. Calls a person makes still go.
 
-import { AsyncLocalStorage } from "node:async_hooks";
 import type { LedgerActor, OnePlan, OnePlanStatus } from "./contract.js";
 
 export const ONE_PLAN_RPM = { free: 20, starter: 100, pro: 500 } as const;
 export const PACE = 0.9;
 export const RESERVE = 0.25;
 export const QUOTA_RECHECK_MS = 60 * 60_000;
+/** What "nothing limits this user" (One sent rateLimit with limit null) paces at. */
+export const UNLIMITED_RPM = 100_000;
 const DEFAULT_BLOCK_MS = 60_000;
 const SETTINGS_TTL_MS = 60_000;
 
@@ -149,8 +150,12 @@ export class Budget {
   }
 
   /** What One's response said (headers and status). */
-  observe(o: { status: number; limit?: number | null; remaining?: number | null; resetMs?: number | null; retryAfterMs?: number | null; refusal?: string | null }): void {
+  observe(o: { status: number; limit?: number | null; remaining?: number | null; resetMs?: number | null; retryAfterMs?: number | null; refusal?: string | null; unlimited?: boolean }): void {
     const now = this.clock.now();
+    if (o.unlimited) {
+      this.resize(() => { this.learned = UNLIMITED_RPM; });
+      this.learnedAt = now;
+    }
     if (o.limit && o.limit > 0 && o.limit < 1_000_000) {
       const lim = Math.floor(o.limit);
       this.resize(() => { this.learned = lim; });
@@ -231,58 +236,16 @@ export function quotaHeld(userId: string): boolean {
   return !!b && clock.now() < b.quotaUntil;
 }
 
-// ---------- reading One's headers ----------
-// runAction (0.19 to 0.23) returns status and body only. One answers every
-// passthrough call with X-RateLimit-Limit / -Remaining / -Reset and, on a 429,
-// Retry-After. The observer reads them for the call in flight only: it is a
-// no-op outside withOneObserver, and it never touches the request or the body.
+// ---------- One's rate limit, as @withone/connect reports it ----------
+// From 0.24, runAction returns `rateLimit: { limit, remaining, resetsIn,
+// retryAfter }` (seconds) read off One's X-RateLimit-* and Retry-After headers
+// for the call, or null when One sent none.
 
-interface Seen { limit: number | null; remaining: number | null; resetMs: number | null; retryAfterMs: number | null }
-const als = new AsyncLocalStorage<{ seen: Seen | null }>();
-let installed = false;
+export interface PackageRateLimit { limit: number | null; remaining: number | null; resetsIn: number | null; retryAfter: number | null }
 
-function num(h: Headers, name: string): number | null {
-  const v = h.get(name);
-  if (v === null || v.trim() === "") return null;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-}
-
-export function retryAfterMs(v: string | null): number | null {
-  if (v === null || v === "") return null;
-  if (/^\d+(\.\d+)?$/.test(v.trim())) return Math.round(Number(v) * 1000);
-  const d = Date.parse(v);
-  return Number.isNaN(d) ? null : Math.max(0, d - Date.now());
-}
-
-export function readRateHeaders(h: Headers): Seen | null {
-  const limit = num(h, "x-ratelimit-limit");
-  const remaining = num(h, "x-ratelimit-remaining");
-  const reset = num(h, "x-ratelimit-reset");
-  const ra = retryAfterMs(h.get("retry-after"));
-  if (limit === null && remaining === null && reset === null && ra === null) return null;
-  return { limit, remaining, resetMs: reset === null ? null : Math.round(reset * 1000), retryAfterMs: ra };
-}
-
-function install(): void {
-  if (installed || typeof globalThis.fetch !== "function") return;
-  installed = true;
-  const inner = globalThis.fetch;
-  globalThis.fetch = (async (input: Parameters<typeof fetch>[0], init?: Parameters<typeof fetch>[1]) => {
-    const res = await inner(input, init);
-    const store = als.getStore();
-    if (store) {
-      const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
-      if (/\/v1\/passthrough\//.test(url)) store.seen = readRateHeaders(res.headers);
-    }
-    return res;
-  }) as typeof fetch;
-}
-
-/** Runs one call and hands back the rate headers One sent with it. */
-export async function withOneObserver<T>(fn: () => Promise<T>): Promise<{ value: T; seen: Seen | null }> {
-  install();
-  const store = { seen: null as Seen | null };
-  const value = await als.run(store, fn);
-  return { value, seen: store.seen };
+export function fromRateLimit(r: PackageRateLimit | null | undefined): { limit: number | null; remaining: number | null; resetMs: number | null; retryAfterMs: number | null; unlimited: boolean } | null {
+  if (!r) return null;
+  const ms = (s: number | null) => (s === null || !Number.isFinite(s) ? null : Math.round(s * 1000));
+  // limit null with no remaining means nothing limits this user (an unlimited plan)
+  return { limit: r.limit, remaining: r.remaining, resetMs: ms(r.resetsIn), retryAfterMs: ms(r.retryAfter), unlimited: r.limit === null && r.remaining === null };
 }

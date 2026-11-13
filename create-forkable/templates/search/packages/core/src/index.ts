@@ -15,7 +15,7 @@ export { createDb, runMigrations, ensureDatabase, detectCapability, ensureVector
 export * as dbSchema from "./db/schema.js";
 export { newId, type IdPrefix } from "./ids.js";
 export type { EngineCtx, CallCtx, OneConnectKeyClient } from "./ctx.js";
-export { ONE_PLAN_RPM, budgetFor, planChanged, quotaHeld, resetBudgets, priorityFor, readRateHeaders, Budget, OneQuotaHeld } from "./one-budget.js";
+export { ONE_PLAN_RPM, budgetFor, planChanged, quotaHeld, resetBudgets, priorityFor, fromRateLimit, Budget, OneQuotaHeld } from "./one-budget.js";
 export { countOneCall, flushOneUsage, oneUsageTotals } from "./one-usage.js";
 export { one, grantedConnections, forgetGrant, RECEIPT_ACTION, fillPath } from "./one.js";
 export { listLedger, recordLedger, toLedgerRow, ledgerSentence, LedgerRollup } from "./ledger.js";

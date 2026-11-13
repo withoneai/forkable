@@ -25,7 +25,7 @@
     "@hono/node-server": "^2.1.0",
     "@modelcontextprotocol/sdk": "^1.32.2",
     "@search/core": "workspace:*",
-    "@withone/connect": "^0.23.1",
+    "@withone/connect": "^0.24.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.0",

@@ -1,11 +1,11 @@
 // Keeping to the One plan (one-budget.ts): pace under the plan's per-minute limit,
-// the person ahead of background work, learning the limit from One's headers,
+// the person ahead of background work, learning the limit One reports,
 // stopping on a 429 and holding background work on a 402.
 import assert from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
 import type { GrantedConnection } from "../src/contract.js";
 import type { CallCtx, OneConnectKeyClient } from "../src/ctx.js";
-import { Budget, ONE_PLAN_RPM, OneQuotaHeld, priorityFor, readRateHeaders, resetBudgets, budgetFor, quotaHeld, type Clock } from "../src/one-budget.js";
+import { Budget, ONE_PLAN_RPM, OneQuotaHeld, priorityFor, fromRateLimit, UNLIMITED_RPM, resetBudgets, budgetFor, quotaHeld, type Clock } from "../src/one-budget.js";
 import { one, forgetGrant } from "../src/one.js";
 import { oneUsageTotals, flushOneUsage } from "../src/one-usage.js";
 import { users } from "../src/db/schema.js";
@@ -83,7 +83,7 @@ describe("one budget", () => {
     assert.deepEqual(order.slice(0, 4), ["bg", "bg", "bg", "me"]);
   });
 
-  it("learns the limit from One's headers and never runs above it", async () => {
+  it("learns the limit One reports and never runs above it", async () => {
     const b = new Budget(fakeClock());
     b.setPlan({ plan: "pro", rpm: null });
     assert.equal(b.limit(), 500);
@@ -127,10 +127,15 @@ describe("one budget", () => {
     assert.equal(b.status().heldUntil, null, "a call that goes through ends the hold");
   });
 
-  it("reads One's rate headers", () => {
-    const h = new Headers({ "X-RateLimit-Limit": "100", "X-RateLimit-Remaining": "7", "X-RateLimit-Reset": "12", "Retry-After": "3" });
-    assert.deepEqual(readRateHeaders(h), { limit: 100, remaining: 7, resetMs: 12_000, retryAfterMs: 3_000 });
-    assert.equal(readRateHeaders(new Headers({ "content-type": "application/json" })), null);
+  it("reads the rate limit @withone/connect reports (seconds to ms), and no limit as unlimited", () => {
+    assert.deepEqual(fromRateLimit({ limit: 100, remaining: 7, resetsIn: 12, retryAfter: 3 }), { limit: 100, remaining: 7, resetMs: 12_000, retryAfterMs: 3_000, unlimited: false });
+    assert.equal(fromRateLimit(null), null);
+    assert.equal(fromRateLimit({ limit: null, remaining: null, resetsIn: null, retryAfter: null })!.unlimited, true);
+    const b = new Budget(fakeClock());
+    b.observe({ status: 200, unlimited: true, refusal: null });
+    assert.equal(b.limit(), UNLIMITED_RPM, "auto on an unlimited plan does not hold Search to Free");
+    b.setPlan({ plan: "starter", rpm: null });
+    assert.equal(b.limit(), 100, "a picked plan still caps it");
   });
 
   it("indexing, embedding and Jev are background; everything a person waits on is not", () => {
@@ -141,32 +146,26 @@ describe("one budget", () => {
 
 describe("one.call keeps to the plan", () => {
   let b: Awaited<ReturnType<typeof testDb>>;
-  const realFetch = globalThis.fetch;
   const GMAIL: GrantedConnection = { key: "live::gmail::default::1", platform: "gmail", name: "Gmail", title: "dana@acme.test", image: "", access: { policy: "full" } } as unknown as GrantedConnection;
-  let answers: { status: number; headers: Record<string, string> }[] = [];
+  type RL = { limit: number | null; remaining: number | null; resetsIn: number | null; retryAfter: number | null } | null;
+  let answers: { status: number; rateLimit: RL }[] = [];
   let calls = 0;
 
   before(async () => {
     b = await testDb("one_budget", { keyword: true });
     await b.db.insert(users).values({ id: "u_budget", email: "dana@acme.test", name: "Dana", isSample: false }).onConflictDoNothing();
-    // runAction's own fetch, answered here with One's headers
-    globalThis.fetch = (async (url: string | URL | Request) => {
-      calls++;
-      const a = answers.shift() ?? { status: 200, headers: { "x-ratelimit-limit": "100", "x-ratelimit-remaining": "80", "x-ratelimit-reset": "30" } };
-      const u = String(url instanceof Request ? url.url : url);
-      assert.ok(u.includes("/v1/passthrough/"));
-      return new Response(JSON.stringify(a.status === 200 ? { ok: true } : { error: "x", correlationId: "c" }), { status: a.status, headers: a.headers });
-    }) as typeof fetch;
   });
-  after(async () => { globalThis.fetch = realFetch; resetBudgets(); await b?.done(); });
+  after(async () => { resetBudgets(); await b?.done(); });
 
+  // runAction as @withone/connect 0.24 answers: status, refusal and the rate limit One reported
   const client = (): OneConnectKeyClient => ({
     isConnected: async () => true,
     listConnections: async () => [GMAIL],
-    runAction: async (_u: string, r: { actionId: string }) => {
-      const res = await fetch(`https://api.withone.test/v1/passthrough/users/me/profile`, { headers: { "x-one-action-id": r.actionId } });
-      const refusal = res.status === 429 ? "rate_limit" : res.status === 402 ? "plan_limit" : null;
-      return { status: res.status, ok: res.ok, blockedByGrant: false, refusal, data: await res.json() };
+    runAction: async () => {
+      calls++;
+      const a = answers.shift() ?? { status: 200, rateLimit: { limit: 100, remaining: 80, resetsIn: 30, retryAfter: null } };
+      const refusal = a.status === 429 ? "rate_limit" : a.status === 402 ? "plan_limit" : null;
+      return { status: a.status, ok: a.status < 300, blockedByGrant: false, refusal, rateLimit: a.rateLimit, data: a.status === 200 ? { ok: true } : { error: "x" } };
     },
   }) as unknown as OneConnectKeyClient;
 
@@ -176,7 +175,7 @@ describe("one.call keeps to the plan", () => {
   it("learns the plan from the answer, counts the call and honours the setting", async () => {
     resetBudgets(); forgetGrant("u_budget");
     await one.raw(ctx(), input);
-    assert.equal(budgetFor("u_budget").limit(), 100, "auto picked up One's X-RateLimit-Limit");
+    assert.equal(budgetFor("u_budget").limit(), 100, "auto picked up the limit One reported");
     await putSettings(b.db, "u_budget", { onePlan: "free", oneRpm: null });
     resetBudgets();
     await one.raw(ctx(), input);
@@ -188,14 +187,14 @@ describe("one.call keeps to the plan", () => {
 
   it("passes Retry-After from a One 429 to the caller and holds background work on a 402", async () => {
     resetBudgets(); await putSettings(b.db, "u_budget", { onePlan: "auto", oneRpm: null });
-    answers = [{ status: 429, headers: { "x-ratelimit-limit": "100", "x-ratelimit-remaining": "0", "retry-after": "7" } }];
+    answers = [{ status: 429, rateLimit: { limit: 100, remaining: 0, resetsIn: 40, retryAfter: 7 } }];
     const r = await one.raw(ctx(), input);
     assert.equal(r.refusal, "rate_limit");
     assert.equal(r.retryAfterMs, 7_000);
     assert.ok(budgetFor("u_budget").status().slowedUntil);
 
     resetBudgets();
-    answers = [{ status: 402, headers: {} }];
+    answers = [{ status: 402, rateLimit: null }];
     const q = await one.raw(ctx("indexer"), input);
     assert.equal(q.refusal, "plan_limit");
     assert.ok(quotaHeld("u_budget"));

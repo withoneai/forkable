@@ -1542,10 +1542,13 @@ user (`packages/core/src/one-budget.ts`) before it reaches One.
   without reaching One for an hour, the scheduler skips the user's runs and
   workers, `GET /sources` shows a banner. Calls a person makes still go, and any
   call that goes through ends the hold.
-- **Headers.** `runAction` (0.19 to 0.23) returns no headers, so
-  `withOneObserver` wraps the global fetch and reads `X-RateLimit-*` and
-  `Retry-After` for the passthrough call in flight only. Remove it when
-  `@withone/connect` returns them.
+- **Where the limit comes from.** `@withone/connect` 0.24 returns
+  `rateLimit: { limit, remaining, resetsIn, retryAfter }` (seconds) on every
+  `runAction` result, read off One's `X-RateLimit-*` and `Retry-After`
+  headers; `fromRateLimit` turns it into milliseconds. `rateLimit` null means
+  One sent nothing (the budget keeps what it had); `limit` and `remaining`
+  null mean nothing limits this user, so `auto` paces at `UNLIMITED_RPM`.
+  The 0.23 fetch observer is gone.
 - **Counts.** `one_usage` (migration 0004) keeps calls per user per UTC day,
   written every 5 s. `GET /api/v1/one-plan` answers `OnePlanStatus`; Settings,
   General shows it (signed-in users only, not the sample).
